@@ -1,0 +1,19 @@
+Program
+
+	Number seconds
+	Number minutes
+	Number hours
+	Number remainder
+
+	Write("Enter time in seconds.")
+	
+	seconds += ReadKey
+
+	hours = seconds / 3600
+	remainder = seconds % 3600
+	minutes = remainder / 60
+	seconds = remainder % 60
+
+	Write("Time is ") Write(hours) Write(" hours, ") Write(minutes) Write(" minutes and ") Write(seconds) Write(" seconds.")
+	
+End Program

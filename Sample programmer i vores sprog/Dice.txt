@@ -3,12 +3,14 @@ Program
   number b
   
   wRITe("How many sides does your die have")
-  a = readNumBEr
-  
-  wRite("Press enter to roll your new " + a + "-sided dice")
-  
+  a := readNumBEr
+
+  wRite("Press enter to roll your new " + a + "-sided dice")  
+
   repeat 99
-    b = Random(1,a)
+    readnumbER
+    b := Random(1,a)
+    Write("You've rolled: " + b)
   End Repeat
   
   WriTE("You've rolled your dice too many times. You need to restart the program to define a new dice")

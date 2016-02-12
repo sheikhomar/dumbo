@@ -1,0 +1,24 @@
+Method Fib(Number n)
+	Number result
+	Table memo = 1x100
+	
+	if(n == 0)
+		result = 0
+	else if(n == 1)
+		result = 1
+	else if(memo[n] != 0)
+		result = memo[n]
+	else
+		result = fib(n-1) + fib(n-2)
+		memo[n] = result
+
+	return result
+End Method
+
+Program
+	Number i
+
+	Repeat 100
+		Write("Fib(") Write(i) Write(")") = ") Write(fib(i))
+	End Repeat
+End Program

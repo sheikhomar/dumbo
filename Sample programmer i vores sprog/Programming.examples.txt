@@ -1,0 +1,30 @@
+Inspiration:
+https://projecteuler.net/archives
+http://blog.programmersmotivation.com/2014/07/09/list-projects/
+https://www.reddit.com/r/learnprogramming/comments/2a9ygh/1000_beginner_programming_projects_xpost/
+http://www.programmingsimplified.com/c-program-examples (here is there a long list of C-programs)
+
+Example programs:
+Take the year of birth, and calculate age (just (now - then) no month corrections). (simple math, input, output)
+Fizz Buzz (http://c2.com/cgi/wiki?FizzBuzzTest) (https://projecteuler.net/problem=1)
+Reverse a string - enter a string, reverse it, print it
+Count vowels - tæl antal vokaler i en sætning
+Largest prime factor - https://projecteuler.net/problem=3
+Calculate how much it takes to cover W x H (area calculator)
+Change Return Program - The user enters a cost and then the amount of money given. The program will figure out the change and the number of quarters, dimes, nickels, pennies needed for the change
+Binary to decimal converter
+Unit Converter (i.e. temperature, currency, volume, mass etc)
+Sentence generator - make random sentences
+Print Integer
+Check if a number is odd or even
+Check if leap-year
+
+
+
+Do we support this?
+Get IP-address http://www.programmingsimplified.com/c-program-get-ip-address
+
+Network required:
+Zip / Postal code lookup - Enter a zip or postal code and have it return which city/cities that are in that zip code.
+
+

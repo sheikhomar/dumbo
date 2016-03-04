@@ -9,22 +9,31 @@
 {WS} = {WhiteSpace} - {CR} - {LF}
                
 ! Terminals specifications
-Identifier = {Letter}{AlphaNumeric}*
+Id = {Letter}{AlphaNumeric}*
 WhiteSpace = {WS}+
-NewLine = ({CR}{LF}{WS}* | {CR}{WS}* | {LF}{WS}*)+
+EOL = ({CR}{LF}{WS}* | {CR}{WS}* | {LF}{WS}*)+
 AssignmentOperator = ':='
 NumberLiteral = {Number}+ '.' {Number}+ | '.' {Number}+ | {Number}+
 TextLiteral = '"' {AlphaNumeric}* '"'
 
 ! CFG               
-<Start> ::=  Program NewLine <ProgramBody> End Program
+<Start> ::=  Program EOL <ProgramBody> End Program
 <ProgramBody> ::= <Decls>
-<NumberDecl> ::= Number Identifier 
-              | Number Identifier AssignmentOperator NumberLiteral 
-<TextDecl> ::= Text Identifier
-            | Text Identifier AssignmentOperator TextLiteral
-<Decls> ::= <NumberDecl> NewLine <Decls> 
-         | <TextDecl> NewLine <Decls>
+<NumberDecl> ::= Number Id 
+              | Number Id AssignmentOperator NumberLiteral 
+<TextDecl> ::= Text Id
+            | Text Id AssignmentOperator TextLiteral
+<Decls> ::= <NumberDecl> EOL <Decls> 
+         | <TextDecl> EOL <Decls>
          | <>
-         
+<Stmts> ::= <Stmts> EOL <Stmt>
+         | <>
+<Stmt> ::= <AssignStmt>
+!        | <IfStmt>
+!        | <RepeatStmt>
+!        | <FuncCall>
+!        | <Expr>
+<AssignStmt> ::= Id := <Expr>
+!              | <Id-List> := <FuncCall>
+!              | <Id-List> := <LiteralList>
 

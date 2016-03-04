@@ -6,10 +6,10 @@
 "Start Symbol" = <Start>
                
 ! GoldParsers way to make comments: http://www.goldparser.org/doc/grammars/example-group.htm
-!Comment Block @= { Nesting = All, Advance = Character }
-!Comment Start   = '*/'
-!Comment End     = '/*'
-!Comment Line    = '//'              
+Comment Block @= { Nesting = All, Advance = Character }
+Comment Start   = '*/'
+Comment End     = '/*'
+Comment Line    = '//'              
 
 ! Set Specification
 {WS} = {WhiteSpace} - {CR} - {LF}

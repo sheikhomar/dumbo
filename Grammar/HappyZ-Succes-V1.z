@@ -1,0 +1,15 @@
+
+Program 
+
+  Number age
+  Text Name
+  age := -10 OR 100
+  AFA := NOT 5 OR 5 + (10 - 5)/(5*1)%100
+  _Omar := TRUE AND TRUE
+  O := 1 < 1
+  O := 1 > 1
+  O := 1 <= 1
+  O := 1 >= 1  
+  O := hej
+
+End Program

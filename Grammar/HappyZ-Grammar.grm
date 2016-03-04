@@ -12,28 +12,73 @@
 Id = {Letter}{AlphaNumeric}*
 WhiteSpace = {WS}+
 EOL = ({CR}{LF}{WS}* | {CR}{WS}* | {LF}{WS}*)+
-AssignmentOperator = ':='
+Assign = ':='
 NumberLiteral = {Number}+ '.' {Number}+ | '.' {Number}+ | {Number}+
 TextLiteral = '"' {AlphaNumeric}* '"'
+BooleanLiteral = 'TRUE' | 'FALSE'
 
 ! CFG               
-<Start> ::=  Program EOL <ProgramBody> End Program
-<ProgramBody> ::= <Decls>
-<NumberDecl> ::= Number Id 
-              | Number Id AssignmentOperator NumberLiteral 
-<TextDecl> ::= Text Id
-            | Text Id AssignmentOperator TextLiteral
-<Decls> ::= <NumberDecl> EOL <Decls> 
-         | <TextDecl> EOL <Decls>
+<Start> ::=  'Program' EOL <Stmts> 'End Program'
+         
+<Literal> ::= NumberLiteral
+           | TextLiteral
+           | BooleanLiteral
+           
+! Declerations    
+<Decl> ::= <NumberDecl>
+         | <TextDecl>
+         | <BoolDecl>
          | <>
+     
+<NumberDecl> ::= 'Number' Id 
+              | 'Number' Id Assign NumberLiteral 
+              
+<TextDecl> ::= 'Text' Id
+            | 'Text' Id Assign TextLiteral
+            
+<BoolDecl> ::= 'Boolean' Id
+            | 'Boolean' Id Assign Booleanliteral
+                     
+
+! Statements
 <Stmts> ::= <Stmts> EOL <Stmt>
          | <>
-<Stmt> ::= <AssignStmt>
-!        | <IfStmt>
-!        | <RepeatStmt>
-!        | <FuncCall>
-!        | <Expr>
-<AssignStmt> ::= Id := <Expr>
-!              | <Id-List> := <FuncCall>
-!              | <Id-List> := <LiteralList>
 
+<Stmt> ::= <Decl>
+        | <AssignStmt>
+      
+<AssignStmt> ::= Id Assign <Expr>
+     
+
+! Operators      
+<Expr> ::= <Expr> 'OR' <Logical-AND>
+         | <Logical-AND>
+
+<Logical-AND> ::= <Logical-AND> 'AND' <Equality>
+          | <Equality>
+
+<Equality> ::= <Equality> '=' <Relational>
+             | <Relational>
+
+<Relational> ::= <Relational> '<' <Additive>
+               | <Relational> '>' <Additive>
+               | <Relational> '<=' <Additive>
+               | <Relational> '>=' <Additive>
+               | <Additive>
+
+<Additive> ::= <Additive> '+' <Multiplicative>
+             | <Additive> '-' <Multiplicative>
+             | <Multiplicative>
+             
+<Multiplicative> ::= <Multiplicative> '*' <Unary>
+                   | <Multiplicative> '/' <Unary>
+                   | <Multiplicative> '%' <Unary>
+                   | <Unary>
+
+<Unary> ::= 'NOT' <Unary>
+         | '-' <Unary>
+         | <Value>
+
+<Value> ::= <Literal>
+          | Id
+          | '(' <Expr> ')'

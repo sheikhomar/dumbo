@@ -1,4 +1,4 @@
-﻿namespace Parse_Tree_C_Sharp
+﻿namespace dumbo.WinUI
 {
     partial class frmMain
     {
@@ -39,9 +39,10 @@
             // 
             // btnLoad
             // 
+            this.btnLoad.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnLoad.Location = new System.Drawing.Point(580, 8);
             this.btnLoad.Name = "btnLoad";
-            this.btnLoad.Size = new System.Drawing.Size(96, 32);
+            this.btnLoad.Size = new System.Drawing.Size(96, 21);
             this.btnLoad.TabIndex = 9;
             this.btnLoad.Text = "Load";
             this.btnLoad.UseVisualStyleBackColor = true;
@@ -49,6 +50,8 @@
             // 
             // txtTableFile
             // 
+            this.txtTableFile.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.txtTableFile.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtTableFile.Location = new System.Drawing.Point(8, 8);
             this.txtTableFile.Name = "txtTableFile";
@@ -57,6 +60,8 @@
             // 
             // btnParse
             // 
+            this.btnParse.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.btnParse.Location = new System.Drawing.Point(580, 200);
             this.btnParse.Name = "btnParse";
             this.btnParse.Size = new System.Drawing.Size(96, 32);
@@ -67,6 +72,9 @@
             // 
             // txtParseTree
             // 
+            this.txtParseTree.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.txtParseTree.BackColor = System.Drawing.SystemColors.Window;
             this.txtParseTree.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtParseTree.Location = new System.Drawing.Point(8, 252);
@@ -79,12 +87,15 @@
             // 
             // txtSource
             // 
+            this.txtSource.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.txtSource.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtSource.Location = new System.Drawing.Point(8, 52);
+            this.txtSource.Location = new System.Drawing.Point(8, 46);
             this.txtSource.Multiline = true;
             this.txtSource.Name = "txtSource";
             this.txtSource.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txtSource.Size = new System.Drawing.Size(668, 140);
+            this.txtSource.Size = new System.Drawing.Size(668, 146);
             this.txtSource.TabIndex = 5;
             this.txtSource.Text = "Program \r\n\r\n  Number age\r\n  Text name\r\n  \r\nEnd Program";
             // 

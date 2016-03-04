@@ -1,14 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
+using System.IO;
 using System.Text;
 using System.Windows.Forms;
-using System.IO;
 
-namespace Parse_Tree_C_Sharp
+namespace dumbo.WinUI
 {
     public partial class frmMain : Form
     {
@@ -64,9 +59,9 @@ namespace Parse_Tree_C_Sharp
             btnLoad.Enabled = true;
             btnParse.Enabled = false;
 
-            string dir = Path.GetFullPath(Path.Combine(Application.StartupPath, "..\\..\\..\\..\\..\\", "Grammar"));
-            
-            string path = Path.Combine(dir, "HappyZ-Grammar.egt");
+            string baseDir = Path.GetFullPath(Path.Combine(Application.StartupPath, "..\\..\\..\\..\\..\\"));
+            string grammarPath = Path.Combine(baseDir, "Grammar");
+            string path = Path.Combine(grammarPath, "HappyZ-Grammar.egt");
             
             txtTableFile.Text = path;
         }
@@ -76,7 +71,7 @@ namespace Parse_Tree_C_Sharp
             //This procedure starts the recursion that draws the parse tree.
             StringBuilder tree = new StringBuilder();
 
-            tree.AppendLine("+-" + Root.Parent.Text(false));
+            tree.AppendLine("+ " + Root.Parent.Text(false));
             DrawReduction(tree, Root, 1);
 
             txtParseTree.Text = tree.ToString();
@@ -100,14 +95,14 @@ namespace Parse_Tree_C_Sharp
                    case GOLD.SymbolType.Nonterminal:
                        GOLD.Reduction branch = (GOLD.Reduction)reduction[n].Data;
   
-                       tree.AppendLine(indentText + "+-" + branch.Parent.Text(false));
+                       tree.AppendLine(indentText + "+ " + branch.Parent.Text(false));
                        DrawReduction(tree, branch, indent + 1);
                        break;
 
                    default:
                        string leaf = (string)reduction[n].Data;
 
-                       tree.AppendLine(indentText + "+-" + leaf);
+                       tree.AppendLine(indentText + "+ " + leaf);
                        break;
                }
            }

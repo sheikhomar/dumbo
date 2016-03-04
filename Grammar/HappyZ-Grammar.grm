@@ -1,0 +1,30 @@
+"Name"    = 'The Z programming language'
+"Version" = '0.1'
+"Author"  = 'Group sw401f16'
+"About"   = ''
+"Case Sensitive" = 'False'
+
+"Start Symbol" = <Start>
+               
+{WS} = {WhiteSpace} - {CR} - {LF}
+               
+! Terminals specifications
+Identifier = {Letter}{AlphaNumeric}*
+WhiteSpace = {WS}+
+NewLine = ({CR}{LF}{WS}* | {CR}{WS}* | {LF}{WS}*)+
+AssignmentOperator = ':='
+NumberLiteral = {Number}+ '.' {Number}+ | '.' {Number}+ | {Number}+
+TextLiteral = '"' {AlphaNumeric}* '"'
+
+! CFG               
+<Start> ::=  Program NewLine <ProgramBody> End Program
+<ProgramBody> ::= <Decls>
+<NumberDecl> ::= Number Identifier 
+              | Number Identifier AssignmentOperator NumberLiteral 
+<TextDecl> ::= Text Identifier
+            | Text Identifier AssignmentOperator TextLiteral
+<Decls> ::= <NumberDecl> NewLine <Decls> 
+         | <TextDecl> NewLine <Decls>
+         | <>
+         
+

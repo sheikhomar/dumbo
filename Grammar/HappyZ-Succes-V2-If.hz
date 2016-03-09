@@ -1,0 +1,16 @@
+Program 
+
+  age := 2+2
+  Number age
+  Text name
+  if(2) then
+    else 
+      a := 2+2
+    if (2+2) then
+      a := 3
+    else 
+      a := 4
+    end if
+  end if
+  
+End Program

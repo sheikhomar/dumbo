@@ -1,0 +1,14 @@
+Program 
+
+  Number age
+  Text name
+  
+  Repeat (2) 
+   a := a+2
+  End repeat
+  
+  Repeat while (a < 2)
+    a := 3 + a
+  End repeat
+
+End Program

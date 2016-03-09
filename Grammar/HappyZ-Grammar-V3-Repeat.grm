@@ -17,7 +17,7 @@ Comment Line    = '//'
 ! Terminals specifications
 Id = ({Letter} | '_'){AlphaNumeric}*
 WhiteSpace = {WS}+
-EOL = ({CR}{LF}{WS}* | {CR}{WS}* )+
+EOL = ({CR}{LF}{WS}* | {CR}{WS}* | {LF}{WS}*)+
 Assign = ':='
 
 
@@ -31,11 +31,6 @@ BooleanLiteral = 'TRUE' | 'FALSE'
 <Literal> ::= NumberLiteral
            | TextLiteral
            | BooleanLiteral
-           
-<MultiId> ::= ',' Id <MultiId>
-           | <>
-
-<Id> ::= Id <MultiId>
 
 ! Declerations    
 
@@ -53,8 +48,8 @@ BooleanLiteral = 'TRUE' | 'FALSE'
             | 'Boolean' Id Assign Booleanliteral
                      
 
-! Statements 
-<Stmts> ::= <Stmt> EOL <Stmts>   ! Bug in language -- We must always have EOL before end program
+! Statements
+<Stmts> ::= <Stmt> EOL <Stmts>
          | <>
 
 <Stmt> ::= <AssignStmt> 
@@ -62,7 +57,7 @@ BooleanLiteral = 'TRUE' | 'FALSE'
         | <RepeatStmt>
         | <Decl>
       
-<AssignStmt> ::= <Id> Assign <Expr>
+<AssignStmt> ::= Id Assign <Expr>
      
 <IfStmt> ::= 'if' '(' <Expr> ')' 'then' EOL <Stmts> <ElseStmt> 'end if'
 

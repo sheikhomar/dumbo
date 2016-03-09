@@ -1,0 +1,6 @@
+Program 
+
+  a := 2
+  a , b := 4
+
+End Program

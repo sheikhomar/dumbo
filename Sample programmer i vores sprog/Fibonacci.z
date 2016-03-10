@@ -23,6 +23,6 @@ Program
 	Number i
 
 	Repeat 100
-		Write("Fib(") Write(i) Write(")") = ") Write(fib(i))
+		Write("Fib(") Write(i) Write(")") = Write(fib(i))
 	End Repeat
 End Program

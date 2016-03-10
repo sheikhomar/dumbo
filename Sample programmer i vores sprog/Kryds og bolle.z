@@ -1,6 +1,6 @@
 Program
 	Write("Welcome to a game og ''Cross and circle''.")
-	Write("This is our game plate:")
+	Write("This is the game plate:")
 	Write("  1  2  3 ")
 	Write("A         ")
 	Write("B         ")

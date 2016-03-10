@@ -1,19 +1,20 @@
 Program
 
-	Number sec
-	Number min
-	Number hour
-	Number remainder
+	Number seconds := 0
+	Number hour	:= 0
+	Number min := 0
+	Number sec := 0
+	Number remainder := 0
 
-	Write("Enter time in seconds.")
+	Write("Enter time in seconds and they will be calulated to hours, minutes and seconds.")
 	
-	seconds += ReadNumber
+	seconds := ReadNumber()
 
 	hour = seconds / 3600
 	remainder = seconds % 3600
 	min = remainder / 60
 	sec = remainder % 60
 
-	Write("Time is ") Write(hour) Write(" hours, ") Write(min) Write(" minutes and ") Write(sec) Write(" seconds.")
+	Write(seconds + "is equal to " + hour + "hours, " + min + " minutes and " + sec + " seconds.")
 	
 End Program

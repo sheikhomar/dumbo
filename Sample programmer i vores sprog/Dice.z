@@ -1,5 +1,5 @@
 Program
-  number a
+  number a := 0
   number b
   
   wRITe("How many sides does your die have")

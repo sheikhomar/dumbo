@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dumbo.WinUI", "src\app\dumb
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dumbo.WpfApp", "src\app\dumbo.WpfApp\dumbo.WpfApp.csproj", "{B582EAE1-A9A9-4ACE-97F8-7F6CCC3197F2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dumbo.Compiler", "src\app\dumbo.Compiler\dumbo.Compiler.csproj", "{DE2710CE-0479-4C06-BA25-3ADD2A3DD203}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{B582EAE1-A9A9-4ACE-97F8-7F6CCC3197F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B582EAE1-A9A9-4ACE-97F8-7F6CCC3197F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B582EAE1-A9A9-4ACE-97F8-7F6CCC3197F2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DE2710CE-0479-4C06-BA25-3ADD2A3DD203}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DE2710CE-0479-4C06-BA25-3ADD2A3DD203}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DE2710CE-0479-4C06-BA25-3ADD2A3DD203}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DE2710CE-0479-4C06-BA25-3ADD2A3DD203}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

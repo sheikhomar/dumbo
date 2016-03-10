@@ -5,6 +5,11 @@
 "Case Sensitive" = 'False'
 "Start Symbol" = <Start>
                
+! Known Isues: 
+! - Some Statements needs exactly one space between its terminals
+! - Else if requires at least one space between else and if
+! - Support for escape characters in Text literal
+
 ! GoldParsers way to make comments: http://www.goldparser.org/doc/grammars/example-group.htm
 Comment Block @= { Nesting = All, Advance = Character }
 Comment Start   = '*/'
@@ -19,10 +24,10 @@ Id = ({Letter} | '_'){AlphaNumeric}*
 WhiteSpace = {WS}+
 NewLine = ({CR}{LF}|{CR})+
 Assign = ':='
-
+{CharacterSet} = {All Valid} - {&22}
 
 NumberLiteral = {Number}+ '.' {Number}+ | '.' {Number}+ | {Number}+
-TextLiteral = '"' {AlphaNumeric}* '"'
+TextLiteral = '"' {CharacterSet}* '"'
 BooleanLiteral = 'TRUE' | 'FALSE'
 
 ! CFG               
@@ -74,10 +79,15 @@ BooleanLiteral = 'TRUE' | 'FALSE'
         
 <AssignStmt> ::= <Id> Assign <Expr>
      
-<IfStmt> ::= 'if' '(' <Expr> ')' 'then' <nl> <Stmts> <ElseStmt> 'end if'
+<IfStmt> ::= 'if' '(' <Expr> ')' 'then' <nl> <Stmts> <ElseIfStmts> <ElseStmt> 'end if'
 
 <ElseStmt> ::= 'else' <nl> <Stmts>
             | <>
+            
+<ElseIfStmts> ::= <ElseIfStmt> <ElseIfStmts>
+               | <>
+
+<ElseIfStmt> ::= 'else if' '(' <Expr> ')' 'then' <nl> <Stmts>
 
 <RepeatStmt> ::= 'Repeat' '(' NumberLiteral ')' <nl> <Stmts> 'End Repeat'
               | 'Repeat' 'While' '(' <Expr> ')' <nl> <Stmts> 'End Repeat'

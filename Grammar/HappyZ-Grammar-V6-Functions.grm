@@ -22,7 +22,7 @@ Assign = ':='
 
 
 NumberLiteral = {Number}+ '.' {Number}+ | '.' {Number}+ | {Number}+
-TextLiteral = '"' {AlphaNumeric}* '"'
+TextLiteral = '"' ({AlphaNumeric} + {WS})* '"'
 BooleanLiteral = 'TRUE' | 'FALSE'
 
 ! CFG               

@@ -17,10 +17,8 @@ Program
 		
 		if (Input[0] = A) then
 			A[(Number)Input[1]] := X
-		end if
 		else if (input[0] = B) then
 			B[(Number)Input[1]] := X
-		end if
 		else if (input[0] = C) then
 			C[(Number)Input[1]] := X
 		end if
@@ -32,10 +30,8 @@ Program
 		
 		if (Input[0] = A) then
 			A[(Number)Input[1]] := O
-		end if
 		else if (input[0] = B) then
 			B[(Number)Input[1]] := O
-		end if
 		else if (input[0] = C) then
 			C[(Number)Input[1]] := O
 		end if

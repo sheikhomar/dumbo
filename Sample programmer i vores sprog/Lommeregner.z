@@ -18,13 +18,10 @@ Program
   
   if operator = "+" then
     result := number1 + number2 
-  end if
   else if operator = "-" then
     result := number1 - number2 
-  end if
   else if operator = "*" then
     result := number1 * number2 
-  end if
   else if operator = "/" then
     result := number1 / number2
   end if

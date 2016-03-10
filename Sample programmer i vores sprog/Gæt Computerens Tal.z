@@ -9,15 +9,12 @@ Program
 		If(GuessedNumber = TheNumber) then
 			Write("Congrats! You guessed my Number!")
 			IsNumberGuessed := true
-		End if
 		Else if(GuessedNumber < TheNumber) then
 			Write("My number is bigger")
 			Write("Guess again")
-		End if
 		Else if (GuessedNumber > TheNumber) then
 			Write("My number is less than")
 			Write("Guess again")
-		End if
 		Else then
 			Write("Error... Restart program")
 		End if

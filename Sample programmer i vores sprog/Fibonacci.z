@@ -4,13 +4,10 @@ Method Fib(Number n)
 	
 	if(n = 0) then
 		result = 0
-	end if
 	else if(n = 1) then
 		result = 1
-	End if
 	else if(memo[n] != 0) then
 		result = memo[n]
-	End if
 	else then
 		result = fib(n-1) + fib(n-2)
 		memo[n] = result

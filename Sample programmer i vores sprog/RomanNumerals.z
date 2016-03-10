@@ -8,31 +8,31 @@ Program
   OriginalInput := input
   
   repeat while (input > 0)
-    if input > 1000 then
+    if (input > 1000) then
 	  output := output + "M"
 	  input := input - 1000
 	end if
-	else if input > 500 then
+	else if (input > 500) then
 	  output := output + "D"
 	  input := input - 500
 	end if
-	else if input > 100 then
+	else if (input > 100) then
 	  output := output + "C"
 	  input := input - 100
 	end if
-	else if input > 50 then
+	else if (input > 50) then
 	  output := output + "L"
 	  input := input - 50
 	end if
-	else if input > 10 then
+	else if (input > 10) then
 	  output := output + "X"
 	  input := input - 10
 	end if
-	else if input > 5 then
+	else if (input > 5) then
 	  output := output + "V"
 	  input := input - 5
 	end if
-	else if input > 1 then
+	else if (input > 1) then
 	  output := output + "I"
 	  input := input - 1
 	end if

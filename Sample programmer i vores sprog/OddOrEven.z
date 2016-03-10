@@ -1,0 +1,17 @@
+Program
+	Number input
+	
+	Write("Enter a number and it will be returned, if it is odd or even")
+	input := ReadNumber()
+	
+	if (input % 2 = 0) then
+		Write("The number is even")
+	end if
+	else if (input % 2 != 0) then
+		Write("The number is odd")
+	end if
+	else then
+		Write("Error occured. Please close the program and try again")
+	end if
+	
+End Program

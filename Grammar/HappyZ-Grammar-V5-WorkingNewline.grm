@@ -26,12 +26,8 @@ TextLiteral = '"' {AlphaNumeric}* '"'
 BooleanLiteral = 'TRUE' | 'FALSE'
 
 ! CFG               
-
-<Start> ::=  <Program> <nl> <FuncDecls>
-         | <Program>
-     
-<Program> ::= 'Program' <nl> <Stmts> 'End Program'
-          
+<Start> ::=  'Program' <nl> <Stmts> 'End Program'
+               
 <Literal> ::= NumberLiteral
            | TextLiteral
            | BooleanLiteral
@@ -59,8 +55,8 @@ BooleanLiteral = 'TRUE' | 'FALSE'
 <BoolDecl> ::= 'Boolean' Id
             | 'Boolean' Id Assign Booleanliteral
                      
-! Statements 
 
+! Statements 
 <Stmts> ::= <Stmt> <nl> <Stmts>   ! Bug in language -- We must always have EOL before end program
          | <>
 
@@ -68,8 +64,6 @@ BooleanLiteral = 'TRUE' | 'FALSE'
         | <IfStmt> 
         | <RepeatStmt>
         | <Decl>
-        | <ReturnStmt>
-        | <FuncCall>
         | <nl>
         
 <AssignStmt> ::= <Id> Assign <Expr>
@@ -82,54 +76,7 @@ BooleanLiteral = 'TRUE' | 'FALSE'
 <RepeatStmt> ::= 'Repeat' '(' NumberLiteral ')' <nl> <Stmts> 'End Repeat'
               | 'Repeat' 'While' '(' <Expr> ')' <nl> <Stmts> 'End Repeat'
 
-<FuncCall> ::= Id '(' <ActualParams> ')'
-            
-<ActualParams> ::= <Expr> <MultiActualParams>
-                | <>
-                
-<MultiActualParams> ::= ',' <Expr> <MultiActualParams>
-                     | <>
-                     
-<ReturnStmt> ::= 'Return' <ReturnValues>
-              | 'Returns' <ReturnValues>
-
-              
-<ReturnValues> ::= <ReturnValue>
-                | <ReturnValue> ',' <ReturnValues>
-                
-<ReturnValue> ::= <Expr>
-               | 'Nothing'
-
-! Functions
-
-<FuncDecls> ::= <FuncDecl> <FuncDecls>
-             | <>
-
-<FuncDecl> ::= 'Function' Id '(' <FormalParams> ')' 'Returns' <ReturnTypes> <nl> <Stmts> 'End Function'
-            
-<FormalParams> ::= <FormalParam> <MultiFormalParams>
-                | <>
-
-<MultiFormalParams> ::= ',' <FormalParam> <MultiFormalParams>
-                     | <>
-
-<FormalParam> ::= 'Number' Id
-         | 'Text' Id
-         | 'Boolean' Id
-         
-<ReturnTypes> ::= 'Nothing'
-               | <ReturnType> <MultiReturnTypes>
-
-<MultiReturnTypes> ::= ',' <ReturnType> <MultiReturnTypes>
-                    | <>
-              
-<ReturnType> ::= 'Number'
-              | 'Text' 
-              | 'Boolean'
-
-
-! Operators    
-  
+! Operators      
 <Expr> ::= <Expr> 'OR' <Logical-AND>
          | <Logical-AND>
 
@@ -159,6 +106,5 @@ BooleanLiteral = 'TRUE' | 'FALSE'
          | <Value>
 
 <Value> ::= <Literal>
-          | <FuncCall>
           | Id
           | '(' <Expr> ')'

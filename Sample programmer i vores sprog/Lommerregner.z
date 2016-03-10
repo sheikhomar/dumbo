@@ -3,28 +3,31 @@ Program
   Number number2, result
   Text operator
   
-  Write "Indtast et tal: "
-  number1 := ReadNumber
+  Write("Indtast et tal: ")
+  number1 := ReadNumber()
   
   repeat
-    Write "Indtast en operator (+ - * /): "
-    operator := ReadText
+    Write("Indtast en operator (+ - * /): ")
+    operator := ReadText()
     
     break if operator = "+" Or operator = "-" Or operator = "*" Or operator = '/'
   end repeat
   
-  Write "Indtast et andet tal: "
+  Write("Indtast et andet tal: ")
   number2 := ReadNumber
   
   if operator = "+" then
     result := number1 + number2 
+  end if
   else if operator = "-" then
     result := number1 / number2 
+  end if
   else if operator = "*" then
     result := number1 * number2 
+  end if
   else if operator = "/" then
     result := number1 / number2
   end if
   
-  Write "Resultatet er " + number1 + " " + operator + " " + number2 + " = " + result
+  Write("Resultatet er " + number1 + " " + operator + " " + number2 + " = " + result)
 end program

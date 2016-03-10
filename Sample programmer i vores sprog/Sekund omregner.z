@@ -7,7 +7,7 @@ Program
 
 	Write("Enter time in seconds.")
 	
-	seconds += ReadKey
+	seconds += ReadNumber
 
 	hour = seconds / 3600
 	remainder = seconds % 3600

@@ -1,0 +1,18 @@
+Program
+	number r, x, y
+
+	write("Enter a radius, x and y")
+	write("First enter radius:")
+	r := readnumber()
+	write("Next enter x:")
+	x := readNUmber()
+	wriTE("Next enter y:")
+	y := readNUMber()
+
+	if(x*x + y*y <= r*r) then
+		write("The point(" + x + "," + y + ") is inside the circle centered in (0,0) and a radius " + r)
+	else then
+		write("The point(" + x + "," + y + ") is outside the circle centered in (0,0) and a radius " + r)
+	end if
+	
+End program

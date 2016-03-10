@@ -1,5 +1,3 @@
 Program
-  write("Hello World!")
-  
-  return
+  Write("Hello World!")
 End Program

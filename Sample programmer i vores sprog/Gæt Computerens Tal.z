@@ -1,22 +1,26 @@
 Program
 	Number TheNumber := Random() % 100
-	Write("Guess my number:")
+	Write("Guess my number: ")
 	Number GuessedNumber
 	Bool IsNumberGuessed := false
 
 	Repeat while (IsNumberGuessed = false)
-		GuessedNumber := Readline()
-		If(GuessedNumber = TheNumber)
+		GuessedNumber := ReadNumber()
+		If(GuessedNumber = TheNumber) then
 			Write("Congrats! You guessed my Number!")
 			IsNumberGuessed := true
-		Else if(GuessedNumber < TheNumber)
+		End if
+		Else if(GuessedNumber < TheNumber) then
 			Write("My number is bigger")
 			Write("Guess again")
-		Else if (GuessedNumber > TheNumber)
+		End if
+		Else if (GuessedNumber > TheNumber) then
 			Write("My number is less than")
 			Write("Guess again")
-		Else
+		End if
+		Else then
 			Write("Error... Restart program")
+		End if
 	End Repeat
 	
 End Program

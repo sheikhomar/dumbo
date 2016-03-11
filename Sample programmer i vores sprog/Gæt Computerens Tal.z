@@ -15,7 +15,7 @@ Program
 		Else if (GuessedNumber > TheNumber) then
 			Write("My number is less than")
 			Write("Guess again")
-		Else then
+		Else
 			Write("Error... Restart program")
 		End if
 	End Repeat

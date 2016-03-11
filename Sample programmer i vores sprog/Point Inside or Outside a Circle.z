@@ -11,7 +11,7 @@ Program
 
 	if(x*x + y*y <= r*r) then
 		write("The point(" + x + "," + y + ") is inside the circle centered in (0,0) and a radius " + r)
-	else then
+	else 
 		write("The point(" + x + "," + y + ") is outside the circle centered in (0,0) and a radius " + r)
 	end if
 	

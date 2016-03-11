@@ -6,9 +6,9 @@ Method Fib(Number n)
 		result = 0
 	else if(n = 1) then
 		result = 1
-	else if(memo[n] != 0) then
+	else if NOT(memo[n] = 0) then
 		result = memo[n]
-	else then
+	else
 		result = fib(n-1) + fib(n-2)
 		memo[n] = result
 	End if

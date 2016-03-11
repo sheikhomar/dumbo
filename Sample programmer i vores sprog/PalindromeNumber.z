@@ -8,7 +8,7 @@ Program
 	
 	temp := input
 	
-	repeat while (temp != 0) then
+	repeat while not(temp = 0) then
 		reverse = reverse * 10
 		reverse = reverse + 10%10
 		temp = temp / 10
@@ -16,7 +16,7 @@ Program
 	
 	if (input = reverse) then
 		write(input + " is a palindrome number.")
-	else if (input != reverse) then
+	else if not(input = reverse) then
 		write(input + " is not a palindrome number.")
 	else
 		write("You hit the cat out of the barrel... or encountered a problem.")

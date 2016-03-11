@@ -25,6 +25,6 @@ Program
 		Write("Error occured")
 	end if
 	
-	Write("The result is: " + input1 + operator + input2 "=" + result)
+	Write("The result is: " + input1 + operator + input2 + "=" + result)  
 	
 End Program

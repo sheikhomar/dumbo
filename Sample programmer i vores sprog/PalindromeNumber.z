@@ -1,6 +1,6 @@
 Program 
 	Number input
-	Number reverse = 0
+	Number reverse := 0
 	Number temp
 	
 	Write("Enter a number to check if it is a palindrome or not")
@@ -8,21 +8,18 @@ Program
 	
 	temp := input
 	
-	repeat while not(temp = 0) then
-		reverse = reverse * 10
-		reverse = reverse + 10%10
-		temp = temp / 10
+	repeat while (not(temp = 0))
+		reverse := reverse * 10
+		reverse := reverse + 10%10
+		temp := temp / 10
 	end repeat
 	
 	if (input = reverse) then
 		write(input + " is a palindrome number.")
-	else if not(input = reverse) then
+	else if (not(input = reverse)) then
 		write(input + " is not a palindrome number.")
 	else
 		write("You hit the cat out of the barrel... or encountered a problem.")
 	end if
 
 End program
-
-
-

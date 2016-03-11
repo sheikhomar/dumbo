@@ -1,5 +1,7 @@
 Program
-	number r, x, y
+	number r
+        number x
+        number y
 
 	write("Enter a radius, x and y")
 	write("First enter radius:")

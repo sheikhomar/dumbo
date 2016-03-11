@@ -1,7 +1,7 @@
 Program
   number input
   number OriginalInput
-  string output := ""
+  text output := ""
   
   write("Indtast et nummer, der skal omregnes til romertal:")
   input := readNumber()

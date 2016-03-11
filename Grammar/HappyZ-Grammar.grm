@@ -21,13 +21,13 @@ Comment Line    = '//'
 
 ! Set Specification
 {WS} = {WhiteSpace} - {CR} - {LF}
+{CharacterSet} = {All Valid} - {&22}
                
 ! Terminals specifications
 Id = ({Letter} | '_'){AlphaNumeric}*
 WhiteSpace = {WS}+
 NewLine = ({CR}{LF}|{CR})+
 Assign = ':='
-{CharacterSet} = {All Valid} - {&22}
 
 NumberLiteral = ('+' | '-')? ({Number}+ '.' {Number}+ | '.' {Number}+ | {Number}+)
 TextLiteral = '"' {CharacterSet}* '"'

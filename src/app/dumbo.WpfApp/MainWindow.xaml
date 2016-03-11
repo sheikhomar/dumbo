@@ -5,8 +5,26 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:dumbo.WpfApp"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
+        Title="MainWindow" Height="450" Width="905">
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
         
+        <avalonEdit:TextEditor
+            Grid.Row="2"
+    xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
+    Name="textEditor"
+    FontFamily="Consolas"
+    FontSize="12pt"
+         ShowLineNumbers="True"   />
+        <Button x:Name="button" Content="Button" HorizontalAlignment="Left" Margin="135,5,0,0" VerticalAlignment="Top" Width="75"/>
+        <TextBox x:Name="textBox" HorizontalAlignment="Left" Height="23" Margin="10,5,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
+        <TreeView x:Name="treeView" Grid.Column="1" HorizontalAlignment="Left" Grid.Row="1" VerticalAlignment="Top" />
     </Grid>
 </Window>

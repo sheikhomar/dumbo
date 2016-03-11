@@ -13,8 +13,8 @@
 
 ! GoldParsers way to make comments:
 Comment Block @= { Nesting = All, Advance = Character }
-Comment Start   = '*/'
-Comment End     = '/*'
+Comment Start   = '/*'
+Comment End     = '*/'
 Comment Line    = '//'              
 
 ! Set Specification

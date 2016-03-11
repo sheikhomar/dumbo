@@ -1,0 +1,30 @@
+Program
+
+	Number input1
+	Number input2
+	Number result
+	Text operator
+
+	Write("Enter operator either +, -, * or / ")
+	operator := ReadText()
+
+	Write("Write the two operands you want to calcute using " + operator + "seperanted by 'Enter'")
+
+	input1 := ReadNumber()
+	input2 := ReadNumber()
+
+	if (operator = "+") then
+		result := input1+input2
+	else if (operator = "-") then
+		result := input1-input2
+	else if (operator = "*") then
+		result := input1*input2
+	else if (operator = "/") then
+		result := input1/input2
+	else 
+		Write("Error occured")
+	end if
+	
+	Write("The result is: " + input1 + operator + input2 "=" + result)
+	
+End Program

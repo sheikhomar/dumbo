@@ -16,15 +16,4 @@ Binary to decimal converter
 Unit Converter (i.e. temperature, currency, volume, mass etc)
 Sentence generator - make random sentences
 Print Integer
-Check if a number is odd or even
-Check if leap-year
-
-
-
-Do we support this?
-Get IP-address http://www.programmingsimplified.com/c-program-get-ip-address
-
-Network required:
-Zip / Postal code lookup - Enter a zip or postal code and have it return which city/cities that are in that zip code.
-
 

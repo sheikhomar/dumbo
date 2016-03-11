@@ -1,7 +1,9 @@
 "Name"    = 'The Z programming language'
 "Version" = '0.1'
 "Author"  = 'Group sw401f16'
-"About"   = 'Happy Z is created by group SW401F16 from Aalborg University. The langauge is designed to be a stepping stone from visual to textual programming.'
+"About"   = 'Happy Z is created by group SW401F16 from Aalborg University.'
+		  | 'The langauge is designed to be a stepping stone from visual'
+		  | 'to textual programming.'
 "Case Sensitive" = 'False'
 "Start Symbol" = <Start>
                

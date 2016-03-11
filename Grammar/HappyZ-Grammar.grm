@@ -2,18 +2,12 @@
 "Version" = '0.1'
 "Author"  = 'Group sw401f16'
 "About"   = 'Happy Z is created by group SW401F16 from Aalborg University.'
-		  | 'The langauge is designed to be a stepping stone from visual'
-		  | 'to textual programming.'
+          | 'The langauge is designed to be a stepping stone from visual'
+          | 'to textual programming.'
 "Case Sensitive" = 'False'
 "Start Symbol" = <Start>
-               
-! Known Isues: 
-! - Some Statements needs exactly one space between its terminals
-! - Else if requires at least one space between else and if
-! - Support for escape characters in Text literal
-! - Support for optional parantheses in if-statements
-
-! GoldParsers way to make comments:
+              
+! Comments
 Comment Block @= { Nesting = All, Advance = Character }
 Comment Start   = '/*'
 Comment End     = '*/'
@@ -28,8 +22,9 @@ Id = ({Letter} | '_'){AlphaNumeric}*
 WhiteSpace = {WS}+
 NewLine = ({CR}{LF}|{CR})+
 Assign = ':='
+Return = 'Return' | 'Returns'
 
-NumberLiteral = ('+' | '-')? ({Number}+ '.' {Number}+ | '.' {Number}+ | {Number}+)
+NumberLiteral = ('-' | '+')? ({Number}+ '.' {Number}+ | '.' {Number}+ | {Number}+)    ! Bug: number a := 2+2 would not parse  because it cant figure it if'+2' is a number or expression
 TextLiteral = '"' {CharacterSet}* '"'
 BooleanLiteral = 'TRUE' | 'FALSE'
 
@@ -58,14 +53,14 @@ BooleanLiteral = 'TRUE' | 'FALSE'
          | <TextDecl> 
          | <BoolDecl> 
      
-<NumberDecl> ::= 'Number' Id 
-              | 'Number' Id Assign NumberLiteral 
+<NumberDecl> ::= 'Number' <Id> 
+              | 'Number' Id Assign <Expr>
               
-<TextDecl> ::= 'Text' Id
-            | 'Text' Id Assign TextLiteral
+<TextDecl> ::= 'Text' <Id>
+            | 'Text' Id Assign <Expr>
             
-<BoolDecl> ::= 'Boolean' Id
-            | 'Boolean' Id Assign Booleanliteral
+<BoolDecl> ::= 'Boolean' <Id>
+            | 'Boolean' Id Assign <Expr>
                      
 ! Statements 
 
@@ -78,11 +73,13 @@ BooleanLiteral = 'TRUE' | 'FALSE'
         | <Decl>
         | <ReturnStmt>
         | <FuncCall>
+        | <BreakStmt>
         | <nl>
         
 <AssignStmt> ::= <Id> Assign <Expr>
      
 <IfStmt> ::= 'if' '(' <Expr> ')' 'then' <nl> <Stmts> <ElseIfStmts> <ElseStmt> 'end if'
+          | 'if' <Expr> 'then' <nl> <Stmts> <ElseIfStmts> <ElseStmt> 'end if'
 
 <ElseStmt> ::= 'else' <nl> <Stmts>
             | <>
@@ -91,6 +88,7 @@ BooleanLiteral = 'TRUE' | 'FALSE'
                | <>
 
 <ElseIfStmt> ::= 'else if' '(' <Expr> ')' 'then' <nl> <Stmts>
+              | 'else if' <Expr> 'then' <nl> <Stmts>        
 
 <RepeatStmt> ::= 'Repeat' '(' NumberLiteral ')' <nl> <Stmts> 'End Repeat'
               | 'Repeat' 'While' '(' <Expr> ')' <nl> <Stmts> 'End Repeat'
@@ -103,8 +101,7 @@ BooleanLiteral = 'TRUE' | 'FALSE'
 <MultiActualParams> ::= ',' <Expr> <MultiActualParams>
                      | <>
                      
-<ReturnStmt> ::= 'Return' <ReturnValues>
-              | 'Returns' <ReturnValues>
+<ReturnStmt> ::= Return <ReturnValues>
 
               
 <ReturnValues> ::= <ReturnValue>
@@ -112,13 +109,15 @@ BooleanLiteral = 'TRUE' | 'FALSE'
                 
 <ReturnValue> ::= <Expr>
                | 'Nothing'
+               
+<BreakStmt> ::= 'Break'
 
 ! Functions
 
 <FuncDecls> ::= <FuncDecl> <FuncDecls>
              | <>
 
-<FuncDecl> ::= 'Function' Id '(' <FormalParams> ')' 'Returns' <ReturnTypes> <nl> <Stmts> 'End Function'
+<FuncDecl> ::= 'Function' Id '(' <FormalParams> ')' Return <ReturnTypes> <nl> <Stmts> 'End Function'
             
 <FormalParams> ::= <FormalParam> <MultiFormalParams>
                 | <>

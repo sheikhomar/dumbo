@@ -11,7 +11,7 @@
 ! - Support for escape characters in Text literal
 ! - Support for optional parantheses in if-statements
 
-! GoldParsers way to make comments: http://www.goldparser.org/doc/grammars/example-group.htm
+! GoldParsers way to make comments:
 Comment Block @= { Nesting = All, Advance = Character }
 Comment Start   = '*/'
 Comment End     = '/*'
@@ -27,7 +27,7 @@ NewLine = ({CR}{LF}|{CR})+
 Assign = ':='
 {CharacterSet} = {All Valid} - {&22}
 
-NumberLiteral = {Number}+ '.' {Number}+ | '.' {Number}+ | {Number}+
+NumberLiteral = ('+' | '-')? ({Number}+ '.' {Number}+ | '.' {Number}+ | {Number}+)
 TextLiteral = '"' {CharacterSet}* '"'
 BooleanLiteral = 'TRUE' | 'FALSE'
 

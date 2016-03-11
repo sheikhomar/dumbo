@@ -1,0 +1,30 @@
+program 
+	
+	number percent
+	number grade
+	
+	write("how many percent?")
+	percent := readnumber()
+	
+	if (percent >= 10) then
+		grade := 3
+	else if (percent >= 40) then
+		grade := 5
+	else if (percent >= 50) then
+		grade := 6
+	else if (percent >= 58) then
+		grade := 7
+	else if (percent >= 66) then
+		grade := 8
+	else if (percent >= 74) then
+		grade := 9
+	else if (percent >= 82) then
+		grade := 10
+	else if (percent >= 90) then 
+		grade := 11
+	else grade := 0
+	end if
+	
+	write(percent + " percent corresponds to the Danish grade " + grade)
+	
+end program

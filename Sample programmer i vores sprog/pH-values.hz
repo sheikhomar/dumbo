@@ -1,0 +1,23 @@
+Program
+
+	Number inputNumber
+	
+	Write("Enter pH-value and i will answer if its alkaline, neutral or acidic.")
+	inputNumber := ReadNumber()
+	
+	if(inputNumber > 7) then
+		if(inputNumber < 12) then
+			write("Alkaline")
+		else 
+			write("Very alkaline")
+		end if
+	else
+		if (inputNumber = 7) then
+			write("Neutral")
+		else if (inputNumber > 2)
+			write("Acidic")
+		else
+			write("Very acidic")
+	end if
+
+End Program

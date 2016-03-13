@@ -1,31 +1,52 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
+using dumbo.Compiler.AST;
 
 namespace dumbo.Compiler.SyntaxAnalysis
 {
     public class ParserResult
     {
-        private readonly IList<LexicalErrorInfo> _lexicalErrors;
-        private readonly IList<SyntaxErrorInfo> _syntaxErrors;
+        private readonly IList<ParserError> _errors;
+        private RootNode _root;
 
         public ParserResult(string errorMessage) 
         {
-            _lexicalErrors = new List<LexicalErrorInfo>();
-            _syntaxErrors = new List<SyntaxErrorInfo>();
-            ErrorMessage = errorMessage;
+            _errors = new List<ParserError>();
+            AddGeneralError(errorMessage);
         }
 
-        public ParserResult() : this(String.Empty)
+        public ParserResult() : this(string.Empty)
         {
             
         }
 
-        public IEnumerable<LexicalErrorInfo> LexicalErrors => _lexicalErrors;
+        public IEnumerable<ParserError> Errors => _errors;
 
-        public IEnumerable<SyntaxErrorInfo> SyntaxErrors => _syntaxErrors;
+        public RootNode Root
+        {
+            get { return _root; }
+            set
+            {
+                if (_root != null)
+                    throw new InvalidOperationException("Root node can only set once.");
+                _root = value;
+            }
+        }
 
-        public string ErrorMessage { get; internal set; }
+        public void AddGeneralError(string message)
+        {
+            if (!string.IsNullOrWhiteSpace(message))
+                _errors.Add(new GeneralParserError(message));
+        }
 
+        public void AddLexicalError(LexicalError lexicalError)
+        {
+            _errors.Add(lexicalError);
+        }
+
+        public void AddSyntaxError(SyntaxError syntaxError)
+        {
+            _errors.Add(syntaxError);
+        }
     }
 }

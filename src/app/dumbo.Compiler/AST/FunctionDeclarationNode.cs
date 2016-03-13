@@ -1,6 +1,6 @@
 ﻿namespace dumbo.Compiler.AST
 {
-    public class ASTNode
+    public class FunctionDeclarationNode : BaseNode
     {
         
     }

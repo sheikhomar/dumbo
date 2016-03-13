@@ -43,17 +43,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AST\ASTNode.cs" />
+    <Compile Include="AST\BaseNode.cs" />
     <Compile Include="AST\ExpressionNode.cs" />
+    <Compile Include="AST\FunctionDeclarationNode.cs" />
+    <Compile Include="SyntaxAnalysis\GeneralParserError.cs" />
     <Compile Include="SyntaxAnalysis\IParser.cs" />
-    <Compile Include="SyntaxAnalysis\LexicalErrorInfo.cs" />
+    <Compile Include="SyntaxAnalysis\LexicalError.cs" />
     <Compile Include="SyntaxAnalysis\Parser.cs" />
     <Compile Include="AST\ProgramNode.cs" />
+    <Compile Include="SyntaxAnalysis\ParserError.cs" />
     <Compile Include="SyntaxAnalysis\ParserResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="AST\RootNode.cs" />
     <Compile Include="AST\StatementNode.cs" />
-    <Compile Include="SyntaxAnalysis\SyntaxErrorInfo.cs" />
+    <Compile Include="SyntaxAnalysis\SyntaxError.cs" />
+    <Compile Include="SyntaxAnalysis\AbstractSyntaxTreeBuilder.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="CodeGeneration\" />

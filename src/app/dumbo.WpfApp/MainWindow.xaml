@@ -118,7 +118,6 @@
 				Name="textEditor"
 				FontFamily="Consolas"
 				FontSize="12pt"
-				SyntaxHighlighting="VBNET"
                 ShowLineNumbers="True"
                 Grid.RowSpan="2"
 			>

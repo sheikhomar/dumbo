@@ -43,7 +43,9 @@ namespace dumbo.WpfApp
             _grammarTableWatcher.Changed += GrammarHasChanged;
 
             textEditor.TextArea.Caret.PositionChanged += CaretOnPositionChanged;
-            
+
+            textEditor.SyntaxHighlighting = HighlightingManager.Instance.GetDefinition("VB");
+
             UpdateCaretPosition();
             LoadDefaultProgram();
             LoadGrammar(GetGrammarFile());
@@ -197,7 +199,7 @@ namespace dumbo.WpfApp
             else
             {
                 ResultTextBox.Text = _myParser.FailMessage;
-                textEditor.TextArea.Caret.Column = _myParser.Column;
+                textEditor.TextArea.Caret.Column = _myParser.Column+1;
                 textEditor.TextArea.Caret.Line = _myParser.Line+1;
             }
 
@@ -209,7 +211,6 @@ namespace dumbo.WpfApp
         {
             SaveFileClick(sender, e);
         }
-
 
         private void DrawReductionTree(GOLD.Reduction Root)
         {

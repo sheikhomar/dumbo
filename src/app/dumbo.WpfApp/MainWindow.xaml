@@ -4,27 +4,142 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:dumbo.WpfApp"
+        xmlns:avalonedit="http://icsharpcode.net/sharpdevelop/avalonedit"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="905">
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition></ColumnDefinition>
-            <ColumnDefinition></ColumnDefinition>
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="30"></RowDefinition>
-            <RowDefinition></RowDefinition>
-        </Grid.RowDefinitions>
+        Title="Happy Z Development Enviroment" Height="450" Width="905" WindowState="Maximized">
+    <Window.Resources>
+        <RoutedUICommand x:Key="CompileCommand" Text="Compile" />
+        <RoutedUICommand x:Key="SaveCommand" Text="Save current file." />
+        <RoutedUICommand x:Key="PickGrammar" Text="Pick another grammar table file." />
+        <RoutedUICommand x:Key="ReloadGrammar" Text="Reload current grammar table." />
+    </Window.Resources>
+    <Window.CommandBindings>
+        <CommandBinding Command="{StaticResource CompileCommand}" Executed="Compile" />
+        <CommandBinding Command="{StaticResource SaveCommand}" Executed="SaveFile" />
+        <CommandBinding Command="{StaticResource PickGrammar}" Executed="PickGrammar" />
+        <CommandBinding Command="{StaticResource ReloadGrammar}" Executed="ReloadGrammar" />
+    </Window.CommandBindings>
+    <Window.InputBindings>
+        <KeyBinding Modifiers="Control" Key="S" Command="{StaticResource SaveCommand}" />
+        <KeyBinding Modifiers="Control" Key="R" Command="{StaticResource ReloadGrammar}" />
+        <KeyBinding Modifiers="Control" Key="Enter" Command="{StaticResource CompileCommand}" />
+    </Window.InputBindings>
+
+    <DockPanel>
+        <ToolBar DockPanel.Dock="Top">
+            <ToolBar.Resources>
+                <Style TargetType="{x:Type Image}">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type ButtonBase}, AncestorLevel=1}, Path=IsEnabled}" Value="False">
+                            <Setter Property="Opacity" Value="0.30" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ToolBar.Resources>
+            <Button Click="OpenFileClick">
+                <Image Source="Images/Open.png" Height="16"/>
+            </Button>
+            <Button ToolTip="Save current source file (Ctrl + S)"  Command="{StaticResource SaveCommand}">
+                <Image Source="Images/Save.png" Height="16"/>
+            </Button>
+            <Separator/>
+            <Button Command="Cut">
+                <Image Source="Images/Cut.png" Height="16"/>
+            </Button>
+            <Button Command="Copy">
+                <Image Source="Images/Copy.png" Height="16"/>
+            </Button>
+            <Button Command="Paste">
+                <Image Source="Images/Paste.png" Height="16"/>
+            </Button>
+            <Button Command="Delete">
+                <Image Source="Images/Delete.png" Height="16"/>
+            </Button>
+            <Separator/>
+            <Button Command="Undo">
+                <Image Source="Images/Undo.png" Height="16"/>
+            </Button>
+            <Button Command="Redo">
+                <Image Source="Images/Redo.png" Height="16"/>
+            </Button>
+            <Separator/>
+            <CheckBox IsChecked="{Binding ElementName=textEditor,Path=WordWrap}">
+                <Image Source="Images/WordWrap.png" Height="16"/>
+            </CheckBox>
+            <CheckBox IsChecked="{Binding ElementName=textEditor,Path=ShowLineNumbers}">
+                <TextBlock Width="16" TextAlignment="Center">#</TextBlock>
+            </CheckBox>
+            <CheckBox IsChecked="{Binding ElementName=textEditor,Path=Options.ShowEndOfLine}">
+                <TextBlock Width="16" TextAlignment="Center">¶</TextBlock>
+            </CheckBox>
+            <Separator />
+            <Button ToolTip="Reload grammar table (Ctrl + R)" Command="{StaticResource ReloadGrammar}">
+                <Image Source="Images/ReloadGrammar.png" Height="16"/>
+            </Button>
+            <Button ToolTip="Pick another grammar table" Command="{StaticResource PickGrammar}">
+                <Image Source="Images/OpenGrammar.png" Height="16"/>
+            </Button>
+            <Button ToolTip="Compile (Ctrl + Enter)" Command="{StaticResource CompileCommand}">
+                <Image Source="Images/Compile.png" Height="16"/>
+            </Button>
+        </ToolBar>
+        <StatusBar DockPanel.Dock="Bottom">
+            <StatusBar.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="100" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="100" />
+                        </Grid.ColumnDefinitions>
+                    </Grid>
+                </ItemsPanelTemplate>
+            </StatusBar.ItemsPanel>
+            <StatusBarItem>
+                <TextBlock Name="lblCursorPosition" />
+            </StatusBarItem>
+            <Separator Grid.Column="1" />
+            <StatusBarItem Grid.Column="2">
+                <TextBlock Name="lblGrammarTable"  />
+            </StatusBarItem>
+            <Separator Grid.Column="3" />
+            <StatusBarItem Grid.Column="4">
+                <ProgressBar Value="0" Width="90" Height="16" />
+            </StatusBarItem>
+        </StatusBar>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+            <avalonedit:TextEditor
+				Name="textEditor"
+				FontFamily="Consolas"
+				FontSize="12pt"
+				SyntaxHighlighting="VBNET"
+                ShowLineNumbers="True"
+                Grid.RowSpan="2"
+			>
+            </avalonedit:TextEditor>
+            <GridSplitter Grid.Column="1" Width="4" HorizontalAlignment="Left"/>
+            
+            <DockPanel Grid.Column="1" Margin="4 0 0 0">
+                
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="60" />
+                        <RowDefinition Height="1*" />
+                    </Grid.RowDefinitions>
+                    <TextBlock Name="InformationBox" Grid.Row="0" />
+
+                    <TextBox Grid.Row="1" Name="ResultTextBox" FontFamily="Consolas" FontSize="11pt" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" />
+                </Grid>
+                
+                
+            </DockPanel>
+        </Grid>
         
-        <avalonEdit:TextEditor
-            Grid.Row="2"
-    xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
-    Name="textEditor"
-    FontFamily="Consolas"
-    FontSize="12pt"
-         ShowLineNumbers="True"   />
-        <Button x:Name="button" Content="Button" HorizontalAlignment="Left" Margin="135,5,0,0" VerticalAlignment="Top" Width="75"/>
-        <TextBox x:Name="textBox" HorizontalAlignment="Left" Height="23" Margin="10,5,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
-        <TreeView x:Name="treeView" Grid.Column="1" HorizontalAlignment="Left" Grid.Row="1" VerticalAlignment="Top" />
-    </Grid>
+    </DockPanel>
 </Window>

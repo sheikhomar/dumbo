@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dumbo.WpfApp", "src\app\dum
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dumbo.Compiler", "src\app\dumbo.Compiler\dumbo.Compiler.csproj", "{DE2710CE-0479-4C06-BA25-3ADD2A3DD203}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dumbo.Tests", "src\test\dumbo.Tests\dumbo.Tests.csproj", "{34085617-ED22-4CD1-ADE5-EB522C449B6B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{DE2710CE-0479-4C06-BA25-3ADD2A3DD203}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DE2710CE-0479-4C06-BA25-3ADD2A3DD203}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DE2710CE-0479-4C06-BA25-3ADD2A3DD203}.Release|Any CPU.Build.0 = Release|Any CPU
+		{34085617-ED22-4CD1-ADE5-EB522C449B6B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{34085617-ED22-4CD1-ADE5-EB522C449B6B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{34085617-ED22-4CD1-ADE5-EB522C449B6B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{34085617-ED22-4CD1-ADE5-EB522C449B6B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

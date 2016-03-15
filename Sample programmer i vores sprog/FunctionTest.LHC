@@ -1,0 +1,79 @@
+//Created by bs
+//
+//This file test differnt behavior of the fucntion part of LHC
+//V 0.1
+//
+Constant Number PI = 3.14
+
+Program
+ Number numb
+ Text txt
+ 
+ //Function assignment
+ numb = MyNumb
+ numb, txt = MyNumbTextMirror(PI, "Hello")
+ 
+ 
+ //Function as exp, eva to true
+ if MyBool()then
+  //do stuff
+ End if
+ 
+ if MyNumb(PI) = PI then
+  //do stuff
+ End if 
+ 
+ 
+ //infinite repeat wiht exp
+ Number a
+ Repeat(a + 1)
+   a = a + 1
+ end Repeat 
+ 
+ 
+ //Unknown behavior for multiret
+ //if(MyFuncTwo(PI,"Hello")) then
+  //
+ //end if
+ 
+ 
+ //Case Check
+ numb = MyCaSEdFunction(5)
+ 
+End Program
+
+
+//Simple type functions
+Function MyBool() returns Bool
+ return true
+End Function
+
+Function MyNumb() returns Number
+ return PI
+End Function
+
+Function MyText() returns Text
+ return "hello"
+End Function
+
+Function MyNumbTextMirror(Number numb, Text txt) returns Number, Text
+ return numb, txt 
+End Function
+
+
+//One two three function test
+Function MyFuncOne(Number localPi) Returns Number
+ return localPi + Pi
+End Function
+
+Function MyFuncTwo(Number localPi, Text localText) Returns Number, Text
+ return localPi, localText
+End Function
+
+Function MyFuncThree(Number localPi) Returns Number, Text
+ return MyFuncOne(localPi), "Hello"
+End Function
+
+FUnCTiOn MyCaSEdFunction(nUMBER locVAR) reTURN Number
+ returns 5*25
+eND FUnCTiOn

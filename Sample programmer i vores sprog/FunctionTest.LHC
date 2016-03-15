@@ -3,15 +3,15 @@
 //This file test differnt behavior of the fucntion part of LHC
 //V 0.1
 //
-Constant Number PI = 3.14
+Constant Number PI := 3.14
 
 Program
  Number numb
  Text txt
  
  //Function assignment
- numb = MyNumb
- numb, txt = MyNumbTextMirror(PI, "Hello")
+ numb := MyNumb
+ numb, txt := MyNumbTextMirror(PI, "Hello")
  
  
  //Function as exp, eva to true
@@ -27,7 +27,7 @@ Program
  //infinite repeat wiht exp
  Number a
  Repeat(a + 1)
-   a = a + 1
+   a := a + 1
  end Repeat 
  
  
@@ -38,13 +38,13 @@ Program
  
  
  //Case Check
- numb = MyCaSEdFunction(5)
+ numb := MyCaSEdFunction(5)
  
 End Program
 
 
 //Simple type functions
-Function MyBool() returns Bool
+Function MyBool() returns Boolean
  return true
 End Function
 

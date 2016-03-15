@@ -33,19 +33,19 @@ BooleanLiteral = 'TRUE' | 'FALSE'
 <Start> ::=  <Program> <nl> <FuncDecls>
          | <Program>
      
+<nl>     ::= NewLine <nl>
+           | NewLine
+           
 <Program> ::= 'Program' <nl> <Stmts> 'End' 'Program'
           
 <Literal> ::= NumberLiteral
            | TextLiteral
            | BooleanLiteral
-                     
+  
+<Id> ::= Id <MultiId>
+                   
 <MultiId> ::= ',' Id <MultiId>
            | <>
-
-<Id> ::= Id <MultiId>
-      
-<nl>     ::= NewLine <nl>
-           | NewLine
 
 ! Declerations    
 
@@ -71,13 +71,11 @@ BooleanLiteral = 'TRUE' | 'FALSE'
         | <ReturnStmt>
         | <FuncCall>
         | <BreakStmt>
-        | <nl>
         
 <AssignStmt> ::= <Id> Assign <ExprList>
               | <Decl> Assign <ExprList>
      
-<IfStmt> ::= 'if' '(' <Expr> ')' 'then' <nl> <Stmts> <ElseIfStmts> <ElseStmt> 'end' 'if'
-          | 'if' <Expr> 'then' <nl> <Stmts> <ElseIfStmts> <ElseStmt> 'end' 'if'
+<IfStmt> ::= 'if' <Expr> 'then' <nl> <Stmts> <ElseIfStmts> <ElseStmt> 'end' 'if'
 
 <ElseStmt> ::= 'else' <nl> <Stmts>
             | <>
@@ -85,11 +83,10 @@ BooleanLiteral = 'TRUE' | 'FALSE'
 <ElseIfStmts> ::= <ElseIfStmt> <ElseIfStmts>
                | <>
 
-<ElseIfStmt> ::= 'else if' '(' <Expr> ')' 'then' <nl> <Stmts>
-              | 'else if' <Expr> 'then' <nl> <Stmts>        
+<ElseIfStmt> ::= 'else if' <Expr> 'then' <nl> <Stmts>        
 
-<RepeatStmt> ::= 'Repeat' '(' <Expr> ')' <nl> <Stmts> 'End' 'Repeat'
-              | 'Repeat' 'While' '(' <Expr> ')' <nl> <Stmts> 'End' 'Repeat'
+<RepeatStmt> ::= 'Repeat' <Expr> <nl> <Stmts> 'End' 'Repeat'
+              | 'Repeat' 'While' <Expr> <nl> <Stmts> 'End' 'Repeat'
 
 <FuncCall> ::= Id '(' <ActualParams> ')'
             
@@ -99,11 +96,8 @@ BooleanLiteral = 'TRUE' | 'FALSE'
 <MultiActualParams> ::= ',' <Expr> <MultiActualParams>
                      | <>
                      
-<ReturnStmt> ::= Return <ReturnValues>
-              
-<ReturnValues> ::= <ReturnValue>
-                | <ReturnValue> ',' <ReturnValues>
-                
+<ReturnStmt> ::= Return <ReturnValue>
+                              
 <ReturnValue> ::= <ExprList>
                | 'Nothing'
                

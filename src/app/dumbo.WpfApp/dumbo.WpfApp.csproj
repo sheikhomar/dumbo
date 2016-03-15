@@ -129,6 +129,12 @@
   <ItemGroup>
     <Resource Include="Images\LoadDefaultSourceFile.png" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\dumbo.Compiler\dumbo.Compiler.csproj">
+      <Project>{DE2710CE-0479-4C06-BA25-3ADD2A3DD203}</Project>
+      <Name>dumbo.Compiler</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

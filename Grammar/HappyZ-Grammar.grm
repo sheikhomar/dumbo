@@ -8,10 +8,10 @@
 "Start Symbol" = <Start>
               
 ! Comments
-Comment Block @= { Nesting = All, Advance = Character }
-Comment Start   = '/*'
-Comment End     = '*/'
-Comment Line    = '//'              
+Comment Line    = '//' 
+Comment2 @= { Type = Noise }
+Comment2 Line = 'Comment'          
+         
 
 ! Set Specification
 {WS} = {WhiteSpace} - {CR} - {LF}

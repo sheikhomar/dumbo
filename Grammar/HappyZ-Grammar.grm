@@ -30,8 +30,9 @@ BooleanLiteral = 'TRUE' | 'FALSE'
 
 ! CFG               
 
-<Start> ::=  <Program> <nl> <FuncDecls>
+<Start> ::= <Program> <nl> <FuncDecls>
          | <Program>
+         | <nl> <Program> <nl> <FuncDecls>
      
 <nl>     ::= NewLine <nl>
            | NewLine
@@ -105,7 +106,8 @@ BooleanLiteral = 'TRUE' | 'FALSE'
 
 ! Functions
 
-<FuncDecls> ::= <FuncDecl> <FuncDecls>
+<FuncDecls> ::= <FuncDecl> <nl> <FuncDecls>
+             | <FuncDecl>
              | <>
 
 <FuncDecl> ::= 'Function' Id '(' <FormalParams> ')' Return <ReturnTypes> <nl> <Stmts> 'End' 'Function'

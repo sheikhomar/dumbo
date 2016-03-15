@@ -43,9 +43,27 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AST\AssignmentNode.cs" />
     <Compile Include="AST\BaseNode.cs" />
+    <Compile Include="AST\BinaryOperationNode.cs" />
+    <Compile Include="AST\BinaryOperatorType.cs" />
+    <Compile Include="AST\DeclStmtNode.cs" />
     <Compile Include="AST\ExpressionNode.cs" />
-    <Compile Include="AST\FunctionDeclarationNode.cs" />
+    <Compile Include="AST\FuncCallNode.cs" />
+    <Compile Include="AST\FunctionDeclNode.cs" />
+    <Compile Include="AST\HappyType.cs" />
+    <Compile Include="AST\IdentifierListNode.cs" />
+    <Compile Include="AST\IdentifierNode.cs" />
+    <Compile Include="AST\IfStmtNode.cs" />
+    <Compile Include="AST\LiteralValueNode.cs" />
+    <Compile Include="AST\RepeatStmtNode.cs" />
+    <Compile Include="AST\RepeatWhileStmtNode.cs" />
+    <Compile Include="AST\ReturnStmtNode.cs" />
+    <Compile Include="AST\StmtBlockNode.cs" />
+    <Compile Include="AST\TypeNode.cs" />
+    <Compile Include="AST\UnaryOperationNode.cs" />
+    <Compile Include="AST\UnaryOperatorType.cs" />
+    <Compile Include="AST\ValueNode.cs" />
     <Compile Include="SyntaxAnalysis\GeneralParserError.cs" />
     <Compile Include="SyntaxAnalysis\IParser.cs" />
     <Compile Include="SyntaxAnalysis\LexicalError.cs" />
@@ -55,7 +73,7 @@
     <Compile Include="SyntaxAnalysis\ParserResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="AST\RootNode.cs" />
-    <Compile Include="AST\StatementNode.cs" />
+    <Compile Include="AST\StmtNode.cs" />
     <Compile Include="SyntaxAnalysis\SyntaxError.cs" />
     <Compile Include="SyntaxAnalysis\AbstractSyntaxTreeBuilder.cs" />
   </ItemGroup>

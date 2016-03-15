@@ -12,6 +12,9 @@
         GreaterThan,
         GreaterOrEqual,
         LessThan,
-        LessOrEqual
+        LessOrEqual,
+
+        Or,
+        And
     }
 }

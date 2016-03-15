@@ -2,8 +2,14 @@
 {
     public class UnaryOperationNode : ExpressionNode
     {
-        public UnaryOperatorType Operator;
-        public ExpressionNode Expression;
+        public UnaryOperationNode(UnaryOperatorType @operator, ExpressionNode expression)
+        {
+            Operator = @operator;
+            Expression = expression;
+        }
+
+        public UnaryOperatorType Operator { get; }
+        public ExpressionNode Expression { get; }
         
     }
 }

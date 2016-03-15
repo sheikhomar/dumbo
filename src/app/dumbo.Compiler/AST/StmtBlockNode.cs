@@ -4,6 +4,13 @@ namespace dumbo.Compiler.AST
 {
     public class StmtBlockNode  : BaseNode
     {
-        public IList<StmtNode> Body;
+        public StmtBlockNode()
+        {
+            Body = new List<StmtNode>();
+        }
+
+        public IList<StmtNode> Body { get; }
+
+        
     }
 }

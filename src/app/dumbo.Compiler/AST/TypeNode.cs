@@ -2,6 +2,9 @@
 {
     public class TypeNode : BaseNode
     {
-        
+        public TypeNode()
+        {
+            
+        }
     }
 }

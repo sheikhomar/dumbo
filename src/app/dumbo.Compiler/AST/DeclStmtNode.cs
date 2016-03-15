@@ -2,7 +2,13 @@
 {
     public class DeclStmtNode : StmtNode
     {
-        public IdentifierListNode Identifers;
-        public TypeNode Type;
+        public DeclStmtNode(IdentifierListNode identifiers, HappyType type)
+        {
+            Identifiers = identifiers;
+            Type = type;
+        }
+
+        public IdentifierListNode Identifiers { get; }
+        public HappyType Type { get; }
     }
 }

@@ -4,6 +4,5 @@
     {
         public IdentifierNode Identifier;
         public ExpressionNode Expression;
-
     }
 }

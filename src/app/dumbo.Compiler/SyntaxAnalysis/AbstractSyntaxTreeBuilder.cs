@@ -87,6 +87,7 @@ namespace dumbo.Compiler.SyntaxAnalysis
             switch (production)
             {
                 case StmtProduction.AssignStmt:
+                    return BuildAssignStmt(lhs[0]);
                     break;
                 case StmtProduction.IfStmt:
                     return BuildIfStmt(lhs[0]);
@@ -110,6 +111,54 @@ namespace dumbo.Compiler.SyntaxAnalysis
             return null;
         }
 
+        private AssignmentStmtNode BuildAssignStmt(Token token)
+        {
+            Debug.Assert(token.Parent.Name() == "AssignStmt");
+            Reduction lhs = (Reduction)token.Data;
+
+            string firstLhfName = lhs[0].Parent.Name();
+
+            ExpressionListNode exprListNode = BuildExprList(lhs[2]);
+
+            if ("Id".Equals(firstLhfName, StringComparison.InvariantCultureIgnoreCase))
+            {
+                return new AssignmentStmtNode(BuildIdentifierList(lhs[0]), exprListNode);
+            }
+            var declNode = BuildDeclStmt(lhs[0]);
+            return new DeclAndAssignmentStmtNode(declNode.Type, declNode.Identifiers, exprListNode);
+        }
+
+        
+        
+        private ExpressionListNode BuildExprList(Token token)
+        {
+            Debug.Assert(token.Parent.Name() == "ExprList");
+            Reduction lhs = (Reduction)token.Data;
+
+            IList<ExpressionNode> list = new List<ExpressionNode>();
+
+            list.Add(BuildExprNode(lhs[0]));
+
+            Token multiToken = lhs[1];
+            AppendExpression(multiToken, list);
+
+            return new ExpressionListNode(list);
+        }
+
+        private void AppendExpression(Token token, IList<ExpressionNode> list)
+        {
+            Debug.Assert(token.Parent.Name() == "MultiExpr");
+            Reduction lhs = (Reduction)token.Data;
+
+            if (lhs.Count() > 0)
+            {
+                list.Add(BuildExprNode(lhs[1]));
+
+                Token multiIdToken2 = lhs[2];
+                AppendExpression(multiIdToken2, list);
+            }
+        }
+
         private IfStmtNode BuildIfStmt(Token ifStmToken)
         {
             Debug.Assert(ifStmToken.Parent.Name() == "IfStmt");
@@ -118,12 +167,33 @@ namespace dumbo.Compiler.SyntaxAnalysis
             bool longIfStmt = lhs.Count() == 11;
 
             Token exprToken = longIfStmt ? lhs[2] : lhs[1];
-            Token stmtToken = longIfStmt ? lhs[6] : lhs[4];
+            Token stmtsToken = longIfStmt ? lhs[6] : lhs[4];
+            Token elseIfToken = longIfStmt ? lhs[7] : lhs[5];
             Token elseToken = longIfStmt ? lhs[8] : lhs[6];
 
-            ExpressionNode exprNode = BuildExprNode(exprToken);
+            ExpressionNode predicate = BuildExprNode(exprToken);
+            StmtBlockNode stmtsNode = BuildStmtsBlock(stmtsToken);
 
 
+            Reduction elseReduction = (Reduction) elseToken.Data;
+            
+            if (elseReduction.Count() > 0)
+            {
+                StmtBlockNode elseStmtsNode = BuildStmtsBlock(elseReduction[2]);
+            }
+
+            Reduction elseIfReduction = (Reduction)elseIfToken.Data;
+            if (elseIfReduction.Count() > 0)
+            {
+                ElseIfStmtNode elseIfNode = BuildElseIfStmt(elseIfToken);
+            }
+
+            //return new IfStmtNode(predicate, elseStmtsNode, null, stmtsNode);
+            return new IfStmtNode(predicate, stmtsNode);
+        }
+
+        private ElseIfStmtNode BuildElseIfStmt(Token elseIfToken)
+        {
             return null;
         }
 

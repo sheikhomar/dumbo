@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.Text;
 
 namespace dumbo.Compiler.AST
 {
-    public class BaseListNode<TBaseType> : BaseNode
+    public abstract class BaseListNode<TBaseType> : BaseNode where TBaseType : BaseNode
     {
         private readonly IList<TBaseType> _internalList;
 
@@ -23,6 +24,28 @@ namespace dumbo.Compiler.AST
         public T GetAs<T>(int index) where T : class, TBaseType
         {
             return _internalList[index] as T;
+        }
+
+        public IList<T> GetAllAs<T>() where T : class, TBaseType
+        {
+            return _internalList as List<T>;
+        }
+
+        public override void PrettyPrint(StringBuilder StrBuilder)
+        {
+            if (_internalList.Count == 0)
+                return;
+
+            _internalList[0].PrettyPrint(StrBuilder);
+
+            if (_internalList.Count == 1)
+                return;
+
+            for (int i = 1; i < _internalList.Count; i++)
+            {
+                StrBuilder.Append(", ");
+                _internalList[i].PrettyPrint(StrBuilder);
+            }
         }
     }
 }

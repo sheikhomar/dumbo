@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Text;
 
 namespace dumbo.Compiler.AST
 {
@@ -11,6 +12,18 @@ namespace dumbo.Compiler.AST
         {
             Program = program;
             Functions = functions;
+        }
+
+        public override void PrettyPrint(StringBuilder StrBuilder)
+        {
+            Program.PrettyPrint(StrBuilder);
+            if (Functions != null)
+            {
+                foreach (var node in Functions)
+                {
+                    node.PrettyPrint(StrBuilder);
+                }
+            }
         }
     }
 }

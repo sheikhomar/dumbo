@@ -24,14 +24,27 @@ namespace dumbo.Compiler.SyntaxAnalysis
         {
             Debug.Assert(root.Parent.Head().Name() == "Start");
 
-            ProgramNode programNode = BuildProgram(root[0]);
+            ProgramNode programNode;
             IList<FunctionDeclNode> funcDelcs;
 
-            if (root.Count() == 3)
-                funcDelcs = BuildFunctionDecls(root[2]);
-            else
-                funcDelcs = new List<FunctionDeclNode>();
-
+            switch (root.Count())
+            {
+                case 1:
+                    programNode = BuildProgram(root[0]);
+                    funcDelcs = new List<FunctionDeclNode>();
+                    break;
+                case 3:
+                    programNode = BuildProgram(root[0]);
+                    funcDelcs = BuildFunctionDecls(root[2]);
+                    break;
+                case 4:
+                    programNode = BuildProgram(root[1]);
+                    funcDelcs = BuildFunctionDecls(root[3]);
+                    break;
+                default:
+                    throw new InvalidOperationException("Unexpected <Start> production.");
+            }
+            
             return new RootNode(programNode, funcDelcs);
         }
 
@@ -88,20 +101,18 @@ namespace dumbo.Compiler.SyntaxAnalysis
             {
                 case StmtProduction.AssignStmt:
                     return BuildAssignStmt(lhs[0]);
-                    break;
                 case StmtProduction.IfStmt:
                     return BuildIfStmt(lhs[0]);
-                    break;
                 case StmtProduction.RepeatStmt:
                     break;
                 case StmtProduction.Decl:
                     return BuildDeclStmt(lhs[0]);
                 case StmtProduction.ReturnStmt:
-                    break;
+                    return BuildReturnStmtNode(lhs[0]);
                 case StmtProduction.FuncCall:
-                    break;
+                    return BuildFuncCallStmt(lhs[0]);
                 case StmtProduction.BreakStmt:
-                    break;
+                    return new BreakStmtNode();
                 case StmtProduction.nl:
                     break;
                 default:
@@ -109,6 +120,57 @@ namespace dumbo.Compiler.SyntaxAnalysis
             }
 
             return null;
+        }
+
+        private ReturnStmtNode BuildReturnStmtNode(Token token)
+        {
+            Debug.Assert(token.Parent.Name() == "ReturnStmt");
+            Reduction lhs = (Reduction)token.Data;
+            ExpressionListNode expressions = null;
+            
+            Reduction data = lhs[1].Data as Reduction;
+            if (data != null)
+            {
+                expressions = BuildExprList(lhs[1]);
+            }
+
+            return new ReturnStmtNode(expressions);
+        }
+
+        private FuncCallStmtNode BuildFuncCallStmt(Token token)
+        {
+            return new FuncCallStmtNode(BuildFuncCallExprNode(token));
+        }
+
+        private FuncCallNode BuildFuncCallExprNode(Token token)
+        {
+            Debug.Assert(token.Parent.Name() == "FuncCall");
+            Reduction lhs = (Reduction)token.Data;
+
+            string identifier = (string) lhs[0].Data;
+
+            FuncCallNode funcCallNode = new FuncCallNode(identifier);
+
+            Token actualParams = lhs[2];
+            AppendFuncCallParameters(actualParams, funcCallNode);
+
+            return funcCallNode;
+        }
+
+        private void AppendFuncCallParameters(Token token, FuncCallNode funcCallNode)
+        {
+            Debug.Assert(token.Parent.Name() == "ActualParams" || token.Parent.Name() == "MultiActualParams");
+            Reduction lhs = (Reduction)token.Data;
+            
+            if (lhs.Count() > 0)
+            {
+                Token exprToken = lhs.Count() == 2 ? lhs[0] : lhs[1];
+                Token multiExprToken = lhs.Count() == 2 ? lhs[1] : lhs[2];
+                
+                ExpressionNode exprNode = BuildExprNode(exprToken);
+                funcCallNode.Parameters.Add(exprNode);
+                AppendFuncCallParameters(multiExprToken, funcCallNode);
+            }
         }
 
         private AssignmentStmtNode BuildAssignStmt(Token token)
@@ -163,38 +225,60 @@ namespace dumbo.Compiler.SyntaxAnalysis
         {
             Debug.Assert(ifStmToken.Parent.Name() == "IfStmt");
             Reduction lhs = (Reduction)ifStmToken.Data;
+            Debug.Assert(lhs.Count() == 9);
 
-            bool longIfStmt = lhs.Count() == 11;
-
-            Token exprToken = longIfStmt ? lhs[2] : lhs[1];
-            Token stmtsToken = longIfStmt ? lhs[6] : lhs[4];
-            Token elseIfToken = longIfStmt ? lhs[7] : lhs[5];
-            Token elseToken = longIfStmt ? lhs[8] : lhs[6];
+            Token exprToken = lhs[1];
+            Token stmtsToken = lhs[4];
+            Token elseIfToken = lhs[5];
+            Token elseToken = lhs[6];
 
             ExpressionNode predicate = BuildExprNode(exprToken);
             StmtBlockNode stmtsNode = BuildStmtsBlock(stmtsToken);
 
+            IfStmtNode ifStmt = null;
 
             Reduction elseReduction = (Reduction) elseToken.Data;
-            
-            if (elseReduction.Count() > 0)
+            bool hasElseBody = elseReduction.Count() > 0;
+
+            if (hasElseBody)
             {
-                StmtBlockNode elseStmtsNode = BuildStmtsBlock(elseReduction[2]);
+                StmtBlockNode  elseStmtsNode = BuildStmtsBlock(elseReduction[2]);
+                ifStmt = new IfElseStmtNode(predicate, stmtsNode, elseStmtsNode);
+            }
+            else
+            {
+                ifStmt = new IfStmtNode(predicate, stmtsNode);
             }
 
             Reduction elseIfReduction = (Reduction)elseIfToken.Data;
-            if (elseIfReduction.Count() > 0)
+            bool hasElseIfStmts = elseIfReduction.Count() > 0;
+            if (hasElseIfStmts)
             {
-                ElseIfStmtNode elseIfNode = BuildElseIfStmt(elseIfToken);
+                AppendElseIfStmts(elseIfToken, ifStmt);
             }
-
-            //return new IfStmtNode(predicate, elseStmtsNode, null, stmtsNode);
-            return new IfStmtNode(predicate, stmtsNode);
+            
+            return ifStmt;
         }
 
-        private ElseIfStmtNode BuildElseIfStmt(Token elseIfToken)
+        private void AppendElseIfStmts(Token token, IfStmtNode ifStmtNode)
         {
-            return null;
+            Debug.Assert(token.Parent.Name() == "ElseIfStmts");
+            Reduction lhs = (Reduction)token.Data;
+            if (lhs.Count() > 0)
+            {
+                Reduction elseIfReduction = (Reduction) lhs[0].Data;
+
+                Token exprToken = elseIfReduction[1];
+                Token stmtsToken = elseIfReduction[4];
+
+                ExpressionNode predicate = BuildExprNode(exprToken);
+                StmtBlockNode stmtsNode = BuildStmtsBlock(stmtsToken);
+
+                ElseIfStmtNode elseIfStmt = new ElseIfStmtNode(predicate, stmtsNode);
+                ifStmtNode.ElseIfStatements.Add(elseIfStmt);
+
+                AppendElseIfStmts(lhs[1], ifStmtNode);
+            }
         }
 
         private ExpressionNode BuildExprNode(Token exprToken)
@@ -277,7 +361,7 @@ namespace dumbo.Compiler.SyntaxAnalysis
                     string name = (string)lhs[0].Data;
                     return new IdentifierNode(name);
                 case "FuncCall":
-                    return null;
+                    return BuildFuncCallExprNode(lhs[0]);
                 case "(":
                     return BuildExprNode(lhs[1]);
                 default:
@@ -329,22 +413,12 @@ namespace dumbo.Compiler.SyntaxAnalysis
             Reduction lhs = (Reduction)declStmtToken.Data;
 
             Token underToken = lhs[0];
-            string name = underToken.Parent.Name();
-            Reduction underLhs = (Reduction) underToken.Data;
 
-            IdentifierListNode idList = BuildIdentifierList(underLhs[1]);
-            DeclStmtNode returnNode = null;
+            string name = (string)underToken.Data;
 
-            if (name == "NumberDecl")
-                return new DeclStmtNode(idList, HappyType.Number);
-
-            if (name == "TextDecl")
-                return new DeclStmtNode(idList, HappyType.Text);
-
-            if (name == "BoolDecl")
-                return new DeclStmtNode(idList, HappyType.Boolean);
-
-            throw new InvalidOperationException("Invalid happy type!");
+            IdentifierListNode idList = BuildIdentifierList(lhs[1]);
+            HappyType type = ConvertToEnum<HappyType>(name);
+            return new DeclStmtNode(idList, type);
         }
 
         private IdentifierListNode BuildIdentifierList(Token idToken)
@@ -390,7 +464,7 @@ namespace dumbo.Compiler.SyntaxAnalysis
 
 
 
-
+        
         public T ConvertToEnum<T>(string input) where T : struct, IComparable, IFormattable, IConvertible
         {
             T output;

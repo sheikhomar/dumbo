@@ -2,7 +2,13 @@ namespace dumbo.Compiler.AST
 {
     public class ElseIfStmtNode : BaseNode
     {
-        public ExpressionNode Predicate { get; set; }
-        public StmtBlockNode Body { get; set; }
+        public ElseIfStmtNode(ExpressionNode predicate, StmtBlockNode body)
+        {
+            Predicate = predicate;
+            Body = body;
+        }
+
+        public ExpressionNode Predicate { get; }
+        public StmtBlockNode Body { get; }
     }
 }

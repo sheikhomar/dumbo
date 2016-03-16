@@ -2,6 +2,13 @@
 {
     public class FuncCallNode : ExpressionNode
     {
-        
+        public FuncCallNode(string identifier)
+        {
+            Identifier = identifier;
+            Parameters = new ActualParamListNode();
+        }
+
+        public string Identifier { get; }
+        public ActualParamListNode Parameters { get; }
     }
 }

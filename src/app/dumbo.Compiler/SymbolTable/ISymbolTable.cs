@@ -13,7 +13,6 @@ namespace dumbo.Compiler.SymbolTable
 
         void EnterSymbol(string name, SymbolTableType type);
         SymbolTableEntry RetrieveSymbol(string name);
-        void DeleteSymbol(string name);
 
         bool DeclaredLocally(string name);
     }

@@ -31,28 +31,51 @@ namespace dumbo.Compiler.SymbolTable
 
         public void CloseScope()
         {
-            throw new NotImplementedException();
+            foreach (string closingName in DepthContent)
+            {
+                SymbolTableEntry entry = RetrieveSymbol(closingName);
+                SymbolTableEntry outerEntry = entry.OuterDecl;
+                Table.Remove(closingName);
+
+                if (outerEntry != null)
+                    EnterSymbol(outerEntry.Name, outerEntry.Type);
+            }
+
+            Depth--;
+            DepthContent = DepthContentStack.Pop();
         }
 
         public bool DeclaredLocally(string name)
         {
-            throw new NotImplementedException();
-        }
-
-        public void DeleteSymbol(string name)
-        {
-            throw new NotImplementedException();
+            SymbolTableEntry entry = RetrieveSymbol(name);
+            return (entry.Depth == Depth);
         }
 
         public void EnterSymbol(string name, SymbolTableType type)
         {
-            SymbolTableEntry oldEntry = Table[name];
-            if (oldEntry != null && oldEntry.Depth == Depth)
+            SymbolTableEntry oldEntry = RetrieveSymbol(name);
+            if (oldEntry != null && oldEntry.Depth >= Depth)
             {
-                throw new Exception();
+                if (oldEntry.Depth > Depth)
+                    throw new ArgumentException("oldEntry was deeper than current entry - programmer error");
+                else
+                    throw new DuplicateDeclarationException(string.Format("Error: Multiple declarations of {0} exist in this scope", name));
             }
-            
-            throw new NotImplementedException();
+
+            SymbolTableEntry newEntry = new SymbolTableEntry(name, type, Depth, null);
+
+            DepthContent.Add(name);
+
+            if (oldEntry == null)
+            {
+                Table.Add(newEntry.Name, newEntry);
+            }
+            else //This is the case when the entry already exist at an outer level
+            {
+                Table.Remove(name);
+                newEntry.OuterDecl = oldEntry;
+                Table.Add(newEntry.Name, newEntry);
+            }
         }
 
         public SymbolTableEntry RetrieveSymbol(string name)

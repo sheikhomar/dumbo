@@ -1,6 +1,6 @@
 ﻿namespace dumbo.Compiler.AST
 {
-    public abstract class ExpressionNode
+    public abstract class ExpressionNode : BaseNode
     {
          
     }

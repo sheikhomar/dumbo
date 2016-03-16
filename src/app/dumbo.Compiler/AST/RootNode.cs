@@ -6,9 +6,9 @@ namespace dumbo.Compiler.AST
     public class RootNode : BaseNode
     {
         public ProgramNode Program { get; set; }
-        public IList<FunctionDeclNode> Functions { get; set; }
+        public IList<FuncDelcNode> Functions { get; set; }
 
-        public RootNode(ProgramNode program, IList<FunctionDeclNode> functions)
+        public RootNode(ProgramNode program, IList<FuncDelcNode> functions)
         {
             Program = program;
             Functions = functions;

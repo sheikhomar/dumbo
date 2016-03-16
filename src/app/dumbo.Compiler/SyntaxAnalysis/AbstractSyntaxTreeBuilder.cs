@@ -25,21 +25,21 @@ namespace dumbo.Compiler.SyntaxAnalysis
             Debug.Assert(root.Parent.Head().Name() == "Start");
 
             ProgramNode programNode;
-            IList<FunctionDeclNode> funcDelcs;
+            IList<FuncDelcNode> funcDelcs;
 
             switch (root.Count())
             {
                 case 1:
                     programNode = BuildProgram(root[0]);
-                    funcDelcs = new List<FunctionDeclNode>();
+                    funcDelcs = new List<FuncDelcNode>();
                     break;
                 case 3:
                     programNode = BuildProgram(root[0]);
-                    funcDelcs = BuildFunctionDecls(root[2]);
+                    funcDelcs = BuildFuncDeclsNode(root[2]);
                     break;
                 case 4:
                     programNode = BuildProgram(root[1]);
-                    funcDelcs = BuildFunctionDecls(root[3]);
+                    funcDelcs = BuildFuncDeclsNode(root[3]);
                     break;
                 default:
                     throw new InvalidOperationException("Unexpected <Start> production.");
@@ -453,7 +453,7 @@ namespace dumbo.Compiler.SyntaxAnalysis
             }
         }
 
-        private IList<FunctionDeclNode> BuildFunctionDecls(Token funcDeclsSymbol)
+        private IList<FuncDelcNode> BuildFuncDeclsNode(Token funcDeclsSymbol)
         {
             Debug.Assert(funcDeclsSymbol.Parent.Name() == "FuncDecls");
 

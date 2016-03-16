@@ -83,6 +83,24 @@ namespace dumbo.Tests.SymbolTable
         }
 
         [Test]
+        public void ThrowsDuplicateDeclaration()
+        {
+            // Arrange
+            table.OpenScope();
+            table.EnterSymbol("tst", new Compiler.SymbolTable.SymbolTablePrimitiveType(Compiler.SymbolTable.SymbolTableType.Boolean));
+
+            // Act & Assert
+            Assert.Throws(typeof(Compiler.SymbolTable.DuplicateDeclarationException), () => table.EnterSymbol("tst", new Compiler.SymbolTable.SymbolTablePrimitiveType(Compiler.SymbolTable.SymbolTableType.Boolean)));
+        }
+
+        [Test]
+        public void ThrowsOutermostScope()
+        {
+            // Act & Assert
+            Assert.Throws(typeof(Compiler.SymbolTable.OutermostScopeException), () => table.CloseScope());
+        }
+
+        [Test]
         public void EnsureOuterDeclarationIsProperlyRestored()
         {
             // Arrange

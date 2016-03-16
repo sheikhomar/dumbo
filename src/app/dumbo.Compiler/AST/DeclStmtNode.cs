@@ -17,6 +17,7 @@ namespace dumbo.Compiler.AST
         {
             StrBuilder.Append(Type.ToString() + " ");
             Identifiers.PrettyPrint(StrBuilder);
+            StrBuilder.Append("\n");
         }
     }
 }

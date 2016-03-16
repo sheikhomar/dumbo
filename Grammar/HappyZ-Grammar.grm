@@ -50,16 +50,10 @@ BooleanLiteral = 'TRUE' | 'FALSE'
 
 ! Declerations    
 
-<Decl> ::= <NumberDecl> 
-         | <TextDecl> 
-         | <BoolDecl> 
-     
-<NumberDecl> ::= 'Number' <Id> 
-              
-<TextDecl> ::= 'Text' <Id>
-            
-<BoolDecl> ::= 'Boolean' <Id>
-                     
+<Decl> ::= 'Number' <Id>  
+         | 'Text' <Id>
+         | 'Boolean' <Id>
+                          
 ! Statements 
 
 <Stmts> ::= <Stmt> <nl> <Stmts>
@@ -97,11 +91,9 @@ BooleanLiteral = 'TRUE' | 'FALSE'
 <MultiActualParams> ::= ',' <Expr> <MultiActualParams>
                      | <>
                      
-<ReturnStmt> ::= Return <ReturnValue>
-                              
-<ReturnValue> ::= <ExprList>
-               | 'Nothing'
-               
+<ReturnStmt> ::= Return <ExprList>
+              | Return 'Nothing'
+                                             
 <BreakStmt> ::= 'Break'
 
 ! Functions

@@ -13,7 +13,6 @@ namespace dumbo.Compiler.AST
             foreach (var node in this)
             {
                 node.PrettyPrint(strBuilder);
-                strBuilder.EndLine();
             }
         }
     }

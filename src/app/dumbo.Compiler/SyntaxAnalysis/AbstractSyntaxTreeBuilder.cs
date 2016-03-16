@@ -1,24 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Threading;
 using dumbo.Compiler.AST;
 using GOLD;
 
 namespace dumbo.Compiler.SyntaxAnalysis
 {
-    public enum StmtProduction
-    {
-        AssignStmt,
-        IfStmt,
-        RepeatStmt, 
-        Decl, 
-        ReturnStmt, 
-        FuncCall, 
-        BreakStmt, 
-        nl  
-    }
-
     public class AbstractSyntaxTreeBuilder
     {
         public RootNode Build(Reduction root)
@@ -264,7 +250,7 @@ namespace dumbo.Compiler.SyntaxAnalysis
             ExpressionNode predicate = BuildExprNode(exprToken);
             StmtBlockNode stmtsNode = BuildStmtsBlock(stmtsToken);
 
-            IfStmtNode ifStmt = null;
+            IfStmtNode ifStmt;
 
             Reduction elseReduction = (Reduction) elseToken.Data;
             bool hasElseBody = elseReduction.Count() > 0;

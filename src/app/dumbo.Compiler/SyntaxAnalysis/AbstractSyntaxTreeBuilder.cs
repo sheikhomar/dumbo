@@ -55,12 +55,12 @@ namespace dumbo.Compiler.SyntaxAnalysis
             
             StmtBlockNode stmtsBlockNode = new StmtBlockNode();
             
-            AppendStatements(stmtsToken, stmtsBlockNode.Body);
+            AppendStatements(stmtsToken, stmtsBlockNode);
 
             return stmtsBlockNode;
         }
 
-        private void AppendStatements(Token stmtsToken, IList<StmtNode> statements)
+        private void AppendStatements(Token stmtsToken, StmtBlockNode statements)
         {
             Debug.Assert(stmtsToken.Parent.Name() == "Stmts");
             Reduction lhs = (Reduction)stmtsToken.Data;
@@ -135,17 +135,17 @@ namespace dumbo.Compiler.SyntaxAnalysis
             Debug.Assert(token.Parent.Name() == "ExprList");
             Reduction lhs = (Reduction)token.Data;
 
-            IList<ExpressionNode> list = new List<ExpressionNode>();
+            var  list = new ExpressionListNode();
 
             list.Add(BuildExprNode(lhs[0]));
 
             Token multiToken = lhs[1];
             AppendExpression(multiToken, list);
 
-            return new ExpressionListNode(list);
+            return list;
         }
 
-        private void AppendExpression(Token token, IList<ExpressionNode> list)
+        private void AppendExpression(Token token, ExpressionListNode list)
         {
             Debug.Assert(token.Parent.Name() == "MultiExpr");
             Reduction lhs = (Reduction)token.Data;
@@ -352,21 +352,19 @@ namespace dumbo.Compiler.SyntaxAnalysis
             Debug.Assert(idToken.Parent.Name() == "Id");
             Reduction lhs = (Reduction)idToken.Data;
 
-            IList<IdentifierNode> list = new List<IdentifierNode>();
+            var listNode = new IdentifierListNode();
 
             string name = (string)lhs[0].Data;
 
-            list.Add(new IdentifierNode(name));
-
+            listNode.Add(new IdentifierNode(name));
             
-
             Token multiIdentToken = lhs[1];
-            AppendIdentifier(multiIdentToken, list);
+            AppendIdentifier(multiIdentToken, listNode);
 
-            return new IdentifierListNode(list);
+            return listNode;
         }
 
-        private void AppendIdentifier(Token multiIdToken, IList<IdentifierNode> list)
+        private void AppendIdentifier(Token multiIdToken, IdentifierListNode list)
         {
             Debug.Assert(multiIdToken.Parent.Name() == "MultiId");
             Reduction lhs = (Reduction)multiIdToken.Data;

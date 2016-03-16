@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AST\AssignmentStmtNode.cs" />
+    <Compile Include="AST\BaseListNode.cs" />
     <Compile Include="AST\BaseNode.cs" />
     <Compile Include="AST\BinaryOperationNode.cs" />
     <Compile Include="AST\BinaryOperatorType.cs" />
@@ -63,7 +64,6 @@
     <Compile Include="AST\RepeatWhileStmtNode.cs" />
     <Compile Include="AST\ReturnStmtNode.cs" />
     <Compile Include="AST\StmtBlockNode.cs" />
-    <Compile Include="AST\TypeNode.cs" />
     <Compile Include="AST\UnaryOperationNode.cs" />
     <Compile Include="AST\UnaryOperatorType.cs" />
     <Compile Include="AST\ValueNode.cs" />
@@ -79,6 +79,7 @@
     <Compile Include="AST\StmtNode.cs" />
     <Compile Include="SyntaxAnalysis\SyntaxError.cs" />
     <Compile Include="SyntaxAnalysis\AbstractSyntaxTreeBuilder.cs" />
+    <Compile Include="Utils.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="CodeGeneration\" />

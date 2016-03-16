@@ -1,16 +1,7 @@
-﻿using System.Collections.Generic;
-
-namespace dumbo.Compiler.AST
+﻿namespace dumbo.Compiler.AST
 {
-    public class StmtBlockNode  : BaseNode
+    public class StmtBlockNode  : BaseListNode<StmtNode>
     {
-        public StmtBlockNode()
-        {
-            Body = new List<StmtNode>();
-        }
-
-        public IList<StmtNode> Body { get; }
-
         
     }
 }

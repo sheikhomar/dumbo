@@ -9,7 +9,7 @@ namespace dumbo.Compiler.AST
             Body = body;
         }
 
-        public  StmtBlockNode Body { get; }
+        public StmtBlockNode Body { get; }
     }
 
 }

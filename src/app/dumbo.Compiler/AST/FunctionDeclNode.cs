@@ -5,7 +5,7 @@ namespace dumbo.Compiler.AST
     public class FunctionDeclNode : BaseNode
     {
         public IdentifierNode Identifer;
-        public IList<TypeNode> ReturnTypes;
+        public IList<HappyType> ReturnTypes;
         public StmtBlockNode Body;
     }
 }

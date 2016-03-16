@@ -1,14 +1,6 @@
-﻿using System.Collections.Generic;
-
-namespace dumbo.Compiler.AST
+﻿namespace dumbo.Compiler.AST
 {
-    public class ExpressionListNode : BaseNode
+    public class ExpressionListNode : BaseListNode<ExpressionNode>
     {
-        public ExpressionListNode(IList<ExpressionNode> expressions)
-        {
-            Expressions = expressions;
-        }
-
-        public IList<ExpressionNode> Expressions { get; }
     }
 }

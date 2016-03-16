@@ -46,9 +46,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="SyntaxAnalysis\AbstractSyntaxTreeBuilderTests.cs" />
     <Compile Include="Class1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SyntaxAnalysis\ParserTests.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\app\dumbo.Compiler\dumbo.Compiler.csproj">
+      <Project>{DE2710CE-0479-4C06-BA25-3ADD2A3DD203}</Project>
+      <Name>dumbo.Compiler</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

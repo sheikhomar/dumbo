@@ -6,6 +6,7 @@ using System.Windows.Input;
 using ICSharpCode.AvalonEdit.Highlighting;
 using Microsoft.Win32;
 using Path = System.IO.Path;
+using dumbo.Compiler.SyntaxAnalysis;
 
 namespace dumbo.WpfApp
 {
@@ -188,7 +189,10 @@ namespace dumbo.WpfApp
             data = new StringReader(textEditor.Text);
             if (_myParser.Parse(data))
             {
-                DrawReductionTree(_myParser.Root);
+                //TODO: Reimplement this 
+                //DrawReductionTree(_myParser.Root);
+
+                PrettyPrint(_myParser.Root);
             }
             else
             {
@@ -215,6 +219,14 @@ namespace dumbo.WpfApp
             DrawReduction(tree, Root, 1);
 
             ResultTextBox.Text = tree.ToString();
+        }
+
+        private void PrettyPrint(GOLD.Reduction Root)
+        {
+            StringBuilder strBuilder = new StringBuilder();
+            var AST = new AbstractSyntaxTreeBuilder();
+            AST.Build(Root).PrettyPrint(strBuilder);
+            ResultTextBox.Text = strBuilder.ToString();
         }
 
         private void DrawReduction(StringBuilder tree, GOLD.Reduction reduction, int indent)

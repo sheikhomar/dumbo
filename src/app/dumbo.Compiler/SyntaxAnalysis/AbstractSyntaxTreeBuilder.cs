@@ -50,7 +50,7 @@ namespace dumbo.Compiler.SyntaxAnalysis
 
             if (funcDeclsToken != null)
             {
-                AppendFuncDecls(funcDeclsToken, rootNode.FuncDels);
+                AppendFuncDecls(funcDeclsToken, rootNode.FuncDecls);
             }
             
             return rootNode;

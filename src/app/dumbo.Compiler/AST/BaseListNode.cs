@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Text;
 
 namespace dumbo.Compiler.AST
 {
-    public abstract class BaseListNode<TBaseType> : BaseNode where TBaseType : BaseNode
+    public abstract class BaseListNode<TBaseType> : BaseNode, IEnumerable<TBaseType> where TBaseType : BaseNode
     {
         private readonly IList<TBaseType> _internalList;
 
@@ -46,6 +47,16 @@ namespace dumbo.Compiler.AST
                 StrBuilder.Append(", ");
                 _internalList[i].PrettyPrint(StrBuilder);
             }
+        }
+
+        public IEnumerator<TBaseType> GetEnumerator()
+        {
+            return _internalList.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
     }
 }

@@ -31,6 +31,9 @@ namespace dumbo.Compiler.SymbolTable
 
         public void CloseScope()
         {
+            if (Depth == 0)
+                throw new OutermostScopeException("The outermost scope cannot be closed - programmer error");
+
             List<SymbolTableEntry> restoreTable = new List<SymbolTableEntry>();
 
             foreach (string closingName in DepthContent)

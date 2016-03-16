@@ -57,6 +57,32 @@ namespace dumbo.Tests.SymbolTable
         }
 
         [Test]
+        public void DeclaredLocallyReturnsTrue()
+        {
+            // Arrange
+            table.OpenScope();
+
+            // Act
+            table.EnterSymbol("test", new Compiler.SymbolTable.SymbolTablePrimitiveType(Compiler.SymbolTable.SymbolTableType.Boolean));
+
+            // Assert
+            Assert.True(table.DeclaredLocally("test"));
+        }
+
+        [Test]
+        public void DeclaredLocallyReturnsFalse()
+        {
+            // Arrange
+            table.EnterSymbol("test", new Compiler.SymbolTable.SymbolTablePrimitiveType(Compiler.SymbolTable.SymbolTableType.Boolean));
+
+            // Act
+            table.OpenScope();
+
+            // Assert
+            Assert.False(table.DeclaredLocally("test"));
+        }
+
+        [Test]
         public void EnsureOuterDeclarationIsProperlyRestored()
         {
             // Arrange

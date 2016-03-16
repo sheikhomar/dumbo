@@ -80,6 +80,7 @@
     <Compile Include="PrettyPrint\IPrettyPrint.cs" />
     <Compile Include="PrettyPrint\IPrettyPrinter.cs" />
     <Compile Include="PrettyPrint\PrettyPrinter.cs" />
+    <Compile Include="SymbolTable\OutermostScopeException.cs" />
     <Compile Include="SymbolTable\DuplicateDeclarationException.cs" />
     <Compile Include="SymbolTable\ISymbolTable.cs" />
     <Compile Include="SymbolTable\SymbolTable.cs" />

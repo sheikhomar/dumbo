@@ -89,6 +89,7 @@ namespace dumbo.Compiler.SyntaxAnalysis
             if (lhs.Count() > 0)
             {
                 Token stmtToken = lhs[0];
+                
                 StmtNode stmtNode = BuildStmt(stmtToken);
                 statements.Add(stmtNode);
 
@@ -112,7 +113,7 @@ namespace dumbo.Compiler.SyntaxAnalysis
                 case StmtProduction.IfStmt:
                     return BuildIfStmt(lhs[0]);
                 case StmtProduction.RepeatStmt:
-                    break;
+                    return BuildRepeatStmtNode(lhs[0]);
                 case StmtProduction.Decl:
                     return BuildDeclStmt(lhs[0]);
                 case StmtProduction.ReturnStmt:
@@ -121,13 +122,32 @@ namespace dumbo.Compiler.SyntaxAnalysis
                     return BuildFuncCallStmt(lhs[0]);
                 case StmtProduction.BreakStmt:
                     return new BreakStmtNode();
-                case StmtProduction.nl:
-                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
+        }
 
-            return null;
+        private StmtNode BuildRepeatStmtNode(Token token)
+        {
+            Debug.Assert(token.Parent.Name() == "RepeatStmt");
+            Reduction lhs = (Reduction)token.Data;
+
+            if (lhs.Count() == 5)
+            {
+                Token exprToken = lhs[1];
+                Token stmtsToken = lhs[3];
+
+                return new RepeatStmtNode(BuildExprNode(exprToken), BuildStmtsBlock(stmtsToken));
+            }
+
+            if (lhs.Count() == 6)
+            {
+                Token exprToken = lhs[2];
+                Token stmtsToken = lhs[4];
+                return new RepeatWhileStmtNode(BuildExprNode(exprToken), BuildStmtsBlock(stmtsToken));
+            }
+
+            throw new InvalidOperationException("Expected another production.");
         }
 
         private ReturnStmtNode BuildReturnStmtNode(Token token)

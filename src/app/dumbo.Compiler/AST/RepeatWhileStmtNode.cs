@@ -4,8 +4,14 @@ namespace dumbo.Compiler.AST
 {
     public class RepeatWhileStmtNode : StmtNode
     {
-        public ExpressionNode Predicate;
-        public StmtBlockNode Body;
+        public RepeatWhileStmtNode(ExpressionNode predicate, StmtBlockNode body)
+        {
+            Predicate = predicate;
+            Body = body;
+        }
+
+        public ExpressionNode Predicate { get; }
+        public StmtBlockNode Body { get; }
 
         public override void PrettyPrint(StringBuilder StrBuilder)
         {

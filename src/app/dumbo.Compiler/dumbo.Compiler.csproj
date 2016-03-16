@@ -68,6 +68,7 @@
     <Compile Include="AST\UnaryOperatorType.cs" />
     <Compile Include="AST\ValueNode.cs" />
     <Compile Include="PrettyPrint\IPrettyPrint.cs" />
+    <Compile Include="SymbolTable\ISymbolTable.cs" />
     <Compile Include="SyntaxAnalysis\GeneralParserError.cs" />
     <Compile Include="SyntaxAnalysis\IParser.cs" />
     <Compile Include="SyntaxAnalysis\LexicalError.cs" />
@@ -85,7 +86,6 @@
   <ItemGroup>
     <Folder Include="CodeGeneration\" />
     <Folder Include="ContextualAnalysis\" />
-    <Folder Include="SymbolTable\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

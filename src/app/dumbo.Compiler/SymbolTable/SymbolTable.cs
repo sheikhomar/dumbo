@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace dumbo.Compiler.SymbolTable
 {
-    class SymbolTable : ISymbolTable
+    public class SymbolTable : ISymbolTable
     {
         public SymbolTable()
         {
@@ -31,6 +31,8 @@ namespace dumbo.Compiler.SymbolTable
 
         public void CloseScope()
         {
+            List<SymbolTableEntry> restoreTable = new List<SymbolTableEntry>();
+
             foreach (string closingName in DepthContent)
             {
                 SymbolTableEntry entry = RetrieveSymbol(closingName);
@@ -38,11 +40,16 @@ namespace dumbo.Compiler.SymbolTable
                 Table.Remove(closingName);
 
                 if (outerEntry != null)
-                    EnterSymbol(outerEntry.Name, outerEntry.Type);
+                    restoreTable.Add(outerEntry);
             }
 
             Depth--;
             DepthContent = DepthContentStack.Pop();
+
+            foreach (SymbolTableEntry entry in restoreTable)
+            {
+                EnterSymbol(entry.Name, entry.Type);
+            }
         }
 
         public bool DeclaredLocally(string name)
@@ -64,7 +71,7 @@ namespace dumbo.Compiler.SymbolTable
 
             SymbolTableEntry newEntry = new SymbolTableEntry(name, type, Depth, null);
 
-            DepthContent.Add(name);
+            DepthContent.Add(name.ToLower());
 
             if (oldEntry == null)
             {
@@ -72,7 +79,7 @@ namespace dumbo.Compiler.SymbolTable
             }
             else //This is the case when the entry already exist at an outer level
             {
-                Table.Remove(name);
+                Table.Remove(name.ToLower());
                 newEntry.OuterDecl = oldEntry;
                 Table.Add(newEntry.Name, newEntry);
             }
@@ -80,9 +87,10 @@ namespace dumbo.Compiler.SymbolTable
 
         public SymbolTableEntry RetrieveSymbol(string name)
         {
-            SymbolTableEntry retrieved = Table[name];
-
-            return retrieved;
+            if (Table.ContainsKey(name.ToLower()))
+                return Table[name.ToLower()];
+            else
+                return null;
         }
         #endregion
     }

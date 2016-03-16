@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace dumbo.Compiler.SymbolTable
 {
-    class SymbolTableEntry
+    public class SymbolTableEntry
     {
         public SymbolTableEntry(string name, SymbolTableType type, int depth, SymbolTableEntry outerDecl)
         {
-            Name = name;
+            Name = name.ToLower();
             Type = type;
             Depth = depth;
             OuterDecl = outerDecl;

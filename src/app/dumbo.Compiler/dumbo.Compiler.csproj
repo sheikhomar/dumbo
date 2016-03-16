@@ -58,8 +58,8 @@
     <Compile Include="AST\ExpressionNode.cs" />
     <Compile Include="AST\FuncCallNode.cs" />
     <Compile Include="AST\FuncCallStmtNode.cs" />
-    <Compile Include="AST\FuncDelcListNode.cs" />
-    <Compile Include="AST\FuncDelcNode.cs" />
+    <Compile Include="AST\FuncDeclListNode.cs" />
+    <Compile Include="AST\FuncDeclNode.cs" />
     <Compile Include="AST\HappyType.cs" />
     <Compile Include="AST\IdentifierListNode.cs" />
     <Compile Include="AST\IdentifierNode.cs" />

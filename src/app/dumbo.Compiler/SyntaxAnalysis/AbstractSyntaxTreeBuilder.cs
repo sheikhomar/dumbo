@@ -25,13 +25,13 @@ namespace dumbo.Compiler.SyntaxAnalysis
             Debug.Assert(root.Parent.Head().Name() == "Start");
 
             ProgramNode programNode;
-            IList<FuncDelcNode> funcDelcs;
+            IList<FuncDeclNode> funcDelcs;
 
             switch (root.Count())
             {
                 case 1:
                     programNode = BuildProgram(root[0]);
-                    funcDelcs = new List<FuncDelcNode>();
+                    funcDelcs = new List<FuncDeclNode>();
                     break;
                 case 3:
                     programNode = BuildProgram(root[0]);
@@ -453,7 +453,7 @@ namespace dumbo.Compiler.SyntaxAnalysis
             }
         }
 
-        private IList<FuncDelcNode> BuildFuncDeclsNode(Token funcDeclsSymbol)
+        private IList<FuncDeclNode> BuildFuncDeclsNode(Token funcDeclsSymbol)
         {
             Debug.Assert(funcDeclsSymbol.Parent.Name() == "FuncDecls");
 

@@ -2,9 +2,9 @@
 
 namespace dumbo.Compiler.AST
 {
-    public class FuncDelcNode : BaseNode
+    public class FuncDeclNode : BaseNode
     {
-        public FuncDelcNode(IdentifierNode identifer, StmtBlockNode body)
+        public FuncDeclNode(IdentifierNode identifer, StmtBlockNode body)
         {
             Identifer = identifer;
             Body = body;

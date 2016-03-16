@@ -2,7 +2,7 @@
 
 namespace dumbo.Compiler.AST
 {
-    public class RootNode
+    public class RootNode : BaseNode
     {
         public ProgramNode Program { get; set; }
         public IList<FunctionDeclNode> Functions { get; set; }

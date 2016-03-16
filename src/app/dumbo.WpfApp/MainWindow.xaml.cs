@@ -7,6 +7,7 @@ using ICSharpCode.AvalonEdit.Highlighting;
 using Microsoft.Win32;
 using Path = System.IO.Path;
 using dumbo.Compiler.SyntaxAnalysis;
+using dumbo.Compiler.PrettyPrint;
 
 namespace dumbo.WpfApp
 {
@@ -308,10 +309,11 @@ namespace dumbo.WpfApp
 
         private void PrettyPrint(GOLD.Reduction Root)
         {
-            StringBuilder strBuilder = new StringBuilder();
             var AST = new AbstractSyntaxTreeBuilder();
-            AST.Build(Root).PrettyPrint(strBuilder);
-            ResultTextBox.Text = strBuilder.ToString();
+            var prettyPrinter = new PrettyPrinter();
+
+            var output = prettyPrinter.print(AST.Build(Root));
+            ResultTextBox.Text = output.ToString();
         }
     }
 }

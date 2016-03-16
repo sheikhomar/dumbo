@@ -1,4 +1,6 @@
-﻿namespace dumbo.Compiler.AST
+﻿using System.Text;
+
+namespace dumbo.Compiler.AST
 {
     public class DeclStmtNode : StmtNode
     {
@@ -10,5 +12,11 @@
 
         public IdentifierListNode Identifiers { get; }
         public HappyType Type { get; }
+
+        public override void PrettyPrint(StringBuilder StrBuilder)
+        {
+            StrBuilder.Append(Type.ToString() + " ");
+            Identifiers.PrettyPrint(StrBuilder);
+        }
     }
 }

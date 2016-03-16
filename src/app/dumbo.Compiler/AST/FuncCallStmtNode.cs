@@ -1,4 +1,6 @@
-﻿namespace dumbo.Compiler.AST
+﻿using System.Text;
+
+namespace dumbo.Compiler.AST
 {
     public class FuncCallStmtNode : StmtNode
     {
@@ -8,5 +10,10 @@
         }
 
         public FuncCallNode CallNode { get; }
+
+        public override void PrettyPrint(StringBuilder StrBuilder)
+        {
+            CallNode.PrettyPrint(StrBuilder);
+        }
     }
 }

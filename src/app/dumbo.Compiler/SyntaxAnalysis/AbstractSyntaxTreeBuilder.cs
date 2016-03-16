@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Threading;
 using dumbo.Compiler.AST;
 using GOLD;
 
@@ -132,7 +133,7 @@ namespace dumbo.Compiler.SyntaxAnalysis
             Debug.Assert(token.Parent.Name() == "RepeatStmt");
             Reduction lhs = (Reduction)token.Data;
 
-            if (lhs.Count() == 5)
+            if (lhs.Count() == 6)
             {
                 Token exprToken = lhs[1];
                 Token stmtsToken = lhs[3];
@@ -140,7 +141,7 @@ namespace dumbo.Compiler.SyntaxAnalysis
                 return new RepeatStmtNode(BuildExprNode(exprToken), BuildStmtsBlock(stmtsToken));
             }
 
-            if (lhs.Count() == 6)
+            if (lhs.Count() == 7)
             {
                 Token exprToken = lhs[2];
                 Token stmtsToken = lhs[4];
@@ -445,8 +446,21 @@ namespace dumbo.Compiler.SyntaxAnalysis
             string name = (string)underToken.Data;
 
             IdentifierListNode idList = BuildIdentifierList(lhs[1]);
-            HappyType type = ConvertToEnum<HappyType>(name);
+            HappyType type = ConvertHappyType(name);
             return new DeclStmtNode(idList, type);
+        }
+
+        private HappyType ConvertHappyType(string typeSpec)
+        {
+            string newTypeSpec = typeSpec.ToLower();
+            if ("number".Equals(newTypeSpec))
+                return HappyType.Number;
+            if ("boolean".Equals(newTypeSpec))
+                return HappyType.Boolean;
+            if ("text".Equals(newTypeSpec))
+                return HappyType.Text;
+
+            throw new InvalidOperationException("Invalid type found: " + typeSpec);
         }
 
         private IdentifierListNode BuildIdentifierList(Token idToken)
@@ -481,22 +495,6 @@ namespace dumbo.Compiler.SyntaxAnalysis
             }
         }
         
-        private FuncDeclListNode BuildFuncDeclsNode(Token funcDeclsSymbol)
-        {
-            Debug.Assert(funcDeclsSymbol.Parent.Name() == "FuncDecls");
-            Reduction lhs = (Reduction) funcDeclsSymbol.Data;
-
-            FuncDeclListNode funcDelcs = new FuncDeclListNode();
-
-            if (lhs.Count() == 1)
-            {
-                BuildFuncDeclNode(lhs[0]);
-
-            }
-
-            return null;
-        }
-
         private void AppendFuncDecls(Token token, FuncDeclListNode list)
         {
             Debug.Assert(token.Parent.Name() == "FuncDecls");
@@ -526,7 +524,28 @@ namespace dumbo.Compiler.SyntaxAnalysis
             
             AppendFormalParameters(lhs[3], funcDelc);
 
+            AppendReturnTypes(lhs[6], funcDelc);
+
             return funcDelc;
+        }
+
+        private void AppendReturnTypes(Token token, FuncDeclNode funcDeclNode)
+        {
+            Debug.Assert(token.Parent.Name() == "ReturnTypes" || token.Parent.Name() == "MultiReturnTypes");
+            Reduction lhs = (Reduction)token.Data;
+
+            if (lhs.Count() > 1)
+            {
+                Token singleToken = lhs.Count() == 2 ? lhs[0] : lhs[1];
+                Token multiToken = lhs.Count() == 2 ? lhs[1] : lhs[2];
+
+                Reduction retReduction = (Reduction) singleToken.Data;
+                string retTypeRef = (string) retReduction[0].Data;
+                HappyType retType = ConvertHappyType(retTypeRef);
+                funcDeclNode.ReturnTypes.Add(retType);
+
+                AppendReturnTypes(multiToken, funcDeclNode);
+            }
         }
         
         private void AppendFormalParameters(Token token, FuncDeclNode funcCallNode)
@@ -542,7 +561,7 @@ namespace dumbo.Compiler.SyntaxAnalysis
                 Reduction formalParmReduction = (Reduction) singleToken.Data;
                 string typeSpec = (string) formalParmReduction[0].Data;
                 string paramName = (string) formalParmReduction[1].Data;
-                HappyType paramType = ConvertToEnum<HappyType>(typeSpec);
+                HappyType paramType = ConvertHappyType(typeSpec);
 
                 FormalParamNode paramNode = new FormalParamNode(paramName, paramType);
                 funcCallNode.Parameters.Add(paramNode);
@@ -554,7 +573,7 @@ namespace dumbo.Compiler.SyntaxAnalysis
         public T ConvertToEnum<T>(string input) where T : struct, IComparable, IFormattable, IConvertible
         {
             T output;
-
+            
             if (!typeof(T).IsEnum)
             {
                 throw new ArgumentException("The type T, is invalid in the given context");

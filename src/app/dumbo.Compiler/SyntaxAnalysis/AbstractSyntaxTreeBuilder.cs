@@ -25,27 +25,35 @@ namespace dumbo.Compiler.SyntaxAnalysis
             Debug.Assert(root.Parent.Head().Name() == "Start");
 
             ProgramNode programNode;
-            IList<FuncDeclNode> funcDelcs;
+            Token funcDeclsToken = null;
 
-            switch (root.Count())
+            if (root.Count() == 1)
             {
-                case 1:
-                    programNode = BuildProgram(root[0]);
-                    funcDelcs = new List<FuncDeclNode>();
-                    break;
-                case 3:
-                    programNode = BuildProgram(root[0]);
-                    funcDelcs = BuildFuncDeclsNode(root[2]);
-                    break;
-                case 4:
-                    programNode = BuildProgram(root[1]);
-                    funcDelcs = BuildFuncDeclsNode(root[3]);
-                    break;
-                default:
-                    throw new InvalidOperationException("Unexpected <Start> production.");
+                programNode = BuildProgram(root[0]);
+            }
+            else if (root.Count() == 3)
+            {
+                programNode = BuildProgram(root[0]);
+                funcDeclsToken = root[2];
+            }
+            else if (root.Count() == 4)
+            {
+                programNode = BuildProgram(root[1]);
+                funcDeclsToken = root[3];
+            }
+            else
+            {
+                throw new InvalidOperationException("Unexpected <Start> production.");
+            }
+
+            RootNode rootNode = new RootNode(programNode);
+
+            if (funcDeclsToken != null)
+            {
+                AppendFuncDecls(funcDeclsToken, rootNode.FuncDels);
             }
             
-            return new RootNode(programNode, funcDelcs);
+            return rootNode;
         }
 
         private ProgramNode BuildProgram(Token programSymbol)
@@ -452,19 +460,77 @@ namespace dumbo.Compiler.SyntaxAnalysis
                 AppendIdentifier(multiIdToken2, list);
             }
         }
-
-        private IList<FuncDeclNode> BuildFuncDeclsNode(Token funcDeclsSymbol)
+        
+        private FuncDeclListNode BuildFuncDeclsNode(Token funcDeclsSymbol)
         {
             Debug.Assert(funcDeclsSymbol.Parent.Name() == "FuncDecls");
+            Reduction lhs = (Reduction) funcDeclsSymbol.Data;
 
-            var lhs = (Reduction) funcDeclsSymbol.Data;
+            FuncDeclListNode funcDelcs = new FuncDeclListNode();
+
+            if (lhs.Count() == 1)
+            {
+                BuildFuncDeclNode(lhs[0]);
+
+            }
 
             return null;
         }
 
+        private void AppendFuncDecls(Token token, FuncDeclListNode list)
+        {
+            Debug.Assert(token.Parent.Name() == "FuncDecls");
+            Reduction lhs = (Reduction)token.Data;
 
+            if (lhs.Count() > 0)
+            {
+                list.Add(BuildFuncDeclNode(lhs[0]));
 
+                if (lhs.Count() == 3)
+                {
+                    AppendFuncDecls(lhs[2], list);
+                }
+            }
+        }
+
+        private FuncDeclNode BuildFuncDeclNode(Token token)
+        {
+            Debug.Assert(token.Parent.Name() == "FuncDecl");
+            Reduction lhs = (Reduction)token.Data;
+
+            string idToken = (string)lhs[1].Data;
+
+            IdentifierNode id = new IdentifierNode(idToken);
+            StmtBlockNode funcBodyNode = BuildStmtsBlock(lhs[8]);
+            FuncDeclNode funcDelc = new FuncDeclNode(id, funcBodyNode);
+            
+            AppendFormalParameters(lhs[3], funcDelc);
+
+            return funcDelc;
+        }
         
+        private void AppendFormalParameters(Token token, FuncDeclNode funcCallNode)
+        {
+            Debug.Assert(token.Parent.Name() == "FormalParams" || token.Parent.Name() == "MultiFormalParams");
+            Reduction lhs = (Reduction)token.Data;
+
+            if (lhs.Count() > 0)
+            {
+                Token singleToken = lhs.Count() == 2 ? lhs[0] : lhs[1];
+                Token multiToken = lhs.Count() == 2 ? lhs[1] : lhs[2];
+
+                Reduction formalParmReduction = (Reduction) singleToken.Data;
+                string typeSpec = (string) formalParmReduction[0].Data;
+                string paramName = (string) formalParmReduction[1].Data;
+                HappyType paramType = ConvertToEnum<HappyType>(typeSpec);
+
+                FormalParamNode paramNode = new FormalParamNode(paramName, paramType);
+                funcCallNode.Parameters.Add(paramNode);
+
+                AppendFormalParameters(multiToken, funcCallNode);
+            }
+        }
+
         public T ConvertToEnum<T>(string input) where T : struct, IComparable, IFormattable, IConvertible
         {
             T output;

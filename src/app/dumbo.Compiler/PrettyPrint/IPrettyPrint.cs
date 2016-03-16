@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace dumbo.Compiler.PrettyPrint
 {
-    interface IPrettyPrint
+    public interface IPrettyPrint
     {
-        void PrettyPrint(StringBuilder StrBuilder);
+        void PrettyPrint(IPrettyPrinter strBuilder);
     }
 }

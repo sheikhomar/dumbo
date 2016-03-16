@@ -68,7 +68,11 @@
     <Compile Include="AST\UnaryOperatorType.cs" />
     <Compile Include="AST\ValueNode.cs" />
     <Compile Include="PrettyPrint\IPrettyPrint.cs" />
+    <Compile Include="SymbolTable\DuplicateDeclarationException.cs" />
     <Compile Include="SymbolTable\ISymbolTable.cs" />
+    <Compile Include="SymbolTable\SymbolTable.cs" />
+    <Compile Include="SymbolTable\SymbolTableEntry.cs" />
+    <Compile Include="SymbolTable\SymbolTableType.cs" />
     <Compile Include="SyntaxAnalysis\GeneralParserError.cs" />
     <Compile Include="SyntaxAnalysis\IParser.cs" />
     <Compile Include="SyntaxAnalysis\LexicalError.cs" />

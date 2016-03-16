@@ -81,7 +81,10 @@
     <Compile Include="SymbolTable\ISymbolTable.cs" />
     <Compile Include="SymbolTable\SymbolTable.cs" />
     <Compile Include="SymbolTable\SymbolTableEntry.cs" />
+    <Compile Include="SymbolTable\SymbolTableFunctionType.cs" />
+    <Compile Include="SymbolTable\SymbolTablePrimitiveType.cs" />
     <Compile Include="SymbolTable\SymbolTableType.cs" />
+    <Compile Include="SymbolTable\SymbolTableTypeEntry.cs" />
     <Compile Include="SyntaxAnalysis\GeneralParserError.cs" />
     <Compile Include="SyntaxAnalysis\IParser.cs" />
     <Compile Include="SyntaxAnalysis\LexicalError.cs" />

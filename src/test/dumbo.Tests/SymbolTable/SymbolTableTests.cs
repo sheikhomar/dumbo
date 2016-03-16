@@ -34,7 +34,7 @@ namespace dumbo.Tests.SymbolTable
                 table.CloseScope();
             }
 
-            table.EnterSymbol("test", Compiler.SymbolTable.SymbolTableType.Boolean);
+            table.EnterSymbol("test", new Compiler.SymbolTable.SymbolTablePrimitiveType(Compiler.SymbolTable.SymbolTableType.Boolean));
 
             // assert
             Assert.AreEqual(depth, table.RetrieveSymbol("test").Depth);
@@ -44,10 +44,10 @@ namespace dumbo.Tests.SymbolTable
         public void AddsAndRemovesNamesProperly()
         {
             //Arrange
-            table.EnterSymbol("fisk", Compiler.SymbolTable.SymbolTableType.Text);
-            table.EnterSymbol("Omar", Compiler.SymbolTable.SymbolTableType.Number);
+            table.EnterSymbol("fisk", new Compiler.SymbolTable.SymbolTablePrimitiveType(Compiler.SymbolTable.SymbolTableType.Text));
+            table.EnterSymbol("Omar", new Compiler.SymbolTable.SymbolTablePrimitiveType(Compiler.SymbolTable.SymbolTableType.Number));
             table.OpenScope();
-            table.EnterSymbol("Marc", Compiler.SymbolTable.SymbolTableType.Boolean);
+            table.EnterSymbol("Marc", new Compiler.SymbolTable.SymbolTablePrimitiveType(Compiler.SymbolTable.SymbolTableType.Boolean));
 
             //Act
             table.CloseScope();
@@ -61,9 +61,9 @@ namespace dumbo.Tests.SymbolTable
         {
             // Arrange
             table.OpenScope();
-            table.EnterSymbol("Declaration", Compiler.SymbolTable.SymbolTableType.Boolean);
+            table.EnterSymbol("Declaration", new Compiler.SymbolTable.SymbolTablePrimitiveType(Compiler.SymbolTable.SymbolTableType.Boolean));
             table.OpenScope();
-            table.EnterSymbol("Declaration", Compiler.SymbolTable.SymbolTableType.Boolean);
+            table.EnterSymbol("Declaration", new Compiler.SymbolTable.SymbolTablePrimitiveType(Compiler.SymbolTable.SymbolTableType.Boolean));
 
             // Act
             table.CloseScope();

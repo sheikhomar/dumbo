@@ -58,7 +58,7 @@ namespace dumbo.Compiler.SymbolTable
             return (entry.Depth == Depth);
         }
 
-        public void EnterSymbol(string name, SymbolTableType type)
+        public void EnterSymbol(string name, SymbolTableTypeEntry type)
         {
             SymbolTableEntry oldEntry = RetrieveSymbol(name);
             if (oldEntry != null && oldEntry.Depth >= Depth)

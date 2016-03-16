@@ -8,7 +8,7 @@ namespace dumbo.Compiler.SymbolTable
 {
     public class SymbolTableEntry
     {
-        public SymbolTableEntry(string name, SymbolTableType type, int depth, SymbolTableEntry outerDecl)
+        public SymbolTableEntry(string name, SymbolTableTypeEntry type, int depth, SymbolTableEntry outerDecl)
         {
             Name = name.ToLower();
             Type = type;
@@ -18,7 +18,7 @@ namespace dumbo.Compiler.SymbolTable
 
         // These properties are used to identify an entry
         public string Name { get; set; }
-        public SymbolTableType Type { get; set; }
+        public SymbolTableTypeEntry Type { get; set; }
         public int Depth { get; set; }
 
         // This property references a previous entry with the same name as this entry

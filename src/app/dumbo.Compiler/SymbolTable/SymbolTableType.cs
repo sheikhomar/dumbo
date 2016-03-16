@@ -10,7 +10,6 @@ namespace dumbo.Compiler.SymbolTable
     {
         Number,
         Text,
-        Boolean,
-        Function
+        Boolean
     }
 }

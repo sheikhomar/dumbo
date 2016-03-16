@@ -67,6 +67,7 @@
     <Compile Include="AST\UnaryOperationNode.cs" />
     <Compile Include="AST\UnaryOperatorType.cs" />
     <Compile Include="AST\ValueNode.cs" />
+    <Compile Include="PrettyPrint\IPrettyPrint.cs" />
     <Compile Include="SyntaxAnalysis\GeneralParserError.cs" />
     <Compile Include="SyntaxAnalysis\IParser.cs" />
     <Compile Include="SyntaxAnalysis\LexicalError.cs" />

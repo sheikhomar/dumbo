@@ -1,3 +1,5 @@
+using System.Text;
+
 namespace dumbo.Compiler.AST
 {
     public class IfStmtNode : StmtNode
@@ -12,5 +14,15 @@ namespace dumbo.Compiler.AST
         public ExpressionNode Predicate { get; }
         public StmtBlockNode Body { get;  }
         public ElseIfStmtListNode ElseIfStatements { get; }
+
+        public override void PrettyPrint(StringBuilder StrBuilder)
+        {
+            StrBuilder.Append("if (");
+            Predicate.PrettyPrint(StrBuilder);
+            StrBuilder.Append(")\n");
+            Body.PrettyPrint(StrBuilder);
+            ElseIfStatements.PrettyPrint(StrBuilder);
+            StrBuilder.Append("end if\n");
+        }
     }
 }

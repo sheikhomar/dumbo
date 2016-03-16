@@ -1,3 +1,5 @@
+using System.Text;
+
 namespace dumbo.Compiler.AST
 {
     public class LiteralValueNode : ValueNode
@@ -8,5 +10,10 @@ namespace dumbo.Compiler.AST
         }
 
         public string Value { get; }
+
+        public override void PrettyPrint(StringBuilder StrBuilder)
+        {
+            StrBuilder.Append(Value);
+        }
     }
 }

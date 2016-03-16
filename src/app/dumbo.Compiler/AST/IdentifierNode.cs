@@ -1,3 +1,5 @@
+using System.Text;
+
 namespace dumbo.Compiler.AST
 {
     public class IdentifierNode : ExpressionNode
@@ -8,5 +10,10 @@ namespace dumbo.Compiler.AST
         }
 
         public string Name { get; }
+
+        public override void PrettyPrint(StringBuilder StrBuilder)
+        {
+            StrBuilder.Append(Name);
+        }
     }
 }

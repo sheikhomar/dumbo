@@ -1,3 +1,5 @@
+using System.Text;
+
 namespace dumbo.Compiler.AST
 {
     public class ReturnStmtNode : StmtNode
@@ -8,5 +10,12 @@ namespace dumbo.Compiler.AST
         }
 
         public ExpressionListNode Expressions { get; }
+
+        public override void PrettyPrint(StringBuilder StrBuilder)
+        {
+            StrBuilder.Append("return ");
+            Expressions.PrettyPrint(StrBuilder);
+            StrBuilder.Append("\n");
+        }
     }
 }

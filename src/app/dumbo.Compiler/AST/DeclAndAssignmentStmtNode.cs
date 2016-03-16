@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using dumbo.Compiler.PrettyPrint;
 
 namespace dumbo.Compiler.AST
 {
@@ -13,12 +14,12 @@ namespace dumbo.Compiler.AST
 
         public HappyType Type { get; }
 
-        public override void PrettyPrint(StringBuilder StrBuilder)
+        public override void PrettyPrint(IPrettyPrinter strBuilder)
         {
-            StrBuilder.Append(Type.ToString() + " ");
-            Identifiers.PrettyPrint(StrBuilder);
-            StrBuilder.Append(" := ");
-            Expressions.PrettyPrint(StrBuilder);
+            strBuilder.Append(Type.ToString() + " ");
+            Identifiers.PrettyPrint(strBuilder);
+            strBuilder.Append(" := ");
+            Expressions.PrettyPrint(strBuilder);
         }
     }
 }

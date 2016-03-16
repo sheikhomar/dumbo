@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using dumbo.Compiler.PrettyPrint;
 
 namespace dumbo.Compiler.AST
 {
@@ -13,11 +14,11 @@ namespace dumbo.Compiler.AST
         public string Identifier { get; }
         public ActualParamListNode Parameters { get; }
 
-        public override void PrettyPrint(StringBuilder StrBuilder)
+        public override void PrettyPrint(IPrettyPrinter strBuilder)
         {
-            StrBuilder.Append(Identifier + "(");
-            Parameters.PrettyPrint(StrBuilder);
-            StrBuilder.Append(")\n");
+            strBuilder.Append(Identifier + "(");
+            Parameters.PrettyPrint(strBuilder);
+            strBuilder.Append(")");
         }
     }
 }

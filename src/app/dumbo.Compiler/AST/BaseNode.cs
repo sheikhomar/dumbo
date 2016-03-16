@@ -6,9 +6,9 @@ namespace dumbo.Compiler.AST
 {
     abstract public class BaseNode : IPrettyPrint
     {
-        virtual public void PrettyPrint(StringBuilder StrBuilder)
+        virtual public void PrettyPrint(IPrettyPrinter strBuilder)
         {
-            StrBuilder.Append("***" + this.ToString() + "***" + "\n");
+            strBuilder.EndLine("***" + this.ToString() + "***");
         }
     }
 }

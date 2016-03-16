@@ -1,4 +1,5 @@
 using System.Text;
+using dumbo.Compiler.PrettyPrint;
 
 namespace dumbo.Compiler.AST
 {
@@ -11,11 +12,11 @@ namespace dumbo.Compiler.AST
 
         public ExpressionListNode Expressions { get; }
 
-        public override void PrettyPrint(StringBuilder StrBuilder)
+        public override void PrettyPrint(IPrettyPrinter StrBuilder)
         {
             StrBuilder.Append("return ");
             Expressions.PrettyPrint(StrBuilder);
-            StrBuilder.Append("\n");
+            StrBuilder.EndLine();
         }
     }
 }

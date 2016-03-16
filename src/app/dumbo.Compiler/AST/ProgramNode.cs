@@ -1,5 +1,6 @@
 ﻿using System.Linq.Expressions;
 using System.Text;
+using dumbo.Compiler.PrettyPrint;
 
 namespace dumbo.Compiler.AST
 {
@@ -12,11 +13,11 @@ namespace dumbo.Compiler.AST
 
         public StmtBlockNode Body { get; }
 
-        public override void PrettyPrint(StringBuilder StrBuilder)
+        public override void PrettyPrint(IPrettyPrinter strBuilder)
         {
-            StrBuilder.Append("Program \r\n");
-            Body.PrettyPrint(StrBuilder);
-            StrBuilder.Append("End Program \r\n");
+            strBuilder.EndLine("Program");
+            Body.PrettyPrint(strBuilder);
+            strBuilder.EndLine("End Program");
         }
     }
 

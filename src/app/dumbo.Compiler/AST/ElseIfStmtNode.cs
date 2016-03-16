@@ -1,4 +1,5 @@
 using System.Text;
+using dumbo.Compiler.PrettyPrint;
 
 namespace dumbo.Compiler.AST
 {
@@ -13,12 +14,12 @@ namespace dumbo.Compiler.AST
         public ExpressionNode Predicate { get; }
         public StmtBlockNode Body { get; }
 
-        public override void PrettyPrint(StringBuilder StrBuilder)
+        public override void PrettyPrint(IPrettyPrinter strBuilder)
         {
-            StrBuilder.Append("else if (");
-            Predicate.PrettyPrint(StrBuilder);
-            StrBuilder.Append(")\n");
-            Body.PrettyPrint(StrBuilder);
+            strBuilder.Append("Else If (");
+            Predicate.PrettyPrint(strBuilder);
+            strBuilder.EndLine(")");
+            Body.PrettyPrint(strBuilder);
         }
     }
 }

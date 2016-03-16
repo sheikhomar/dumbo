@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using dumbo.Compiler.PrettyPrint;
 
 namespace dumbo.Compiler.AST
 {
@@ -13,10 +14,10 @@ namespace dumbo.Compiler.AST
         public UnaryOperatorType Operator { get; }
         public ExpressionNode Expression { get; }
 
-        public override void PrettyPrint(StringBuilder StrBuilder)
+        public override void PrettyPrint(IPrettyPrinter strBuilder)
         {
-            StrBuilder.Append(" " + OperatorTranslator.UnaryOperatorTypeTranslator(Operator) + " ");
-            Expression.PrettyPrint(StrBuilder);
+            strBuilder.Append(" " + OperatorTranslator.UnaryOperatorTypeTranslator(Operator) + " ");
+            Expression.PrettyPrint(strBuilder);
         }
     }
 }

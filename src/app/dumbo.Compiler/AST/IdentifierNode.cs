@@ -1,4 +1,5 @@
 using System.Text;
+using dumbo.Compiler.PrettyPrint;
 
 namespace dumbo.Compiler.AST
 {
@@ -11,9 +12,9 @@ namespace dumbo.Compiler.AST
 
         public string Name { get; }
 
-        public override void PrettyPrint(StringBuilder StrBuilder)
+        public override void PrettyPrint(IPrettyPrinter strBuilder)
         {
-            StrBuilder.Append(Name);
+            strBuilder.Append(Name);
         }
     }
 }

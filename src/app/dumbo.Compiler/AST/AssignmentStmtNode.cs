@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using dumbo.Compiler.PrettyPrint;
+using System.Collections.Generic;
 using System.Text;
 
 namespace dumbo.Compiler.AST
@@ -14,15 +15,15 @@ namespace dumbo.Compiler.AST
         public IdentifierListNode Identifiers { get; }
         public ExpressionListNode Expressions { get; }
 
-        public override void PrettyPrint(StringBuilder StrBuilder)
+        public override void PrettyPrint(IPrettyPrinter strBuilder)
         {
-            Identifiers.PrettyPrint(StrBuilder);
+            Identifiers.PrettyPrint(strBuilder);
 
-            StrBuilder.Append(" := ");
+            strBuilder.Append(" := ");
 
-            Expressions.PrettyPrint(StrBuilder);
+            Expressions.PrettyPrint(strBuilder);
 
-            StrBuilder.Append("\n");
+            strBuilder.EndLine();
         }
     }
 }

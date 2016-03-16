@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Text;
+using dumbo.Compiler.PrettyPrint;
 
 namespace dumbo.Compiler.AST
 {
@@ -14,10 +15,10 @@ namespace dumbo.Compiler.AST
             FuncDecls = new FuncDeclListNode();
         }
 
-        public override void PrettyPrint(StringBuilder StrBuilder)
+        public override void PrettyPrint(IPrettyPrinter strBuilder)
         {
-            Program.PrettyPrint(StrBuilder);
-            FuncDecls.PrettyPrint(StrBuilder);
+            Program.PrettyPrint(strBuilder);
+            FuncDecls.PrettyPrint(strBuilder);
         }
     }
 }

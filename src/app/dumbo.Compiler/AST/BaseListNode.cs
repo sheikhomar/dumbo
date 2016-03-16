@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Text;
+using dumbo.Compiler.PrettyPrint;
 
 namespace dumbo.Compiler.AST
 {
@@ -32,20 +33,20 @@ namespace dumbo.Compiler.AST
             return _internalList as List<T>;
         }
 
-        public override void PrettyPrint(StringBuilder StrBuilder)
+        public override void PrettyPrint(IPrettyPrinter strBuilder)
         {
             if (_internalList.Count == 0)
                 return;
 
-            _internalList[0].PrettyPrint(StrBuilder);
+            _internalList[0].PrettyPrint(strBuilder);
 
             if (_internalList.Count == 1)
                 return;
 
             for (int i = 1; i < _internalList.Count; i++)
             {
-                StrBuilder.Append(", ");
-                _internalList[i].PrettyPrint(StrBuilder);
+                strBuilder.Append(", ");
+                _internalList[i].PrettyPrint(strBuilder);
             }
         }
 

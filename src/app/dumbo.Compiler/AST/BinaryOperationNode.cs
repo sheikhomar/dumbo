@@ -1,4 +1,5 @@
 using System.Text;
+using dumbo.Compiler.PrettyPrint;
 
 namespace dumbo.Compiler.AST
 {
@@ -15,11 +16,11 @@ namespace dumbo.Compiler.AST
         public BinaryOperatorType Operator { get; }
         public ExpressionNode RightOperand { get; }
 
-        public override void PrettyPrint(StringBuilder StrBuilder)
+        public override void PrettyPrint(IPrettyPrinter strBuilder)
         {
-            LeftOperand.PrettyPrint(StrBuilder);
-            StrBuilder.Append(" " + OperatorTranslator.BinaryOperatorTypeTranslator(Operator) + " ");
-            RightOperand.PrettyPrint(StrBuilder);
+            LeftOperand.PrettyPrint(strBuilder);
+            strBuilder.Append(" " + OperatorTranslator.BinaryOperatorTypeTranslator(Operator) + " ");
+            RightOperand.PrettyPrint(strBuilder);
         }
     }
 }

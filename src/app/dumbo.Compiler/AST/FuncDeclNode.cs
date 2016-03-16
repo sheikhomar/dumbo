@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Text;
+using dumbo.Compiler.PrettyPrint;
 
 namespace dumbo.Compiler.AST
 {
@@ -18,25 +19,27 @@ namespace dumbo.Compiler.AST
         public IList<HappyType> ReturnTypes { get; }
         public StmtBlockNode Body { get; }
 
-        public override void PrettyPrint(StringBuilder StrBuilder)
+        public override void PrettyPrint(IPrettyPrinter strBuilder)
         {
-            StrBuilder.Append("\n\n" + "Function " + Identifer.Name + "(");
-            Parameters.PrettyPrint(StrBuilder);
-            StrBuilder.Append(") returns ");
+            strBuilder.EndLine();
+            strBuilder.EndLine();
+            strBuilder.Append("Function " + Identifer.Name + "(");
+            Parameters.PrettyPrint(strBuilder);
+            strBuilder.Append(") returns ");
 
             if (ReturnTypes.Count == 0)
-                StrBuilder.Append("Nothing");
+                strBuilder.Append("Nothing");
             else if (ReturnTypes.Count != 1)
             {
-                StrBuilder.Append(ReturnTypes[0].ToString());
+                strBuilder.Append(ReturnTypes[0].ToString());
 
                 for (int i = 1; i < ReturnTypes.Count; i++)
                 {
-                    StrBuilder.Append(ReturnTypes[i].ToString());
+                    strBuilder.Append(ReturnTypes[i].ToString());
                 }
             }
             else
-                StrBuilder.Append(ReturnTypes[0].ToString());
+                strBuilder.Append(ReturnTypes[0].ToString());
         }
     }
 }

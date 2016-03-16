@@ -66,6 +66,7 @@
     <Compile Include="AST\IfElseStmtNode.cs" />
     <Compile Include="AST\IfStmtNode.cs" />
     <Compile Include="AST\LiteralValueNode.cs" />
+    <Compile Include="AST\OperatorTranslator.cs" />
     <Compile Include="AST\RepeatStmtNode.cs" />
     <Compile Include="AST\RepeatWhileStmtNode.cs" />
     <Compile Include="AST\ReturnStmtNode.cs" />

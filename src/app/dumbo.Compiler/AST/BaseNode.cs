@@ -8,7 +8,7 @@ namespace dumbo.Compiler.AST
     {
         virtual public void PrettyPrint(StringBuilder StrBuilder)
         {
-            StrBuilder.Append(this.ToString());
+            StrBuilder.Append("***" + this.ToString() + "***" + "\n");
         }
     }
 }

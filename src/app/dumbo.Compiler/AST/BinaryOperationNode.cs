@@ -1,3 +1,5 @@
+using System.Text;
+
 namespace dumbo.Compiler.AST
 {
     public class BinaryOperationNode : ExpressionNode
@@ -12,5 +14,12 @@ namespace dumbo.Compiler.AST
         public ExpressionNode LeftOperand { get; }
         public BinaryOperatorType Operator { get; }
         public ExpressionNode RightOperand { get; }
+
+        public override void PrettyPrint(StringBuilder StrBuilder)
+        {
+            LeftOperand.PrettyPrint(StrBuilder);
+            StrBuilder.Append(" " + OperatorTranslator.BinaryOperatorTypeTranslator(Operator) + " ");
+            RightOperand.PrettyPrint(StrBuilder);
+        }
     }
 }

@@ -7,7 +7,12 @@ namespace dumbo.Compiler.AST
     {
         public override void PrettyPrint(IPrettyPrinter strBuilder)
         {
-            foreach (var node in this.GetAllAs<StmtNode>())
+            var newList = GetAllAs<StmtNode>();
+
+            if (newList.Count == 0)
+                return;
+
+            foreach (var node in newList)
             {
                 node.PrettyPrint(strBuilder);
             }

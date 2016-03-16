@@ -1,3 +1,5 @@
+using dumbo.Compiler.PrettyPrint;
+
 namespace dumbo.Compiler.AST
 {
     public class FormalParamNode : BaseNode
@@ -10,5 +12,10 @@ namespace dumbo.Compiler.AST
 
         public string Name { get; }
         public HappyType Type { get; }
+
+        public override void PrettyPrint(IPrettyPrinter strBuilder)
+        {
+            strBuilder.Append(Type.ToString() + " " + Name);
+        }
     }
 }

@@ -21,12 +21,14 @@ namespace dumbo.Compiler.AST
 
         public override void PrettyPrint(IPrettyPrinter strBuilder)
         {
+            //Declares the Function + its name
             strBuilder.EndLine();
             strBuilder.EndLine();
             strBuilder.Append("Function " + Identifer.Name + "(");
             Parameters.PrettyPrint(strBuilder);
             strBuilder.Append(") returns ");
 
+            //Declare the return types of the function decl
             if (ReturnTypes.Count == 0)
                 strBuilder.Append("Nothing");
             else if (ReturnTypes.Count != 1)
@@ -40,6 +42,11 @@ namespace dumbo.Compiler.AST
             }
             else
                 strBuilder.Append(ReturnTypes[0].ToString());
+
+            //Finish the function with end
+            strBuilder.EndLine();
+            strBuilder.EndLine("End Function");
+
         }
     }
 }

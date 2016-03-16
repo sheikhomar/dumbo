@@ -12,10 +12,12 @@ namespace dumbo.Compiler.AST
             if (newList.Count == 0)
                 return;
 
+            strBuilder.IndentIncrement(); //Inc. indentation
             foreach (var node in newList)
             {
                 node.PrettyPrint(strBuilder);
             }
+            strBuilder.IndentDecrement(); //Dec. indentation
         }
     }
 }

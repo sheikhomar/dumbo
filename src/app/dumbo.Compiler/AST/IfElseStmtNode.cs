@@ -15,13 +15,22 @@ namespace dumbo.Compiler.AST
 
         public override void PrettyPrint(IPrettyPrinter strBuilder)
         {
+            //If .. Then
             strBuilder.Append("If (");
             Predicate.PrettyPrint(strBuilder);
             strBuilder.EndLine(") Then");
+
+            //If Body
             Body.PrettyPrint(strBuilder);
+
+            //Else
             ElseIfStatements.PrettyPrint(strBuilder);
             strBuilder.EndLine("Else");
+
+            //Else body
             Else.PrettyPrint(strBuilder);
+
+            //End If
             strBuilder.EndLine("End If");
         }
     }

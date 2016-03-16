@@ -12,17 +12,20 @@
         <RoutedUICommand x:Key="SaveCommand" Text="Save current file." />
         <RoutedUICommand x:Key="PickGrammar" Text="Pick another grammar table file." />
         <RoutedUICommand x:Key="ReloadGrammar" Text="Reload current grammar table." />
+        <RoutedUICommand x:Key="PrintCommand" Text="Print" />
     </Window.Resources>
     <Window.CommandBindings>
         <CommandBinding Command="{StaticResource CompileCommand}" Executed="Compile" />
         <CommandBinding Command="{StaticResource SaveCommand}" Executed="SaveFile" />
         <CommandBinding Command="{StaticResource PickGrammar}" Executed="PickGrammar" />
         <CommandBinding Command="{StaticResource ReloadGrammar}" Executed="ReloadGrammar" />
+        <CommandBinding Command="{StaticResource PrintCommand}" Executed="Print" />
     </Window.CommandBindings>
     <Window.InputBindings>
         <KeyBinding Modifiers="Control" Key="S" Command="{StaticResource SaveCommand}" />
         <KeyBinding Modifiers="Control" Key="R" Command="{StaticResource ReloadGrammar}" />
         <KeyBinding Modifiers="Control" Key="Enter" Command="{StaticResource CompileCommand}" />
+        <KeyBinding Modifiers="Control" Key="P" Command="{StaticResource PrintCommand}" />
     </Window.InputBindings>
 
     <DockPanel>

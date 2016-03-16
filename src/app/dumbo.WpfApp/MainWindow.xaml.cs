@@ -175,6 +175,34 @@ namespace dumbo.WpfApp
             return Path.Combine(appDir, "DefaultProgram.hz");
         }
 
+        private void Print(object sender,ExecutedRoutedEventArgs e)
+        {
+            if (!File.Exists(currentSourcePath))
+            {
+                ResultTextBox.Text = $"File {currentSourcePath} does not exist!";
+                return;
+            }
+
+            var data = new StringReader(currentSourcePath);
+
+
+            data = new StringReader(textEditor.Text);
+            if (_myParser.Parse(data))
+            {
+                PrettyPrint(_myParser.Root);
+            }
+            else
+            {
+                ResultTextBox.Text = _myParser.FailMessage;
+                textEditor.TextArea.Caret.Column = _myParser.Column + 1;
+                textEditor.TextArea.Caret.Line = _myParser.Line + 1;
+            }
+
+            latestCompiledAt = DateTime.Now;
+            UpdateInformationBox();
+
+        }
+
         private void Compile(object sender, ExecutedRoutedEventArgs e)
         {
             if (!File.Exists(currentSourcePath))
@@ -189,10 +217,7 @@ namespace dumbo.WpfApp
             data = new StringReader(textEditor.Text);
             if (_myParser.Parse(data))
             {
-                //TODO: Reimplement this 
-                //DrawReductionTree(_myParser.Root);
-
-                PrettyPrint(_myParser.Root);
+                DrawReductionTree(_myParser.Root);
             }
             else
             {
@@ -219,14 +244,6 @@ namespace dumbo.WpfApp
             DrawReduction(tree, Root, 1);
 
             ResultTextBox.Text = tree.ToString();
-        }
-
-        private void PrettyPrint(GOLD.Reduction Root)
-        {
-            StringBuilder strBuilder = new StringBuilder();
-            var AST = new AbstractSyntaxTreeBuilder();
-            AST.Build(Root).PrettyPrint(strBuilder);
-            ResultTextBox.Text = strBuilder.ToString();
         }
 
         private void DrawReduction(StringBuilder tree, GOLD.Reduction reduction, int indent)
@@ -287,6 +304,14 @@ namespace dumbo.WpfApp
             {
                 return false;
             }
+        }
+
+        private void PrettyPrint(GOLD.Reduction Root)
+        {
+            StringBuilder strBuilder = new StringBuilder();
+            var AST = new AbstractSyntaxTreeBuilder();
+            AST.Build(Root).PrettyPrint(strBuilder);
+            ResultTextBox.Text = strBuilder.ToString();
         }
     }
 }

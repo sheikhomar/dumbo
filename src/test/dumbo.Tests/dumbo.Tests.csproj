@@ -49,6 +49,8 @@
     <Compile Include="Class1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SymbolTable\SymbolTableTests.cs" />
+    <Compile Include="SyntaxAnalysis\BaseParserTester.cs" />
+    <Compile Include="SyntaxAnalysis\ParserDeclarationTests.cs" />
     <Compile Include="SyntaxAnalysis\ParserTests.cs" />
   </ItemGroup>
   <ItemGroup>

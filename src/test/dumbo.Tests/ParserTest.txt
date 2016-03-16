@@ -1,0 +1,252 @@
+// ********************Empty***************
+Program
+End Program
+
+
+Program
+
+End Program
+
+
+ProGram
+
+End Program
+
+
+Program
+
+ENd Program
+
+
+Program
+End PrOgram
+
+// *********************Decls***************
+Program
+    Number a
+End Program
+
+
+Program
+    NUMBER a
+End Program
+
+
+Program
+    Number a, b
+End Program
+
+
+Program
+    Number a , b
+End Program
+
+
+Program
+    Boolean a
+End Program
+
+
+Program
+    Boolean a, b
+End Program
+
+
+Program
+    BooleAn a , b
+End Program
+
+
+Program
+    Text a
+End Program
+
+
+Program
+    Text a, b
+End Program
+
+
+Program
+    Text a , b
+End Program
+
+
+Program
+    TexT a
+End Program
+
+// ************************DeclAss***********************
+Program
+    Number a := 1
+End Program
+
+
+Program
+    Number a := 1.11111111111111111111111111111111
+End Program
+
+
+Program
+    Number a := 1,2,3
+End Program
+
+
+Program
+    Number a, b := 1
+End Program
+
+
+Program
+    Number a, b := 1, 2
+End Program
+
+
+Program
+    NumbEr a , b := 1, 2 ,3.222222222222222222222222222224
+End Program
+
+// *******************Ass*************************
+Program
+    a := 1,2
+End Program
+
+
+Program
+    a := 1.2 , 2.5
+End Program
+
+
+Program
+    a , b := 1
+End Program
+
+
+Program
+    a, b := 1,2,3
+End Program
+
+
+Program
+    a, b := 1,2
+End Program
+
+
+Program
+    a := false, true
+End Program
+
+
+Program
+    a := truE
+End Program
+
+
+Program
+    a := faLse
+End Program
+
+
+Program
+    a := ""
+End Program
+
+
+Program
+    a := "test"
+End Program
+
+
+Program
+    a :="Program"
+End Program
+
+
+Program
+    a, b := 1
+End Program
+
+
+Program
+    a, b := 1,2
+End Program
+
+
+Program
+    a, b := 1,2,false 
+End Program
+
+
+Program
+    a, b := 1, "Program", true
+End Program
+
+
+Program
+    a, b := true and false or 1
+End Program
+
+
+Program
+    a, b := 1 or 2
+End Program
+
+
+Program
+    a, b := test(test)
+End Program
+
+
+Program
+    a, b := test() or 1 
+End Program
+
+// *********************FuncCall**************
+Program
+    a( )
+End Program
+
+
+Program
+    a(           )
+End Program
+
+
+Program
+    a( a)
+End Program
+
+
+Program
+    a( a, False, "")
+End Program
+
+
+Program
+    a( false, FaLsE , "False",1254)
+End Program
+
+
+Program
+    a( b())
+End Program
+
+
+Program
+    a( a(a()))
+End Program
+
+
+Program
+    a( a(a,a()))
+End Program
+
+
+Program
+    a( a,a(a,a,a()))
+End Program
+
+// ************************FuncDecl************************
+Program
+    
+End Program

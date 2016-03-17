@@ -11,21 +11,22 @@ namespace dumbo.Compiler.SyntaxAnalysis
         {
             Debug.Assert(root.Parent.Head().Name() == "Start");
 
-            ProgramNode programNode;
-            Token funcDeclsToken = null;
+            Token funcDeclsToken;
+            Token programToken;
 
-            if (root.Count() == 1)
+            if (root.Count() == 2)
             {
-                programNode = BuildProgram(root[0]);
+                programToken = root[0];
+                funcDeclsToken = root[1];
             }
             else if (root.Count() == 3)
             {
-                programNode = BuildProgram(root[0]);
+                programToken = root[0].Parent.Name() == "nl" ? root[1] : root[0];
                 funcDeclsToken = root[2];
             }
             else if (root.Count() == 4)
             {
-                programNode = BuildProgram(root[1]);
+                programToken = root[1];
                 funcDeclsToken = root[3];
             }
             else
@@ -33,6 +34,7 @@ namespace dumbo.Compiler.SyntaxAnalysis
                 throw new InvalidOperationException("Unexpected <Start> production.");
             }
 
+            ProgramNode programNode = BuildProgram(programToken);
             RootNode rootNode = new RootNode(programNode);
 
             if (funcDeclsToken != null)

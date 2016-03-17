@@ -334,7 +334,7 @@ End function
 Program
 End Program
 
-Function a(Number a, booLean) return number, Text
+Function a(Number a, booLean z) return number, Text
     e := a = b and d = 11.11 or true and d <= 20
 End function
 
@@ -598,7 +598,7 @@ End Program
 
  //New Program 
 Program
-	repeat while 1 > 1 > True()
+	repeat while 1 > 1 > Truee()
 		if time() then
 		end if
 	end repeat

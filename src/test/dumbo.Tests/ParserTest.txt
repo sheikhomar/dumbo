@@ -12,12 +12,6 @@ End Program
  //New Program 
 Program
 
-End Program
-
-
- //New Program 
-Program
-
 
 
 
@@ -278,13 +272,13 @@ End Program
 
  //New Program 
 Program
-    a( True())
+    a( Truee())
 End Program
 
 
  //New Program 
 Program
-    a( false(a()))
+    a( falsee(a()))
 End Program
 
 
@@ -642,5 +636,11 @@ End Program
 //*******************************Expr*******************************
  //New Program 
 Program
-	a := 
+	a := (((1)+1)and 1)
+End Program
+
+
+ //New Program 
+Program
+	a := 1+1-1/1*1 and 1 or 1=1<1>1>=1<=1
 End Program

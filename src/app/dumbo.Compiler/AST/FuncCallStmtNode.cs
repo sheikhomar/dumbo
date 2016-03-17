@@ -15,6 +15,7 @@ namespace dumbo.Compiler.AST
         public override void PrettyPrint(IPrettyPrinter prettyPrinter)
         {
             CallNode.PrettyPrint(prettyPrinter);
+            prettyPrinter.EndLine();
         }
     }
 }

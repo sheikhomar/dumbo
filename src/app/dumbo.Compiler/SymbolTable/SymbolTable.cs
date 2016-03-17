@@ -63,6 +63,11 @@ namespace dumbo.Compiler.SymbolTable
 
         public void EnterSymbol(string name, SymbolTableTypeEntry type)
         {
+            EnterSymbol(name, type, false);
+        }
+
+        public void EnterSymbol(string name, SymbolTableTypeEntry type, bool unhideability)
+        {
             SymbolTableEntry oldEntry = RetrieveSymbol(name);
             if (oldEntry != null && oldEntry.Depth >= Depth)
             {
@@ -72,7 +77,7 @@ namespace dumbo.Compiler.SymbolTable
                     throw new DuplicateDeclarationException(string.Format("Error: Multiple declarations of {0} exist in this scope", name));
             }
 
-            SymbolTableEntry newEntry = new SymbolTableEntry(name, type, Depth, null);
+            SymbolTableEntry newEntry = new SymbolTableEntry(name, type, Depth, null, unhideability);
 
             DepthContent.Add(name.ToLower());
 
@@ -82,6 +87,9 @@ namespace dumbo.Compiler.SymbolTable
             }
             else //This is the case when the entry already exist at an outer level
             {
+                if (oldEntry.IsUnhideable)
+                    throw new IllegalHideException(string.Format("{0} is already declared and is unhideable", oldEntry.Name));
+
                 Table.Remove(name.ToLower());
                 newEntry.OuterDecl = oldEntry;
                 Table.Add(newEntry.Name, newEntry);

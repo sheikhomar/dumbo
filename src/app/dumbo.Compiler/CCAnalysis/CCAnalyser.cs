@@ -47,6 +47,11 @@ namespace dumbo.Compiler.CCAnalysis
             symbolTable.EnterSymbol(name, type);
         }
 
+        public void EnterSymbol(string name, SymbolTableTypeEntry type, bool unhideability)
+        {
+            symbolTable.EnterSymbol(name, type, unhideability);
+        }
+
         public void OpenScope()
         {
             symbolTable.OpenScope();

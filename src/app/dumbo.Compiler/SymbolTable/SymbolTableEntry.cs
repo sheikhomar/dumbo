@@ -8,12 +8,18 @@ namespace dumbo.Compiler.SymbolTable
 {
     public class SymbolTableEntry
     {
-        public SymbolTableEntry(string name, SymbolTableTypeEntry type, int depth, SymbolTableEntry outerDecl)
+        public SymbolTableEntry(string name, SymbolTableTypeEntry type, int depth, SymbolTableEntry outerDecl) : this(name, type, depth, outerDecl, false)
+        {
+
+        }
+
+        public SymbolTableEntry(string name, SymbolTableTypeEntry type, int depth, SymbolTableEntry outerDecl, bool unhideability)
         {
             Name = name.ToLower();
             Type = type;
             Depth = depth;
             OuterDecl = outerDecl;
+            IsUnhideable = unhideability;
         }
 
         // These properties are used to identify an entry
@@ -23,5 +29,8 @@ namespace dumbo.Compiler.SymbolTable
 
         // This property references a previous entry with the same name as this entry
         public SymbolTableEntry OuterDecl { get; set; }
+
+        // Boolean flags
+        public bool IsUnhideable { get; set; }
     }
 }

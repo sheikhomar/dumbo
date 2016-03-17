@@ -30,14 +30,15 @@ BooleanLiteral = 'TRUE' | 'FALSE'
 
 ! CFG               
 
-<Start> ::= <Program> <nl> <FuncDecls>
-         | <Program>
+<Start> ::= <Program> <FuncDecls>
          | <nl> <Program> <FuncDecls>
+         | <Program> <nl> <FuncDecls>
+         | <nl> <Program> <nl> <FuncDecls>
      
 <nl>     ::= NewLine <nl>
            | NewLine
            
-<Program> ::= 'Program' <nl> <Stmts> 'End' 'Program'
+<Program> ::='Program' <nl> <Stmts> 'End' 'Program'
           
 <Literal> ::= NumberLiteral
            | TextLiteral

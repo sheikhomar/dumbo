@@ -32,7 +32,7 @@ BooleanLiteral = 'TRUE' | 'FALSE'
 
 <Start> ::= <Program> <nl> <FuncDecls>
          | <Program>
-         | <nl> <Program> <nl> <FuncDecls>
+         | <nl> <Program> <FuncDecls>
      
 <nl>     ::= NewLine <nl>
            | NewLine

@@ -1,5 +1,7 @@
 ﻿using System.Text;
+using dumbo.Compiler.CCAnalysis;
 using dumbo.Compiler.PrettyPrint;
+using dumbo.Compiler.SymbolTable;
 
 namespace dumbo.Compiler.AST
 {
@@ -20,6 +22,20 @@ namespace dumbo.Compiler.AST
             Identifiers.PrettyPrint(prettyPrinter);
             prettyPrinter.Append(" := ");
             Expressions.PrettyPrint(prettyPrinter);
+        }
+
+        public override void CCAnalyse(ICCAnalyser analyser)
+        {
+
+            //Check all Type and literal, remember that a, b = 5 ie last exp
+            //This must be done before scope stuff.
+
+            var idList = Identifiers.GetAllAs<IdentifierNode>();
+
+            foreach (var id in idList)
+            {
+                analyser.EnterSymbol(id.Name, new SymbolTablePrimitiveType(Type));
+            }
         }
     }
 }

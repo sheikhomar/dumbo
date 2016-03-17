@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Text;
+using dumbo.Compiler.CCAnalysis;
 using dumbo.Compiler.PrettyPrint;
 
 namespace dumbo.Compiler.AST
@@ -50,6 +51,12 @@ namespace dumbo.Compiler.AST
             //Finish the function with end
             prettyPrinter.EndLine("End Function");
 
+        }
+
+
+        public override void CCAnalyse(ICCAnalyser analyser)
+        {
+            
         }
     }
 }

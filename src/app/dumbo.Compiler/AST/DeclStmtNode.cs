@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using dumbo.Compiler.CCAnalysis;
 using dumbo.Compiler.PrettyPrint;
 using dumbo.Compiler.SymbolTable;
 
@@ -22,9 +23,18 @@ namespace dumbo.Compiler.AST
             prettyPrinter.EndLine();
         }
 
-        public override void ScopeCheck(ISymbolTable table)
+        public override void CCAnalyse(ICCAnalyser analyser)
         {
-            base.ScopeCheck(table);
+            var idList = Identifiers.GetAllAs<IdentifierNode>();
+
+            foreach (var id in idList)
+            {
+                analyser.EnterSymbol(id.Name, new SymbolTablePrimitiveType(Type));
+            }
+
+            //
         }
+
+
     }
 }

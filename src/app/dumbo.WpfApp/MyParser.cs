@@ -32,7 +32,7 @@ namespace dumbo.WpfApp
             GOLD.ParseMessage response;
             bool done;                      //Controls when we leave the loop
             bool accepted = false;          //Was the parse successful?
-        
+
             parser.Open(reader);
             parser.TrimReductions = false;  //Please read about this feature before enabling  
 
@@ -58,7 +58,7 @@ namespace dumbo.WpfApp
                     case GOLD.ParseMessage.SyntaxError:
                         //Expecting a different token
                         FailMessage = "Syntax Error:\n " +
-                                      "Position: " + parser.CurrentPosition().Line + ", " + parser.CurrentPosition().Column + "\n  "  +
+                                      "Position: " + parser.CurrentPosition().Line + ", " + parser.CurrentPosition().Column + "\n  " +
                                       "Read: " + parser.CurrentToken().Data + "\n  " +
                                       "Expecting: " + parser.ExpectedSymbols().Text();
                         done = true;
@@ -73,7 +73,7 @@ namespace dumbo.WpfApp
 
                     case GOLD.ParseMessage.Accept:
                         //Accepted!
-                        Root = (GOLD.Reduction) parser.CurrentReduction;    //The root node!                                  
+                        Root = (GOLD.Reduction)parser.CurrentReduction;    //The root node!                                  
                         done = true;
                         accepted = true;
                         break;

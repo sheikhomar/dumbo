@@ -4,11 +4,11 @@ namespace dumbo.Compiler.SyntaxAnalysis
     {
         AssignStmt,
         IfStmt,
-        RepeatStmt, 
-        Decl, 
-        ReturnStmt, 
-        FuncCall, 
-        BreakStmt, 
-        nl  
+        RepeatStmt,
+        Decl,
+        ReturnStmt,
+        FuncCall,
+        BreakStmt,
+        nl
     }
 }

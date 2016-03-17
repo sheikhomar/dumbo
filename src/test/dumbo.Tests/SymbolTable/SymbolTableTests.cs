@@ -13,14 +13,14 @@ namespace dumbo.Tests.SymbolTable
         dumbo.Compiler.SymbolTable.SymbolTable table = new dumbo.Compiler.SymbolTable.SymbolTable();
 
         [SetUp]
-        public void tableSetup()
+        public void TableSetup()
         {
             table = new dumbo.Compiler.SymbolTable.SymbolTable();
         }
 
-        [TestCase(0,0,0)]
-        [TestCase(2,0,2)]
-        [TestCase(2,1,1)]
+        [TestCase(0, 0, 0)]
+        [TestCase(2, 0, 2)]
+        [TestCase(2, 1, 1)]
         public void EnsureDepthIsIncrementedAndDecremented(int opens, int closes, int depth)
         {
             // act

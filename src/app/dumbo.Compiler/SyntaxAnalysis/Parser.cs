@@ -34,7 +34,7 @@ namespace dumbo.Compiler.SyntaxAnalysis
         private ParserResult ParseInternal(GOLD.Parser parser)
         {
             ParserResult result = new ParserResult();
-            
+
             var done = false;
             while (!done)
             {

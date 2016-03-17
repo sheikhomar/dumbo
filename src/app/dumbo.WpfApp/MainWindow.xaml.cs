@@ -81,10 +81,10 @@ namespace dumbo.WpfApp
         private void GrammarHasChanged(object sender, FileSystemEventArgs e)
         {
             if (e.FullPath == currentGrammarTablePath && !IsFileReady(e.FullPath)) return;
-            
+
             Dispatcher.BeginInvoke(new Action(() => LoadGrammar(currentGrammarTablePath)));
         }
-        
+
         private void CaretOnPositionChanged(object sender, EventArgs eventArgs)
         {
             UpdateCaretPosition();
@@ -176,7 +176,7 @@ namespace dumbo.WpfApp
             return Path.Combine(appDir, "DefaultProgram.hz");
         }
 
-        private void Print(object sender,ExecutedRoutedEventArgs e)
+        private void Print(object sender, ExecutedRoutedEventArgs e)
         {
             if (!File.Exists(currentSourcePath))
             {
@@ -223,8 +223,8 @@ namespace dumbo.WpfApp
             else
             {
                 ResultTextBox.Text = _myParser.FailMessage;
-                textEditor.TextArea.Caret.Column = _myParser.Column+1;
-                textEditor.TextArea.Caret.Line = _myParser.Line+1;
+                textEditor.TextArea.Caret.Column = _myParser.Column + 1;
+                textEditor.TextArea.Caret.Line = _myParser.Line + 1;
             }
 
             latestCompiledAt = DateTime.Now;

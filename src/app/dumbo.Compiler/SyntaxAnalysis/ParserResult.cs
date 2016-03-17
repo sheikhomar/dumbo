@@ -9,7 +9,7 @@ namespace dumbo.Compiler.SyntaxAnalysis
         private readonly IList<ParserError> _errors;
         private RootNode _root;
 
-        public ParserResult(string errorMessage) 
+        public ParserResult(string errorMessage)
         {
             _errors = new List<ParserError>();
             AddGeneralError(errorMessage);
@@ -17,7 +17,7 @@ namespace dumbo.Compiler.SyntaxAnalysis
 
         public ParserResult() : this(string.Empty)
         {
-            
+
         }
 
         public IEnumerable<ParserError> Errors => _errors;

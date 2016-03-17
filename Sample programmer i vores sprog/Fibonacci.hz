@@ -23,4 +23,4 @@ Function Fib(Number n) returns number
 	End if
 
 	return result
-End Method
+End function

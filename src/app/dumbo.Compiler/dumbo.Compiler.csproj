@@ -102,6 +102,9 @@
     <Compile Include="SyntaxAnalysis\StmtProduction.cs" />
     <Compile Include="SyntaxAnalysis\SyntaxError.cs" />
     <Compile Include="SyntaxAnalysis\AbstractSyntaxTreeBuilder.cs" />
+    <Compile Include="CCAnalysis\ICCAnalyser.cs" />
+    <Compile Include="CCAnalysis\ICCAnalysable.cs" />
+    <Compile Include="CCAnalysis\CCAnalyser.cs" />
     <Compile Include="Utils.cs" />
   </ItemGroup>
   <ItemGroup>

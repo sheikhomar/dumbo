@@ -1,4 +1,5 @@
 using System.Text;
+using dumbo.Compiler.CCAnalysis;
 using dumbo.Compiler.PrettyPrint;
 
 namespace dumbo.Compiler.AST
@@ -15,6 +16,12 @@ namespace dumbo.Compiler.AST
         public override void PrettyPrint(IPrettyPrinter prettyPrinter)
         {
             prettyPrinter.Append(Name);
+        }
+
+        public override void CCAnalyse(ICCAnalyser analyser)
+        {
+            var hans = analyser.RetrieveSymbol(Name);
+            
         }
     }
 }

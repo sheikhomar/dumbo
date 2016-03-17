@@ -18,9 +18,15 @@ namespace dumbo.Compiler.CCAnalysis
         }
 
 
+        public bool IsEqual(HappyType inpt, HappyType inpt2)
+        {
+            return inpt.Equals(inpt2);
+        }
 
-
-
+        public bool IsListsEqual(IList<HappyType> inpt, IList<HappyType> inpt2)
+        {
+            //Comp each element and what?
+        }
 
 
 

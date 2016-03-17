@@ -10,17 +10,12 @@ namespace dumbo.Compiler.AST
     {
         virtual public void CCAnalyse(ICCAnalyser analyser)
         {
-            throw new NotImplementedException();
+            throw new NotImplementedException(); //should make CCAnalyse abstract
         }
 
         virtual public void PrettyPrint(IPrettyPrinter prettyPrinter)
         {
             prettyPrinter.EndLine("***" + this.ToString() + "***");
-        }
-
-        virtual public void ScopeCheck(ISymbolTable table)
-        {
-            
         }
     }
 }

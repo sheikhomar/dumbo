@@ -743,9 +743,9 @@ Program
 	Number sum2
 	Number sum3
 	
-	sum1 = 10 + 11 + 12
-	sum2 = 010 + 011 + 012
-	sum3 = 10.0 + 11.1 + 12.3
+	sum1 := 10 + 11 + 12
+	sum2 := 010 + 011 + 012
+	sum3 := 10.0 + 11.1 + 12.3
 	
 	write("Sum1 = " + sum1)
 	wRiTe("Sum2 = " + sum2)
@@ -766,8 +766,8 @@ Program
 	
 End program
 
-Function Fahrenheit_temperature(number celcius_temp, number fahrenheit_temp)
-	fahrenheit_temp = (9.0 / 5.0) * celcius_temp + 32.0
+Function Fahrenheit_temperature(number celcius_temp, number fahrenheit_temp) return nothing
+	fahrenheit_temp := (9.0 / 5.0) * celcius_temp + 32.0
 end function
 
 
@@ -883,7 +883,8 @@ program
 		grade := 10
 	else if (percent >= 90) then 
 		grade := 11
-	else grade := 0
+	else 
+		grade := 0
 	end if
 	
 	write(percent + " percent corresponds to the Danish grade " + grade)
@@ -927,7 +928,7 @@ Program
     operator := ReadText()
     
     if (operator = "+" Or operator = "-" Or operator = "*" Or operator = "/") then
-       Break()                // This is not correct - syntax doesn't allow this yet - Marc
+       Break                // This is not correct - syntax doesn't allow this yet - Marc
     end if
   end repeat
   
@@ -984,20 +985,20 @@ Program
 	Number res3_equiv
 	Number res4_equiv
 	
-	res1 = a > b AND c < x
-	res2 = a < NOT b OR not(not(a))
-	res3 = a + b < not(c) + c
-	res4 = a - x or b * c and b / a
+	res1 := a > b AND c < x
+	res2 := a < NOT b OR not(not(a))
+	res3 := a + b < not(c) + c
+	res4 := a - x or b * c and b / a
 	
 	write("res1 = " + res1)
 	write("res2 = " + res2)
 	write("res3 = " + res3)
 	write("res4 = " + res4)
 	
-	res1_equiv = (a > b) and (c < x)
-	res2_equiv = (a < (not(b)) or (not(not(a))
-	res3_equiv = (a + b) < (((not(c)) + c))
-	res4_equiv = (a - x) or ((b * c) and (b / a))
+	res1_equiv := (a > b) and (c < x)
+	res2_equiv := (a < (not(b))) or (not(not(a)))
+	res3_equiv := (a + b) < (((not(c)) + c))
+	res4_equiv := (a - x) or ((b * c) and (b / a))
 	
 	write("res1_equiv = " + res1_equiv)
 	write("res2_equiv = " + res2_equiv)
@@ -1052,10 +1053,11 @@ Program
 	else
 		if (inputNumber = 7) then
 			write("Neutral")
-		else if (inputNumber > 2)
+		else if (inputNumber > 2) then
 			write("Acidic")
 		else
 			write("Very acidic")
+		end if
 	end if
 
 End Program

@@ -26,6 +26,7 @@ namespace dumbo.Compiler.CCAnalysis
         public bool IsListsEqual(IList<HappyType> inpt, IList<HappyType> inpt2)
         {
             //Comp each element and what?
+            throw new NotFiniteNumberException();
         }
 
 

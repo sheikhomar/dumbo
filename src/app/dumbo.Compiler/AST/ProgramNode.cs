@@ -20,13 +20,6 @@ namespace dumbo.Compiler.AST
             Body.PrettyPrint(prettyPrinter);
             prettyPrinter.EndLine("End Program");
         }
-
-        public override void ScopeCheck(ISymbolTable table)
-        {
-            table.OpenScope();
-            Body.ScopeCheck(table);
-            table.CloseScope();
-        }
     }
 
 }

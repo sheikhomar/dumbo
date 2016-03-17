@@ -26,11 +26,5 @@ namespace dumbo.Compiler.AST
 
             prettyPrinter.EndLine();
         }
-
-        public override void ScopeCheck(ISymbolTable table)
-        {
-            Identifiers.ScopeCheck(table);
-            Expressions.ScopeCheck(table);
-        }
     }
 }

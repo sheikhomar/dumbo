@@ -661,19 +661,19 @@ End Program
 
  //New Program 
 Program
-	_9 := 1
+	_a := 1
 End Program
 
 
  //New Program 
 Program
-	____________________________________9 := 1
+	_a_______________ := 1
 End Program
 
 
  //New Program 
 Program
-	_ := 1
+	_a_a_a___A_a______ := 1
 End Program
 
 

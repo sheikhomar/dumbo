@@ -9,13 +9,16 @@ namespace dumbo.Compiler.SymbolTable
 {
     public class SymbolTableFunctionType : SymbolTableTypeEntry
     {
-        public SymbolTableFunctionType()
+        public IList<HappyType> _parametertypes;
+        public IList<HappyType> _returntypes;
+
+        public SymbolTableFunctionType(IList<HappyType> parametertypes, IList<HappyType> returntypes)
         {
-            parametertypes = new List<HappyType>();
-            returntypes = new List<HappyType>();
+            _parametertypes = parametertypes;
+            _returntypes = returntypes;
         }
 
-        public List<HappyType> parametertypes { get; set; }
-        public List<HappyType> returntypes { get; set; }
+        public IList<HappyType> parametertypes => _parametertypes;
+        public IList<HappyType> returntypes => _returntypes;
     }
 }

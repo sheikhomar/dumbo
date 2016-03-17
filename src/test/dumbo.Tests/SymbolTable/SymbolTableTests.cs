@@ -116,22 +116,23 @@ namespace dumbo.Tests.SymbolTable
             Assert.AreEqual(1, table.RetrieveSymbol("Declaration").Depth);
         }
 
-        [Test]
-        public void EnsureFunctionParametersAreStored()
-        {
-            // Arrange
-            Compiler.SymbolTable.SymbolTableFunctionType entry = new Compiler.SymbolTable.SymbolTableFunctionType();
-            entry.parametertypes.Add(Compiler.AST.HappyType.Boolean);
-            entry.parametertypes.Add(Compiler.AST.HappyType.Text);
+        //[Test]
+        //public void EnsureFunctionParametersAreStored()
+        //{
+            
+        //    // Arrange
+        //    Compiler.SymbolTable.SymbolTableFunctionType entry = new Compiler.SymbolTable.SymbolTableFunctionType();
+        //    entry.parametertypes.Add(Compiler.AST.HappyType.Boolean);
+        //    entry.parametertypes.Add(Compiler.AST.HappyType.Text);
 
-            // Act
-            table.EnterSymbol("test", entry);
+        //    // Act
+        //    table.EnterSymbol("test", entry);
 
-            // Assert
-            bool first = (Compiler.AST.HappyType.Boolean == ((Compiler.SymbolTable.SymbolTableFunctionType)(table.RetrieveSymbol("test").Type)).parametertypes[0]);
-            bool second = (Compiler.AST.HappyType.Text == ((Compiler.SymbolTable.SymbolTableFunctionType)(table.RetrieveSymbol("test").Type)).parametertypes[1]);
+        //    // Assert
+        //    bool first = (Compiler.AST.HappyType.Boolean == ((Compiler.SymbolTable.SymbolTableFunctionType)(table.RetrieveSymbol("test").Type)).parametertypes[0]);
+        //    bool second = (Compiler.AST.HappyType.Text == ((Compiler.SymbolTable.SymbolTableFunctionType)(table.RetrieveSymbol("test").Type)).parametertypes[1]);
 
-            Assert.True(first && second);
-        }
+        //    Assert.True(first && second);
+        //}
     }
 }

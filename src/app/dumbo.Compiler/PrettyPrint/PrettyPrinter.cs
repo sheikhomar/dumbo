@@ -21,7 +21,6 @@ namespace dumbo.Compiler.PrettyPrint
             inLine = false;
             indentSize = 0;
 
-
             root.PrettyPrint(this);
 
             return strBuilder;
@@ -31,22 +30,19 @@ namespace dumbo.Compiler.PrettyPrint
         {
             if (inLine)
             {
-                Add(inpt);
+                Write(inpt);
             }
             else
             {
                 Indent();
-                Add(inpt);
+                Write(inpt);
             }
         }
 
         public void EndLine(string inpt = "")
         {
-            if (!inLine)
-                Indent();
-
-            AddLine(inpt);
-            inLine = false;
+            Append(inpt);
+            FinishLine();
         }
 
         public void IndentIncrement()
@@ -62,15 +58,17 @@ namespace dumbo.Compiler.PrettyPrint
                 throw new IndentDecrementException("Unable to decrement as indentSize is less than 1");
         }
 
+
         //Private methods
-        private void Add(string inpt)
+        private void Write(string inpt)
         {
             strBuilder.Append(inpt);
         }
 
-        private void AddLine(string inpt)
+        private void FinishLine()
         {
-            strBuilder.AppendLine(inpt);
+            strBuilder.AppendLine("");
+            inLine = false;
         }
 
         private void Indent()

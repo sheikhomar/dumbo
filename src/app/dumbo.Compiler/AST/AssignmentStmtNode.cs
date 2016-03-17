@@ -1,6 +1,7 @@
 ﻿using dumbo.Compiler.PrettyPrint;
 using System.Collections.Generic;
 using System.Text;
+using dumbo.Compiler.SymbolTable;
 
 namespace dumbo.Compiler.AST
 {
@@ -24,6 +25,12 @@ namespace dumbo.Compiler.AST
             Expressions.PrettyPrint(prettyPrinter);
 
             prettyPrinter.EndLine();
+        }
+
+        public override void ScopeCheck(ISymbolTable table)
+        {
+            Identifiers.ScopeCheck(table);
+            Expressions.ScopeCheck(table);
         }
     }
 }

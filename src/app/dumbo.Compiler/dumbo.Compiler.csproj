@@ -80,6 +80,7 @@
     <Compile Include="PrettyPrint\IPrettyPrint.cs" />
     <Compile Include="PrettyPrint\IPrettyPrinter.cs" />
     <Compile Include="PrettyPrint\PrettyPrinter.cs" />
+    <Compile Include="ScopeCheck\IScopeCheck.cs" />
     <Compile Include="SymbolTable\OutermostScopeException.cs" />
     <Compile Include="SymbolTable\DuplicateDeclarationException.cs" />
     <Compile Include="SymbolTable\ISymbolTable.cs" />
@@ -107,7 +108,6 @@
   <ItemGroup>
     <Folder Include="CodeGeneration\" />
     <Folder Include="ContextualAnalysis\" />
-    <Folder Include="ScopeCheck\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

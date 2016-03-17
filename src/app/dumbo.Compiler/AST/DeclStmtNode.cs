@@ -1,5 +1,6 @@
 ﻿using System.Text;
 using dumbo.Compiler.PrettyPrint;
+using dumbo.Compiler.SymbolTable;
 
 namespace dumbo.Compiler.AST
 {
@@ -19,6 +20,11 @@ namespace dumbo.Compiler.AST
             prettyPrinter.Append(Type.ToString() + " ");
             Identifiers.PrettyPrint(prettyPrinter);
             prettyPrinter.EndLine();
+        }
+
+        public override void ScopeCheck(ISymbolTable table)
+        {
+            base.ScopeCheck(table);
         }
     }
 }

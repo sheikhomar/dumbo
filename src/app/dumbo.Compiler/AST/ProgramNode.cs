@@ -1,6 +1,7 @@
 ﻿using System.Linq.Expressions;
 using System.Text;
 using dumbo.Compiler.PrettyPrint;
+using dumbo.Compiler.SymbolTable;
 
 namespace dumbo.Compiler.AST
 {
@@ -18,6 +19,13 @@ namespace dumbo.Compiler.AST
             prettyPrinter.EndLine("Program");
             Body.PrettyPrint(prettyPrinter);
             prettyPrinter.EndLine("End Program");
+        }
+
+        public override void ScopeCheck(ISymbolTable table)
+        {
+            table.OpenScope();
+            Body.ScopeCheck(table);
+            table.CloseScope();
         }
     }
 

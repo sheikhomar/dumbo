@@ -12,9 +12,9 @@ namespace dumbo.Compiler.AST
 
         public FuncCallNode CallNode { get; }
 
-        public override void PrettyPrint(IPrettyPrinter strBuilder)
+        public override void PrettyPrint(IPrettyPrinter prettyPrinter)
         {
-            CallNode.PrettyPrint(strBuilder);
+            CallNode.PrettyPrint(prettyPrinter);
         }
     }
 }

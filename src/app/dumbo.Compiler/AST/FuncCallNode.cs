@@ -14,11 +14,11 @@ namespace dumbo.Compiler.AST
         public string Identifier { get; }
         public ActualParamListNode Parameters { get; }
 
-        public override void PrettyPrint(IPrettyPrinter strBuilder)
+        public override void PrettyPrint(IPrettyPrinter prettyPrinter)
         {
-            strBuilder.Append(Identifier + "(");
-            Parameters.PrettyPrint(strBuilder);
-            strBuilder.Append(")");
+            prettyPrinter.Append(Identifier + "(");
+            Parameters.PrettyPrint(prettyPrinter);
+            prettyPrinter.Append(")");
         }
     }
 }

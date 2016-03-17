@@ -19,36 +19,36 @@ namespace dumbo.Compiler.AST
         public IList<HappyType> ReturnTypes { get; }
         public StmtBlockNode Body { get; }
 
-        public override void PrettyPrint(IPrettyPrinter strBuilder)
+        public override void PrettyPrint(IPrettyPrinter prettyPrinter)
         {
             //Declares the Function + its name
-            strBuilder.EndLine();
-            strBuilder.EndLine();
-            strBuilder.Append("Function " + Identifer.Name + "(");
-            Parameters.PrettyPrint(strBuilder);
-            strBuilder.Append(") Returns ");
+            prettyPrinter.EndLine();
+            prettyPrinter.EndLine();
+            prettyPrinter.Append("Function " + Identifer.Name + "(");
+            Parameters.PrettyPrint(prettyPrinter);
+            prettyPrinter.Append(") Returns ");
 
             //Declare the return types of the function decl
             if (ReturnTypes.Count == 0)
-                strBuilder.Append("Nothing");
+                prettyPrinter.Append("Nothing");
             else if (ReturnTypes.Count != 1)
             {
-                strBuilder.Append(ReturnTypes[0].ToString());
+                prettyPrinter.Append(ReturnTypes[0].ToString());
 
                 for (int i = 1; i < ReturnTypes.Count; i++)
                 {
-                    strBuilder.Append(", " + ReturnTypes[i].ToString());
+                    prettyPrinter.Append(", " + ReturnTypes[i].ToString());
                 }
             }
             else
-                strBuilder.Append(ReturnTypes[0].ToString());
+                prettyPrinter.Append(ReturnTypes[0].ToString());
 
-            strBuilder.EndLine();
+            prettyPrinter.EndLine();
 
-            Body.PrettyPrint(strBuilder);
+            Body.PrettyPrint(prettyPrinter);
 
             //Finish the function with end
-            strBuilder.EndLine("End Function");
+            prettyPrinter.EndLine("End Function");
 
         }
     }

@@ -12,9 +12,9 @@ namespace dumbo.Compiler.AST
 
         public string Name { get; }
 
-        public override void PrettyPrint(IPrettyPrinter strBuilder)
+        public override void PrettyPrint(IPrettyPrinter prettyPrinter)
         {
-            strBuilder.Append(Name);
+            prettyPrinter.Append(Name);
         }
     }
 }

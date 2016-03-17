@@ -15,10 +15,10 @@ namespace dumbo.Compiler.AST
             FuncDecls = new FuncDeclListNode();
         }
 
-        public override void PrettyPrint(IPrettyPrinter strBuilder)
+        public override void PrettyPrint(IPrettyPrinter prettyPrinter)
         {
-            Program.PrettyPrint(strBuilder);
-            FuncDecls.PrettyPrint(strBuilder);
+            Program.PrettyPrint(prettyPrinter);
+            FuncDecls.PrettyPrint(prettyPrinter);
         }
     }
 }

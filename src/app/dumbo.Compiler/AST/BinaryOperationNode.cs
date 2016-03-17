@@ -16,11 +16,11 @@ namespace dumbo.Compiler.AST
         public BinaryOperatorType Operator { get; }
         public ExpressionNode RightOperand { get; }
 
-        public override void PrettyPrint(IPrettyPrinter strBuilder)
+        public override void PrettyPrint(IPrettyPrinter prettyPrinter)
         {
-            LeftOperand.PrettyPrint(strBuilder);
-            strBuilder.Append(" " + OperatorTranslator.BinaryOperatorTypeTranslator(Operator) + " ");
-            RightOperand.PrettyPrint(strBuilder);
+            LeftOperand.PrettyPrint(prettyPrinter);
+            prettyPrinter.Append(" " + OperatorTranslator.BinaryOperatorTypeTranslator(Operator) + " ");
+            RightOperand.PrettyPrint(prettyPrinter);
         }
     }
 }

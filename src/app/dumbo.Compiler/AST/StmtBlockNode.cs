@@ -5,19 +5,19 @@ namespace dumbo.Compiler.AST
 {
     public class StmtBlockNode  : BaseListNode<StmtNode>
     {
-        public override void PrettyPrint(IPrettyPrinter strBuilder)
+        public override void PrettyPrint(IPrettyPrinter prettyPrinter)
         {
             var newList = GetAllAs<StmtNode>();
 
             if (newList.Count == 0)
                 return;
 
-            strBuilder.IndentIncrement(); //Inc. indentation
+            prettyPrinter.IndentIncrement(); //Inc. indentation
             foreach (var node in newList)
             {
-                node.PrettyPrint(strBuilder);
+                node.PrettyPrint(prettyPrinter);
             }
-            strBuilder.IndentDecrement(); //Dec. indentation
+            prettyPrinter.IndentDecrement(); //Dec. indentation
         }
     }
 }

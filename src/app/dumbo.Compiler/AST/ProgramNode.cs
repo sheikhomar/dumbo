@@ -13,11 +13,11 @@ namespace dumbo.Compiler.AST
 
         public StmtBlockNode Body { get; }
 
-        public override void PrettyPrint(IPrettyPrinter strBuilder)
+        public override void PrettyPrint(IPrettyPrinter prettyPrinter)
         {
-            strBuilder.EndLine("Program");
-            Body.PrettyPrint(strBuilder);
-            strBuilder.EndLine("End Program");
+            prettyPrinter.EndLine("Program");
+            Body.PrettyPrint(prettyPrinter);
+            prettyPrinter.EndLine("End Program");
         }
     }
 

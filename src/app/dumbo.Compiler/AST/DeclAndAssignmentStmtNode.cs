@@ -14,12 +14,12 @@ namespace dumbo.Compiler.AST
 
         public HappyType Type { get; }
 
-        public override void PrettyPrint(IPrettyPrinter strBuilder)
+        public override void PrettyPrint(IPrettyPrinter prettyPrinter)
         {
-            strBuilder.Append(Type.ToString() + " ");
-            Identifiers.PrettyPrint(strBuilder);
-            strBuilder.Append(" := ");
-            Expressions.PrettyPrint(strBuilder);
+            prettyPrinter.Append(Type.ToString() + " ");
+            Identifiers.PrettyPrint(prettyPrinter);
+            prettyPrinter.Append(" := ");
+            Expressions.PrettyPrint(prettyPrinter);
         }
     }
 }

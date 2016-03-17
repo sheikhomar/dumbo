@@ -16,21 +16,21 @@ namespace dumbo.Compiler.AST
         public StmtBlockNode Body { get;  }
         public ElseIfStmtListNode ElseIfStatements { get; }
 
-        public override void PrettyPrint(IPrettyPrinter strBuilder)
+        public override void PrettyPrint(IPrettyPrinter prettyPrinter)
         {
             //If ... Then
-            strBuilder.Append("If (");
-            Predicate.PrettyPrint(strBuilder);
-            strBuilder.EndLine(") Then");
+            prettyPrinter.Append("If (");
+            Predicate.PrettyPrint(prettyPrinter);
+            prettyPrinter.EndLine(") Then");
             
             //If Body
-            Body.PrettyPrint(strBuilder);
+            Body.PrettyPrint(prettyPrinter);
 
             //Else If...
-            ElseIfStatements.PrettyPrint(strBuilder);
+            ElseIfStatements.PrettyPrint(prettyPrinter);
 
             //End if
-            strBuilder.EndLine("End If");
+            prettyPrinter.EndLine("End If");
         }
     }
 }

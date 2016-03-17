@@ -14,11 +14,11 @@ namespace dumbo.Compiler.AST
         public IdentifierListNode Identifiers { get; }
         public HappyType Type { get; }
 
-        public override void PrettyPrint(IPrettyPrinter strBuilder)
+        public override void PrettyPrint(IPrettyPrinter prettyPrinter)
         {
-            strBuilder.Append(Type.ToString() + " ");
-            Identifiers.PrettyPrint(strBuilder);
-            strBuilder.EndLine();
+            prettyPrinter.Append(Type.ToString() + " ");
+            Identifiers.PrettyPrint(prettyPrinter);
+            prettyPrinter.EndLine();
         }
     }
 }

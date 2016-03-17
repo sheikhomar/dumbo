@@ -14,10 +14,10 @@ namespace dumbo.Compiler.AST
         public UnaryOperatorType Operator { get; }
         public ExpressionNode Expression { get; }
 
-        public override void PrettyPrint(IPrettyPrinter strBuilder)
+        public override void PrettyPrint(IPrettyPrinter prettyPrinter)
         {
-            strBuilder.Append(" " + OperatorTranslator.UnaryOperatorTypeTranslator(Operator) + " ");
-            Expression.PrettyPrint(strBuilder);
+            prettyPrinter.Append(" " + OperatorTranslator.UnaryOperatorTypeTranslator(Operator) + " ");
+            Expression.PrettyPrint(prettyPrinter);
         }
     }
 }

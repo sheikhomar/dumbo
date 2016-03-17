@@ -15,15 +15,15 @@ namespace dumbo.Compiler.AST
         public IdentifierListNode Identifiers { get; }
         public ExpressionListNode Expressions { get; }
 
-        public override void PrettyPrint(IPrettyPrinter strBuilder)
+        public override void PrettyPrint(IPrettyPrinter prettyPrinter)
         {
-            Identifiers.PrettyPrint(strBuilder);
+            Identifiers.PrettyPrint(prettyPrinter);
 
-            strBuilder.Append(" := ");
+            prettyPrinter.Append(" := ");
 
-            Expressions.PrettyPrint(strBuilder);
+            Expressions.PrettyPrint(prettyPrinter);
 
-            strBuilder.EndLine();
+            prettyPrinter.EndLine();
         }
     }
 }

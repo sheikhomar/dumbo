@@ -5,9 +5,9 @@ namespace dumbo.Compiler.AST
 {
     public class BreakStmtNode : StmtNode
     {
-        public override void PrettyPrint(IPrettyPrinter StrBuilder)
+        public override void PrettyPrint(IPrettyPrinter prettyPrinter)
         {
-            StrBuilder.EndLine("Break");
+            prettyPrinter.EndLine("Break");
         }
     }
 }

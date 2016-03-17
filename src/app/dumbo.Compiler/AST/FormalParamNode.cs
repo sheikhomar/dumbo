@@ -13,9 +13,9 @@ namespace dumbo.Compiler.AST
         public string Name { get; }
         public HappyType Type { get; }
 
-        public override void PrettyPrint(IPrettyPrinter strBuilder)
+        public override void PrettyPrint(IPrettyPrinter prettyPrinter)
         {
-            strBuilder.Append(Type.ToString() + " " + Name);
+            prettyPrinter.Append(Type.ToString() + " " + Name);
         }
     }
 }

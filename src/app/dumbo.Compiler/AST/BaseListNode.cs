@@ -33,20 +33,20 @@ namespace dumbo.Compiler.AST
             return _internalList as List<T>;
         }
 
-        public override void PrettyPrint(IPrettyPrinter strBuilder)
+        public override void PrettyPrint(IPrettyPrinter prettyPrinter)
         {
             if (_internalList.Count == 0)
                 return;
 
-            _internalList[0].PrettyPrint(strBuilder);
+            _internalList[0].PrettyPrint(prettyPrinter);
 
             if (_internalList.Count == 1)
                 return;
 
             for (int i = 1; i < _internalList.Count; i++)
             {
-                strBuilder.Append(", ");
-                _internalList[i].PrettyPrint(strBuilder);
+                prettyPrinter.Append(", ");
+                _internalList[i].PrettyPrint(prettyPrinter);
             }
         }
 

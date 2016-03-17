@@ -14,13 +14,13 @@ namespace dumbo.Compiler.AST
         public ExpressionNode Predicate { get; }
         public StmtBlockNode Body { get; }
 
-        public override void PrettyPrint(IPrettyPrinter strBuilder)
+        public override void PrettyPrint(IPrettyPrinter prettyPrinter)
         {
-            strBuilder.Append("repeat while (");
-            Predicate.PrettyPrint(strBuilder);
-            strBuilder.EndLine(")");
-            Body.PrettyPrint(strBuilder);
-            strBuilder.EndLine("end repeat");
+            prettyPrinter.Append("repeat while (");
+            Predicate.PrettyPrint(prettyPrinter);
+            prettyPrinter.EndLine(")");
+            Body.PrettyPrint(prettyPrinter);
+            prettyPrinter.EndLine("end repeat");
         }
     }
 }

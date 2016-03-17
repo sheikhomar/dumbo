@@ -8,6 +8,6 @@ namespace dumbo.Compiler.PrettyPrint
 {
     public interface IPrettyPrint
     {
-        void PrettyPrint(IPrettyPrinter strBuilder);
+        void PrettyPrint(IPrettyPrinter prettyPrinter);
     }
 }

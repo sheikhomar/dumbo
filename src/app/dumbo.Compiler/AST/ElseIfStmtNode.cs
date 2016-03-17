@@ -14,12 +14,12 @@ namespace dumbo.Compiler.AST
         public ExpressionNode Predicate { get; }
         public StmtBlockNode Body { get; }
 
-        public override void PrettyPrint(IPrettyPrinter strBuilder)
+        public override void PrettyPrint(IPrettyPrinter prettyPrinter)
         {
-            strBuilder.Append("Else If (");
-            Predicate.PrettyPrint(strBuilder);
-            strBuilder.EndLine(") Then");
-            Body.PrettyPrint(strBuilder);
+            prettyPrinter.Append("Else If (");
+            Predicate.PrettyPrint(prettyPrinter);
+            prettyPrinter.EndLine(") Then");
+            Body.PrettyPrint(prettyPrinter);
         }
     }
 }

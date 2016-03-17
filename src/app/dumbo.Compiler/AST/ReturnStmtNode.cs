@@ -12,14 +12,14 @@ namespace dumbo.Compiler.AST
 
         public ExpressionListNode Expressions { get; }
 
-        public override void PrettyPrint(IPrettyPrinter StrBuilder)
+        public override void PrettyPrint(IPrettyPrinter prettyPrinter)
         {
-            StrBuilder.Append("Return ");
+            prettyPrinter.Append("Return ");
             if (Expressions.Count == 0)
-                StrBuilder.Append("Nothing");
+                prettyPrinter.Append("Nothing");
             else
-                Expressions.PrettyPrint(StrBuilder);
-            StrBuilder.EndLine();
+                Expressions.PrettyPrint(prettyPrinter);
+            prettyPrinter.EndLine();
         }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using dumbo.Compiler.AST;
 
 namespace dumbo.Compiler.SymbolTable
 {
@@ -10,9 +11,9 @@ namespace dumbo.Compiler.SymbolTable
     {
         public SymbolTableFunctionType()
         {
-            parameters = new List<SymbolTableType>();
+            parameters = new List<HappyType>();
         }
 
-        public List<SymbolTableType> parameters { get; set; }
+        public List<HappyType> parameters { get; set; }
     }
 }

@@ -34,7 +34,7 @@ namespace dumbo.Tests.SymbolTable
                 table.CloseScope();
             }
 
-            table.EnterSymbol("test", new Compiler.SymbolTable.SymbolTablePrimitiveType(Compiler.SymbolTable.SymbolTableType.Boolean));
+            table.EnterSymbol("test", new Compiler.SymbolTable.SymbolTablePrimitiveType(Compiler.AST.HappyType.Boolean));
 
             // assert
             Assert.AreEqual(depth, table.RetrieveSymbol("test").Depth);
@@ -44,10 +44,10 @@ namespace dumbo.Tests.SymbolTable
         public void AddsAndRemovesNamesProperly()
         {
             //Arrange
-            table.EnterSymbol("fisk", new Compiler.SymbolTable.SymbolTablePrimitiveType(Compiler.SymbolTable.SymbolTableType.Text));
-            table.EnterSymbol("Omar", new Compiler.SymbolTable.SymbolTablePrimitiveType(Compiler.SymbolTable.SymbolTableType.Number));
+            table.EnterSymbol("fisk", new Compiler.SymbolTable.SymbolTablePrimitiveType(Compiler.AST.HappyType.Text));
+            table.EnterSymbol("Omar", new Compiler.SymbolTable.SymbolTablePrimitiveType(Compiler.AST.HappyType.Number));
             table.OpenScope();
-            table.EnterSymbol("Marc", new Compiler.SymbolTable.SymbolTablePrimitiveType(Compiler.SymbolTable.SymbolTableType.Boolean));
+            table.EnterSymbol("Marc", new Compiler.SymbolTable.SymbolTablePrimitiveType(Compiler.AST.HappyType.Boolean));
 
             //Act
             table.CloseScope();
@@ -63,7 +63,7 @@ namespace dumbo.Tests.SymbolTable
             table.OpenScope();
 
             // Act
-            table.EnterSymbol("test", new Compiler.SymbolTable.SymbolTablePrimitiveType(Compiler.SymbolTable.SymbolTableType.Boolean));
+            table.EnterSymbol("test", new Compiler.SymbolTable.SymbolTablePrimitiveType(Compiler.AST.HappyType.Boolean));
 
             // Assert
             Assert.True(table.DeclaredLocally("test"));
@@ -73,7 +73,7 @@ namespace dumbo.Tests.SymbolTable
         public void DeclaredLocallyReturnsFalse()
         {
             // Arrange
-            table.EnterSymbol("test", new Compiler.SymbolTable.SymbolTablePrimitiveType(Compiler.SymbolTable.SymbolTableType.Boolean));
+            table.EnterSymbol("test", new Compiler.SymbolTable.SymbolTablePrimitiveType(Compiler.AST.HappyType.Boolean));
 
             // Act
             table.OpenScope();
@@ -87,10 +87,10 @@ namespace dumbo.Tests.SymbolTable
         {
             // Arrange
             table.OpenScope();
-            table.EnterSymbol("tst", new Compiler.SymbolTable.SymbolTablePrimitiveType(Compiler.SymbolTable.SymbolTableType.Boolean));
+            table.EnterSymbol("tst", new Compiler.SymbolTable.SymbolTablePrimitiveType(Compiler.AST.HappyType.Boolean));
 
             // Act & Assert
-            Assert.Throws(typeof(Compiler.SymbolTable.DuplicateDeclarationException), () => table.EnterSymbol("tst", new Compiler.SymbolTable.SymbolTablePrimitiveType(Compiler.SymbolTable.SymbolTableType.Boolean)));
+            Assert.Throws(typeof(Compiler.SymbolTable.DuplicateDeclarationException), () => table.EnterSymbol("tst", new Compiler.SymbolTable.SymbolTablePrimitiveType(Compiler.AST.HappyType.Boolean)));
         }
 
         [Test]
@@ -105,9 +105,9 @@ namespace dumbo.Tests.SymbolTable
         {
             // Arrange
             table.OpenScope();
-            table.EnterSymbol("Declaration", new Compiler.SymbolTable.SymbolTablePrimitiveType(Compiler.SymbolTable.SymbolTableType.Boolean));
+            table.EnterSymbol("Declaration", new Compiler.SymbolTable.SymbolTablePrimitiveType(Compiler.AST.HappyType.Boolean));
             table.OpenScope();
-            table.EnterSymbol("Declaration", new Compiler.SymbolTable.SymbolTablePrimitiveType(Compiler.SymbolTable.SymbolTableType.Boolean));
+            table.EnterSymbol("Declaration", new Compiler.SymbolTable.SymbolTablePrimitiveType(Compiler.AST.HappyType.Boolean));
 
             // Act
             table.CloseScope();
@@ -121,15 +121,15 @@ namespace dumbo.Tests.SymbolTable
         {
             // Arrange
             Compiler.SymbolTable.SymbolTableFunctionType entry = new Compiler.SymbolTable.SymbolTableFunctionType();
-            entry.parameters.Add(Compiler.SymbolTable.SymbolTableType.Boolean);
-            entry.parameters.Add(Compiler.SymbolTable.SymbolTableType.Text);
+            entry.parameters.Add(Compiler.AST.HappyType.Boolean);
+            entry.parameters.Add(Compiler.AST.HappyType.Text);
 
             // Act
             table.EnterSymbol("test", entry);
 
             // Assert
-            bool first = (Compiler.SymbolTable.SymbolTableType.Boolean == ((Compiler.SymbolTable.SymbolTableFunctionType)(table.RetrieveSymbol("test").Type)).parameters[0]);
-            bool second = (Compiler.SymbolTable.SymbolTableType.Text == ((Compiler.SymbolTable.SymbolTableFunctionType)(table.RetrieveSymbol("test").Type)).parameters[1]);
+            bool first = (Compiler.AST.HappyType.Boolean == ((Compiler.SymbolTable.SymbolTableFunctionType)(table.RetrieveSymbol("test").Type)).parameters[0]);
+            bool second = (Compiler.AST.HappyType.Text == ((Compiler.SymbolTable.SymbolTableFunctionType)(table.RetrieveSymbol("test").Type)).parameters[1]);
 
             Assert.True(first && second);
         }

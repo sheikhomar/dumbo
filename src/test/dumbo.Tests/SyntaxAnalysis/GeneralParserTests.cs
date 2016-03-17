@@ -21,6 +21,8 @@ namespace dumbo.Tests.SyntaxAnalysis
             {
                 StringBuilder programBuilder = new StringBuilder();
                 string line;
+                int counter = 0;
+                int nextProgramLine = 0;
                 while ((line = fs.ReadLine()) != null)
                 {
                     if (" //New Program ".Equals(line))
@@ -29,17 +31,19 @@ namespace dumbo.Tests.SyntaxAnalysis
                         var result = parser.Parse(new StringReader(programText));
                         if (result.Errors.Any())
                         {
-
-
-                            Assert.Fail($"Parser error for program: \n\r\n\r{programText}");
+                            var errorMessages = result.Errors.Select(e => e.GetErrorMessage()).ToArray();
+                            
+                            Assert.Fail($"Parser error for program at line {nextProgramLine}: \n\r \n\r{string.Join(", ", errorMessages)} \n\r{programText}");
                         }
                         
                         programBuilder = new StringBuilder();
+                        nextProgramLine = counter+2;
                     }
                     else
                     {
                         programBuilder.AppendLine(line);
                     }
+                    counter++;
                 }
             }
         }

@@ -3,250 +3,644 @@ Program
 End Program
 
 
+ //New Program 
 Program
 
 End Program
 
 
-ProGram
+ //New Program 
+Program
 
 End Program
 
 
+ //New Program 
 Program
+
+
+
+
 
 ENd Program
 
 
+ //New Program 
 Program
 End PrOgram
 
 // *********************Decls***************
+ //New Program 
 Program
     Number a
 End Program
 
 
+ //New Program 
 Program
     NUMBER a
 End Program
 
 
+ //New Program 
 Program
     Number a, b
 End Program
 
 
+ //New Program 
 Program
     Number a , b
 End Program
 
 
+ //New Program 
 Program
     Boolean a
 End Program
 
 
+ //New Program 
 Program
     Boolean a, b
 End Program
 
 
+ //New Program 
 Program
     BooleAn a , b
 End Program
 
 
+ //New Program 
 Program
     Text a
 End Program
 
 
+ //New Program 
 Program
     Text a, b
 End Program
 
 
+ //New Program 
 Program
     Text a , b
 End Program
 
 
+ //New Program 
 Program
     TexT a
 End Program
 
 // ************************DeclAss***********************
+ //New Program 
 Program
     Number a := 1
 End Program
 
 
+ //New Program 
 Program
     Number a := 1.11111111111111111111111111111111
 End Program
 
 
+ //New Program 
 Program
     Number a := 1,2,3
 End Program
 
 
+ //New Program 
 Program
     Number a, b := 1
 End Program
 
 
+ //New Program 
 Program
     Number a, b := 1, 2
 End Program
 
 
+ //New Program 
 Program
     NumbEr a , b := 1, 2 ,3.222222222222222222222222222224
 End Program
 
 // *******************Ass*************************
+ //New Program 
 Program
     a := 1,2
 End Program
 
 
+ //New Program 
 Program
     a := 1.2 , 2.5
 End Program
 
 
+ //New Program 
 Program
     a , b := 1
 End Program
 
 
+ //New Program 
 Program
     a, b := 1,2,3
 End Program
 
 
+ //New Program 
 Program
     a, b := 1,2
 End Program
 
 
+ //New Program 
 Program
     a := false, true
 End Program
 
 
+ //New Program 
 Program
     a := truE
 End Program
 
 
+ //New Program 
 Program
     a := faLse
 End Program
 
 
+ //New Program 
 Program
     a := ""
 End Program
 
 
+ //New Program 
 Program
     a := "test"
 End Program
 
 
+ //New Program 
 Program
     a :="Program"
 End Program
 
 
+ //New Program 
 Program
     a, b := 1
 End Program
 
 
+ //New Program 
 Program
     a, b := 1,2
 End Program
 
 
+ //New Program 
 Program
     a, b := 1,2,false 
 End Program
 
 
+ //New Program 
 Program
     a, b := 1, "Program", true
 End Program
 
 
+ //New Program 
 Program
     a, b := true and false or 1
 End Program
 
 
+ //New Program 
 Program
     a, b := 1 or 2
 End Program
 
 
+ //New Program 
 Program
     a, b := test(test)
 End Program
 
 
+ //New Program 
 Program
-    a, b := test() or 1 
+    a, b := test() or 1
 End Program
 
 // *********************FuncCall**************
+ //New Program 
 Program
     a( )
 End Program
 
 
+ //New Program 
 Program
     a(           )
 End Program
 
 
+ //New Program 
 Program
     a( a)
 End Program
 
 
+ //New Program 
 Program
     a( a, False, "")
 End Program
 
 
+ //New Program 
 Program
     a( false, FaLsE , "False",1254)
 End Program
 
 
+ //New Program 
 Program
-    a( b())
+    a( True())
 End Program
 
 
+ //New Program 
 Program
-    a( a(a()))
+    a( false(a()))
 End Program
 
 
+ //New Program 
 Program
     a( a(a,a()))
 End Program
 
 
+ //New Program 
 Program
     a( a,a(a,a,a()))
 End Program
 
 // ************************FuncDecl************************
+ //New Program 
 Program
-    
+End Program
+
+Function a() return nothing
+	//Hammertime
+End function
+
+
+ //New Program 
+Program
+End Program
+
+Function a(Number a) return nothing
+    e := a = b and d = 11.11 or true and d <= 20
+End function
+
+
+ //New Program 
+Program
+End Program
+
+Function a(Number a, Boolean a) return nothing
+    e := a = b and d = 11.11 or true and d <= 20
+End function
+
+
+ //New Program 
+Program
+End Program
+
+Function a(Number a, text a, boolean a) return nothing
+    e := a = b and d = 11.11 or true and d <= 20
+End function
+
+
+ //New Program 
+Program
+End Program
+
+Function a(Number a, booLean) return number, Text
+    e := a = b and d = 11.11 or true and d <= 20
+End function
+
+
+ //New Program 
+Program
+End Program
+
+FunctIon a(Number A) retUrn BooleAn, number, number
+    e := a = b and d = 11.11 or true and d <= 20
+End functIon
+
+
+ //New Program 
+Program
+End Program
+
+Function a() return number, text, text
+    e := a = b and d = 11.11 or true and d <= 20
+End function
+
+
+ //New Program 
+Program
+End Program
+
+Function a(Number a) return text, text, text, text, text, text, text, text, text, text, text, text, text, text, text, text, text, text, text, text
+    e := a = b and d = 11.11 or true and d <= 20
+End function
+
+
+ //New Program 
+Program
+End Program
+
+function a(boolean a, boolean a, boolean a, boolean a, boolean a, boolean a, boolean a, boolean a, boolean a, boolean a, boolean a, boolean a) return nothing
+    //Hammertime
+EnD functioN
+
+
+ //New Program 
+Program
+End Program
+
+Function a() return text
+
+
+
+
+	test := 11
+	
+	
+	
+	
+	
+	
+End function
+
+
+ //New Program 
+Program
+End Program
+
+
+
+
+Function a() return number, text, text
+    e := a = b and d = 11.11 or true and d <= 20
+End function
+
+// **************************************IfStmt********************************
+ //New Program 
+Program
+	if(true) then
+		test := 0
+		
+	end if
+End Program
+
+
+ //New Program 
+Program
+	if true  then
+	
+	end if
+End Program
+
+
+ //New Program 
+Program
+	if true then
+	end if
+End Program
+
+
+ //New Program 
+Program
+	if true  then
+		test := 0
+	else
+		test := test
+	end if
+End Program
+
+
+ //New Program 
+Program
+	if true  then
+	else
+	end if
+End Program
+
+
+ //New Program 
+Program
+	if true  then
+		test := 0
+	else if false then
+		number test
+	else
+		test := test
+	end if
+End Program
+
+
+ //New Program 
+Program
+	if true  then
+	else if false then
+	else
+	end if
+End Program
+
+
+ //New Program 
+Program
+	if true  then
+		test := 0
+	else if false then
+		number test
+	else if false then
+		number test
+	else if false then
+		number test
+	else
+		test := test
+	end if
+End Program
+
+
+ //New Program 
+Program
+	if true  then
+		test := 0
+	else if false then
+		number test
+	else if false then
+		number test
+	else
+		test := test
+	end if
+End Program
+
+
+ //New Program 
+Program
+	if(true )then
+		test := 0
+	else if    (false )      then
+		number test
+	else if(false)then
+		number test
+	else
+		test := test
+	end if
+End Program
+
+
+ //New Program 
+Program
+	if a() then
+		test := 0
+	else if a = a(a()) then
+		number test
+	else if a or (a and a <= a(a(), a)) = a()  then
+		number test
+	else
+		test := test
+	end if
+End Program
+
+// *************************RepSmt*******************************
+ //New Program 
+Program
+	repeat 1
+		
+	end repeat
+End Program
+
+
+ //New Program 
+Program
+	repeat 1
+		if time() then
+		end if
+	end repeat
+End Program
+
+
+ //New Program 
+Program
+	repeat 1
+	end repeat
+End Program
+
+
+ //New Program 
+Program
+	repeat 111111111111111111111111111111111111.11111111111111111111111111111111111111111111111
+		if time() then
+		end if
+	end repeat
+End Program
+
+
+ //New Program 
+Program
+	repeat 1 = 1 = 1 //Evaluerer til false :D
+		if time() then
+		end if
+	end repeat
+End Program
+
+
+ //New Program 
+Program
+	repeat(a() = false)
+		if time() then
+		end if
+	end repeat
+End Program
+
+
+ //New Program 
+Program
+	repEat 1
+		repeat 2
+		end repeat
+	enD Repeat
+End Program
+
+// ***************************RepWhileStmt*********************************
+ //New Program 
+Program
+	repeat while 1 = 1 = 1
+		if time() then
+		end if
+	end repeat
+End Program
+
+
+ //New Program 
+Program
+	repeat while 1 > 1 > True()
+		if time() then
+		end if
+	end repeat
+End Program
+
+
+ //New Program 
+Program
+	repeaT wHile(1)
+		if time() then
+		end if
+	end repEat
+End Program
+
+
+ //New Program 
+Program
+	repeat while 1 or ((1 and 2) = a())
+		if time() then
+		end if
+	end repeat
+End Program
+
+
+ //New Program 
+Program
+	repeat while 1
+		repEat 11
+			repEat while 11
+			end repeat
+		end repEat
+	end repeat
+End Program
+
+//*******************************Expr*******************************
+ //New Program 
+Program
+	a := 
 End Program

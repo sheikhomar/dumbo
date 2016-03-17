@@ -121,15 +121,15 @@ namespace dumbo.Tests.SymbolTable
         {
             // Arrange
             Compiler.SymbolTable.SymbolTableFunctionType entry = new Compiler.SymbolTable.SymbolTableFunctionType();
-            entry.parameters.Add(Compiler.AST.HappyType.Boolean);
-            entry.parameters.Add(Compiler.AST.HappyType.Text);
+            entry.parametertypes.Add(Compiler.AST.HappyType.Boolean);
+            entry.parametertypes.Add(Compiler.AST.HappyType.Text);
 
             // Act
             table.EnterSymbol("test", entry);
 
             // Assert
-            bool first = (Compiler.AST.HappyType.Boolean == ((Compiler.SymbolTable.SymbolTableFunctionType)(table.RetrieveSymbol("test").Type)).parameters[0]);
-            bool second = (Compiler.AST.HappyType.Text == ((Compiler.SymbolTable.SymbolTableFunctionType)(table.RetrieveSymbol("test").Type)).parameters[1]);
+            bool first = (Compiler.AST.HappyType.Boolean == ((Compiler.SymbolTable.SymbolTableFunctionType)(table.RetrieveSymbol("test").Type)).parametertypes[0]);
+            bool second = (Compiler.AST.HappyType.Text == ((Compiler.SymbolTable.SymbolTableFunctionType)(table.RetrieveSymbol("test").Type)).parametertypes[1]);
 
             Assert.True(first && second);
         }

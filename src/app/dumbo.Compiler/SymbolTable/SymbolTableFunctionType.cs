@@ -11,9 +11,11 @@ namespace dumbo.Compiler.SymbolTable
     {
         public SymbolTableFunctionType()
         {
-            parameters = new List<HappyType>();
+            parametertypes = new List<HappyType>();
+            returntypes = new List<HappyType>();
         }
 
-        public List<HappyType> parameters { get; set; }
+        public List<HappyType> parametertypes { get; set; }
+        public List<HappyType> returntypes { get; set; }
     }
 }

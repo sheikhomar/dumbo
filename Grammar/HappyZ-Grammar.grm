@@ -18,7 +18,7 @@ Comment2 Line = 'Comment'
 {CharacterSet} = {All Valid} - {&22}
                
 ! Terminals specifications
-Id = ({Letter} | '_'){AlphaNumeric}*
+Id = '_'? {Letter}({AlphaNumeric} | '_')*
 WhiteSpace = {WS}+
 NewLine = ({CR}{LF}|{CR})+
 Assign = ':='

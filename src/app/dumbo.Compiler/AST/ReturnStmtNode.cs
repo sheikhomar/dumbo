@@ -14,8 +14,11 @@ namespace dumbo.Compiler.AST
 
         public override void PrettyPrint(IPrettyPrinter StrBuilder)
         {
-            StrBuilder.Append("return ");
-            Expressions.PrettyPrint(StrBuilder);
+            StrBuilder.Append("Return ");
+            if (Expressions.Count == 0)
+                StrBuilder.Append("Nothing");
+            else
+                Expressions.PrettyPrint(StrBuilder);
             StrBuilder.EndLine();
         }
     }

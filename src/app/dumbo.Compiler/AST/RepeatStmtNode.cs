@@ -16,9 +16,11 @@ namespace dumbo.Compiler.AST
 
         public override void PrettyPrint(IPrettyPrinter strBuilder)
         {
-            strBuilder.EndLine("repeat (" + Number + ")");
+            strBuilder.Append("repeat (");
+            Number.PrettyPrint(strBuilder);
+            strBuilder.EndLine(")");
             Body.PrettyPrint(strBuilder);
-            strBuilder.EndLine("end repeat");
+            strBuilder.EndLine("End Repeat");
         }
     }
 }

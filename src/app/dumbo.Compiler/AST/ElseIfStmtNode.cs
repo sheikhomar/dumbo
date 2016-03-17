@@ -18,7 +18,7 @@ namespace dumbo.Compiler.AST
         {
             strBuilder.Append("Else If (");
             Predicate.PrettyPrint(strBuilder);
-            strBuilder.EndLine(")");
+            strBuilder.EndLine(") Then");
             Body.PrettyPrint(strBuilder);
         }
     }

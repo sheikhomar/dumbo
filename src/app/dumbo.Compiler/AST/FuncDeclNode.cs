@@ -26,7 +26,7 @@ namespace dumbo.Compiler.AST
             strBuilder.EndLine();
             strBuilder.Append("Function " + Identifer.Name + "(");
             Parameters.PrettyPrint(strBuilder);
-            strBuilder.Append(") returns ");
+            strBuilder.Append(") Returns ");
 
             //Declare the return types of the function decl
             if (ReturnTypes.Count == 0)
@@ -37,14 +37,17 @@ namespace dumbo.Compiler.AST
 
                 for (int i = 1; i < ReturnTypes.Count; i++)
                 {
-                    strBuilder.Append(ReturnTypes[i].ToString());
+                    strBuilder.Append(", " + ReturnTypes[i].ToString());
                 }
             }
             else
                 strBuilder.Append(ReturnTypes[0].ToString());
 
-            //Finish the function with end
             strBuilder.EndLine();
+
+            Body.PrettyPrint(strBuilder);
+
+            //Finish the function with end
             strBuilder.EndLine("End Function");
 
         }

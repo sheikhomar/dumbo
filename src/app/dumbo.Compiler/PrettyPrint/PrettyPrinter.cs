@@ -42,6 +42,9 @@ namespace dumbo.Compiler.PrettyPrint
 
         public void EndLine(string inpt = "")
         {
+            if (!inLine)
+                Indent();
+
             AddLine(inpt);
             inLine = false;
         }

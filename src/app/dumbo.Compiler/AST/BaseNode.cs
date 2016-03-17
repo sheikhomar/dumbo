@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Text;
 using dumbo.Compiler.PrettyPrint;
+using dumbo.Compiler.SymbolTable;
 
 namespace dumbo.Compiler.AST
 {

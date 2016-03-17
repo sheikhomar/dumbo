@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace dumbo.Compiler.SymbolTable
 {
-    interface ISymbolTable
+    public interface ISymbolTable
     {
         void OpenScope();
         void CloseScope();

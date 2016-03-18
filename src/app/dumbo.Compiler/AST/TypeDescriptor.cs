@@ -21,5 +21,7 @@ namespace dumbo.Compiler.AST
         {
             _types.Add(type);
         }
+
+        public HappyType GetFirst() => _types[0];
     }
 }

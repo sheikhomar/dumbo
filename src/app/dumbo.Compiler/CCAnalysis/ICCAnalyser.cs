@@ -7,8 +7,9 @@ using dumbo.Compiler.SymbolTable;
 
 namespace dumbo.Compiler.CCAnalysis
 {
-    public interface ICCAnalyser : ISymbolTable
+    public interface ICCAnalyser 
     {
-        
+        ISymbolTable SymbolTable{ get; }
+        // TODO: add errorhandler
     }
 }

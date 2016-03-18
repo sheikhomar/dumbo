@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Text;
 using dumbo.Compiler.CCAnalysis;
 using dumbo.Compiler.PrettyPrint;
+using dumbo.Compiler.SymbolTable;
 
 namespace dumbo.Compiler.AST
 {
@@ -56,7 +58,22 @@ namespace dumbo.Compiler.AST
 
         public override void CCAnalyse(ICCAnalyser analyser)
         {
-            
+            analyser.SymbolTable.OpenScope();
+
+            if (Parameters.Count != 0)
+                AddParameters(analyser);
+
+            Body.CCAnalyse(analyser);
+
+            analyser.SymbolTable.CloseScope();
+        }
+
+        private void AddParameters(ICCAnalyser analyser)
+        {
+            foreach (var param in Parameters)
+            {
+                analyser.SymbolTable.EnterSymbol(param.Name, new SymbolTablePrimitiveType(param.Type), true);
+            }
         }
     }
 }

@@ -25,10 +25,10 @@ namespace dumbo.Compiler.AST
 
         public override void CCAnalyse(ICCAnalyser analyser)
         {
-            analyser.OpenScope();
+            analyser.SymbolTable.OpenScope();
             //..
             //..
-            analyser.CloseScope();
+            analyser.SymbolTable.CloseScope();
         }
     }
 }

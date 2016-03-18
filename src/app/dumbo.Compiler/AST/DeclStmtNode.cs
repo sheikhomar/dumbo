@@ -29,7 +29,7 @@ namespace dumbo.Compiler.AST
 
             foreach (var id in idList)
             {
-                analyser.EnterSymbol(id.Name, new SymbolTablePrimitiveType(Type));
+                analyser.SymbolTable.EnterSymbol(id.Name, new SymbolTablePrimitiveType(Type));
             }
 
             //

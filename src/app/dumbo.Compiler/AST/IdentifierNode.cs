@@ -20,7 +20,7 @@ namespace dumbo.Compiler.AST
 
         public override void CCAnalyse(ICCAnalyser analyser)
         {
-            var hans = analyser.RetrieveSymbol(Name); //adde exception? otherwise its null.
+            var hans = analyser.SymbolTable.RetrieveSymbol(Name); //adde exception? otherwise its null.
 
             //Check if null, if so, then error message...
 

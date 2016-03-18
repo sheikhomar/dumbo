@@ -17,6 +17,13 @@ namespace dumbo.Compiler.CCAnalysis
             symbolTable = new SymbolTable.SymbolTable();
         }
 
+        public ISymbolTable SymbolTable
+        {
+            get
+            {
+                return symbolTable;
+            }
+        }
 
         public bool IsEqual(HappyType inpt, HappyType inpt2)
         {
@@ -27,39 +34,6 @@ namespace dumbo.Compiler.CCAnalysis
         {
             //Comp each element and what?
             throw new NotFiniteNumberException();
-        }
-
-
-
-        //Symbol tabel parse
-        public void CloseScope()
-        {
-            symbolTable.CloseScope();
-        }
-
-        public bool DeclaredLocally(string name)
-        {
-            return symbolTable.DeclaredLocally(name);
-        }
-
-        public void EnterSymbol(string name, SymbolTableTypeEntry type)
-        {
-            symbolTable.EnterSymbol(name, type);
-        }
-
-        public void EnterSymbol(string name, SymbolTableTypeEntry type, bool unhideability)
-        {
-            symbolTable.EnterSymbol(name, type, unhideability);
-        }
-
-        public void OpenScope()
-        {
-            symbolTable.OpenScope();
-        }
-
-        public SymbolTableEntry RetrieveSymbol(string name)
-        {
-            return symbolTable.RetrieveSymbol(name);
         }
     }
 }

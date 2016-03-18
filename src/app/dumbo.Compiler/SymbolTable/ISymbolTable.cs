@@ -11,8 +11,7 @@ namespace dumbo.Compiler.SymbolTable
         void OpenScope();
         void CloseScope();
 
-        void EnterSymbol(string name, SymbolTableTypeEntry type);
-        void EnterSymbol(string name, SymbolTableTypeEntry type, bool unhideability);
+        void EnterSymbol(string name, SymbolTableTypeEntry type, bool unhideability = false);
         SymbolTableEntry RetrieveSymbol(string name);
 
         bool DeclaredLocally(string name);

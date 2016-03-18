@@ -1,5 +1,7 @@
+using System;
 using System.Text;
 using dumbo.Compiler.PrettyPrint;
+using dumbo.Compiler.SymbolTable;
 
 namespace dumbo.Compiler.AST
 {
@@ -11,6 +13,14 @@ namespace dumbo.Compiler.AST
         }
 
         public string Value { get; }
+
+        public override TypeDescriptor GetHappyType(ISymbolTable symbolTable)
+        {
+            var typeDescriptor = new TypeDescriptor();
+            typeDescriptor.Add(this.Type);
+
+            return typeDescriptor;
+        }
 
         public override void PrettyPrint(IPrettyPrinter prettyPrinter)
         {

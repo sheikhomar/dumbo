@@ -1,6 +1,8 @@
+using System;
 using System.Text;
 using dumbo.Compiler.CCAnalysis;
 using dumbo.Compiler.PrettyPrint;
+using dumbo.Compiler.SymbolTable;
 
 namespace dumbo.Compiler.AST
 {
@@ -25,6 +27,19 @@ namespace dumbo.Compiler.AST
             //Check if null, if so, then error message...
 
             
+        }
+
+        public override TypeDescriptor GetHappyType(ISymbolTable symbolTable)
+        {
+            var typeDescriptor = new TypeDescriptor();
+            var retrivedType = (symbolTable.RetrieveSymbol(Name).Type as SymbolTablePrimitiveType)?.Type;
+
+            if (retrivedType.HasValue)
+                typeDescriptor.Add(retrivedType.Value);
+            else
+                typeDescriptor.Add(HappyType.Error);
+            
+            return typeDescriptor;
         }
     }
 }

@@ -11,10 +11,20 @@ namespace dumbo.Compiler.CCAnalysis
     public class CCAnalyser : ICCAnalyser
     {
         private ISymbolTable symbolTable;
+        private IErrorReporter errorReporter; 
 
         public CCAnalyser()
         {
             symbolTable = new SymbolTable.SymbolTable();
+            errorReporter = new ErrorReporter();
+        }
+
+        public IErrorReporter ErrorReporter
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
         }
 
         public ISymbolTable SymbolTable
@@ -32,8 +42,14 @@ namespace dumbo.Compiler.CCAnalysis
 
         public bool IsListsEqual(IList<HappyType> inpt, IList<HappyType> inpt2)
         {
-            //Comp each element and what?
-            throw new NotFiniteNumberException();
+            int i = 0;
+            foreach (var element in inpt)
+            {
+                if (!element.Equals(inpt2[i]))
+                    return false;
+                i++;
+            }
+            return true;
         }
     }
 }

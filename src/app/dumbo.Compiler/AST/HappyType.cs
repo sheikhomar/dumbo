@@ -4,6 +4,7 @@
     {
         Number,
         Text,
-        Boolean
+        Boolean,
+        Error
     }
 }

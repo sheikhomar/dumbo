@@ -392,7 +392,7 @@ namespace dumbo.Compiler.SyntaxAnalysis
 
             switch (operatorCode)
             {
-                case "not": return UnaryOperatorType.Negation;
+                case "not": return UnaryOperatorType.Not;
                 case "-": return UnaryOperatorType.Minus;
                 case "+": return UnaryOperatorType.Plus;
 

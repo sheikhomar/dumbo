@@ -73,9 +73,12 @@
     <Compile Include="AST\RepeatWhileStmtNode.cs" />
     <Compile Include="AST\ReturnStmtNode.cs" />
     <Compile Include="AST\StmtBlockNode.cs" />
+    <Compile Include="AST\TypeDescriptor.cs" />
     <Compile Include="AST\UnaryOperationNode.cs" />
     <Compile Include="AST\UnaryOperatorType.cs" />
     <Compile Include="AST\ValueNode.cs" />
+    <Compile Include="CCAnalysis\ErrorReporter.cs" />
+    <Compile Include="CCAnalysis\IErrorReporter.cs" />
     <Compile Include="PrettyPrint\IndentDecrementException.cs" />
     <Compile Include="PrettyPrint\IPrettyPrint.cs" />
     <Compile Include="PrettyPrint\IPrettyPrinter.cs" />

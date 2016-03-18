@@ -124,7 +124,7 @@ namespace dumbo.Tests.SymbolTable
             IList<Compiler.AST.HappyType> list = new List<Compiler.AST.HappyType>();
             list.Add(Compiler.AST.HappyType.Boolean);
             list.Add(Compiler.AST.HappyType.Text);
-            Compiler.SymbolTable.SymbolTableFunctionType entry = new Compiler.SymbolTable.SymbolTableFunctionType(list, list);
+            Compiler.SymbolTable.SymbolTableFunctionType entry = new Compiler.SymbolTable.SymbolTableFunctionType(list, new List<Compiler.AST.HappyType>());
 
             // Act
             table.EnterSymbol("test", entry);
@@ -132,6 +132,26 @@ namespace dumbo.Tests.SymbolTable
             // Assert
             bool first = (Compiler.AST.HappyType.Boolean == ((Compiler.SymbolTable.SymbolTableFunctionType)(table.RetrieveSymbol("test").Type)).parametertypes[0]);
             bool second = (Compiler.AST.HappyType.Text == ((Compiler.SymbolTable.SymbolTableFunctionType)(table.RetrieveSymbol("test").Type)).parametertypes[1]);
+
+            Assert.True(first && second);
+        }
+
+        [Test]
+        public void EnsureFunctionReturnTypesAreStored()
+        {
+
+            // Arrange
+            IList<Compiler.AST.HappyType> list = new List<Compiler.AST.HappyType>();
+            list.Add(Compiler.AST.HappyType.Boolean);
+            list.Add(Compiler.AST.HappyType.Text);
+            Compiler.SymbolTable.SymbolTableFunctionType entry = new Compiler.SymbolTable.SymbolTableFunctionType(new List<Compiler.AST.HappyType>(), list);
+
+            // Act
+            table.EnterSymbol("test", entry);
+
+            // Assert
+            bool first = (Compiler.AST.HappyType.Boolean == ((Compiler.SymbolTable.SymbolTableFunctionType)(table.RetrieveSymbol("test").Type)).returntypes[0]);
+            bool second = (Compiler.AST.HappyType.Text == ((Compiler.SymbolTable.SymbolTableFunctionType)(table.RetrieveSymbol("test").Type)).returntypes[1]);
 
             Assert.True(first && second);
         }
@@ -145,9 +165,6 @@ namespace dumbo.Tests.SymbolTable
 
             // Act & Assert
             Assert.Throws(typeof(Compiler.SymbolTable.IllegalHideException), () => table.EnterSymbol("i", new Compiler.SymbolTable.SymbolTablePrimitiveType(Compiler.AST.HappyType.Boolean)));
-
-            
-
         }
     }
 }

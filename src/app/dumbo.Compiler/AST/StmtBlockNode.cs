@@ -26,8 +26,7 @@ namespace dumbo.Compiler.AST
         public override void CCAnalyse(ICCAnalyser analyser)
         {
             analyser.SymbolTable.OpenScope();
-            //..
-            //..
+            base.CCAnalyse(analyser);
             analyser.SymbolTable.CloseScope();
         }
     }

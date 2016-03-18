@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using dumbo.Compiler.CCAnalysis;
 using dumbo.Compiler.PrettyPrint;
 
 namespace dumbo.Compiler.AST
@@ -21,6 +22,15 @@ namespace dumbo.Compiler.AST
             prettyPrinter.EndLine(")");
             Body.PrettyPrint(prettyPrinter);
             prettyPrinter.EndLine("End Repeat");
+        }
+
+        public override void CCAnalyse(ICCAnalyser analyser)
+        {
+            //Check Predicate is of type Number
+            if (Number.GetHappyType(analyser.SymbolTable).GetFirst() != HappyType.Number)
+                analyser.ErrorReporter.AddError("RepeatStmt must have a predicate of type Number");
+            //Check Body
+            Body.CCAnalyse(analyser);
         }
     }
 }

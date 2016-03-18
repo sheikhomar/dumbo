@@ -1,4 +1,5 @@
 using System.Text;
+using dumbo.Compiler.CCAnalysis;
 using dumbo.Compiler.PrettyPrint;
 
 namespace dumbo.Compiler.AST
@@ -20,6 +21,14 @@ namespace dumbo.Compiler.AST
             else
                 Expressions.PrettyPrint(prettyPrinter);
             prettyPrinter.EndLine();
+        }
+
+        public override void CCAnalyse(ICCAnalyser analyser)
+        {
+            if (Expressions.Count == 0)
+                return;
+
+            //Check that each ret type matches the function
         }
     }
 }

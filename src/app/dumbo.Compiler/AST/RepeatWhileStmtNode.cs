@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using dumbo.Compiler.CCAnalysis;
 using dumbo.Compiler.PrettyPrint;
 
 namespace dumbo.Compiler.AST
@@ -21,6 +22,16 @@ namespace dumbo.Compiler.AST
             prettyPrinter.EndLine(")");
             Body.PrettyPrint(prettyPrinter);
             prettyPrinter.EndLine("end repeat");
+        }
+
+        public override void CCAnalyse(ICCAnalyser analyser)
+        {
+            //Check predicate is bool
+            if (Predicate.GetHappyType(analyser.SymbolTable).GetFirst() != HappyType.Boolean)
+                analyser.ErrorReporter.AddError("Predicate is not of type Boolean");
+
+            //Check that body is type correct
+            Body.CCAnalyse(analyser);
         }
     }
 }

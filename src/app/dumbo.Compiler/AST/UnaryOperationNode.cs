@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text;
+using dumbo.Compiler.CCAnalysis;
 using dumbo.Compiler.PrettyPrint;
 using dumbo.Compiler.SymbolTable;
 
@@ -21,6 +22,17 @@ namespace dumbo.Compiler.AST
             prettyPrinter.Append(" " + OperatorTranslator.UnaryOperatorTypeTranslator(Operator) + " ");
             Expression.PrettyPrint(prettyPrinter);
         }
+
+        //Currently Expressions do not impl CCAnalyser
+        //public override void CCAnalyse(ICCAnalyser analyser)
+        //{
+        //    var typeOfExpression = Expression.GetHappyType(analyser.SymbolTable).GetFirst();
+        //    if (EvaluateType(typeOfExpression).GetFirst().Equals(HappyType.Error))
+        //        analyser.ErrorReporter.AddError("Incorrect use of operator in unary expression " + this.ToString());
+
+        //    return ;
+        //}
+
 
         public override TypeDescriptor GetHappyType(ISymbolTable symbolTable)
         {
@@ -65,6 +77,11 @@ namespace dumbo.Compiler.AST
                 td.Add(type1);
             else
                 td.Add(HappyType.Error);
+        }
+
+        public override string ToString()
+        {
+            return Operator.ToString() + Expression.ToString(); //Todo, ensure that expression and operator impl a ToString
         }
     }
 }

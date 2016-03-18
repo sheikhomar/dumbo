@@ -63,6 +63,10 @@ namespace dumbo.Compiler.AST
             if (Parameters.Count != 0)
                 AddParameters(analyser);
 
+            //For each element in the list do the check
+            //If the element is a return stmt then check in relation to the formal parameters 
+
+
             Body.CCAnalyse(analyser);
 
             analyser.SymbolTable.CloseScope();

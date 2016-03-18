@@ -27,7 +27,47 @@ namespace dumbo.Compiler.AST
 
         public override TypeDescriptor GetHappyType(ISymbolTable symbolTable)
         {
-            throw new NotImplementedException();
+            TypeDescriptor leftOperandDesc = LeftOperand.GetHappyType(symbolTable);
+            TypeDescriptor rightOperandDesc = RightOperand.GetHappyType(symbolTable);
+
+        }
+
+        private TypeDescriptor EvaluateType(HappyType leftOperand, BinaryOperatorType @operator, HappyType rightOperand)
+        {
+            switch (@operator)
+            {
+                case BinaryOperatorType.Plus:
+                    // TODO: Add something with numbers and texts
+                    break;
+                case BinaryOperatorType.Minus:
+                    if (leftOperand.Equals(rightOperand) && leftOperand.Equals(HappyType.Number))
+                        return HappyType.Number;
+                    else
+                        
+                    break;
+                case BinaryOperatorType.Times:
+                    break;
+                case BinaryOperatorType.Division:
+                    break;
+                case BinaryOperatorType.Modulo:
+                    break;
+                case BinaryOperatorType.Equals:
+                    break;
+                case BinaryOperatorType.GreaterThan:
+                    break;
+                case BinaryOperatorType.GreaterOrEqual:
+                    break;
+                case BinaryOperatorType.LessThan:
+                    break;
+                case BinaryOperatorType.LessOrEqual:
+                    break;
+                case BinaryOperatorType.Or:
+                    break;
+                case BinaryOperatorType.And:
+                    break;
+                default:
+                    break;
+            }
         }
     }
 }

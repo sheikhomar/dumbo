@@ -10,11 +10,16 @@ namespace dumbo.Compiler.AST
     {
         private IList<HappyType> _types;
 
-        public TypeDescriptor(IList<HappyType> happyTypes)
+        public TypeDescriptor()
         {
-            _types = happyTypes;
+            _types = new List<HappyType>();
         }
 
-        IList<HappyType> Types { get; }
+        public IList<HappyType> Types { get; }
+
+        public void Add(HappyType type)
+        {
+            _types.Add(type);
+        }
     }
 }

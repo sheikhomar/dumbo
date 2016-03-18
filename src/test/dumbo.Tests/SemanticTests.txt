@@ -1,0 +1,1602 @@
+// ********************Empty***************
+Program
+End Program
+
+
+ //New Program 
+Program
+
+End Program
+
+
+ //New Program 
+Program
+
+
+
+
+
+ENd Program
+
+
+ //New Program 
+Program
+End PrOgram
+
+// *********************Decls***************
+ //New Program 
+Program
+    Number a
+End Program
+
+
+ //New Program 
+Program
+    NUMBER a
+End Program
+
+
+ //New Program 
+Program
+    Number a, b
+End Program
+
+
+ //New Program 
+Program
+    Number a , b
+End Program
+
+
+ //New Program 
+Program
+    Boolean a
+End Program
+
+
+ //New Program 
+Program
+    Boolean a, b
+End Program
+
+
+ //New Program 
+Program
+    BooleAn a , b
+End Program
+
+
+ //New Program 
+Program
+    Text a
+End Program
+
+
+ //New Program 
+Program
+    Text a, b
+End Program
+
+
+ //New Program 
+Program
+    Text a , b
+End Program
+
+
+ //New Program 
+Program
+    TexT a
+End Program
+
+// ************************DeclAss***********************
+ //New Program 
+Program
+    Number a := 1
+End Program
+
+
+ //New Program 
+Program
+    Number a := 1.11111111111111111111111111111111
+End Program
+
+
+ //New Program 
+Program
+    text a, b := "",""
+End Program
+
+
+ //New Program 
+Program
+    boolean a, b := true, false
+End Program
+
+
+ //New Program 
+Program
+    Number a, b := 1, 2
+End Program
+
+
+ //New Program 
+Program
+    NumbEr a , b, c := 1, 2 ,3.222222222222222222222222222224
+End Program
+
+
+ //New Program Failing
+Program
+    Number a, b := 1
+End Program
+
+
+ //New Program Failing
+Program
+    Number a := 1.11111111111111111111111111111111, faLse
+End Program
+
+
+ //New Program Failing
+Program
+    Number a := 1,2,3
+End Program
+
+
+ //New Program Failing
+Program
+    Number a, b := 1
+End Program
+
+
+ //New Program Failing
+Program
+    Number a, b := 1, true
+End Program
+
+
+ //New Program Failing
+Program
+    NumbEr a , b := 1, 2 ,3.222222222222222222222222222224
+End Program
+
+// *******************Ass*************************
+ //New Program 
+Program
+	Number a
+    a := 1
+End Program
+
+
+ //New Program 
+Program
+	Number a, b
+    a, b := 1.2 , 2.5
+End Program
+
+
+ //New Program 
+Program
+	Number a, b, c
+    a, b, c := 1,2,3
+End Program
+
+
+ //New Program 
+Program
+	Number a, b
+    a, b := 1,2
+End Program
+
+
+ //New Program 
+Program
+	Boolean a
+    a := false
+End Program
+
+
+ //New Program 
+Program
+	Boolean a
+    a := truE
+End Program
+
+
+ //New Program 
+Program
+	Boolean a
+    a := faLse
+End Program
+
+
+ //New Program 
+Program
+	text a
+    a := ""
+End Program
+
+
+ //New Program 
+Program
+	text a
+    a := "test"
+End Program
+
+
+ //New Program 
+Program
+	text a
+    a :="Program"
+End Program
+
+
+ //New Program 
+Program
+	number a
+	boolean b
+    a, b := 1, false
+End Program
+
+
+ //New Program 
+Program
+	number a
+	text b
+    a, b := 1,"2"
+End Program
+
+
+ //New Program 
+Program
+	number a, b
+	boolean c
+    a, b,c := 1,2,false 
+End Program
+
+
+ //New Program 
+Program
+	number a
+	text b
+	boolean c
+    a, b,c := 1, "Program", true
+End Program
+
+
+ //New Program 
+Program
+	boolean a
+    a := true and false or 1 = 1
+End Program
+
+
+ //New Program 
+Program
+	boolean a, b
+    a, b := 1 = 1, true or 2 < 2
+End Program
+
+
+ //New Program 
+Program
+	number a, b
+    a, b := test("test")
+End Program
+
+Function test(text a) return number, number
+	Return 1,1
+End function
+
+
+ //New Program 
+Program
+	boolean a, b
+    a, b := test(), false or 1 % 2 = 0
+End Program
+
+Function test() return boolean
+	return true
+End function
+
+
+ //New Program Failing
+Program
+	Number a
+    a := 1,2
+End Program
+
+
+ //New Program Failing
+Program
+	Number a
+    a := 1.2 , 2.5
+End Program
+
+
+ //New Program Failing
+Program
+	Number a, b
+    a , b := 1
+End Program
+
+
+ //New Program Failing
+Program
+	Number a, b
+    a, b := 1,2,3
+End Program
+
+
+ //New Program Failing
+Program
+	Number a, b, c
+    a, b,c := 1,2,faLse
+End Program
+
+
+ //New Program Failing
+Program
+	Boolean a
+    a := false, true
+End Program
+
+
+ //New Program Failing
+Program
+	Boolean a
+    a := truE,false
+End Program
+
+
+ //New Program Failing
+Program
+	Boolean a
+    a := faLse, 1
+End Program
+
+
+ //New Program Failing
+Program
+	text a
+    a := "", 1
+End Program
+
+
+ //New Program Failing
+Program
+	text a
+    a := "test", ""
+End Program
+
+
+ //New Program Failing
+Program
+	text a
+    a := _Program
+End Program
+
+
+ //New Program Failing
+Program
+	number a, b
+    a, b := 1
+End Program
+
+
+ //New Program Failing
+Program
+	number a
+	text a
+    a, a := 1,""
+End Program
+
+
+ //New Program Failing
+Program
+	number a, a
+    a, a := 1,false 
+End Program
+
+
+ //New Program Failing
+Program
+	number a
+	text b
+    a, b := 1, _a
+End Program
+
+
+ //New Program Failing
+Program
+	boolean a, b
+    a, b := true and false, 1
+End Program
+
+
+ //New Program Failing
+Program
+	boolean a, b
+    a, b := 1 or 2
+End Program
+
+
+ //New Program Failing
+Program
+	number a, b
+	boolean test
+    a, b := test(test)
+End Program
+
+Function test(boolean test) return number, boolean
+	return 1,test
+End Function
+
+
+ //New Program Failing
+Program
+	boolean a, b
+    a, b := test() or 1, true
+End Program
+
+Function test() return boolean
+	return true
+End Function
+
+// *********************FuncCall**************
+ //New Program 
+Program
+    a( )
+End Program
+
+Function a() return nothing
+End functIon
+
+
+ //New Program 
+Program
+    a(           )
+End Program
+
+Function a() return nothing
+End functIon
+
+
+ //New Program 
+Program
+	number a := 1
+    a( a)
+End Program
+
+Function a(number a) return nothing
+End functIon
+
+
+ //New Program 
+Program
+	number a := 1
+    a( a, False, "")
+End Program
+
+Function a(number a, boolean b, text c) return nothing
+End functIon
+
+
+ //New Program 
+Program
+    a( false, FaLsE , "False",1254)
+End Program
+
+Function a(booLean a, boolean b, text c, number d) return nothing
+End functIon
+
+
+ //New Program Failing
+Program
+    a( )
+End Program
+
+
+ //New Program Failing
+Program
+    a(           )
+End Program
+
+Function a(number a) return nothing
+End Function
+
+
+ //New Program Failing
+Program
+    a( a)
+End Program
+
+Function a(number a) return nothing
+End Function
+
+
+ //New Program Failing
+Program
+    a( 1, False, "")
+End Program
+
+Function a(number a, boolean a, text a) return number, text, boolean
+	return a, a, a
+End Function
+
+
+ //New Program Failing
+Program
+    a( false, FaLsE , "False",1254)
+End Program
+
+Function a(number a) return nothing
+End Function
+
+// ************************FuncDecl************************
+ //New Program 
+Program
+End Program
+
+Function a() return nothing
+	//Hammertime
+End function
+
+
+ //New Program 
+Program
+End Program
+
+Function a(Number a) return nothing
+End function
+
+
+ //New Program 
+Program
+End Program
+
+Function a(Number a, Boolean b) return nothing
+End function
+
+
+ //New Program 
+Program
+End Program
+
+Function a(Number a, text b, boolean c) return nothing
+End function
+
+
+ //New Program 
+Program
+End Program
+
+Function a(Number a, booLean z) return number, Text
+	return a, ""
+End function
+
+
+ //New Program 
+Program
+End Program
+
+FunctIon a(Number A) retUrn BooleAn, number, number
+    return true, a, a
+End functIon
+
+
+ //New Program 
+Program
+End Program
+
+Function a() return number, text, text
+	return 1, "", ""
+End function
+
+
+ //New Program 
+Program
+End Program
+
+Function a(Number a) return text, text, text, text, text, text, text, text, text, text, text, text, text, text, text, text, text, text, text, text
+    return "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""
+End function
+
+
+ //New Program 
+Program
+End Program
+
+function a(boolean a, boolean a, boolean a, boolean a, boolean a, boolean a, boolean a, boolean a, boolean a, boolean a, boolean a, boolean a) return nothing
+    //Hammertime
+EnD functioN
+
+
+ //New Program 
+Program
+End Program
+
+Function a() return text
+
+	number test
+
+
+	test := 11
+	
+	
+	return "test"
+	
+	
+	
+End function
+
+
+ //New Program 
+Program
+End Program
+
+
+
+
+Function a() return number, text, text
+    retUrn 1, "", ""
+End function
+
+
+ //New Program Failing
+Program
+End Program
+
+Function a() return nothing
+	return 1
+End function
+
+
+ //New Program Failing
+Program
+End Program
+
+Function a(Number a) return nothing
+    return a
+End function
+
+
+ //New Program Failing
+Program
+End Program
+
+Function a(Number a, Boolean a) return nothing
+End function
+
+
+ //New Program Failing
+Program
+End Program
+
+Function a(Number a, text a, boolean a) return nothing
+End function
+
+
+ //New Program Failing
+Program
+End Program
+
+Function a(Number a, booLean z) return number, a
+End function
+
+
+ //New Program Failing
+Program
+End Program
+
+FunctIon a(Number A) retUrn true, a, a
+End functIon
+
+
+ //New Program Failing
+Program
+End Program
+
+Function a() return number, text, text
+Endfunction
+
+
+ //New Program Failing
+Program
+End Program
+
+Function a(Number a) return text, text, text, text, text, text, text, text, text, text, text, text, text, text, text, text, text, text, text, text
+End function
+
+
+ //New Program Failing
+Program
+End Program
+
+function a(boolean a, boolean a, boolean a, boolean a, boolean a, boolean a, boolean a, boolean a, boolean a, boolean a, boolean a, boolean a) return nothing
+    //Hammertime
+EnD functioN
+
+
+ //New Program Failing
+Program
+End Program
+
+Function a() return text
+
+
+
+
+	return text test := "11"
+	
+	
+	
+	
+	
+	
+End function
+
+
+ //New Program Failing
+Program
+End Program
+
+
+
+
+Function a() return number, text, text
+    return a(1)
+End function
+
+// **************************************IfStmt********************************
+ //New Program 
+Program
+	if(true) then
+		number test := 0
+		
+	end if
+End Program
+
+
+ //New Program 
+Program
+	if true  then
+	
+	end if
+End Program
+
+
+ //New Program 
+Program
+	if true then
+	end if
+End Program
+
+
+ //New Program 
+Program
+	if true  then
+		number test := 0
+	else
+		number test := 0
+	end if
+End Program
+
+
+ //New Program 
+Program
+	if true  then
+	else
+	end if
+End Program
+
+
+ //New Program 
+Program
+	if true  then
+		number test := 0
+	else if false then
+		number _test
+	else
+		number _test
+	end if
+End Program
+
+
+ //New Program 
+Program
+	if true  then
+	else if false then
+	else
+	end if
+End Program
+
+
+ //New Program 
+Program
+	if true  then
+		number test := 0
+	else if false then
+		number _test
+	else if false then
+		number _test1
+	else if false then
+		number test_
+	else
+		number _test
+	end if
+End Program
+
+
+ //New Program 
+Program
+	if(true )then
+		number test := 0
+	else if    (false )      then
+		number _test
+	else if(false)then
+		number test_
+	else
+		number test := 0
+	end if
+End Program
+
+
+ //New Program 
+Program
+	number a := 1
+	if a() then
+		number a := 1
+	else if a = 1 then
+		number test := 0
+	else if a < 2 or (a > 1 and -a <= a) = a  then
+		number test
+	else
+		number test := 0
+	end if
+End Program
+
+Function a() return boolean
+	return true
+End Function
+
+
+ //New Program Failing
+Program
+	if(true) then
+		number test := 0
+		
+	endif
+End Program
+
+
+ //New Program Failing
+Program
+	iftrue  then
+	
+	end if
+End Program
+
+
+ //New Program Failing
+Program
+	if true then	end if
+End Program
+
+
+ //New Program Failing
+Program
+	if true  then
+		number test := 0
+	else	end if
+End Program
+
+
+ //New Program Failing
+Program
+	if true  then	else	end if
+End Program
+
+
+ //New Program Failing
+Program
+	if test = 0 then
+		number test := 0
+	else if false then
+		number test
+	else
+		number test
+	end if
+End Program
+
+
+ //New Program Failing
+Program
+	if "" = ""  then
+	else if false then
+	else
+	end if
+End Program
+
+
+ //New Program Failing
+Program
+	if true  then
+		number test := 0
+	else if test = 0 then
+		number test_
+	else if false then
+		number test__
+	else if false then
+		number test___
+	else
+		number test
+	end if
+End Program
+
+
+ //New Program Failing
+Program
+	if true  then
+		number test := 0
+	else if false then
+		number test
+	else if 1 = true then
+		number test
+	else
+		number test
+	end if
+End Program
+
+
+ //New Program Failing
+Program
+	if(true )then
+		number test
+	else if    (false )      then
+		number test
+	else if(false)then
+		number test
+	end if
+	else
+		number test
+	end if
+End Program
+
+
+ //New Program Failing
+Program
+	if true then
+		number test
+	else if true then
+		number test
+	else if true  then
+		number test
+	else
+	else
+		number test
+	end if
+End Program
+
+// *************************RepSmt*******************************
+ //New Program 
+Program
+	repeat 1
+		
+	end repeat
+End Program
+
+
+ //New Program 
+Program
+	repeat 1
+		if time() then
+		end if
+	end repeat
+End Program
+
+
+ //New Program 
+Program
+	repeat 1
+	end repeat
+End Program
+
+
+ //New Program 
+Program
+	repeat 111111111111111111111111111111111111.11111111111111111111111111111111111111111111111
+		if time() then
+		end if
+	end repeat
+End Program
+
+
+ //New Program 
+Program
+	repeat 1 = 1 = 1 //Evaluerer til false :D
+		if time() then
+		end if
+	end repeat
+End Program
+
+
+ //New Program 
+Program
+	repeat(a() = false)
+		if time() then
+		end if
+	end repeat
+End Program
+
+
+ //New Program 
+Program
+	repEat 1
+		repeat 2
+		end repeat
+	enD Repeat
+End Program
+
+// ***************************RepWhileStmt*********************************
+ //New Program 
+Program
+	repeat while 1 = 1 = 1
+		if time() then
+		end if
+	end repeat
+End Program
+
+
+ //New Program 
+Program
+	repeat while 1 > 1 > Truee()
+		if time() then
+		end if
+	end repeat
+End Program
+
+
+ //New Program 
+Program
+	repeaT wHile(1)
+		if time() then
+		end if
+	end repEat
+End Program
+
+
+ //New Program 
+Program
+	repeat while 1 or ((1 and 2) = a())
+		if time() then
+		end if
+	end repeat
+End Program
+
+
+ //New Program 
+Program
+	repeat while 1
+		repEat 11
+			repEat while 11
+			end repeat
+		end repEat
+	end repeat
+End Program
+
+//*******************************Expr*******************************
+ //New Program 
+Program
+	a := (((1)+1)and 1)
+End Program
+
+
+ //New Program 
+Program
+	a := +--1+1-1/1*1 and 1 or not +1=1<1>(1>=1)<=1%1 and -------------------------i or - false
+	a := not ----------------a()
+End Program
+
+// ********************************Id********************************
+ //New Program 
+Program
+	_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 := 1
+End Program
+
+
+ //New Program 
+Program
+	abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 := 1
+End Program
+
+
+ //New Program 
+Program
+	_a := 1
+End Program
+
+
+ //New Program 
+Program
+	_a_______________ := 1
+End Program
+
+
+ //New Program 
+Program
+	_a_a_a___A_a______ := 1
+End Program
+
+
+ //New Program 
+Program
+	_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789____ := 1
+End Program
+
+// ***************************Ret**************************
+ //New Program 
+Program
+	return a()
+End Program
+
+
+ //New Program 
+Program
+	return nothing
+End Program
+
+
+ //New Program 
+Program
+	return a(),a(),b(a(),a)
+End Program
+
+
+ //New Program 
+Program
+	return false or true and a()
+End Program
+
+
+ //New Program 
+Program
+	return a
+End Program
+
+
+ //New Program 
+Program
+	return a, b
+End Program
+
+
+ //New Program 
+Program
+	return 1,1,1
+End Program
+
+
+ //New Program 
+Program
+	return false, true or false
+End Program
+
+// **************************Break***************************
+ //New Program 
+Program
+	break
+End Program
+
+// ************************Mini Programs************************
+ //New Program 
+Program
+	Number sum1
+	Number sum2
+	Number sum3
+	
+	sum1 := 10 + 11 + 12
+	sum2 := 010 + 011 + 012
+	sum3 := 10.0 + 11.1 + 12.3
+	
+	write("Sum1 = " + sum1)
+	wRiTe("Sum2 = " + sum2)
+	WrITe("Sum3 = " + sum3)
+End program
+
+
+ //New Program 
+Program
+
+	number result
+	
+	fahrenheit_temperature(0.0, fahrenheit_temp)
+	write("Freezing point: " + result + " F.")
+	
+	fahrenheit_temperature(100.0, fahrenheit_temp)
+	write("Boiling point: " + result + " F.")
+	
+End program
+
+Function Fahrenheit_temperature(number celcius_temp, number fahrenheit_temp) return nothing
+	fahrenheit_temp := (9.0 / 5.0) * celcius_temp + 32.0
+end function
+
+
+ //New Program 
+ Program
+  number a := 0
+  number b
+  
+  wRITe("How many sides does your die have")
+  a := readNumBEr()
+
+  wRite("Press enter to roll your new " + a + "-sided dice")  
+
+  repeat (99)
+    readnumbER()
+    b := Random(1,a)
+    Write("You've rolled: " + b)
+  End Repeat
+  
+  WriTE("You've rolled your dice too many times. You need to restart the program to define a new dice")
+
+End Program
+
+
+ //New Program 
+Program
+	Number TheNumber 
+    TheNumber := Random() % 100
+	Write("Guess my number: ")
+	Number GuessedNumber
+	Boolean IsNumberGuessed := false
+
+	Repeat while (IsNumberGuessed = false)
+		GuessedNumber := ReadNumber()
+		If(GuessedNumber = TheNumber) then
+			Write("Congrats! You guessed my Number!")
+			IsNumberGuessed := true
+		Else if(GuessedNumber < TheNumber) then
+			Write("My number is bigger")
+			Write("Guess again")
+		Else if (GuessedNumber > TheNumber) then
+			Write("My number is less than")
+			Write("Guess again")
+		Else
+			Write("Error... Restart program")
+		End if
+	End Repeat
+	
+End Program
+
+
+ //New Program 
+Program
+  Write("Hello World!")
+End Program
+
+
+ //New Program 
+Program
+
+	Number input1
+	Number input2
+	Number result
+	Text operator
+
+	Write("Enter operator either +, -, * or / ")
+	operator := ReadText()
+
+	Write("Write the two operands you want to calcute using " + operator + "seperanted by 'Enter'")
+
+	input1 := ReadNumber()
+	input2 := ReadNumber()
+
+	if (operator = "+") then
+		result := input1+input2
+	else if (operator = "-") then
+		result := input1-input2
+	else if (operator = "*") then
+		result := input1*input2
+	else if (operator = "/") then
+		result := input1/input2
+	else 
+		Write("Error occured")
+	end if
+	
+	Write("The result is: " + input1 + operator + input2 + "=" + result)  
+	
+End Program
+
+
+ //New Program 
+program 
+	
+	number percent
+	number grade
+	
+	write("how many percent?")
+	percent := readnumber()
+	
+	if (percent >= 10) then
+		grade := 3
+	else if (percent >= 40) then
+		grade := 5
+	else if (percent >= 50) then
+		grade := 6
+	else if (percent >= 58) then
+		grade := 7
+	else if (percent >= 66) then
+		grade := 8
+	else if (percent >= 74) then
+		grade := 9
+	else if (percent >= 82) then
+		grade := 10
+	else if (percent >= 90) then 
+		grade := 11
+	else 
+		grade := 0
+	end if
+	
+	write(percent + " percent corresponds to the Danish grade " + grade)
+	
+end program
+
+
+ //New Program 
+Program
+
+	Number input
+	
+	Write("Is it leap year?")
+	Write("Enter the year you want to know if its leap year")
+	
+	input := ReadNumber()
+	
+	Repeat while (input > 0)	
+		if (input % 4 = 0) then
+			wRiTe("It is a leap year.")
+		else if (NOT(input % 4 = 0)) then
+			Write("It is not a leap year.")
+		end if	
+	end repeat
+
+end program
+
+
+ //New Program 
+Program
+  Number number1 := 1
+  Number number2
+  Number result
+  Text operator := ""
+  
+  Write("Indtast et tal: ")
+  number1 := ReadNumber()
+  
+  repeat while (true)
+    Write("Indtast en operator (+ - * /): ")
+    operator := ReadText()
+    
+    if (operator = "+" Or operator = "-" Or operator = "*" Or operator = "/") then
+       Break                // This is not correct - syntax doesn't allow this yet - Marc
+    end if
+  end repeat
+  
+  Write("Indtast et andet tal: ")
+  number2 := ReadNumber()
+  
+  if (operator = "+") then
+    result := number1 + number2 
+  else if (operator = "-") then
+    result := number1 - number2 
+  else if (operator = "*") then
+    result := number1 * number2 
+  else if (operator = "/") then
+    result := number1 / number2
+  end if
+  
+  Write("Resultatet er " + number1 + " " + operator + " " + number2 + " = " + result)
+End program
+
+
+ //New Program 
+Program
+	Number input
+	
+	Write("Enter a number and it will be returned, if it is odd or even")
+	input := ReadNumber()
+	
+	if (input % 2 = 0) then
+		Write("The number is even")
+	else if (NOT(input % 2 = 0)) then
+		Write("The number is odd")
+	else
+		Write("Error occured. Please close the program and try again")
+	end if
+	
+End Program
+
+
+ //New Program 
+Program 
+
+	Number a := 1
+	Number b := 2
+	Number c := 3
+	Number x := 1.0
+	
+	Number res1
+	Number res2
+	Number res3
+	Number res4
+	
+	Number res1_equiv
+	Number res2_equiv
+	Number res3_equiv
+	Number res4_equiv
+	
+	res1 := a > b AND c < x
+	res2 := a < NOT b OR not(not(a))
+	res3 := a + b < not(c) + c
+	res4 := a - x or b * c and b / a
+	
+	write("res1 = " + res1)
+	write("res2 = " + res2)
+	write("res3 = " + res3)
+	write("res4 = " + res4)
+	
+	res1_equiv := (a > b) and (c < x)
+	res2_equiv := (a < (not(b))) or (not(not(a)))
+	res3_equiv := (a + b) < (((not(c)) + c))
+	res4_equiv := (a - x) or ((b * c) and (b / a))
+	
+	write("res1_equiv = " + res1_equiv)
+	write("res2_equiv = " + res2_equiv)
+	write("res3_equiv = " + res3_equiv)
+	write("res4_equiv = " + res4_equiv)
+
+End program
+
+
+ //New Program 
+Program 
+	Number input
+	Number reverse := 0
+	Number temp
+	
+	Write("Enter a number to check if it is a palindrome or not")
+	input := ReadNumber()
+	
+	temp := input
+	
+	repeat while (not(temp = 0))
+		reverse := reverse * 10
+		reverse := reverse + 10%10
+		temp := temp / 10
+	end repeat
+	
+	if (input = reverse) then
+		write(input + " is a palindrome number.")
+	else if (not(input = reverse)) then
+		write(input + " is not a palindrome number.")
+	else
+		write("You hit the cat out of the barrel... or encountered a problem.")
+	end if
+
+End program
+
+
+ //New Program 
+Program
+
+	Number inputNumber
+	
+	Write("Enter pH-value and i will answer if its alkaline, neutral or acidic.")
+	inputNumber := ReadNumber()
+	
+	if(inputNumber > 7) then
+		if(inputNumber < 12) then
+			write("Alkaline")
+		else 
+			write("Very alkaline")
+		end if
+	else
+		if (inputNumber = 7) then
+			write("Neutral")
+		else if (inputNumber > 2) then
+			write("Acidic")
+		else
+			write("Very acidic")
+		end if
+	end if
+
+End Program
+
+
+ //New Program 
+Program
+	number r
+        number x
+        number y
+
+	write("Enter a radius, x and y")
+	write("First enter radius:")
+	r := readnumber()
+	write("Next enter x:")
+	x := readNUmber()
+	wriTE("Next enter y:")
+	y := readNUMber()
+
+	if(x*x + y*y <= r*r) then
+		write("The point(" + x + "," + y + ") is inside the circle centered in (0,0) and a radius " + r)
+	else 
+		write("The point(" + x + "," + y + ") is outside the circle centered in (0,0) and a radius " + r)
+	end if
+	
+End program
+
+
+ //New Program 
+Program
+  number input
+  number OriginalInput
+  text output := ""
+  
+  write("Indtast et nummer, der skal omregnes til romertal:")
+  input := readNumber()
+  OriginalInput := input
+  
+  repeat while (input > 0)
+    if (input > 1000) then
+	  output := output + "M"
+	  input := input - 1000
+	else if (input > 500) then
+	  output := output + "D"
+	  input := input - 500
+	else if (input > 100) then
+	  output := output + "C"
+	  input := input - 100
+	else if (input > 50) then
+	  output := output + "L"
+	  input := input - 50
+	else if (input > 10) then
+	  output := output + "X"
+	  input := input - 10
+	else if (input > 5) then
+	  output := output + "V"
+	  input := input - 5
+	else if (input > 1) then
+	  output := output + "I"
+	  input := input - 1
+	end if
+  end repeat
+  
+  write(OriginalInput + " is the same as " + output + " in Roman numerals")
+  
+end Program
+
+
+ //New Program 
+Program
+
+	Number seconds := 0
+	Number hour	:= 0
+	Number min := 0
+	Number sec := 0
+	Number remainder := 0
+
+	Write("Enter time in seconds and they will be calulated to hours, minutes and seconds.")
+	
+	seconds := ReadNumber()
+
+	hour := seconds / 3600
+	remainder := seconds % 3600
+	min := remainder / 60
+	sec := remainder % 60
+
+	Write(seconds + "is equal to " + hour + "hours, " + min + " minutes and " + sec + " seconds.")
+	
+End Program

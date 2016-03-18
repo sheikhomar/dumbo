@@ -1,5 +1,7 @@
+using System;
 using System.Text;
 using dumbo.Compiler.PrettyPrint;
+using dumbo.Compiler.SymbolTable;
 
 namespace dumbo.Compiler.AST
 {
@@ -21,6 +23,11 @@ namespace dumbo.Compiler.AST
             LeftOperand.PrettyPrint(prettyPrinter);
             prettyPrinter.Append(" " + OperatorTranslator.BinaryOperatorTypeTranslator(Operator) + " ");
             RightOperand.PrettyPrint(prettyPrinter);
+        }
+
+        public override TypeDescriptor GetHappyType(ISymbolTable symbolTable)
+        {
+            throw new NotImplementedException();
         }
     }
 }

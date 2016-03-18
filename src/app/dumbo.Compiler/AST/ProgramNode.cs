@@ -1,5 +1,6 @@
 ﻿using System.Linq.Expressions;
 using System.Text;
+using dumbo.Compiler.CCAnalysis;
 using dumbo.Compiler.PrettyPrint;
 using dumbo.Compiler.SymbolTable;
 
@@ -19,6 +20,11 @@ namespace dumbo.Compiler.AST
             prettyPrinter.EndLine("Program");
             Body.PrettyPrint(prettyPrinter);
             prettyPrinter.EndLine("End Program");
+        }
+
+        public override void CCAnalyse(ICCAnalyser analyser)
+        {
+            Body.CCAnalyse(analyser);
         }
     }
 

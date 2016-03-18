@@ -1,4 +1,5 @@
-﻿using System;
+﻿using dumbo.Compiler.AST;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,5 +10,6 @@ namespace dumbo.Compiler.CCAnalysis
     public interface ICCAnalysable
     {
         void CCAnalyse(ICCAnalyser analyser);
+
     }
 }

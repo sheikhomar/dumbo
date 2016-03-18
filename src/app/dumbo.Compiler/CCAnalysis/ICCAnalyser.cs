@@ -13,6 +13,8 @@ namespace dumbo.Compiler.CCAnalysis
         ISymbolTable SymbolTable{ get; }
         IErrorReporter ErrorReporter { get; }
         bool IsListsEqual(IList<HappyType> inpt, IList<HappyType> inpt2);
+        bool IsListEqualToType(IList<HappyType> inpt, HappyType inpt2);
+        bool IsEqual(HappyType inpt, HappyType inpt2);
 
     }
 }

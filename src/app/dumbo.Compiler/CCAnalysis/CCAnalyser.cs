@@ -40,6 +40,16 @@ namespace dumbo.Compiler.CCAnalysis
             return inpt.Equals(inpt2);
         }
 
+        public bool IsListEqualToType(IList<HappyType> inpt, HappyType inpt2)
+        {
+            foreach (var element in inpt)
+            {
+                if (!element.Equals(inpt2))
+                    return false;
+            }
+            return true;
+        }
+
         public bool IsListsEqual(IList<HappyType> inpt, IList<HappyType> inpt2)
         {
             int i = 0;

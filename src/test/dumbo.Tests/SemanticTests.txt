@@ -475,6 +475,33 @@ End functIon
 
  //New Program 
 Program
+    a( b())
+End Program
+
+Function a(number a) return nothing
+End functIon
+
+Function b() return number
+	Return 1
+End function
+
+
+ //New Program 
+Program
+    text a := a( b(a(1, false)), true)
+End Program
+
+Function a(number a, boolean b) return text
+	return ""
+End functIon
+
+Function b(text a) return number
+	Return 1
+End function
+
+
+ //New Program 
+Program
 	number a := 1
     a( a, False, "")
 End Program
@@ -533,6 +560,75 @@ End Program
 
 Function a(number a) return nothing
 End Function
+
+
+ //New Program Failing
+Program
+    a( b())
+End Program
+
+Function a(number a) return nothing
+End functIon
+
+Function b() return boolean
+	Return true
+End function
+
+
+ //New Program Failing
+Program
+    text a := a( b(a(1, false)), true)
+End Program
+
+Function a(number a, boolean b) return text, number
+	return "", 1
+End functIon
+
+Function b(text a) return number
+	Return 1
+End function
+
+
+ //New Program Failing
+Program
+    text a := a( b(a(1, false)), true)
+End Program
+
+Function a(number a, boolean b) return text
+	return ""
+End functIon
+
+Function b(text a) return number
+	Return truE
+End function
+
+
+ //New Program Failing
+Program
+    text a := a( b(a(1, false)), true)
+End Program
+
+Function a(number a, number b) return text
+	return ""
+End functIon
+
+Function b(text a) return number
+	Return 1
+End function
+
+
+ //New Program Failing
+Program
+    text a := a( b(a(1, false)), true)
+End Program
+
+Function a(number a, boolean b) return  number
+	return  1
+End functIon
+
+Function b(text a) return number
+	Return 1
+End function
 
 // ************************FuncDecl************************
  //New Program 
@@ -984,6 +1080,7 @@ End Program
 Program
 	repeat 1
 		
+		
 	end repeat
 End Program
 
@@ -995,6 +1092,10 @@ Program
 		end if
 	end repeat
 End Program
+
+Function time() return boolean
+	return false
+end functIon
 
 
  //New Program 
@@ -1012,21 +1113,15 @@ Program
 	end repeat
 End Program
 
-
- //New Program 
-Program
-	repeat 1 = 1 = 1 //Evaluerer til false :D
-		if time() then
-		end if
-	end repeat
-End Program
+Function time() return boolean
+	return false
+end functIon
 
 
  //New Program 
 Program
-	repeat(a() = false)
-		if time() then
-		end if
+	number a := 22
+	repeat(a * 42)
 	end repeat
 End Program
 
@@ -1039,12 +1134,63 @@ Program
 	enD Repeat
 End Program
 
+
+ //New Program Failing
+Program
+	repeat 1 = 1 and true
+		
+	end repeat
+End Program
+
+
+ //New Program Failing
+Program
+	repeat true
+		if false then
+		end if
+	end repeat
+End Program
+
+
+ //New Program Failing
+Program
+	repeat 1 then
+	end repeat
+End Program
+
+
+ //New Program Failing
+Program
+	repeat 111111111111111111111111111111111111.11111111111111111111111111111111111111111111111
+	endrepeat
+End Program
+
+
+ //New Program Failing
+Program
+	repeat 1 = 1 = 1 //Evaluerer til false :D
+	end repeat
+End Program
+
+
+ //New Program Failing
+Program
+	repeat("")
+	end repeat
+End Program
+
+
+ //New Program Failing
+Program
+	repEat 1
+		repeat 2
+	enD Repeat
+End Program
+
 // ***************************RepWhileStmt*********************************
  //New Program 
 Program
-	repeat while 1 = 1 = 1
-		if time() then
-		end if
+	repeat while 1 = 1 or false
 	end repeat
 End Program
 
@@ -1052,133 +1198,410 @@ End Program
  //New Program 
 Program
 	repeat while 1 > 1 > Truee()
-		if time() then
-		end if
 	end repeat
 End Program
+
+Function truee() return number
+	return 1%1
+end functIon
 
 
  //New Program 
 Program
-	repeaT wHile(1)
-		if time() then
-		end if
+	repeaT wHile(true)
+	
+	
+	
+	
 	end repEat
 End Program
 
 
  //New Program 
 Program
-	repeat while 1 or ((1 and 2) = a())
-		if time() then
-		end if
+	repeat while 1 = 1 or ((1 = 1 and 2 = 1) or true)
 	end repeat
 End Program
 
 
  //New Program 
 Program
-	repeat while 1
+	repeat while true
 		repEat 11
-			repEat while 11
+			repEat while 1 > 2
 			end repeat
 		end repEat
 	end repeat
 End Program
 
+
+ //New Program Failing
+Program
+	repeat while 1 = 1 = 1
+	end repeat
+End Program
+
+
+ //New Program Failing
+Program
+	repeat while 1 > 1 > Truee()
+	end repeat
+End Program
+
+Function truee() return boolean
+	return false
+end function
+
+
+ //New Program Failing
+Program
+	repeaT wHile(1)
+	end repEat
+End Program
+
+
+ //New Program Failing
+Program
+	repeat while 1 < 1 or (true)	end repeat
+End Program
+
+
+ //New Program Failing
+Program
+	repeat while 1 = 1
+		repEat 11
+			repEat while 11 < 1
+			end repeat
+		end repEat
+End Program
+
 //*******************************Expr*******************************
  //New Program 
 Program
-	a := (((1)+1)and 1)
+	number a := (((1)+1)+ 1)
 End Program
 
 
  //New Program 
 Program
-	a := +--1+1-1/1*1 and 1 or not +1=1<1>(1>=1)<=1%1 and -------------------------i or - false
-	a := not ----------------a()
+	number a
+	text b
+	boolean c
+	a := +--1+1-1/1*1%1 -------------------------i
+	b := "Kurt" + " " + "Nielsen"
+	c :=true and false or true and not false or +1=1 and -1<1 or 1>1 and (1>=1) or 1<=1
 End Program
 
+
+ //New Program Failing
+Program
+	number a := (((1)+1)and 1)
+End Program
+
+
+ //New Program Failing
+Program
+	boolean a := (((1)+1)and 1)
+End Program
+
+
+ //New Program Failing
+Program
+	number a
+	text b
+	boolean c
+	a := +--1+1-1/1*1%1 -------------------------i
+	b := not "Kurt" + " " + "Nielsen"
+	c := true and false or true and not false or +1=1 and 1<1 or 1>1 and (1>=1) or 1<=1
+End Program
+
+
+ //New Program Failing
+Program
+	number a := 1-""
+End Program
+
+
+ //New Program Failing
+Program
+	number a := 1-true
+End Program
+
+
+ //New Program Failing
+Program
+	number a := 1+""
+End Program
+
+
+ //New Program Failing
+Program
+	number a := 1+false
+End Program
+
+
+ //New Program Failing
+Program
+	number a := 1*""
+End Program
+
+
+ //New Program Failing
+Program
+	number a := 1*true
+End Program
+
+
+ //New Program Failing
+Program
+	number a := 1/true
+End Program
+
+
+ //New Program Failing
+Program
+	number a := 1/""
+End Program
+
+
+ //New Program Failing
+Program
+	number a := 1%true
+End Program
+
+
+ //New Program Failing
+Program
+	number a := 1%""
+End Program
+
+
+ //New Program Failing
+Program
+	number a := - true
+End Program
+
+
+ //New Program Failing
+Program
+	number a := - ""
+End Program
+
+
+ //New Program Failing
+Program
+	number a := not 1
+End Program
+
+
+ //New Program Failing
+Program
+	number a := not ""
+End Program
+
+
+ //New Program Failing
+Program
+	boolean a := 1 and true
+End Program
+
+
+ //New Program Failing
+Program
+	booLean a := 1 = true
+End Program
+
+
+ //New Program Failing
+Program
+	boolean a := 1 = ""
+End Program
+
+
+ //New Program Failing
+Program
+	boolean a := "" = ""
+End Program
+
+
+ //New Program Failing
+Program
+	text a := "" - ""
+End Program
+
+
+ //New Program Failing
+Program
+	boolean a := true = true
+End Program
 // ********************************Id********************************
  //New Program 
 Program
-	_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 := 1
+	number _abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 := 1
 End Program
 
 
  //New Program 
 Program
-	abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 := 1
+	number abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 := 1
 End Program
 
 
  //New Program 
 Program
-	_a := 1
+	number _a := 1
 End Program
 
 
  //New Program 
 Program
-	_a_______________ := 1
+	number _a_______________ := 1
 End Program
 
 
  //New Program 
 Program
-	_a_a_a___A_a______ := 1
+	number _a_a_a___A_a______ := 1
 End Program
 
 
  //New Program 
 Program
-	_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789____ := 1
+	number _abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789____ := 1
+End Program
+
+
+ //New Program Failing
+Program
+	Number __abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 := 1
+End Program
+
+
+ //New Program Failing
+Program
+	number 1abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 := 1
+End Program
+
+
+ //New Program Failing
+Program
+	number _1 := 1
+End Program
+
+
+ //New Program Failing
+Program
+	number _ := 1
+End Program
+
+
+ //New Program Failing
+Program
+	number 1 := 1
 End Program
 
 // ***************************Ret**************************
  //New Program 
 Program
+	number a := a()
+End Program
+
+Function a() return number
+	return 1
+end function
+
+
+ //New Program 
+Program
+	a()
+End Program
+
+Function a() return nothing
+	return nothing
+end function
+
+
+ //New Program 
+Program
+	number a,b,c:= a()
+End Program
+
+Function a() return number, number, number
+	return b(), b(), 1
+end function
+
+Function b() return number
+	return 1
+end functIon
+
+
+ //New Program 
+Program
+	boolean a:=a()
+End Program
+
+Function a() return booLean
+	return true and false or b()
+end function
+
+Function b() return booLean
+	return true
+end functIon
+
+
+ //New Program 
+Program
+	text a = a()
+End Program
+
+Function a() return text
+	return ""
+end function
+
+
+ //New Program Failing
+Program
 	return a()
 End Program
 
 
- //New Program 
+ //New Program Failing
 Program
 	return nothing
 End Program
 
 
- //New Program 
+ //New Program Failing
 Program
 	return a(),a(),b(a(),a)
 End Program
 
 
- //New Program 
+ //New Program Failing
 Program
 	return false or true and a()
 End Program
 
 
- //New Program 
+ //New Program Failing
 Program
 	return a
 End Program
 
 
- //New Program 
+ //New Program Failing
 Program
 	return a, b
 End Program
 
 
- //New Program 
+ //New Program Failing
 Program
 	return 1,1,1
 End Program
 
 
- //New Program 
+ //New Program Failing
 Program
 	return false, true or false
 End Program
@@ -1186,8 +1609,69 @@ End Program
 // **************************Break***************************
  //New Program 
 Program
-	break
+	repeat while true
+		break
+	end repeat
 End Program
+
+
+ //New Program 
+Program
+	repeat 15
+		break
+	end repeat
+End Program
+
+
+ //New Program Failing
+Program
+	repeat while true
+		break 1
+	end repeat
+End Program
+
+
+ //New Program Failing
+Program
+	repeat 11
+		break = true
+	end repeat
+End Program
+
+
+ //New Program Failing
+Program
+	repeat 11
+		break true
+	end repeat
+End Program
+
+
+ //New Program Failing
+Program
+	repeat 11
+		true break
+	end repeat
+End Program
+
+
+ //New Program Failing
+Program
+	if(true) then
+		break
+	end if
+End Program
+
+
+ //New Program Failing
+Program
+	number a := a()
+End Program
+
+functIon a() return number
+	break
+	retUrn 1
+end function
 
 // ************************Mini Programs************************
  //New Program 
@@ -1205,23 +1689,31 @@ Program
 	WrITe("Sum3 = " + sum3)
 End program
 
+Function write(text textToPrint) return nothing
+	// Print stuff
+End function
+
 
  //New Program 
 Program
 
 	number result
 	
-	fahrenheit_temperature(0.0, fahrenheit_temp)
+	result := fahrenheit_temperature(0.0, fahrenheit_temp)
 	write("Freezing point: " + result + " F.")
 	
-	fahrenheit_temperature(100.0, fahrenheit_temp)
+	result := fahrenheit_temperature(100.0, fahrenheit_temp)
 	write("Boiling point: " + result + " F.")
 	
 End program
 
-Function Fahrenheit_temperature(number celcius_temp, number fahrenheit_temp) return nothing
+Function Fahrenheit_temperature(number celcius_temp, number fahrenheit_temp) return number
 	fahrenheit_temp := (9.0 / 5.0) * celcius_temp + 32.0
 end function
+
+Function write(text textToPrint) return nothing
+	// Print stuff
+End function
 
 
  //New Program 
@@ -1235,7 +1727,7 @@ end function
   wRite("Press enter to roll your new " + a + "-sided dice")  
 
   repeat (99)
-    readnumbER()
+    a := readnumbER()
     b := Random(1,a)
     Write("You've rolled: " + b)
   End Repeat
@@ -1243,6 +1735,18 @@ end function
   WriTE("You've rolled your dice too many times. You need to restart the program to define a new dice")
 
 End Program
+
+Function write(text textToPrint) return nothing
+	// Print stuff
+End function
+
+Function readnumber() return number
+	return 1
+End function
+
+Function random(number a, number b) return number
+	return 1
+End function
 
 
  //New Program 
@@ -1271,11 +1775,27 @@ Program
 	
 End Program
 
+Function write(text textToPrint) return nothing
+	// Print stuff
+End function
+
+Function readnumber() return number
+	return 1
+End function
+
+Function random() return number
+	return 1
+End function
+
 
  //New Program 
 Program
   Write("Hello World!")
 End Program
+
+Function write(text textToPrint) return nothing
+	// Print stuff
+End function
 
 
  //New Program 
@@ -1309,6 +1829,18 @@ Program
 	Write("The result is: " + input1 + operator + input2 + "=" + result)  
 	
 End Program
+
+Function write(text textToPrint) return nothing
+	// Print stuff
+End function
+
+Function readtext() return text
+	return ""
+End function
+
+Function readnumber() return number
+	return 1
+End function
 
 
  //New Program 
@@ -1344,6 +1876,14 @@ program
 	
 end program
 
+Function write(text textToPrint) return nothing
+	// Print stuff
+End function
+
+Function readnumber() return number
+	return 1
+End function
+
 
  //New Program 
 Program
@@ -1365,41 +1905,13 @@ Program
 
 end program
 
+Function write(text textToPrint) return nothing
+	// Print stuff
+End function
 
- //New Program 
-Program
-  Number number1 := 1
-  Number number2
-  Number result
-  Text operator := ""
-  
-  Write("Indtast et tal: ")
-  number1 := ReadNumber()
-  
-  repeat while (true)
-    Write("Indtast en operator (+ - * /): ")
-    operator := ReadText()
-    
-    if (operator = "+" Or operator = "-" Or operator = "*" Or operator = "/") then
-       Break                // This is not correct - syntax doesn't allow this yet - Marc
-    end if
-  end repeat
-  
-  Write("Indtast et andet tal: ")
-  number2 := ReadNumber()
-  
-  if (operator = "+") then
-    result := number1 + number2 
-  else if (operator = "-") then
-    result := number1 - number2 
-  else if (operator = "*") then
-    result := number1 * number2 
-  else if (operator = "/") then
-    result := number1 / number2
-  end if
-  
-  Write("Resultatet er " + number1 + " " + operator + " " + number2 + " = " + result)
-End program
+Function readnumber() return number
+	return 1
+End function
 
 
  //New Program 
@@ -1419,46 +1931,13 @@ Program
 	
 End Program
 
+Function write(text textToPrint) return nothing
+	// Print stuff
+End function
 
- //New Program 
-Program 
-
-	Number a := 1
-	Number b := 2
-	Number c := 3
-	Number x := 1.0
-	
-	Number res1
-	Number res2
-	Number res3
-	Number res4
-	
-	Number res1_equiv
-	Number res2_equiv
-	Number res3_equiv
-	Number res4_equiv
-	
-	res1 := a > b AND c < x
-	res2 := a < NOT b OR not(not(a))
-	res3 := a + b < not(c) + c
-	res4 := a - x or b * c and b / a
-	
-	write("res1 = " + res1)
-	write("res2 = " + res2)
-	write("res3 = " + res3)
-	write("res4 = " + res4)
-	
-	res1_equiv := (a > b) and (c < x)
-	res2_equiv := (a < (not(b))) or (not(not(a)))
-	res3_equiv := (a + b) < (((not(c)) + c))
-	res4_equiv := (a - x) or ((b * c) and (b / a))
-	
-	write("res1_equiv = " + res1_equiv)
-	write("res2_equiv = " + res2_equiv)
-	write("res3_equiv = " + res3_equiv)
-	write("res4_equiv = " + res4_equiv)
-
-End program
+Function readnumber() return number
+	return 1
+End function
 
 
  //New Program 
@@ -1488,6 +1967,14 @@ Program
 
 End program
 
+Function write(text textToPrint) return nothing
+	// Print stuff
+End function
+
+Function readnumber() return number
+	return 1
+End function
+
 
  //New Program 
 Program
@@ -1515,6 +2002,14 @@ Program
 
 End Program
 
+Function write(text textToPrint) return nothing
+	// Print stuff
+End function
+
+Function readnumber() return number
+	return 1
+End function
+
 
  //New Program 
 Program
@@ -1537,6 +2032,14 @@ Program
 	end if
 	
 End program
+
+Function write(text textToPrint) return nothing
+	// Print stuff
+End function
+
+Function readnumber() return number
+	return 1
+End function
 
 
  //New Program 
@@ -1578,6 +2081,14 @@ Program
   
 end Program
 
+Function write(text textToPrint) return nothing
+	// Print stuff
+End function
+
+Function readnumber() return number
+	return 1
+End function
+
 
  //New Program 
 Program
@@ -1599,4 +2110,194 @@ Program
 
 	Write(seconds + "is equal to " + hour + "hours, " + min + " minutes and " + sec + " seconds.")
 	
+End Program
+
+Function write(text textToPrint) return nothing
+	// Print stuff
+End function
+
+Function readnumber() return number
+	return 1
+End function
+
+// **************************Scope*******************************
+ //New Program 
+Program
+	number a := 0
+		repeat while true
+			boolean a := true
+			if(true)
+				a := false
+			end if
+		end repeat
+End Program
+
+
+ //New Program 
+Program
+	number a := 0
+		repeat while true
+			number a := 1
+			if(true)
+				boolean a := true
+			else
+			    a := 2
+			end if
+		end repeat
+End Program
+
+
+ //New Program 
+Program
+	number a := 0
+		repeat while true
+			number a := 1
+			if(true)
+				boolean a := true
+			else if
+			    a := 2
+			end if
+		end repeat
+End Program
+
+
+ //New Program 
+Program
+	number a := 0
+		repeat while true
+			number a := 1
+			if(true)
+				boolean a := true
+			else if
+			else
+				a := 2
+			end if
+		end repeat
+End Program
+
+
+ //New Program 
+Program
+	number a := 0
+		repeat 1
+			boolean a := false
+			if(true)
+				a := true
+			else
+			    a := true
+			end if
+		end repeat
+End Program
+
+
+ //New Program 
+Program
+	number a := 0
+		repeat while true
+			boolean a := true
+		end repeat
+	a := 1
+End Program
+
+
+ //New Program 
+Program
+	number a := 0
+		if(true)
+			boolean a := true
+		end if
+		repeat while a = 0
+			a := 1
+		end repeat
+End Program
+
+
+ //New Program Failing
+Program
+	number a := 0
+		repeat while true
+			boolean a := true
+			if(true)
+				a := 1
+			end if
+		end repeat
+End Program
+
+
+ //New Program Failing
+Program
+	number a := 0
+		repeat while true
+			number a := 1
+			if(true)
+				boolean a := true
+			else
+			    a := false
+			end if
+		end repeat
+End Program
+
+
+ //New Program Failing
+Program
+	number a := 0
+		repeat while true
+			number a := 1
+			if(true)
+				boolean a := true
+			else if
+			    a := false
+			end if
+		end repeat
+End Program
+
+
+ //New Program Failing
+Program
+	number a := 0
+		repeat while true
+			number a := 1
+			if(true)
+				boolean a := true
+			else if
+			else
+				a := false
+			end if
+		end repeat
+End Program
+
+
+ //New Program Failing
+Program
+	number a := 0
+		repeat 1
+			boolean a := false
+			if(true)
+				a := 1
+			else
+			    a := 1
+			end if
+		end repeat
+End Program
+
+
+ //New Program Failing
+Program
+	number a := 0
+		repeat while true
+			boolean a := true
+		end repeat
+	a := false
+End Program
+
+
+ //New Program Failing
+Program
+	number a := 0
+		if(true)
+			boolean a := true
+		end if
+		repeat while a
+			a := false
+		end repeat
 End Program

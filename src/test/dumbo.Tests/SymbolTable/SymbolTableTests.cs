@@ -156,15 +156,15 @@ namespace dumbo.Tests.SymbolTable
             Assert.True(first && second);
         }
 
-        //[Test]
-        //public void ThrowsUnhideableError()
-        //{
-        //    // Arrange
-        //    table.EnterSymbol("i", new Compiler.SymbolTable.SymbolTablePrimitiveType(Compiler.AST.HappyType.Boolean), true);
-        //    table.OpenScope();
+        [Test]
+        public void ThrowsUnhideableError()
+        {
+            // Arrange
+            table.EnterSymbol("i", new Compiler.SymbolTable.SymbolTablePrimitiveType(Compiler.AST.HappyType.Boolean), true);
+            table.OpenScope();
 
-        //    // Act & Assert
-        //    Assert.Throws(typeof(Compiler.SymbolTable.IllegalHideException), () => table.EnterSymbol("i", new Compiler.SymbolTable.SymbolTablePrimitiveType(Compiler.AST.HappyType.Boolean)));
-        //}
+            // Act & Assert
+            Assert.Throws(typeof(Compiler.SymbolTable.IllegalHideException), () => table.EnterSymbol("i", new Compiler.SymbolTable.SymbolTablePrimitiveType(Compiler.AST.HappyType.Boolean)));
+        }
     }
 }

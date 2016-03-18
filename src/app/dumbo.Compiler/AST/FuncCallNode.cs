@@ -1,5 +1,7 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
 using dumbo.Compiler.PrettyPrint;
+using dumbo.Compiler.SymbolTable;
 
 namespace dumbo.Compiler.AST
 {
@@ -13,6 +15,23 @@ namespace dumbo.Compiler.AST
 
         public string Identifier { get; }
         public ActualParamListNode Parameters { get; }
+
+        public override TypeDescriptor GetHappyType(ISymbolTable symbolTable)
+        {
+            var typeDescriptor = new TypeDescriptor();
+
+            foreach (var parameter in Parameters)
+            {
+                var parameterTypeList = parameter.GetHappyType(symbolTable).Types;
+
+                foreach (var element in parameterTypeList)
+                {
+                    typeDescriptor.Add(element);
+                }
+            }
+
+            return typeDescriptor;
+        }
 
         public override void PrettyPrint(IPrettyPrinter prettyPrinter)
         {

@@ -40,8 +40,8 @@ namespace dumbo.Compiler.AST
             {
                 expr.CCAnalyse(analyser);
             }
-
-            analyser.IsListsEqual(Identifiers.GetAllAs<IdentifierNode>, Expressions.);
+            //TODO: Add this
+            //analyser.IsListsEqual(Identifiers.GetAllAs<IdentifierNode>, Expressions.);
         }
     }
 }

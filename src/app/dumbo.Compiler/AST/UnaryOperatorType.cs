@@ -2,7 +2,7 @@
 {
     public enum UnaryOperatorType
     {
-        Negation,
+        Not,
         Minus,
         Plus
     }

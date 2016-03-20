@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Input;
+using System.Xml;
 using dumbo.Compiler.AST;
 using dumbo.Compiler.CCAnalysis;
 using ICSharpCode.AvalonEdit.Highlighting;
@@ -13,6 +14,7 @@ using Microsoft.Win32;
 using Path = System.IO.Path;
 using dumbo.Compiler.SyntaxAnalysis;
 using dumbo.Compiler.PrettyPrint;
+using ICSharpCode.AvalonEdit.Highlighting.Xshd;
 
 namespace dumbo.WpfApp
 {
@@ -40,7 +42,15 @@ namespace dumbo.WpfApp
 
             textEditor.TextArea.Caret.PositionChanged += CaretOnPositionChanged;
 
-            textEditor.SyntaxHighlighting = HighlightingManager.Instance.GetDefinition("VB");
+            
+            using (var s = GetType().Assembly.GetManifestResourceStream("dumbo.WpfApp.HappyZSyntaxHighlighting.xshd"))
+            {
+                using (var reader = new XmlTextReader(s))
+                {
+                    textEditor.SyntaxHighlighting = HighlightingLoader.Load(reader, HighlightingManager.Instance);
+                }
+            }
+
             textEditor.TextArea.TextView.BackgroundRenderers.Add(
                 new HighlightCurrentLineBackgroundRenderer(textEditor));
 

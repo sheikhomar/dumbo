@@ -1,0 +1,56 @@
+﻿<?xml version="1.0"?>
+
+<!-- Syntax Definition for the Happy Z language -->
+<SyntaxDefinition name="HappyZ" extensions=".hz" xmlns="http://icsharpcode.net/sharpdevelop/syntaxdefinition/2008">
+    <Color name="Comment" foreground="Green" />
+    <Color name="String" foreground="Red" />
+    
+    <Color name="DataTypes" foreground="#FF6F002F" />
+    <Color name="Operators" foreground="#FF8515EA" />
+    <Color name="Constants" foreground="Blue"  />
+    <Color name="Keywords" foreground="Blue" />
+    <Color name="FunctionKeywords" foreground="Blue" />
+    <Color name="ContextKeywords" foreground="Blue" />
+    
+    <RuleSet ignoreCase="true">
+        <Span color="String">
+            <Begin>"</Begin>
+            <End>"</End>
+            <RuleSet>
+                <Span begin="&quot;&quot;" end="" />
+            </RuleSet>
+        </Span>
+        <Span color="Comment">
+            <Begin>//</Begin>
+        </Span>
+        <Span color="Comment">
+            <Begin>\bComment\b</Begin>
+        </Span>
+        <Keywords color="DataTypes">
+            <Word>Boolean</Word>
+            <Word>Number</Word>
+            <Word>Text</Word>
+        </Keywords>
+        <Keywords color="Operators">
+            <Word>Or</Word>
+            <Word>And</Word>
+        </Keywords>
+        <Keywords color="Constants">
+            <Word>True</Word>
+            <Word>False</Word>
+            <Word>Nothing</Word>
+        </Keywords>
+        <Keywords color="Keywords">
+            <Word>Break</Word>
+            <Word>Return</Word>
+            <Word>Returns</Word>
+            <Word>If</Word>
+            <Word>Then</Word>
+            <Word>End</Word>
+            <Word>Repeat</Word>
+            <Word>While</Word>
+            <Word>Function</Word>
+            <Word>Program</Word>
+        </Keywords>
+    </RuleSet>
+</SyntaxDefinition>

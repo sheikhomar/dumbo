@@ -6,14 +6,14 @@ using dumbo.Compiler.SymbolTable;
 
 namespace dumbo.Compiler.AST
 {
-    abstract public class BaseNode : IPrettyPrint, ICCAnalysable
+    public abstract class BaseNode : IPrettyPrint, ICCAnalysable
     {
-        virtual public void CCAnalyse(ICCAnalyser analyser)
+        public virtual void CCAnalyse(ICCAnalyser analyser)
         {
             throw new NotImplementedException(); //should make CCAnalyse abstract
         }
 
-        virtual public void PrettyPrint(IPrettyPrinter prettyPrinter)
+        public virtual void PrettyPrint(IPrettyPrinter prettyPrinter)
         {
             prettyPrinter.EndLine("***" + this.ToString() + "***");
         }

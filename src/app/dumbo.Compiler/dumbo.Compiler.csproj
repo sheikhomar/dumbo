@@ -108,6 +108,7 @@
     <Compile Include="CCAnalysis\ICCAnalyser.cs" />
     <Compile Include="CCAnalysis\ICCAnalysable.cs" />
     <Compile Include="CCAnalysis\CCAnalyser.cs" />
+    <Compile Include="SyntaxAnalysis\TokenData.cs" />
     <Compile Include="Utils.cs" />
   </ItemGroup>
   <ItemGroup>

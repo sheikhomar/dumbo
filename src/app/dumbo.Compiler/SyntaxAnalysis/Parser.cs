@@ -43,11 +43,11 @@ namespace dumbo.Compiler.SyntaxAnalysis
                 switch (response)
                 {
                     case GOLD.ParseMessage.TokenRead:
-                        // A token is read. We don't have to do anything.
+                        var token = parser.CurrentToken();
+                        token.Data = new TokenData(parser.CurrentPosition(), token.Data);
                         break;
 
                     case GOLD.ParseMessage.Reduction:
-                        // Let the parser build a tree of Reduction objects
                         break;
 
                     case GOLD.ParseMessage.Accept:

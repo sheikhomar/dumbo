@@ -164,7 +164,7 @@ namespace dumbo.Compiler.SyntaxAnalysis
             Debug.Assert(token.Parent.Name() == "FuncCall");
             Reduction lhs = (Reduction)token.Data;
 
-            string identifier = (string) lhs[0].Data;
+            string identifier = GetSpelling(lhs[0]);
 
             FuncCallNode funcCallNode = new FuncCallNode(identifier);
 
@@ -172,6 +172,11 @@ namespace dumbo.Compiler.SyntaxAnalysis
             AppendFuncCallParameters(actualParams, funcCallNode);
 
             return funcCallNode;
+        }
+
+        private string GetSpelling(Token token)
+        {
+            return ((TokenData) token.Data).Spelling;
         }
 
         private void AppendFuncCallParameters(Token token, FuncCallNode funcCallNode)
@@ -324,7 +329,7 @@ namespace dumbo.Compiler.SyntaxAnalysis
             if (lhs.Count() == 3)
             {
                 ExpressionNode leftOperand = BuildExprNode(lhs[0]);
-                BinaryOperatorType operatorType = ParseOperator((string) lhs[1].Data);
+                BinaryOperatorType operatorType = ParseOperator(GetSpelling(lhs[1]));
                 ExpressionNode rightOperand = BuildExprNode(lhs[2]);
 
                 return new BinaryOperationNode(leftOperand, operatorType, rightOperand);
@@ -340,7 +345,7 @@ namespace dumbo.Compiler.SyntaxAnalysis
 
             if (lhs.Count() == 2)
             {
-                string operatorCode = ((string) lhs[0].Data).ToLower();
+                string operatorCode = GetSpelling(lhs[0]).ToLower();
                 return new UnaryOperationNode(
                     ParseUnaryOperator(operatorCode),
                     BuildUnaryExprNode(lhs[1]));
@@ -360,7 +365,7 @@ namespace dumbo.Compiler.SyntaxAnalysis
             {
                 case "Literal":
                     Reduction lhs2 = (Reduction) lhs[0].Data;
-                    string value = (string)lhs2[0].Data;
+                    string value = GetSpelling(lhs2[0]);
                     string literalType = lhs2[0].Parent.Name();
                     HappyType happyType;
 
@@ -375,7 +380,7 @@ namespace dumbo.Compiler.SyntaxAnalysis
 
                     return new LiteralValueNode(value, happyType);
                 case "Id":
-                    string name = (string)lhs[0].Data;
+                    string name = GetSpelling(lhs[0]);
                     return new IdentifierNode(name);
                 case "FuncCall":
                     return BuildFuncCallExprNode(lhs[0]);
@@ -431,7 +436,7 @@ namespace dumbo.Compiler.SyntaxAnalysis
 
             Token underToken = lhs[0];
 
-            string name = (string)underToken.Data;
+            string name = GetSpelling(underToken);
 
             IdentifierListNode idList = BuildIdentifierList(lhs[1]);
             HappyType type = ConvertHappyType(name);
@@ -458,7 +463,7 @@ namespace dumbo.Compiler.SyntaxAnalysis
 
             var listNode = new IdentifierListNode();
 
-            string name = (string)lhs[0].Data;
+            string name = GetSpelling(lhs[0]);
 
             listNode.Add(new IdentifierNode(name));
             
@@ -475,7 +480,7 @@ namespace dumbo.Compiler.SyntaxAnalysis
 
             if (lhs.Count() > 0)
             {
-                string name = (string)lhs[1].Data;
+                string name = GetSpelling(lhs[1]);
                 list.Add(new IdentifierNode(name));
 
                 Token multiIdToken2 = lhs[2];
@@ -504,7 +509,7 @@ namespace dumbo.Compiler.SyntaxAnalysis
             Debug.Assert(token.Parent.Name() == "FuncDecl");
             Reduction lhs = (Reduction)token.Data;
 
-            string idToken = (string)lhs[1].Data;
+            string idToken = GetSpelling(lhs[1]);
 
             IdentifierNode id = new IdentifierNode(idToken);
             StmtBlockNode funcBodyNode = BuildStmtsBlock(lhs[8]);
@@ -528,7 +533,7 @@ namespace dumbo.Compiler.SyntaxAnalysis
                 Token multiToken = lhs.Count() == 2 ? lhs[1] : lhs[2];
 
                 Reduction retReduction = (Reduction) singleToken.Data;
-                string retTypeRef = (string) retReduction[0].Data;
+                string retTypeRef = GetSpelling(retReduction[0]);
                 HappyType retType = ConvertHappyType(retTypeRef);
                 funcDeclNode.ReturnTypes.Add(retType);
 
@@ -547,8 +552,8 @@ namespace dumbo.Compiler.SyntaxAnalysis
                 Token multiToken = lhs.Count() == 2 ? lhs[1] : lhs[2];
 
                 Reduction formalParmReduction = (Reduction) singleToken.Data;
-                string typeSpec = (string) formalParmReduction[0].Data;
-                string paramName = (string) formalParmReduction[1].Data;
+                string typeSpec =  GetSpelling(formalParmReduction[0]);
+                string paramName = GetSpelling(formalParmReduction[1]);
                 HappyType paramType = ConvertHappyType(typeSpec);
 
                 FormalParamNode paramNode = new FormalParamNode(paramName, paramType);

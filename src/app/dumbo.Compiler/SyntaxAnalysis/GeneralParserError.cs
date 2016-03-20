@@ -9,9 +9,14 @@
             _message = message;
         }
 
+        public override int LineNumber => 0;
+        public override int Column => 0;
+
         public override string GetErrorMessage()
         {
             return _message;
         }
+
+        
     }
 }

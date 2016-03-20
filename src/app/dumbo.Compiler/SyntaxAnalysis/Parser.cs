@@ -94,18 +94,23 @@ namespace dumbo.Compiler.SyntaxAnalysis
         private void AppendSyntaxError(GOLD.Parser parser, ParserResult result)
         {
             var position = parser.CurrentPosition();
-            var readToken = parser.CurrentToken().Data.ToString();
+            var readToken = GetCurrentToken(parser);
             var expectedTokens = parser.ExpectedSymbols().Text();
-            var error = new SyntaxError(position.Line, position.Column, readToken, expectedTokens);
+            var error = new SyntaxError(position.Line + 1, position.Column + 1, readToken, expectedTokens);
             result.AddSyntaxError(error);
         }
 
         private void AppendLexicalError(GOLD.Parser parser, ParserResult result)
         {
             var position = parser.CurrentPosition();
-            var currentToken = parser.CurrentToken().Data.ToString();
-            var error = new LexicalError(position.Line, position.Column, currentToken);
+            var currentToken = GetCurrentToken(parser);
+            var error = new LexicalError(position.Line + 1, position.Column + 1, currentToken);
             result.AddLexicalError(error);
+        }
+
+        private string GetCurrentToken(GOLD.Parser parser)
+        {
+            return (parser.CurrentToken().Data as TokenData).Spelling;
         }
     }
 }

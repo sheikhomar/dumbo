@@ -4,20 +4,22 @@ namespace dumbo.Compiler.SyntaxAnalysis
 {
     public class LexicalError : ParserError
     {
-        public int Column { get; }
-        public int Line { get; }
         public string CurrentToken { get; }
+        public override int LineNumber { get; }
+        public override int Column { get; }
 
         public LexicalError(int line, int column, string currentToken)
         {
-            Line = line;
+            LineNumber = line;
             Column = column;
             CurrentToken = currentToken;
         }
 
         public override string GetErrorMessage()
         {
-            return $"Lexical error on line: {Line}:{Column}\n Current token: {CurrentToken}\n";
+            return $"Lexical error on line: {LineNumber} [Col {Column}]\nCurrent token: {CurrentToken}\n";
         }
+
+
     }
 }

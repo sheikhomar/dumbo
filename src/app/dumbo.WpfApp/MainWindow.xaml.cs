@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -303,14 +305,30 @@ namespace dumbo.WpfApp
             CCAnalyser analyser = new CCAnalyser();
             root.CCAnalyse(analyser);
 
+            IList<ErrorListItem> list = new List<ErrorListItem>();
+
             var errors = analyser.ErrorReporter.Errors;
             if (errors.Any())
             {
+                
+
                 foreach (var error in errors)
                 {
                     ResultTextBox.Text += $"\nLine {error.Line}, Col {error.Count}: {error.Message}";
+                    list.Add(new ErrorListItem() { Line = error.Line, Status = "Error", Description = error.Message});
                 }
             }
+
+            
+            ErrorList.ItemsSource = list;
         }
+    }
+
+    public class ErrorListItem
+    {
+        public string Status { get; set; }
+        public string Description { get; set; }
+        public int Line { get; set; }
+        public int Column { get; set; }
     }
 }

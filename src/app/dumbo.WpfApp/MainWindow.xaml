@@ -125,23 +125,37 @@
                 Grid.RowSpan="2"
 			>
             </avalonedit:TextEditor>
-            <GridSplitter Grid.Column="1" Width="4" HorizontalAlignment="Left"/>
-            
+            <GridSplitter Grid.Row="0" Grid.Column="1" Width="4" HorizontalAlignment="Left"/>
+
             <DockPanel Grid.Column="1" Margin="4 0 0 0">
-                
+
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="60" />
+                        <RowDefinition Height="4*" />
+                        <RowDefinition Height="10" />
                         <RowDefinition Height="1*" />
                     </Grid.RowDefinitions>
                     <TextBlock Name="InformationBox" Grid.Row="0" />
 
                     <TextBox Grid.Row="1" Name="ResultTextBox" FontFamily="Consolas" FontSize="11pt" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" />
+
+                    <GridSplitter Grid.Row="2" Height="4" Width="Auto" ResizeDirection="Rows" HorizontalAlignment="Stretch" />
+
+                    <TextBlock Text="Error List" Grid.Row="3"></TextBlock>
+
+                    <DataGrid Grid.Row="3" Name="ErrorList" AutoGenerateColumns="False">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Binding="{Binding Status}" Header="Status" IsReadOnly="True" Width="50"/>
+                            <DataGridTextColumn Binding="{Binding Line}" Header="Line" IsReadOnly="True" Width="40"/>
+                            <DataGridTextColumn Binding="{Binding Description}" Header="Description" IsReadOnly="True" Width="*" />
+                        </DataGrid.Columns>
+                    </DataGrid>
                 </Grid>
-                
-                
+
+
             </DockPanel>
         </Grid>
-        
+
     </DockPanel>
 </Window>

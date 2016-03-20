@@ -28,12 +28,7 @@ namespace dumbo.Compiler.AST
         {
             return _internalList[index] as T;
         }
-
-        public IList<T> GetAllAs<T>() where T : class, TBaseType
-        {
-            return _internalList as List<T>;
-        }
-
+        
         public override void PrettyPrint(IPrettyPrinter prettyPrinter)
         {
             if (_internalList.Count == 0)

@@ -25,9 +25,7 @@ namespace dumbo.Compiler.AST
 
         public override void CCAnalyse(ICCAnalyser analyser)
         {
-            var idList = Identifiers.GetAllAs<IdentifierNode>();
-
-            foreach (var id in idList)
+            foreach (var id in Identifiers)
             {
                 analyser.SymbolTable.EnterSymbol(id.Name, new SymbolTablePrimitiveType(Type));
             }

@@ -47,9 +47,7 @@ namespace dumbo.Compiler.AST
                 analyser.ErrorReporter.AddError("Type Error: The assignment is not type correct.");
 
             // Adding identifiers to symboltable
-            var idList = Identifiers.GetAllAs<IdentifierNode>();
-
-            foreach (var id in idList)
+            foreach (var id in Identifiers)
             {
                 analyser.SymbolTable.EnterSymbol(id.Name, new SymbolTablePrimitiveType(Type));
             }

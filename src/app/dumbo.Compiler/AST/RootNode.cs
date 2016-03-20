@@ -27,14 +27,14 @@ namespace dumbo.Compiler.AST
         public override void CCAnalyse(ICCAnalyser analyser)
         {
             //Function in table do here
-            var FuncDeclList = FuncDecls.GetAllAs<FuncDeclNode>();
-            AddFunctionsToTable(FuncDeclList, analyser);
+            //var FuncDeclList = FuncDecls.GetAllAs<FuncDeclNode>();
+            AddFunctionsToTable(FuncDecls, analyser);
 
             //Program visit
             Program.CCAnalyse(analyser);
 
             //Function body visit
-            foreach (var function in FuncDeclList)
+            foreach (var function in FuncDecls)
             {
                 function.CCAnalyse(analyser);
             }
@@ -42,7 +42,7 @@ namespace dumbo.Compiler.AST
         }
 
         #region  CCAnalyseHelper
-        private void AddFunctionsToTable(IList<FuncDeclNode> funcList, ICCAnalyser analyser)
+        private void AddFunctionsToTable(FuncDeclListNode funcList, ICCAnalyser analyser)
         {
             foreach (var funcDecl in funcList)
             {
@@ -52,10 +52,9 @@ namespace dumbo.Compiler.AST
 
         private IList<HappyType> parameterTypesMaker(FormalParamListNode parameters)
         {
-            var paralist = parameters.GetAllAs<FormalParamNode>();
             var retList = new List<HappyType>();
 
-            foreach (var parameter in paralist)
+            foreach (var parameter in parameters)
             {
                 retList.Add(parameter.Type);
             }

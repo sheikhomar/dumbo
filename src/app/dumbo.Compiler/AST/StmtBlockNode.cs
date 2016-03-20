@@ -9,13 +9,11 @@ namespace dumbo.Compiler.AST
     {
         public override void PrettyPrint(IPrettyPrinter prettyPrinter)
         {
-            var newList = GetAllAs<StmtNode>();
-
-            if (newList.Count == 0)
+            if (Count == 0)
                 return;
 
             prettyPrinter.IndentIncrement(); //Inc. indentation
-            foreach (var node in newList)
+            foreach (var node in this)
             {
                 node.PrettyPrint(prettyPrinter);
             }

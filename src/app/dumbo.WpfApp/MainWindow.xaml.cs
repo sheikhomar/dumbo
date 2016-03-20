@@ -306,10 +306,11 @@ namespace dumbo.WpfApp
             var errors = analyser.ErrorReporter.Errors;
             if (errors.Any())
             {
-                ResultTextBox.Text = string.Join("\n\n", errors);
+                foreach (var error in errors)
+                {
+                    ResultTextBox.Text += $"\nLine {error.Line}, Col {error.Count}: {error.Message}";
+                }
             }
-
-            
         }
     }
 }

@@ -7,14 +7,19 @@ namespace dumbo.Compiler.CCAnalysis
     {
         public ErrorReporter()
         {
-            Errors = new List<string>();
+            Errors = new List<CCError>();
         }
 
-        public IList<string> Errors { get; }
+        public void AddError(CCError error)
+        {
+            Errors.Add(error);
+        }
+
+        public IList<CCError> Errors { get; }
 
         public void AddError(string error)
         {
-            Errors.Add(error);
+            Errors.Add(new CCError(error, 0, 0));
         }
     }
 }

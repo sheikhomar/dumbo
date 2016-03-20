@@ -5,6 +5,7 @@ namespace dumbo.Compiler.CCAnalysis
     public interface IErrorReporter
     {
         void AddError(string error);
-        IList<string> Errors { get; }
+        void AddError(CCError error);
+        IList<CCError> Errors { get; }
     }
 }

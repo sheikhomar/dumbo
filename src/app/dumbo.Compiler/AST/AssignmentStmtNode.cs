@@ -8,10 +8,12 @@ namespace dumbo.Compiler.AST
 {
     public class AssignmentStmtNode : StmtNode
     {
-        public AssignmentStmtNode(IdentifierListNode identifiers, ExpressionListNode expressions)
+        public AssignmentStmtNode(IdentifierListNode identifiers, ExpressionListNode expressions, int line, int column)
         {
             Identifiers = identifiers;
             Expressions = expressions;
+            Line = line;
+            Column = column;
         }
 
         public IdentifierListNode Identifiers { get; }

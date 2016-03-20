@@ -17,5 +17,8 @@ namespace dumbo.Compiler.AST
         {
             prettyPrinter.EndLine("***" + this.ToString() + "***");
         }
+
+        public int Line { get; protected set; }
+        public int Column { get; protected set; }
     }
 }

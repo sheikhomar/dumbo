@@ -202,17 +202,23 @@ namespace dumbo.Compiler.SyntaxAnalysis
 
             string firstLhfName = lhs[0].Parent.Name();
 
-            ExpressionListNode exprListNode = BuildExprList(lhs[2]);
+            var assignToken = lhs[1].Data as TokenData;
+            int line = assignToken.LineNumber;
+            int column = assignToken.Column;
 
+            ExpressionListNode exprListNode = BuildExprList(lhs[2]);
+            
             if ("Id".Equals(firstLhfName, StringComparison.InvariantCultureIgnoreCase))
             {
-                return new AssignmentStmtNode(BuildIdentifierList(lhs[0]), exprListNode);
+                return new AssignmentStmtNode(
+                    BuildIdentifierList(lhs[0]), exprListNode, line, column);
             }
-            var declNode = BuildDeclStmt(lhs[0]);
-            return new DeclAndAssignmentStmtNode(declNode.Type, declNode.Identifiers, exprListNode);
-        }
 
-        
+            var declNode = BuildDeclStmt(lhs[0]);
+            return new DeclAndAssignmentStmtNode(
+                declNode.Type, declNode.Identifiers, exprListNode,
+                line, column);
+        }
         
         private ExpressionListNode BuildExprList(Token token)
         {

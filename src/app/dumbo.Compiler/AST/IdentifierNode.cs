@@ -32,7 +32,13 @@ namespace dumbo.Compiler.AST
         public override TypeDescriptor GetHappyType(ISymbolTable symbolTable)
         {
             var typeDescriptor = new TypeDescriptor();
-            var retrivedType = (symbolTable.RetrieveSymbol(Name).Type as SymbolTablePrimitiveType)?.Type;
+            
+            HappyType? retrivedType = null;
+            var symbolEntry = symbolTable.RetrieveSymbol(Name);
+            if (symbolEntry != null)
+            {
+                retrivedType = (symbolEntry.Type as SymbolTablePrimitiveType)?.Type;
+            }
 
             if (retrivedType.HasValue)
                 typeDescriptor.Add(retrivedType.Value);

@@ -23,6 +23,7 @@ namespace dumbo.Compiler.AST
             Identifiers.PrettyPrint(prettyPrinter);
             prettyPrinter.Append(" := ");
             Expressions.PrettyPrint(prettyPrinter);
+            prettyPrinter.EndLine();
         }
 
         public override void CCAnalyse(ICCAnalyser analyser)

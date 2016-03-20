@@ -1,8 +1,10 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Input;
+using dumbo.Compiler.AST;
 using ICSharpCode.AvalonEdit.Highlighting;
 using Microsoft.Win32;
 using Path = System.IO.Path;
@@ -21,14 +23,13 @@ namespace dumbo.WpfApp
         private DateTime latestCompiledAt;
         private DateTime latestSaveAt;
         private DateTime grammarTableLoadedAt;
-        private readonly MyParser _myParser;
+        private Parser _myParser;
         private readonly FileSystemWatcher _grammarTableWatcher;
 
         public MainWindow()
         {
             InitializeComponent();
-
-            _myParser = new MyParser();
+            
             _grammarTableWatcher = new FileSystemWatcher();
             _grammarTableWatcher.NotifyFilter = NotifyFilters.LastWrite;
             _grammarTableWatcher.EnableRaisingEvents = false;
@@ -54,20 +55,17 @@ namespace dumbo.WpfApp
             string message = string.Empty;
             try
             {
-                if (!_myParser.Setup(path))
-                    message = $"Grammar {path} could not be loaded.";
-                else
-                {
-                    lblGrammarTable.ToolTip = path;
-                    lblGrammarTable.Text = Path.GetFileName(path);
+                _myParser = new Parser(path);
 
-                    currentGrammarTablePath = path;
-                    grammarTableLoadedAt = DateTime.Now;
-                    UpdateInformationBox();
+                lblGrammarTable.ToolTip = path;
+                lblGrammarTable.Text = Path.GetFileName(path);
 
-                    _grammarTableWatcher.Path = Path.GetDirectoryName(currentGrammarTablePath);
-                    _grammarTableWatcher.EnableRaisingEvents = true;
-                }
+                currentGrammarTablePath = path;
+                grammarTableLoadedAt = DateTime.Now;
+                UpdateInformationBox();
+
+                _grammarTableWatcher.Path = Path.GetDirectoryName(currentGrammarTablePath);
+                _grammarTableWatcher.EnableRaisingEvents = true;
             }
             catch (Exception ex)
             {
@@ -178,29 +176,7 @@ namespace dumbo.WpfApp
 
         private void Print(object sender, ExecutedRoutedEventArgs e)
         {
-            if (!File.Exists(currentSourcePath))
-            {
-                ResultTextBox.Text = $"File {currentSourcePath} does not exist!";
-                return;
-            }
-
-            var data = new StringReader(currentSourcePath);
-
-
-            data = new StringReader(textEditor.Text);
-            if (_myParser.Parse(data))
-            {
-                PrettyPrint(_myParser.Root);
-            }
-            else
-            {
-                ResultTextBox.Text = _myParser.FailMessage;
-                textEditor.TextArea.Caret.Column = _myParser.Column + 1;
-                textEditor.TextArea.Caret.Line = _myParser.Line + 1;
-            }
-
-            latestCompiledAt = DateTime.Now;
-            UpdateInformationBox();
+            Compile(sender, e);
 
         }
 
@@ -211,20 +187,26 @@ namespace dumbo.WpfApp
                 ResultTextBox.Text = $"File {currentSourcePath} does not exist!";
                 return;
             }
+            
+            var data = new StringReader(textEditor.Text);
+            var parserResult = _myParser.Parse(data);
 
-            var data = new StringReader(currentSourcePath);
-
-
-            data = new StringReader(textEditor.Text);
-            if (_myParser.Parse(data))
+            if (parserResult.Errors.Any())
             {
-                DrawReductionTree(_myParser.Root);
+                StringBuilder errorMessage = new StringBuilder();
+
+                foreach (var parserError in parserResult.Errors)
+                {
+                    textEditor.TextArea.Caret.Column = parserError.Column;
+                    textEditor.TextArea.Caret.Line = parserError.LineNumber;
+                    errorMessage.Append(parserError.GetErrorMessage());
+                }
+
+                ResultTextBox.Text = errorMessage.ToString();
             }
             else
             {
-                ResultTextBox.Text = _myParser.FailMessage;
-                textEditor.TextArea.Caret.Column = _myParser.Column + 1;
-                textEditor.TextArea.Caret.Line = _myParser.Line + 1;
+                PrettyPrint(parserResult.Root);
             }
 
             latestCompiledAt = DateTime.Now;
@@ -307,12 +289,10 @@ namespace dumbo.WpfApp
             }
         }
 
-        private void PrettyPrint(GOLD.Reduction Root)
+        private void PrettyPrint(RootNode root)
         {
-            var AST = new AbstractSyntaxTreeBuilder();
             var prettyPrinter = new PrettyPrinter();
-
-            var output = prettyPrinter.print(AST.Build(Root));
+            var output = prettyPrinter.print(root);
             ResultTextBox.Text = output.ToString();
         }
     }

@@ -10,29 +10,23 @@ namespace dumbo.Compiler.CCAnalysis
 {
     public class CCAnalyser : ICCAnalyser
     {
-        private ISymbolTable symbolTable;
-        private IErrorReporter errorReporter; 
+        private readonly ISymbolTable _symbolTable;
+        private readonly IErrorReporter _errorReporter; 
 
         public CCAnalyser()
         {
-            symbolTable = new SymbolTable.SymbolTable();
-            errorReporter = new ErrorReporter();
+            _symbolTable = new SymbolTable.SymbolTable();
+            _errorReporter = new ErrorReporter();
         }
 
         public IErrorReporter ErrorReporter
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
+            get { return _errorReporter; }
         }
 
         public ISymbolTable SymbolTable
         {
-            get
-            {
-                return symbolTable;
-            }
+            get { return _symbolTable; }
         }
 
         public bool IsEqual(HappyType inpt, HappyType inpt2)

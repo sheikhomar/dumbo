@@ -5,6 +5,7 @@ using System.Text;
 using System.Windows;
 using System.Windows.Input;
 using dumbo.Compiler.AST;
+using dumbo.Compiler.CCAnalysis;
 using ICSharpCode.AvalonEdit.Highlighting;
 using Microsoft.Win32;
 using Path = System.IO.Path;
@@ -207,6 +208,7 @@ namespace dumbo.WpfApp
             else
             {
                 PrettyPrint(parserResult.Root);
+                CheckContextualContraints(parserResult.Root);
             }
 
             latestCompiledAt = DateTime.Now;
@@ -294,6 +296,20 @@ namespace dumbo.WpfApp
             var prettyPrinter = new PrettyPrinter();
             var output = prettyPrinter.print(root);
             ResultTextBox.Text = output.ToString();
+        }
+
+        private void CheckContextualContraints(RootNode root)
+        {
+            CCAnalyser analyser = new CCAnalyser();
+            root.CCAnalyse(analyser);
+
+            var errors = analyser.ErrorReporter.Errors;
+            if (errors.Any())
+            {
+                ResultTextBox.Text = string.Join("\n\n", errors);
+            }
+
+            
         }
     }
 }

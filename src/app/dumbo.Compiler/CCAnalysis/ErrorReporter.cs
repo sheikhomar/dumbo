@@ -5,16 +5,16 @@ namespace dumbo.Compiler.CCAnalysis
 {
     internal class ErrorReporter : IErrorReporter
     {
-        private IList<string> errors;
-
         public ErrorReporter()
         {
-            errors = new List<string>();
+            Errors = new List<string>();
         }
+
+        public IList<string> Errors { get; }
 
         public void AddError(string error)
         {
-            errors.Add(error);
+            Errors.Add(error);
         }
     }
 }

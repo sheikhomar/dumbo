@@ -11,10 +11,10 @@ namespace dumbo.Compiler.AST
         public ProgramNode Program { get; set; }
         public FuncDeclListNode FuncDecls { get; }
 
-        public RootNode(ProgramNode program)
+        public RootNode(ProgramNode program, FuncDeclListNode funcDecls = null)
         {
             Program = program;
-            FuncDecls = new FuncDeclListNode();
+            FuncDecls = funcDecls ?? new FuncDeclListNode();
         }
 
         public override void PrettyPrint(IPrettyPrinter prettyPrinter)

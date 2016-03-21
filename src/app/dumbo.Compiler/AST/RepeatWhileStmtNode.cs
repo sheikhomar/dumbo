@@ -28,7 +28,7 @@ namespace dumbo.Compiler.AST
         {
             //Check predicate is bool
             if (Predicate.GetHappyType(analyser.SymbolTable).GetFirst() != HappyType.Boolean)
-                analyser.ErrorReporter.AddError("Predicate is not of type Boolean");
+                analyser.ErrorReporter.AddError("Repeat While Statement must have a predicate of type Boolean");
 
             //Check that body is type correct
             Body.CCAnalyse(analyser);

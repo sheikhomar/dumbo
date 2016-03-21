@@ -26,9 +26,7 @@ namespace dumbo.Compiler.AST
         public override void CCAnalyse(ICCAnalyser analyser)
         {
             if (Expressions.Count == 0)
-                return;
-
-            //Check that each ret type matches the function
+                return; //We have Nothing as return type
         }
     }
 }

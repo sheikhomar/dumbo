@@ -27,7 +27,6 @@ namespace dumbo.Compiler.AST
         public override void CCAnalyse(ICCAnalyser analyser)
         {
             //Function in table do here
-            //var FuncDeclList = FuncDecls.GetAllAs<FuncDeclNode>();
             AddFunctionsToTable(FuncDecls, analyser);
 
             //Program visit

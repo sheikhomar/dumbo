@@ -20,15 +20,6 @@ namespace dumbo.Compiler.AST
             prettyPrinter.Append(Name);
         }
 
-        public override void CCAnalyse(ICCAnalyser analyser)
-        {
-            var hans = analyser.SymbolTable.RetrieveSymbol(Name); //adde exception? otherwise its null.
-
-            //Check if null, if so, then error message...
-
-            
-        }
-
         public override TypeDescriptor GetHappyType(ISymbolTable symbolTable)
         {
             var typeDescriptor = new TypeDescriptor();

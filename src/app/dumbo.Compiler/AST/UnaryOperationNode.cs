@@ -23,17 +23,6 @@ namespace dumbo.Compiler.AST
             Expression.PrettyPrint(prettyPrinter);
         }
 
-        //Currently Expressions do not impl CCAnalyser
-        //public override void CCAnalyse(ICCAnalyser analyser)
-        //{
-        //    var typeOfExpression = Expression.GetHappyType(analyser.SymbolTable).GetFirst();
-        //    if (EvaluateType(typeOfExpression).GetFirst().Equals(HappyType.Error))
-        //        analyser.ErrorReporter.AddError("Incorrect use of operator in unary expression " + this.ToString());
-
-        //    return ;
-        //}
-
-
         public override TypeDescriptor GetHappyType(ISymbolTable symbolTable)
         {
             TypeDescriptor td = Expression.GetHappyType(symbolTable);

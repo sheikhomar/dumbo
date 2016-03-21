@@ -1,5 +1,6 @@
 using System;
 using System.Text;
+using dumbo.Compiler.CCAnalysis;
 using dumbo.Compiler.PrettyPrint;
 using dumbo.Compiler.SymbolTable;
 
@@ -22,6 +23,11 @@ namespace dumbo.Compiler.AST
         public override void PrettyPrint(IPrettyPrinter prettyPrinter)
         {
             prettyPrinter.Append(Value);
+        }
+
+        public override void CCAnalyse(ICCAnalyser analyser)
+        {
+            
         }
     }
 }

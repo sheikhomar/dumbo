@@ -62,5 +62,10 @@ namespace dumbo.Compiler.AST
         {
             return Operator.ToString() + Expression.ToString(); //Todo, ensure that expression and operator impl a ToString
         }
+
+        public override void CCAnalyse(ICCAnalyser analyser)
+        {
+            
+        }
     }
 }

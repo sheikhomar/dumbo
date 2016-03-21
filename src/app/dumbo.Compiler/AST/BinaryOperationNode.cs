@@ -1,5 +1,6 @@
 using System;
 using System.Text;
+using dumbo.Compiler.CCAnalysis;
 using dumbo.Compiler.PrettyPrint;
 using dumbo.Compiler.SymbolTable;
 
@@ -114,5 +115,10 @@ namespace dumbo.Compiler.AST
             return false;
         }
         #endregion
+
+        public override void CCAnalyse(ICCAnalyser analyser)
+        {
+            
+        }
     }
 }

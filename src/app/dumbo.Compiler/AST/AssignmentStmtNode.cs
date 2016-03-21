@@ -38,32 +38,65 @@ namespace dumbo.Compiler.AST
             else if (Identifiers.Count > Expressions.Count && Expressions.Count != 1)
                 analyser.ErrorReporter.AddError("Assignment Error: Too many identifiers compared to expressions");
 
-            for (int i = 0; i < Identifiers.Count; i++)
-            {
-                var id = Identifiers[i];
-                var expr = Expressions[i];
+            if(Identifiers.Count == Expressions.Count)
+                for (int i = 0; i < Identifiers.Count; i++)
+                {
+                    var id = Identifiers[i];
+                    var expr = Expressions[i];
 
-                var entry = analyser.SymbolTable.RetrieveSymbol(id.Name);
-                if (entry == null)
-                {
-                    analyser.ErrorReporter.AddError(new CCError($"Identifier '{id.Name}' is undeclared.", Line, Column));
-                }
-                else
-                {
-                    var type = entry.Type as SymbolTablePrimitiveType;
-                    if (type == null)
+                    var entry = analyser.SymbolTable.RetrieveSymbol(id.Name);
+                    if (entry == null)
                     {
-                        analyser.ErrorReporter.AddError(new CCError($"Assignment to a function is not allowed.", Line,
-                            Column));
+                        analyser.ErrorReporter.AddError(new CCError($"Identifier '{id.Name}' is undeclared.", Line, Column));
                     }
                     else
                     {
-                        var typeDescriptor = expr.GetHappyType(analyser.SymbolTable);
-                        var exprType = typeDescriptor.GetFirst();
-                        if (type.Type != exprType)
+                        var type = entry.Type as SymbolTablePrimitiveType;
+                        if (type == null)
                         {
-                            analyser.ErrorReporter.AddError(new CCError($"The variable '{id.Name}' cannot be assigned the type {exprType}.", Line,
-                            Column));
+                            analyser.ErrorReporter.AddError(new CCError($"Assignment to a function is not allowed.", Line, Column));
+                        }
+                        else
+                        {
+                            expr.CCAnalyse(analyser);
+                            var typeDescriptor = expr.GetHappyType(analyser.SymbolTable);
+                            var exprType = typeDescriptor.GetFirst();
+                            if (type.Type != exprType)
+                            {
+                                analyser.ErrorReporter.AddError(new CCError($"The variable '{id.Name}' cannot be assigned the type {exprType}.", Line,
+                                Column));
+                            }
+                        }
+                    }
+                }
+            else
+            {
+                for (int i = 0; i < Identifiers.Count; i++)
+                {
+                    var id = Identifiers[i];
+
+                    var entry = analyser.SymbolTable.RetrieveSymbol(id.Name);
+                    if (entry == null)
+                    {
+                        analyser.ErrorReporter.AddError(new CCError($"Identifier '{id.Name}' is undeclared.", Line, Column));
+                    }
+                    else
+                    {
+                        var type = entry.Type as SymbolTablePrimitiveType;
+                        if (type == null)
+                        {
+                            analyser.ErrorReporter.AddError(new CCError($"Assignment to a function is not allowed.", Line,
+                                Column));
+                        }
+                        else
+                        {
+                            var expr = Expressions[0];
+                            var typeDescriptor = expr.GetHappyType(analyser.SymbolTable);
+                            var exprType = typeDescriptor.Types[i];
+                            if (exprType != type.Type)
+                            {
+                                analyser.ErrorReporter.AddError(new CCError($"The variable '{id.Name}' cannot be assigned the type {exprType}.", Line, Column));
+                            }
                         }
                     }
                 }

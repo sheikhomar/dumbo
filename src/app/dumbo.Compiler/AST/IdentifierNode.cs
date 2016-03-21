@@ -34,5 +34,10 @@ namespace dumbo.Compiler.AST
             else
                 return new TypeDescriptor(HappyType.Error);
         }
+
+        public override void CCAnalyse(ICCAnalyser analyser)
+        {
+
+        }
     }
 }

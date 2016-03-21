@@ -8,44 +8,62 @@ using NUnit.Framework;
 namespace dumbo.Tests.SyntaxAnalysis
 {
     [TestFixture]
-    public class GeneralParserTests
+    public class GeneralParserTestsBlackBox
     {
         [Test]
-        public void TestCodeSnippet()
+        public void TestCodeSnippetParser()
         {
             var parser = new Parser(Utils.GetGrammarTablePath());
 
             var dir = Path.GetDirectoryName(GetType().Assembly.Location);
-            var path = Path.Combine(dir, "ParserTest.txt");
+            var path = Path.Combine(dir, "ParserTests.txt");
             using (var fs = new StreamReader(path))
             {
                 StringBuilder programBuilder = new StringBuilder();
-                string line;
+                string line = fs.ReadLine();
                 int counter = 0;
                 int nextProgramLine = 0;
-                while ((line = fs.ReadLine()) != null)
+                while (line != null)
                 {
                     if (" //New Program ".Equals(line))
                     {
-                        var programText = programBuilder.ToString();
+                        var programText = AppendLines(ref line, fs, ref counter).ToString();
                         var result = parser.Parse(new StringReader(programText));
                         if (result.Errors.Any())
                         {
                             var errorMessages = result.Errors.Select(e => e.GetErrorMessage()).ToArray();
-                            
+
                             Assert.Fail($"Parser error for program at line {nextProgramLine}: \n\r \n\r{string.Join(", ", errorMessages)} \n\r{programText}");
                         }
-                        
-                        programBuilder = new StringBuilder();
-                        nextProgramLine = counter+2;
+
+                        nextProgramLine = counter + 2;
                     }
                     else
                     {
-                        programBuilder.AppendLine(line);
+                        line = fs.ReadLine();
                     }
                     counter++;
                 }
             }
+        }
+
+        private StringBuilder AppendLines(ref string line, StreamReader fs, ref int counter)
+        {
+            StringBuilder builder = new StringBuilder();
+            line = fs.ReadLine();
+
+            while (!" //New Program ".Equals(line) && !" //New Program Failing".Equals(line))
+            {
+                builder.AppendLine(line);
+                line = fs.ReadLine();
+                counter++;
+                if (line == null)
+                {
+                    break;
+                }
+            }
+
+            return builder;
         }
     }
 }

@@ -324,7 +324,7 @@ namespace dumbo.WpfApp
 
                 foreach (var error in errors)
                 {
-                    ResultTextBox.Text += $"\nLine {error.Line}, Col {error.Count}: {error.Message}";
+                    ResultTextBox.Text += $"\nLine {error.Line}, Col {error.Column}: {error.Message}";
                     list.Add(new ErrorListItem() { Line = error.Line, Status = "Error", Description = error.Message});
                 }
             }

@@ -4,13 +4,13 @@
     {
         public string Message { get; }
         public int Line { get; }
-        public int Count { get; }
+        public int Column { get; }
 
-        public CCError(string message, int line, int count)
+        public CCError(string message, int line, int column)
         {
             Message = message;
             Line = line;
-            Count = count;
+            Column = column;
         }
     }
 }

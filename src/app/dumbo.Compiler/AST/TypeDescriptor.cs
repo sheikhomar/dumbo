@@ -10,18 +10,24 @@ namespace dumbo.Compiler.AST
     {
         private IList<HappyType> _types;
 
-        public TypeDescriptor()
+        public TypeDescriptor(HappyType happyType)
         {
             _types = new List<HappyType>();
+            Add(happyType);
         }
 
-        public IList<HappyType> Types { get; }
+        public IList<HappyType> Types => _types;
 
         public void Add(HappyType type)
         {
             _types.Add(type);
         }
 
-        public HappyType GetFirst() => _types[0];
+        public HappyType GetFirst()
+        {
+            if  (_types.Any())
+                return _types[0];
+            throw new IndexOutOfRangeException("Type descriptor is empty.");
+        }
     }
 }

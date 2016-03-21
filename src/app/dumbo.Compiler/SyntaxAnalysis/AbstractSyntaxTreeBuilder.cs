@@ -159,14 +159,14 @@ namespace dumbo.Compiler.SyntaxAnalysis
             return new FuncCallStmtNode(BuildFuncCallExprNode(token));
         }
 
-        private FuncCallNode BuildFuncCallExprNode(Token token)
+        private FuncCallExprNode BuildFuncCallExprNode(Token token)
         {
             Debug.Assert(token.Parent.Name() == "FuncCall");
             Reduction lhs = (Reduction)token.Data;
 
             string identifier = GetSpelling(lhs[0]);
 
-            FuncCallNode funcCallNode = new FuncCallNode(identifier);
+            FuncCallExprNode funcCallNode = new FuncCallExprNode(identifier);
 
             Token actualParams = lhs[2];
             AppendFuncCallParameters(actualParams, funcCallNode);
@@ -179,7 +179,7 @@ namespace dumbo.Compiler.SyntaxAnalysis
             return ((TokenData) token.Data).Spelling;
         }
 
-        private void AppendFuncCallParameters(Token token, FuncCallNode funcCallNode)
+        private void AppendFuncCallParameters(Token token, FuncCallExprNode funcCallNode)
         {
             Debug.Assert(token.Parent.Name() == "ActualParams" || token.Parent.Name() == "MultiActualParams");
             Reduction lhs = (Reduction)token.Data;

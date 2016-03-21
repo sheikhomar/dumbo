@@ -27,45 +27,35 @@ namespace dumbo.Compiler.AST
         {
             TypeDescriptor td = Expression.GetHappyType(symbolTable);
 
-            TypeDescriptor returnTypeDesc = new TypeDescriptor();
-
             if (td.Types.Count == 1)
                 return EvaluateType(td.GetFirst());
             else
             {
-                returnTypeDesc.Add(HappyType.Error);
-                return returnTypeDesc;
+                return new TypeDescriptor(HappyType.Error);
             }
         }
 
         private TypeDescriptor EvaluateType(HappyType type)
         {
-            TypeDescriptor td = new TypeDescriptor();
-
             switch (Operator)
             {
                 case UnaryOperatorType.Not:
-                    TypeAdder(td, type, HappyType.Boolean);
-                    break;
+                    return TypeAdder(type, HappyType.Boolean);
                 case UnaryOperatorType.Minus:
-                    TypeAdder(td, type, HappyType.Number);
-                    break;
+                    return TypeAdder(type, HappyType.Number);
                 case UnaryOperatorType.Plus:
-                    TypeAdder(td, type, HappyType.Number);
-                    break;
+                    return TypeAdder(type, HappyType.Number);
                 default:
                     throw new FormatException("Uknown Unary Operator");
             }
-
-            return td;
         }
 
-        private void TypeAdder(TypeDescriptor td, HappyType type1, HappyType type2)
+        private TypeDescriptor TypeAdder(HappyType type1, HappyType type2)
         {
             if (type1 == type2)
-                td.Add(type1);
+                return new TypeDescriptor(type1);
             else
-                td.Add(HappyType.Error);
+                return new TypeDescriptor(HappyType.Error);
         }
 
         public override string ToString()

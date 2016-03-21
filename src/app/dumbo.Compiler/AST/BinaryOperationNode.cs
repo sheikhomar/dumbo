@@ -42,35 +42,29 @@ namespace dumbo.Compiler.AST
 
         private TypeDescriptor EvaluateType(HappyType leftOperand, BinaryOperatorType @operator, HappyType rightOperand)
         {
-            var td = new TypeDescriptor();
             bool check;
 
             switch (@operator)
             {
                 case BinaryOperatorType.Plus:
                     if (leftOperand.Equals(rightOperand) && rightOperand == HappyType.Number)
-                        td.Add(HappyType.Number);
+                        return new TypeDescriptor(HappyType.Number);
                     else if (leftOperand.Equals(rightOperand) && rightOperand == HappyType.Text)
-                        td.Add(HappyType.Text);
+                        return new TypeDescriptor(HappyType.Text);
                     else
-                        td.Add(HappyType.Error);
-                    break;
+                        return new TypeDescriptor(HappyType.Error);
                 case BinaryOperatorType.Minus:
                     check = IsSameType(HappyType.Number, leftOperand, rightOperand);
-                    TypeAdder(td, HappyType.Number, check);
-                    break;
+                    return TypeAdder(HappyType.Number, check);
                 case BinaryOperatorType.Times:
                     check = IsSameType(HappyType.Number, leftOperand, rightOperand);
-                    TypeAdder(td, HappyType.Number, check);
-                    break;
+                    return TypeAdder(HappyType.Number, check);
                 case BinaryOperatorType.Division:
                     check = IsSameType(HappyType.Number, leftOperand, rightOperand);
-                    TypeAdder(td, HappyType.Number, check);
-                    break;
+                    return TypeAdder(HappyType.Number, check);
                 case BinaryOperatorType.Modulo:
                     check = IsSameType(HappyType.Number, leftOperand, rightOperand);
-                    TypeAdder(td, HappyType.Number, check);
-                    break;
+                    return TypeAdder(HappyType.Number, check);
                 case BinaryOperatorType.Equals:
                     if(leftOperand == HappyType.Number)
                         check = IsSameType(HappyType.Number, leftOperand, rightOperand);
@@ -80,45 +74,37 @@ namespace dumbo.Compiler.AST
                         check = IsSameType(HappyType.Text, leftOperand, rightOperand);
                     else
                         check = false;
-                    TypeAdder(td, HappyType.Boolean, check);
-                    break;
+                    return TypeAdder(HappyType.Boolean, check);
                 case BinaryOperatorType.GreaterThan:
                     check = IsSameType(HappyType.Number, leftOperand, rightOperand);
-                    TypeAdder(td, HappyType.Boolean, check);
-                    break;
+                    return TypeAdder(HappyType.Boolean, check);
                 case BinaryOperatorType.GreaterOrEqual:
                     check = IsSameType(HappyType.Number, leftOperand, rightOperand);
-                    TypeAdder(td, HappyType.Boolean, check);
-                    break;
+                    return TypeAdder(HappyType.Boolean, check);
                 case BinaryOperatorType.LessThan:
                     check = IsSameType(HappyType.Number, leftOperand, rightOperand);
-                    TypeAdder(td, HappyType.Boolean, check);
-                    break;
+                    return TypeAdder(HappyType.Boolean, check);
                 case BinaryOperatorType.LessOrEqual:
                     check = IsSameType(HappyType.Number, leftOperand, rightOperand);
-                    TypeAdder(td, HappyType.Boolean, check);
-                    break;
+                    return TypeAdder(HappyType.Boolean, check);
                 case BinaryOperatorType.Or:
                     check = IsSameType(HappyType.Boolean, leftOperand, rightOperand);
-                    TypeAdder(td, HappyType.Boolean, check);
-                    break;
+                    return TypeAdder(HappyType.Boolean, check);
                 case BinaryOperatorType.And:
                     check = IsSameType(HappyType.Boolean, leftOperand, rightOperand);
-                    TypeAdder(td, HappyType.Boolean, check);
-                    break;
+                    return TypeAdder(HappyType.Boolean, check);
                 default:
                     throw new FormatException("Uknown Binary Operator");
             }
-            return td;
         }
 
         #region Helper functions
-        private void TypeAdder(TypeDescriptor td, HappyType typeToAdd, bool check)
+        private TypeDescriptor TypeAdder(HappyType typeToAdd, bool check)
         {
             if (check)
-                td.Add(typeToAdd);
+                return new TypeDescriptor(typeToAdd);
             else
-                td.Add(HappyType.Error);
+                return new TypeDescriptor(HappyType.Error);
         }
 
         private bool IsSameType(HappyType checkType, HappyType leftOperand, HappyType rightOperand)

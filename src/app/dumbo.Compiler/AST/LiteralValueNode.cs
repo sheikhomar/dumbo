@@ -16,10 +16,7 @@ namespace dumbo.Compiler.AST
 
         public override TypeDescriptor GetHappyType(ISymbolTable symbolTable)
         {
-            var typeDescriptor = new TypeDescriptor();
-            typeDescriptor.Add(this.Type);
-
-            return typeDescriptor;
+            return new TypeDescriptor(Type);
         }
 
         public override void PrettyPrint(IPrettyPrinter prettyPrinter)

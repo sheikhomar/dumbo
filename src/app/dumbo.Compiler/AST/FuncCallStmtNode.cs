@@ -5,12 +5,12 @@ namespace dumbo.Compiler.AST
 {
     public class FuncCallStmtNode : StmtNode
     {
-        public FuncCallStmtNode(FuncCallNode funcCallNode)
+        public FuncCallStmtNode(FuncCallExprNode funcCallNode)
         {
             CallNode = funcCallNode;
         }
 
-        public FuncCallNode CallNode { get; }
+        public FuncCallExprNode CallNode { get; }
 
         public override void PrettyPrint(IPrettyPrinter prettyPrinter)
         {

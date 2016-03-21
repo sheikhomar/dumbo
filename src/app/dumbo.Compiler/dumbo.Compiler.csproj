@@ -58,7 +58,7 @@
     <Compile Include="AST\ExpressionNode.cs" />
     <Compile Include="AST\FormalParamListNode.cs" />
     <Compile Include="AST\FormalParamNode.cs" />
-    <Compile Include="AST\FuncCallNode.cs" />
+    <Compile Include="AST\FuncCallExprNode.cs" />
     <Compile Include="AST\FuncCallStmtNode.cs" />
     <Compile Include="AST\FuncDeclListNode.cs" />
     <Compile Include="AST\FuncDeclNode.cs" />

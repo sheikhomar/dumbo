@@ -29,6 +29,8 @@ namespace dumbo.Compiler.AST
             //Function in table do here
             AddFunctionsToTable(FuncDecls, analyser);
 
+            // Add all constants
+
             //Program visit
             Program.CCAnalyse(analyser);
 

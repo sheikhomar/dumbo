@@ -75,11 +75,10 @@ namespace dumbo.Compiler.CCAnalysis
         public void AddFunctionToSymbolTable(string name, IList<HappyType> parametertypes, IList<HappyType> returntypes, int line, int column)
         {
             var entry = SymbolTable.RetrieveSymbol(name);
-            var function = entry.Type as SymbolTableFunctionType;
-            if (function == null)
+            if (entry == null)
                 SymbolTable.EnterSymbol(name, new SymbolTableFunctionType(parametertypes, returntypes), true);
             else
-                ErrorReporter.AddError(new CCError($"The function {name} has already been declared, and cannot be declared more than once", line, column));
+                ErrorReporter.AddError(new CCError($"The function {name} has already been declared, and cannot be declared ", line, column));
         }
     }
 }

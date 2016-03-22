@@ -3,6 +3,7 @@ using System.Text;
 using dumbo.Compiler.CCAnalysis;
 using dumbo.Compiler.PrettyPrint;
 using dumbo.Compiler.SymbolTable;
+using System.Collections.Generic;
 
 namespace dumbo.Compiler.AST
 {
@@ -46,19 +47,6 @@ namespace dumbo.Compiler.AST
                 else
                     return new TypeDescriptor(functionType.returntypes[0]);
             }
-            //var typeDescriptor = new TypeDescriptor(Parameters[0].GetHappyType(symbolTable).Types[0]);
-
-            //for (int i = 0; i < Parameters.Count; i++)
-            //{
-            //    var parameterTypeList = Parameters[i].GetHappyType(symbolTable).Types;
-
-            //    for (int j = 0; j < parameterTypeList.Count; j++)
-            //    {
-            //        if(i != 0 && j != 0)
-            //            typeDescriptor.Add(parameterTypeList[j]);
-            //    }
-            //}
-            //return typeDescriptor;
         }
 
         public override void PrettyPrint(IPrettyPrinter prettyPrinter)
@@ -87,33 +75,39 @@ namespace dumbo.Compiler.AST
         {
             var functionType = function.Type as SymbolTableFunctionType;
             if (functionType == null)
-            {
-                var error = new CCError("Cannot be called as a funtion because it is a variable", this.Line, this.Column);
-                analyser.ErrorReporter.AddError(error);
-            }
+                analyser.ErrorReporter.AddError(new CCError("Cannot be called as a funtion because it is a variable", this.Line, this.Column));
             else
             {
-                if (functionType.parametertypes.Count == Parameters.Count)
-                {
-
-                    for (int i = 0; i < Parameters.Count; i++)
-                    {
-                        var formalParam = functionType.parametertypes[i];
-                        var actualParam = Parameters[i];
-
-                        if (!actualParam.GetHappyType(analyser.SymbolTable).GetFirst().Equals(formalParam))
-                        {
-                            var error = new CCError($"The actual parameter number {i + 1} doesn't match the formal parameter", this.Line, this.Column);
-                            analyser.ErrorReporter.AddError(error);
-                        }
-                    }
-                }
+                if(functionType.parametertypes.Count < Parameters.Count)
+                    analyser.ErrorReporter.AddError(new CCError("There is too many actual parameters compared to the number of formal parameters", Line, Column));
                 else
                 {
-                    var error = new CCError("The number of actual parameters doesn't match the number of formal parameters", Line, Column);
-                    analyser.ErrorReporter.AddError(error);
+                    var actualParamTypeList = new List<HappyType>();
+                    foreach (var actualParam in Parameters)
+                        actualParamTypeList.AddRange(actualParam.GetHappyType(analyser.SymbolTable).Types);
+
+                    TypeCheckParameters(functionType.parametertypes, actualParamTypeList, analyser);
                 }
             }
+        }
+
+        private void TypeCheckParameters(IList<HappyType> formalParameters, IList<HappyType> actualParameters, ICCAnalyser analyser)
+        {
+            if(formalParameters.Count == actualParameters.Count)
+            {
+                for (int i = 0; i < formalParameters.Count; i++)
+                {
+                    var formalParam = formalParameters[i];
+                    var actualParam = actualParameters[i];
+
+                    if (!actualParam.Equals(formalParam))
+                    {
+                        analyser.ErrorReporter.AddError(new CCError($"The actual parameter number {i + 1} doesn't match the formal parameter", Line, Column));
+                    }
+                }
+            }
+            else
+                analyser.ErrorReporter.AddError(new CCError($"The number of actual and formal parameters isn't compatible. There is {formalParameters.Count} formal parameters and {actualParameters.Count} actual parameters", Line, Column));
         }
     }
 }

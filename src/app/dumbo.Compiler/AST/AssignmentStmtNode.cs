@@ -40,7 +40,7 @@ namespace dumbo.Compiler.AST
                 analyser.ErrorReporter.AddError("Assignment Error: More Expressions than identifiers");
                 return;
             }
-
+            
             exprTypeList = CheckExpressionForMultipleReturnTypes(analyser);                        
             if (Identifiers.Count > exprTypeList.Count)
                 analyser.ErrorReporter.AddError("Assignment Error: Too many identifiers compared to expression types.");
@@ -85,6 +85,7 @@ namespace dumbo.Compiler.AST
             foreach (var expr in Expressions)
             {
                 expressionTypes.AddRange(expr.GetHappyType(analyser.SymbolTable).Types);
+                expr.CCAnalyse(analyser);
             }
             return expressionTypes;
         }

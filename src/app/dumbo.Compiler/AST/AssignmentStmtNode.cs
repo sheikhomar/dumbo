@@ -32,18 +32,28 @@ namespace dumbo.Compiler.AST
 
         public override void CCAnalyse(ICCAnalyser analyser)
         {
+            IList<HappyType> exprTypeList = new List<HappyType>();
+
             // Check for the correct count of identifiers and expressions
             if (Identifiers.Count < Expressions.Count)
+            {
                 analyser.ErrorReporter.AddError("Assignment Error: More Expressions than identifiers");
-            else if (Identifiers.Count > Expressions.Count && Expressions.Count != 1)
-                analyser.ErrorReporter.AddError("Assignment Error: Too many identifiers compared to expressions");
+                return;
+            }
 
-            if(Identifiers.Count == Expressions.Count)
+            exprTypeList = CheckExpressionForMultipleReturnTypes(analyser);                        
+            if (Identifiers.Count > exprTypeList.Count)
+                analyser.ErrorReporter.AddError("Assignment Error: Too many identifiers compared to expression types.");
+            else if(Identifiers.Count < exprTypeList.Count)
+                analyser.ErrorReporter.AddError("Assignment Error: Too many expression types compared to identifiers.");
+
+
+            if (Identifiers.Count == exprTypeList.Count)
+            {
                 for (int i = 0; i < Identifiers.Count; i++)
                 {
                     var id = Identifiers[i];
-                    var expr = Expressions[i];
-
+                    var exprType = exprTypeList[i];
                     var entry = analyser.SymbolTable.RetrieveSymbol(id.Name);
                     if (entry == null)
                     {
@@ -58,42 +68,7 @@ namespace dumbo.Compiler.AST
                         }
                         else
                         {
-                            expr.CCAnalyse(analyser);
-                            var typeDescriptor = expr.GetHappyType(analyser.SymbolTable);
-                            var exprType = typeDescriptor.GetFirst();
                             if (type.Type != exprType)
-                            {
-                                analyser.ErrorReporter.AddError(new CCError($"The variable '{id.Name}' cannot be assigned the type {exprType}.", Line,
-                                Column));
-                            }
-                        }
-                    }
-                }
-            else
-            {
-                for (int i = 0; i < Identifiers.Count; i++)
-                {
-                    var id = Identifiers[i];
-
-                    var entry = analyser.SymbolTable.RetrieveSymbol(id.Name);
-                    if (entry == null)
-                    {
-                        analyser.ErrorReporter.AddError(new CCError($"Identifier '{id.Name}' is undeclared.", Line, Column));
-                    }
-                    else
-                    {
-                        var type = entry.Type as SymbolTablePrimitiveType;
-                        if (type == null)
-                        {
-                            analyser.ErrorReporter.AddError(new CCError($"Assignment to a function is not allowed.", Line,
-                                Column));
-                        }
-                        else
-                        {
-                            var expr = Expressions[0];
-                            var typeDescriptor = expr.GetHappyType(analyser.SymbolTable);
-                            var exprType = typeDescriptor.Types[i];
-                            if (exprType != type.Type)
                             {
                                 analyser.ErrorReporter.AddError(new CCError($"The variable '{id.Name}' cannot be assigned the type {exprType}.", Line, Column));
                             }
@@ -101,28 +76,17 @@ namespace dumbo.Compiler.AST
                     }
                 }
             }
-
-            // Generating the TypeLists
-            IList<HappyType> idTypeList = GetHappyTypeList(Identifiers, analyser.SymbolTable);
-            IList<HappyType> exprTypeList = GetHappyTypeList(Expressions, analyser.SymbolTable);
-
-            // Checking if the assignment is typecorrect
-            if (exprTypeList.Count == 1 && !analyser.IsListEqualToType(idTypeList, exprTypeList[0]))
-                analyser.ErrorReporter.AddError("Type Error: The assignment is not type correct.");
-            else if (!analyser.IsListsEqual(idTypeList, exprTypeList))
-                analyser.ErrorReporter.AddError("Type Error: The assignment is not type correct.");
         }
 
-        private IList<HappyType> GetHappyTypeList(IEnumerable<ExpressionNode> nodeList, ISymbolTable st)
+        private IList<HappyType> CheckExpressionForMultipleReturnTypes(ICCAnalyser analyser)
         {
-            IList<HappyType> typeList = new List<HappyType>();
+            var expressionTypes = new List<HappyType>();
 
-            foreach (var node in nodeList)
+            foreach (var expr in Expressions)
             {
-                typeList.Add(node.GetHappyType(st).GetFirst());
+                expressionTypes.AddRange(expr.GetHappyType(analyser.SymbolTable).Types);
             }
-
-            return typeList;
+            return expressionTypes;
         }
     }
 }

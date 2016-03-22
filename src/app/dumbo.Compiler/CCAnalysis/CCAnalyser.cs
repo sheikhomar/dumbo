@@ -11,7 +11,7 @@ namespace dumbo.Compiler.CCAnalysis
     public class CCAnalyser : ICCAnalyser
     {
         private readonly ISymbolTable _symbolTable;
-        private readonly IErrorReporter _errorReporter; 
+        private readonly IErrorReporter _errorReporter;
 
         public CCAnalyser()
         {
@@ -54,6 +54,24 @@ namespace dumbo.Compiler.CCAnalysis
                 i++;
             }
             return true;
+        }
+
+        public void AddToSymbolTable(string name)
+        {
+            //Hide symbol table? Only allow write via this method. Should still be possible to read
+            ////Todo - check that symbol is not in table | gives exception atm
+            //analyser.SymbolTable.RetrieveSymbol(param.Name);
+
+            ////Does exists
+            ////y  - is hidable
+            ////y - is in this scope?
+            ////y - I throw error         // x val is already declared in this scope | A
+            ////n - I put my val.
+            ////n - I throw error                 // x val is Global or parameter. | A
+            ////n - alles ok
+
+            ////Check if exists, then check unhidable - if not den we have no idea whether its in our scope or another...
+            //analyser.SymbolTable.EnterSymbol(param.Name, new SymbolTablePrimitiveType(param.Type), true);
         }
     }
 }

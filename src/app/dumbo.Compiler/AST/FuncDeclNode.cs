@@ -60,68 +60,67 @@ namespace dumbo.Compiler.AST
         {
             analyser.SymbolTable.OpenScope();
 
-            AddParameters(analyser);
+            AddParametersToSymbolTable(analyser);
             Body.CCAnalyse(analyser);
+            CheckGlobalParameters(analyser);
             CheckReturnTypes(analyser);
 
             analyser.SymbolTable.CloseScope();
         }
 
-        private void AddParameters(ICCAnalyser analyser)
+
+        private void AddParametersToSymbolTable(ICCAnalyser analyser)
         {
             foreach (var param in Parameters)
             {
-                //Todo - check that symbol is not in table | gives exception atm
-                analyser.SymbolTable.RetrieveSymbol(param.Name);
-
-
-                analyser.SymbolTable.EnterSymbol(param.Name, new SymbolTablePrimitiveType(param.Type), true);
+                analyser.AddVariableToSymbolTable(param.Name,param.Type,true,param.Line,param.Column);
             }
         }
+
+        private void CheckGlobalParameters(ICCAnalyser analyser)
+        {
+            var parameters = ConvertParametersToHappyType();
+            int numberOfNothing = 0;
+
+            foreach (var parameter in parameters)
+            {
+                if (parameter.Equals(HappyType.Nothing))
+                    numberOfNothing++;
+            }
+
+            if (numberOfNothing == 0 && Parameters.Count > 0)
+                return;
+            if (numberOfNothing == 1 && Parameters.Count == 1)
+                return;
+            if(numberOfNothing > 1)
+            {
+                analyser.ErrorReporter.AddError("Function cannot contain multiple Nothing as return");
+                return;
+            }
+        }
+
 
         private void CheckReturnTypes(ICCAnalyser analyser)
         {
             var returnStms = GetReturnStmtNodes();
+            var parameters = ConvertParametersToHappyType();
 
-            if (Parameters.Count == 0)
+            if (ContaintsNothing(parameters))
                 CheckNothingReturnTypeCorectness(returnStms, analyser);
             else
                 CheckOneOrMoreReturnTypeCorectness(returnStms, analyser);
-
-        }
-        private IList<ReturnStmtNode> GetReturnStmtNodes()
-        {
-            var returnStms = new List<ReturnStmtNode>();
-
-            foreach (var stmt in Body)
-            {
-                if (stmt is ReturnStmtNode)
-                    returnStms.Add(((ReturnStmtNode)stmt));
-            }
-
-            return returnStms;
         }
 
-        private IList<HappyType> ConvertParametersToHappyType()
-        {
-            var retList = new List<HappyType>();
-
-            foreach (var parameter in Parameters)
-            {
-                retList.Add(parameter.Type);
-            }
-
-            return retList;
-        }
 
         private void CheckNothingReturnTypeCorectness(IList<ReturnStmtNode> returnStms, ICCAnalyser analyser)
         {
             foreach (var retStmt in returnStms)
             {
                 if (retStmt.GeteReturnTypes(analyser.SymbolTable).GetNumberOfTypes() != 0)
-                    analyser.ErrorReporter.AddError("Function has return type Nothing but return x,y has type xxxx");
+                    analyser.ErrorReporter.AddError("Function has return type (Nothing+maybe more) but return x,y has type xxxx");
             }
         }
+
 
         private void CheckOneOrMoreReturnTypeCorectness(IList<ReturnStmtNode> returnStms, ICCAnalyser analyser)
         {
@@ -135,5 +134,43 @@ namespace dumbo.Compiler.AST
                     analyser.ErrorReporter.AddError("Function has return types yyy but return x,y has types xxxx");
             }
         }
+
+
+        private IList<ReturnStmtNode> GetReturnStmtNodes()
+        {
+            var returnStms = new List<ReturnStmtNode>();
+
+            foreach (var stmt in Body)
+            {
+                if (stmt is ReturnStmtNode)
+                    returnStms.Add(((ReturnStmtNode)stmt));
+            }
+
+            return returnStms;
+        }
+
+
+        private IList<HappyType> ConvertParametersToHappyType()
+        {
+            var retList = new List<HappyType>();
+
+            foreach (var parameter in Parameters)
+            {
+                retList.Add(parameter.Type);
+            }
+
+            return retList;
+        }
+
+        private bool ContaintsNothing(IList<HappyType> list)
+        {
+            foreach (var type in list)
+            {
+                if (type.Equals(HappyType.Nothing))
+                    return true;
+            }
+            return false;
+        }
+
     }
 }

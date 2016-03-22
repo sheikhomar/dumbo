@@ -1,0 +1,21 @@
+Program
+
+	Number a := 20
+	Number b := 10
+	Number c := 15
+	Number d := 5
+	Number e
+	
+	e = (a + b) * c / d //(30*15) / 5 ------- should write 90
+	write("Value of (a + b) * c / d is: " + e + "\n")
+	
+	e = ((a + b) * c) / d;    // (30 * 15 ) / 5 -------- should write 90
+	write("Value of ((a + b) * c) / d is: " + e + "\n")
+	
+   e = (a + b) * (c / d);   // (30) * (15/5) ------- should write 90
+   write("Value of (a + b) * (c / d) is: " + e "\n");
+
+   e = a + (b * c) / d;     //  20 + (150/5) ------- should write 50
+   write("Value of a + (b * c) / d is: " + e + "\n");
+
+End Program

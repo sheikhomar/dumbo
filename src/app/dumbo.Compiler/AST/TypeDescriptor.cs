@@ -16,6 +16,15 @@ namespace dumbo.Compiler.AST
             Add(happyType);
         }
 
+        public TypeDescriptor(IList<HappyType> happyTypeList)
+        {
+            _types = new List<HappyType>();
+            foreach (var type in happyTypeList)
+            {
+                _types.Add(type);
+            }
+        }
+
         public IEnumerable<HappyType> Types => _types;
         public int GetNumberOfTypes() => _types.Count;
         public void Add(HappyType type) => _types.Add(type);
@@ -33,19 +42,6 @@ namespace dumbo.Compiler.AST
             if (index >= _types.Count)
                 throw new IndexOutOfRangeException("No type at index " + index);
             return _types[index];
-        }
-
-        public void AddFirstToList(IList<HappyType> list)
-        {
-            list.Add(GetFirst());
-        }
-
-        public void AddTypesToList(IList<HappyType> list)
-        {
-            foreach (var type in _types)
-            {
-                list.Add(type);
-            }
         }
     }
 }

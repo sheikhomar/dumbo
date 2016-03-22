@@ -56,20 +56,30 @@ namespace dumbo.Compiler.CCAnalysis
             return true;
         }
 
-        public void AddVariableToSymbolTable(string name, HappyType Type, bool Unhideable, int Line, int Column)
+        public void AddVariableToSymbolTable(string name, HappyType type, bool unhideable, int line, int column)
         {
             var entry = SymbolTable.RetrieveSymbol(name);
             if (entry == null)
-                SymbolTable.EnterSymbol(name, new SymbolTablePrimitiveType(Type), Unhideable);
+                SymbolTable.EnterSymbol(name, new SymbolTablePrimitiveType(type), unhideable);
             else if (entry.IsUnhideable == false)
             {
                 if (entry.Depth == SymbolTable.Depth)
-                    ErrorReporter.AddError(new CCError($"The variable {name} is already declared in this scope", Line, Column));
+                    ErrorReporter.AddError(new CCError($"The variable {name} is already declared in this scope", line, column));
                 else
-                    SymbolTable.EnterSymbol(name, new SymbolTablePrimitiveType(Type), Unhideable);
+                    SymbolTable.EnterSymbol(name, new SymbolTablePrimitiveType(type), unhideable);
             }
             else if (entry.IsUnhideable == true)
-                ErrorReporter.AddError(new CCError($"The variable {name} can't override a unhideable variable", Line, Column));
+                ErrorReporter.AddError(new CCError($"The variable {name} can't override a unhideable variable", line, column));
+        }
+
+        public void AddFunctionToSymbolTable(string name, IList<HappyType> parametertypes, IList<HappyType> returntypes, int line, int column)
+        {
+            var entry = SymbolTable.RetrieveSymbol(name);
+            var function = entry.Type as SymbolTableFunctionType;
+            if (function == null)
+                SymbolTable.EnterSymbol(name, new SymbolTableFunctionType(parametertypes, returntypes), true);
+            else
+                ErrorReporter.AddError(new CCError($"The function {name} has already been declared, and cannot be declared more than once", line, column));
         }
     }
 }

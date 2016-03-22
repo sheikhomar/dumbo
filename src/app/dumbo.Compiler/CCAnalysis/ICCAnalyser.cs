@@ -16,6 +16,6 @@ namespace dumbo.Compiler.CCAnalysis
         bool IsListEqualToType(IList<HappyType> inpt, HappyType inpt2);
         bool IsEqual(HappyType inpt, HappyType inpt2);
         void AddVariableToSymbolTable(string name, HappyType Type, bool Unhideable, int Line, int Column);
-
+        void AddFunctionToSymbolTable(string name, IList<HappyType> parametertypes, IList<HappyType> returntypes, int Line, int Column);
     }
 }

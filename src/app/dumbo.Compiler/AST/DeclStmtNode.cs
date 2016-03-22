@@ -27,7 +27,7 @@ namespace dumbo.Compiler.AST
         {
             foreach (var id in Identifiers)
             {
-                analyser.SymbolTable.EnterSymbol(id.Name, new SymbolTablePrimitiveType(Type));
+                analyser.AddVariableToSymbolTable(id.Name, Type, false, Line, Column);
             }
 
             //

@@ -52,7 +52,7 @@ namespace dumbo.Compiler.AST
             // Adding identifiers to symboltable
             foreach (var id in Identifiers)
             {
-                analyser.SymbolTable.EnterSymbol(id.Name, new SymbolTablePrimitiveType(Type));
+                analyser.AddVariableToSymbolTable(id.Name, Type, false, Line, Column);
             }
         }
 

@@ -546,6 +546,20 @@ Function aa() return boolean, boolean
 End function
 
 
+ //New Program 
+Program
+	text t := aa(bb(11))
+End Program
+
+Function aa(number a, boolean b) return text
+	return "ALLO"
+End Function
+
+Function bb(Number a) return number, boolean
+	return 11, true
+End Function
+
+
  //New Program Failing
 Program
     a( )
@@ -682,6 +696,34 @@ End Program
 Function aa() return boolean, boolean
 	return true, false
 End function
+
+
+ //New Program Failing
+Program
+	text t := aa(bb(11))
+End Program
+
+Function aa(number a, boolean b) return text
+	return "ALLO"
+End Function
+
+Function bb(Number a) return number, boolean, text
+	return 11, true, ""
+End Function
+
+
+ //New Program Failing
+Program
+	text t := aa(bb(11))
+End Program
+
+Function aa(number a, boolean b) return text
+	return "ALLO"
+End Function
+
+Function bb(Number a) return number
+	return 11
+End Function
 
 // ************************FuncDecl************************
  //New Program 

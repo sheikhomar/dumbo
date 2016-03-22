@@ -2,6 +2,7 @@
 {
     public enum HappyType
     {
+        Nothing,
         Number,
         Text,
         Boolean,

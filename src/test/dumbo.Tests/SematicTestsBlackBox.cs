@@ -12,7 +12,7 @@ namespace dumbo.Tests.SyntaxAnalysis
     public class SematicTestsBlackBox
     {
         [Test]
-        public void TestCodeSnippetSematic()//Discussion is needed, check fail info -- It doesn't make sence we allow this
+        public void TestCodeSnippetSematic()
         {
             var parser = new Parser(Utils.GetGrammarTablePath());
 

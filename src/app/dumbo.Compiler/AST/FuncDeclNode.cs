@@ -60,14 +60,9 @@ namespace dumbo.Compiler.AST
         {
             analyser.SymbolTable.OpenScope();
 
-            if (Parameters.Count != 0)
-                AddParameters(analyser);
-
-            //For each element in the list do the check
-            //If the element is a return stmt then check in relation to the formal parameters 
-
-
+            AddParameters(analyser);
             Body.CCAnalyse(analyser);
+            CheckReturnTypes(analyser);
 
             analyser.SymbolTable.CloseScope();
         }
@@ -76,7 +71,68 @@ namespace dumbo.Compiler.AST
         {
             foreach (var param in Parameters)
             {
+                //Todo - check that symbol is not in table | gives exception atm
+                analyser.SymbolTable.RetrieveSymbol(param.Name);
+
+
                 analyser.SymbolTable.EnterSymbol(param.Name, new SymbolTablePrimitiveType(param.Type), true);
+            }
+        }
+
+        private void CheckReturnTypes(ICCAnalyser analyser)
+        {
+            var returnStms = GetReturnStmtNodes();
+
+            if (Parameters.Count == 0)
+                CheckNothingReturnTypeCorectness(returnStms, analyser);
+            else
+                CheckOneOrMoreReturnTypeCorectness(returnStms, analyser);
+
+        }
+        private IList<ReturnStmtNode> GetReturnStmtNodes()
+        {
+            var returnStms = new List<ReturnStmtNode>();
+
+            foreach (var stmt in Body)
+            {
+                if (stmt is ReturnStmtNode)
+                    returnStms.Add(((ReturnStmtNode)stmt));
+            }
+
+            return returnStms;
+        }
+
+        private IList<HappyType> ConvertParametersToHappyType()
+        {
+            var retList = new List<HappyType>();
+
+            foreach (var parameter in Parameters)
+            {
+                retList.Add(parameter.Type);
+            }
+
+            return retList;
+        }
+
+        private void CheckNothingReturnTypeCorectness(IList<ReturnStmtNode> returnStms, ICCAnalyser analyser)
+        {
+            foreach (var retStmt in returnStms)
+            {
+                if (retStmt.GeteReturnTypes(analyser.SymbolTable).GetNumberOfTypes() != 0)
+                    analyser.ErrorReporter.AddError("Function has return type Nothing but return x,y has type xxxx");
+            }
+        }
+
+        private void CheckOneOrMoreReturnTypeCorectness(IList<ReturnStmtNode> returnStms, ICCAnalyser analyser)
+        {
+            var parametersAsHappyType = ConvertParametersToHappyType();
+
+            foreach (var retStmt in returnStms)
+            {
+                var retStmtHappyTypes = retStmt.GeteReturnTypes(analyser.SymbolTable).GetAsList();
+
+                if (!analyser.IsListsEqual(parametersAsHappyType, retStmtHappyTypes))
+                    analyser.ErrorReporter.AddError("Function has return types yyy but return x,y has types xxxx");
             }
         }
     }

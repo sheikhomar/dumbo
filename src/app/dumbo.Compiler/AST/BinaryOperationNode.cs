@@ -32,7 +32,7 @@ namespace dumbo.Compiler.AST
             TypeDescriptor rightOperandDesc = RightOperand.GetHappyType(symbolTable);
             HappyType lo = HappyType.Error, ro = HappyType.Error;
 
-            if (leftOperandDesc.Types.Count == 1 || rightOperandDesc.Types.Count == 1)
+            if (leftOperandDesc.GetNumberOfTypes() == 1 || rightOperandDesc.GetNumberOfTypes() == 1)
             {
                 lo = leftOperandDesc.GetFirst();
                 ro = rightOperandDesc.GetFirst();

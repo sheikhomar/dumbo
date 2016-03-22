@@ -27,7 +27,7 @@ namespace dumbo.Compiler.AST
         {
             TypeDescriptor td = Expression.GetHappyType(symbolTable);
 
-            if (td.Types.Count == 1)
+            if (td.GetNumberOfTypes() == 1)
                 return EvaluateType(td.GetFirst());
             else
             {

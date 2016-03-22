@@ -16,18 +16,36 @@ namespace dumbo.Compiler.AST
             Add(happyType);
         }
 
-        public IList<HappyType> Types => _types;
-
-        public void Add(HappyType type)
-        {
-            _types.Add(type);
-        }
+        public IEnumerable<HappyType> Types => _types;
+        public int GetNumberOfTypes() => _types.Count;
+        public void Add(HappyType type) => _types.Add(type);
+        public IList<HappyType> GetAsList() => new List<HappyType>();
 
         public HappyType GetFirst()
         {
             if  (_types.Any())
                 return _types[0];
             throw new IndexOutOfRangeException("Type descriptor is empty.");
+        }
+
+        public HappyType GetAt(int index)
+        {
+            if (index >= _types.Count)
+                throw new IndexOutOfRangeException("No type at index " + index);
+            return _types[index];
+        }
+
+        public void AddFirstToList(IList<HappyType> list)
+        {
+            list.Add(GetFirst());
+        }
+
+        public void AddTypesToList(IList<HappyType> list)
+        {
+            foreach (var type in _types)
+            {
+                list.Add(type);
+            }
         }
     }
 }

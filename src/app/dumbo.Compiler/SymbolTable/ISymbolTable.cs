@@ -15,5 +15,6 @@ namespace dumbo.Compiler.SymbolTable
         SymbolTableEntry RetrieveSymbol(string name);
 
         bool DeclaredLocally(string name);
+        int Depth { get; }
     }
 }

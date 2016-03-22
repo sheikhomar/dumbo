@@ -56,22 +56,20 @@ namespace dumbo.Compiler.CCAnalysis
             return true;
         }
 
-        public void AddToSymbolTable(string name)
+        public void AddVariableToSymbolTable(string name, HappyType Type, bool Unhideable, int Line, int Column)
         {
-            //Hide symbol table? Only allow write via this method. Should still be possible to read
-            ////Todo - check that symbol is not in table | gives exception atm
-            //analyser.SymbolTable.RetrieveSymbol(param.Name);
-
-            ////Does exists
-            ////y  - is hidable
-            ////y - is in this scope?
-            ////y - I throw error         // x val is already declared in this scope | A
-            ////n - I put my val.
-            ////n - I throw error                 // x val is Global or parameter. | A
-            ////n - alles ok
-
-            ////Check if exists, then check unhidable - if not den we have no idea whether its in our scope or another...
-            //analyser.SymbolTable.EnterSymbol(param.Name, new SymbolTablePrimitiveType(param.Type), true);
+            var entry = SymbolTable.RetrieveSymbol(name);
+            if (entry == null)
+                SymbolTable.EnterSymbol(name, new SymbolTablePrimitiveType(Type), Unhideable);
+            else if (entry.IsUnhideable == false)
+            {
+                if (entry.Depth == SymbolTable.Depth)
+                    ErrorReporter.AddError(new CCError($"The variable {name} is already declared in this scope", Line, Column));
+                else
+                    SymbolTable.EnterSymbol(name, new SymbolTablePrimitiveType(Type), Unhideable);
+            }
+            else if (entry.IsUnhideable == true)
+                ErrorReporter.AddError(new CCError($"The variable {name} can't override a unhideable variable", Line, Column));
         }
     }
 }

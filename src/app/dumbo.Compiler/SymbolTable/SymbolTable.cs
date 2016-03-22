@@ -17,7 +17,7 @@ namespace dumbo.Compiler.SymbolTable
         }
 
         private Dictionary<string, SymbolTableEntry> Table { get; set; }
-        private int Depth { get; set; }
+        public int Depth { get; private set; }
         private List<string> DepthContent { get; set; }
         private Stack<List<string>> DepthContentStack { get; set; }
 

@@ -520,6 +520,32 @@ Function aa(booLean a, boolean b, text c, number d) return nothing
 End functIon
 
 
+ //New Program 
+Program
+	boolean a, b
+	Number c, d
+	d := 1
+	a, b, c := aa(), d
+End Program
+
+Function aa() return boolean, boolean
+	return true, false
+End function
+
+
+ //New Program 
+Program
+	boolean a, b
+	Number c, d
+	d := 1
+	c, b, a := d, aa()
+End Program
+
+Function aa() return boolean, boolean
+	return true, false
+End function
+
+
  //New Program Failing
 Program
     a( )
@@ -629,6 +655,32 @@ End functIon
 
 Function b(text a) return number
 	Return 1
+End function
+
+
+ //New Program Failing
+Program
+	boolean a, b
+	Number c, d
+	d := 1
+	a, c, b := aa(), d
+End Program
+
+Function aa() return boolean, boolean
+	return true, false
+End function
+
+
+ //New Program Failing
+Program
+	boolean a, b
+	Number c, d
+	d := 1
+	a, c, b := d, aa()
+End Program
+
+Function aa() return boolean, boolean
+	return true, false
 End function
 
 // ************************FuncDecl************************

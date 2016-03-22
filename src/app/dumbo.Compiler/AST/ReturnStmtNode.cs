@@ -1,6 +1,7 @@
 using System.Text;
 using dumbo.Compiler.CCAnalysis;
 using dumbo.Compiler.PrettyPrint;
+using dumbo.Compiler.SymbolTable;
 
 namespace dumbo.Compiler.AST
 {
@@ -12,6 +13,23 @@ namespace dumbo.Compiler.AST
         }
 
         public ExpressionListNode Expressions { get; }
+
+        public TypeDescriptor GeteReturnTypes(ISymbolTable symbolTable)
+        {
+            //First type
+            var td = new TypeDescriptor(Expressions[0].GetHappyType(symbolTable).GetFirst());
+
+            //Then the rest
+            for (int i = 1; i < Expressions.Count; i++)
+            {
+                var typeDec = Expressions[i].GetHappyType(symbolTable); //What to do if functions can be return type
+
+                //This should not be allowed
+                td.Add(typeDec.GetFirst());
+            }
+            return td;
+        }
+
 
         public override void PrettyPrint(IPrettyPrinter prettyPrinter)
         {

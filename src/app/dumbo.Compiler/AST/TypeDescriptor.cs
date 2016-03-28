@@ -28,7 +28,6 @@ namespace dumbo.Compiler.AST
         public IEnumerable<HappyType> Types => _types;
         public int GetNumberOfTypes() => _types.Count;
         public void Add(HappyType type) => _types.Add(type);
-        public IList<HappyType> GetAsList() => new List<HappyType>();
 
         public HappyType GetFirst()
         {

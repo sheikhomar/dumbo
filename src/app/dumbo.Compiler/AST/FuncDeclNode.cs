@@ -133,7 +133,7 @@ namespace dumbo.Compiler.AST
 
             foreach (var retStmt in returnStms)
             {
-                var retStmtHappyTypes = retStmt.GeteReturnTypes(analyser.SymbolTable).GetAsList();
+                var actualRetTypes = retStmt.GeteReturnTypes(analyser.SymbolTable).Types.ToList();
 
                 if (!analyser.IsListsEqual(parametersAsHappyType, retStmtHappyTypes))
                     analyser.ErrorReporter.AddError("Function has return types yyy but return x,y has types xxxx");

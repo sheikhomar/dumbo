@@ -21,7 +21,7 @@ namespace dumbo.Compiler.AST
                 return new TypeDescriptor(HappyType.Nothing);
 
             //First type
-            var happyTypeList = new List<HappyType>(Expressions[0].GetHappyType(symbolTable).GetAsList());
+            var happyTypeList = new List<HappyType>(Expressions[0].GetHappyType(symbolTable).Types);
 
             //Then the rest
             for (int i = 1; i < Expressions.Count; i++)

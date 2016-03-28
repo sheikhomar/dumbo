@@ -52,6 +52,9 @@ namespace dumbo.Compiler.AST
                         return new TypeDescriptor(HappyType.Number);
                     else if (leftOperand.Equals(rightOperand) && rightOperand == HappyType.Text)
                         return new TypeDescriptor(HappyType.Text);
+                    if ((leftOperand == HappyType.Text && rightOperand == HappyType.Number) ||
+                        (leftOperand == HappyType.Number && rightOperand == HappyType.Text))
+                        return new TypeDescriptor(HappyType.Text);
                     else
                         return new TypeDescriptor(HappyType.Error);
                 case BinaryOperatorType.Minus:

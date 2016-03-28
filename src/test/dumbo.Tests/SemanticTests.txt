@@ -1646,7 +1646,7 @@ end functIon
 
  //New Program 
 Program
-	text a = aa()
+	text a := aa()
 End Program
 
 Function aa() return text
@@ -2221,7 +2221,7 @@ Program
 	number a := 0
 		repeat while true
 			boolean a := true
-			if(true)
+			if(true) then
 				a := false
 			end if
 		end repeat
@@ -2233,7 +2233,7 @@ Program
 	number a := 0
 		repeat while true
 			number a := 1
-			if(true)
+			if(true) then
 				boolean a := true
 			else
 			    a := 2
@@ -2247,9 +2247,9 @@ Program
 	number a := 0
 		repeat while true
 			number a := 1
-			if(true)
+			if(true) then
 				boolean a := true
-			else if
+			else if true then
 			    a := 2
 			end if
 		end repeat
@@ -2261,9 +2261,8 @@ Program
 	number a := 0
 		repeat while true
 			number a := 1
-			if(true)
+			if(true) then
 				boolean a := true
-			else if
 			else
 				a := 2
 			end if
@@ -2276,7 +2275,7 @@ Program
 	number a := 0
 		repeat 1
 			boolean a := false
-			if(true)
+			if(true) then
 				a := true
 			else
 			    a := true
@@ -2298,7 +2297,7 @@ End Program
  //New Program 
 Program
 	number a := 0
-		if(true)
+		if(true) then
 			boolean a := true
 		end if
 		repeat while a = 0
@@ -2312,7 +2311,7 @@ Program
 	number a := 0
 		repeat while true
 			boolean a := true
-			if(true)
+			if(true) then
 				a := 1
 			end if
 		end repeat
@@ -2324,7 +2323,7 @@ Program
 	number a := 0
 		repeat while true
 			number a := 1
-			if(true)
+			if(true) then
 				boolean a := true
 			else
 			    a := false
@@ -2338,7 +2337,7 @@ Program
 	number a := 0
 		repeat while true
 			number a := 1
-			if(true)
+			if(true) then
 				boolean a := true
 			else if
 			    a := false
@@ -2352,7 +2351,7 @@ Program
 	number a := 0
 		repeat while true
 			number a := 1
-			if(true)
+			if(true) then
 				boolean a := true
 			else if
 			else
@@ -2367,7 +2366,7 @@ Program
 	number a := 0
 		repeat 1
 			boolean a := false
-			if(true)
+			if(true) then
 				a := 1
 			else
 			    a := 1
@@ -2389,7 +2388,7 @@ End Program
  //New Program Failing
 Program
 	number a := 0
-		if(true)
+		if(true) then
 			boolean a := true
 		end if
 		repeat while a

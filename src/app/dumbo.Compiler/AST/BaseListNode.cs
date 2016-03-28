@@ -29,6 +29,33 @@ namespace dumbo.Compiler.AST
             return _internalList[index] as T;
         }
         
+        /// <summary>
+        /// Find descendant nodes of a specific type T.
+        /// </summary>
+        /// <typeparam name="T">the type to look for</typeparam>
+        /// <returns></returns>
+        public IEnumerable<T> FindDescendants<T>() where T : class
+        {
+            var list = new List<T>();
+            foreach (var item in _internalList)
+            {
+                T tItem = item as T;
+                if (tItem != null)
+                    list.Add(tItem);
+
+                IHaveBlocks blocksItem = item as IHaveBlocks;
+                if (blocksItem != null)
+                {
+                    foreach (var block in blocksItem.GetBlocks())
+                    {
+                        list.AddRange(block.FindDescendants<T>());
+                    }
+                }
+            }
+
+            return list;
+        }
+
         public override void PrettyPrint(IPrettyPrinter prettyPrinter)
         {
             if (_internalList.Count == 0)

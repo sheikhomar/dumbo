@@ -10,7 +10,7 @@ namespace dumbo.Compiler.AST
     {
         private readonly IList<TBaseType> _internalList;
 
-        public BaseListNode()
+        protected BaseListNode()
         {
             _internalList = new List<TBaseType>();
         }

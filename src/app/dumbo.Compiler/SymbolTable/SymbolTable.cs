@@ -39,6 +39,8 @@ namespace dumbo.Compiler.SymbolTable
             foreach (string closingName in DepthContent)
             {
                 SymbolTableEntry entry = RetrieveSymbol(closingName);
+                if (entry == null)
+                    continue;
                 SymbolTableEntry outerEntry = entry.OuterDecl;
                 Table.Remove(closingName);
 

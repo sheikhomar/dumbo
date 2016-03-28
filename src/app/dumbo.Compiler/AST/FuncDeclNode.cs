@@ -61,7 +61,12 @@ namespace dumbo.Compiler.AST
             analyser.SymbolTable.OpenScope();
 
             AddParametersToSymbolTable(analyser);
-            Body.CCAnalyse(analyser);
+
+            // NOTE! We don't call Body.CCAnalyse(analyser) because
+            // StmtBlockNode opens and closes its own scope.
+            foreach (var innerStmt in Body)
+                innerStmt.CCAnalyse(analyser);
+
             CheckGlobalParameters(analyser);
             CheckReturnTypes(analyser);
 

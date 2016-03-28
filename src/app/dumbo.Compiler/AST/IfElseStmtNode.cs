@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Text;
 using dumbo.Compiler.CCAnalysis;
 using dumbo.Compiler.PrettyPrint;
@@ -39,6 +40,13 @@ namespace dumbo.Compiler.AST
         {
             base.CCAnalyse(analyser);
             Else.CCAnalyse(analyser);
+        }
+
+        public override IEnumerable<StmtBlockNode> GetBlocks()
+        {
+            foreach (var block in base.GetBlocks())
+                yield return block;
+            yield return Else;
         }
     }
 }

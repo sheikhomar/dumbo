@@ -8,7 +8,7 @@ using dumbo.Compiler.SymbolTable;
 
 namespace dumbo.Compiler.AST
 {
-    public class FuncDeclNode : BaseNode
+    public class FuncDeclNode : BaseNode, IHaveBlocks
     {
         public FuncDeclNode(IdentifierNode identifer, StmtBlockNode body)
         {
@@ -193,6 +193,10 @@ namespace dumbo.Compiler.AST
             }
             return false;
         }
-
+        
+        public IEnumerable<StmtBlockNode> GetBlocks()
+        {
+            yield return Body;
+        }
     }
 }

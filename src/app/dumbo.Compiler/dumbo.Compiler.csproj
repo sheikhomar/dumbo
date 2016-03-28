@@ -67,6 +67,7 @@
     <Compile Include="AST\IdentifierNode.cs" />
     <Compile Include="AST\IfElseStmtNode.cs" />
     <Compile Include="AST\IfStmtNode.cs" />
+    <Compile Include="AST\IHaveBlocks.cs" />
     <Compile Include="AST\LiteralValueNode.cs" />
     <Compile Include="AST\OperatorTranslator.cs" />
     <Compile Include="AST\RepeatStmtNode.cs" />

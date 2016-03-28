@@ -1,4 +1,5 @@
-﻿using System.Linq.Expressions;
+﻿using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Text;
 using dumbo.Compiler.CCAnalysis;
 using dumbo.Compiler.PrettyPrint;
@@ -6,7 +7,7 @@ using dumbo.Compiler.SymbolTable;
 
 namespace dumbo.Compiler.AST
 {
-    public class ProgramNode : BaseNode
+    public class ProgramNode : BaseNode, IHaveBlocks
     {
         public ProgramNode(StmtBlockNode body)
         {
@@ -25,6 +26,11 @@ namespace dumbo.Compiler.AST
         public override void CCAnalyse(ICCAnalyser analyser)
         {
             Body.CCAnalyse(analyser);
+        }
+        
+        public IEnumerable<StmtBlockNode> GetBlocks()
+        {
+            yield return Body;
         }
     }
 

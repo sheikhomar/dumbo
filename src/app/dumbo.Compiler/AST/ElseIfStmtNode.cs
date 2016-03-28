@@ -1,10 +1,11 @@
+using System.Collections.Generic;
 using System.Text;
 using dumbo.Compiler.CCAnalysis;
 using dumbo.Compiler.PrettyPrint;
 
 namespace dumbo.Compiler.AST
 {
-    public class ElseIfStmtNode : BaseNode
+    public class ElseIfStmtNode : BaseNode, IHaveBlocks
     {
         public ElseIfStmtNode(ExpressionNode predicate, StmtBlockNode body)
         {
@@ -31,6 +32,11 @@ namespace dumbo.Compiler.AST
 
             //Check body
             Body.CCAnalyse(analyser);
+        }
+
+        public IEnumerable<StmtBlockNode> GetBlocks()
+        {
+            yield return Body;
         }
     }
 }

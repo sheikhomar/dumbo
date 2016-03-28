@@ -1,10 +1,11 @@
-﻿using System.Text;
+﻿using System.Collections.Generic;
+using System.Text;
 using dumbo.Compiler.CCAnalysis;
 using dumbo.Compiler.PrettyPrint;
 
 namespace dumbo.Compiler.AST
 {
-    public class RepeatStmtNode : StmtNode
+    public class RepeatStmtNode : StmtNode, IHaveBlocks
     {
         public RepeatStmtNode(ExpressionNode number, StmtBlockNode body)
         {
@@ -31,6 +32,11 @@ namespace dumbo.Compiler.AST
                 analyser.ErrorReporter.AddError("RepeatStmt must have a predicate of type Number");
             //Check Body
             Body.CCAnalyse(analyser);
+        }
+
+        public IEnumerable<StmtBlockNode> GetBlocks()
+        {
+            yield return Body;
         }
     }
 }

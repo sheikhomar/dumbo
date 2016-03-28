@@ -1,10 +1,11 @@
-﻿using System.Text;
+﻿using System.Collections.Generic;
+using System.Text;
 using dumbo.Compiler.CCAnalysis;
 using dumbo.Compiler.PrettyPrint;
 
 namespace dumbo.Compiler.AST
 {
-    public class RepeatWhileStmtNode : StmtNode
+    public class RepeatWhileStmtNode : StmtNode, IHaveBlocks
     {
         public RepeatWhileStmtNode(ExpressionNode predicate, StmtBlockNode body)
         {
@@ -32,6 +33,11 @@ namespace dumbo.Compiler.AST
 
             //Check that body is type correct
             Body.CCAnalyse(analyser);
+        }
+
+        public IEnumerable<StmtBlockNode> GetBlocks()
+        {
+            yield return Body;
         }
     }
 }

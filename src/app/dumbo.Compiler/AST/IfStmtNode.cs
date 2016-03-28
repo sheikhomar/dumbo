@@ -1,10 +1,11 @@
+using System.Collections.Generic;
 using System.Text;
 using dumbo.Compiler.CCAnalysis;
 using dumbo.Compiler.PrettyPrint;
 
 namespace dumbo.Compiler.AST
 {
-    public class IfStmtNode : StmtNode
+    public class IfStmtNode : StmtNode, IHaveBlocks
     {
         public IfStmtNode(ExpressionNode predicate, StmtBlockNode body)
         {
@@ -45,6 +46,13 @@ namespace dumbo.Compiler.AST
 
             //Check Else If Statements
             ElseIfStatements.CCAnalyse(analyser);
+        }
+
+        public virtual IEnumerable<StmtBlockNode> GetBlocks()
+        {
+            yield return Body;
+            foreach (var elseIfStatement in ElseIfStatements)
+                yield return elseIfStatement.Body;
         }
     }
 }

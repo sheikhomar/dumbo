@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Linq;
 using System.Text;
 using dumbo.Compiler;
@@ -24,7 +25,7 @@ namespace dumbo.Tests.SyntaxAnalysis
                 string line = fs.ReadLine();
                 int counter = 0;
                 int nextProgramLine = 0;
-                CCAnalyser ccAnalyser = new CCAnalyser();
+                
                 while (line != null)
                 {
                     if (" //New Program ".Equals(line))
@@ -39,14 +40,15 @@ namespace dumbo.Tests.SyntaxAnalysis
                         }
                         else
                         {
+                            CCAnalyser ccAnalyser = new CCAnalyser();
                             result.Root.CCAnalyse(ccAnalyser);
+
                             if (ccAnalyser.ErrorReporter.Errors.Any())
                             {
                                 var errorMessages = ccAnalyser.ErrorReporter.Errors.Select(e => e.Message).ToArray();
 
                                 Assert.Fail($"CCAnalyser error for program at line {nextProgramLine}: \n\r \n\r{string.Join(", ", errorMessages)} \n\r{programText}");
                             }
-                            
                         }
                         
                         nextProgramLine = counter + 2;
@@ -57,6 +59,7 @@ namespace dumbo.Tests.SyntaxAnalysis
                         var result = parser.Parse(new StringReader(programText));
                         if (!result.Errors.Any())
                         {
+                            CCAnalyser ccAnalyser = new CCAnalyser();
                             result.Root.CCAnalyse(ccAnalyser);
                             if (!ccAnalyser.ErrorReporter.Errors.Any())
                             {

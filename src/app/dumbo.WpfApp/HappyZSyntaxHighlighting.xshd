@@ -46,6 +46,7 @@
             <Word>Returns</Word>
             <Word>If</Word>
             <Word>Then</Word>
+            <Word>Else</Word>
             <Word>End</Word>
             <Word>Repeat</Word>
             <Word>While</Word>

@@ -8,10 +8,7 @@ namespace dumbo.Compiler.AST
 {
     public abstract class BaseNode : IPrettyPrint, ICCAnalysable
     {
-        public virtual void CCAnalyse(ICCAnalyser analyser)
-        {
-            throw new NotImplementedException(); //should make CCAnalyse abstract
-        }
+        public abstract void CCAnalyse(ICCAnalyser analyser);
 
         public virtual void PrettyPrint(IPrettyPrinter prettyPrinter)
         {

@@ -33,6 +33,11 @@ namespace dumbo.Compiler.AST
             return new TypeDescriptor(happyTypeList);
         }
 
+        public override void CCAnalyse(ICCAnalyser analyser)
+        {
+            Expressions.CCAnalyse(analyser);
+        }
+
         public override void PrettyPrint(IPrettyPrinter prettyPrinter)
         {
             prettyPrinter.Append("Return ");

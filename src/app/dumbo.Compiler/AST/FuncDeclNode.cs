@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using dumbo.Compiler.CCAnalysis;
 using dumbo.Compiler.PrettyPrint;
@@ -129,14 +130,30 @@ namespace dumbo.Compiler.AST
 
         private void CheckOneOrMoreReturnTypeCorectness(IList<ReturnStmtNode> returnStms, ICCAnalyser analyser)
         {
-            var parametersAsHappyType = ConvertParametersToHappyType();
-
             foreach (var retStmt in returnStms)
             {
                 var actualRetTypes = retStmt.GeteReturnTypes(analyser.SymbolTable).Types.ToList();
 
-                if (!analyser.IsListsEqual(parametersAsHappyType, retStmtHappyTypes))
-                    analyser.ErrorReporter.AddError("Function has return types yyy but return x,y has types xxxx");
+                if (ReturnTypes.Count == actualRetTypes.Count)
+                {
+                    for (int i = 0; i < ReturnTypes.Count; i++)
+                    {
+                        if (ReturnTypes[i] != actualRetTypes[i])
+                        {
+                            string message = $"Function should return type {ReturnTypes[i]} in {i+1} position, but statement returns type {actualRetTypes[i]}.";
+                            analyser.ErrorReporter.AddError(new CCError(message, retStmt.Line, retStmt.Column));
+                        }
+                    }
+                }
+                else
+                {
+                    if (ReturnTypes.Count != 0 || actualRetTypes.Count != 1 || actualRetTypes[0] != HappyType.Nothing)
+                    {
+                        string message =
+                            $"Function should return {ReturnTypes.Count} types, but statement returns {actualRetTypes.Count} types.";
+                        analyser.ErrorReporter.AddError(new CCError(message, retStmt.Line, retStmt.Column));
+                    }
+                }
             }
         }
 

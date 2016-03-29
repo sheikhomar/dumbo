@@ -41,7 +41,8 @@ namespace dumbo.Compiler.AST
                 return;
             }
             
-            exprTypeList = CheckExpressionForMultipleReturnTypes(analyser);                        
+            exprTypeList = CheckExpressionForMultipleReturnTypes(analyser);
+                                    
             if (Identifiers.Count > exprTypeList.Count)
                 analyser.ErrorReporter.AddError("Assignment Error: Too many identifiers compared to expression types.");
             else if(Identifiers.Count < exprTypeList.Count)
@@ -78,7 +79,7 @@ namespace dumbo.Compiler.AST
             }
         }
 
-        private IList<HappyType> CheckExpressionForMultipleReturnTypes(ICCAnalyser analyser)
+        protected IList<HappyType> CheckExpressionForMultipleReturnTypes(ICCAnalyser analyser)
         {
             var expressionTypes = new List<HappyType>();
 

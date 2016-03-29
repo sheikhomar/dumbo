@@ -62,8 +62,7 @@ namespace dumbo.Compiler.AST
 
             if (function == null)
             {
-                var error = new CCError("The function is not declared", this.Line, this.Column);
-                analyser.ErrorReporter.AddError(error);
+                analyser.ErrorReporter.AddError(new CCError("The function is not declared", this.Line, this.Column));
             }
             else
             {

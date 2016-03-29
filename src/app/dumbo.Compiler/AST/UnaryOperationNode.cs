@@ -19,7 +19,7 @@ namespace dumbo.Compiler.AST
 
         public override void PrettyPrint(IPrettyPrinter prettyPrinter)
         {
-            prettyPrinter.Append(" " + OperatorTranslator.UnaryOperatorTypeTranslator(Operator) + " ");
+            prettyPrinter.Append(OperatorTranslator.UnaryOperatorTypeTranslator(Operator));
             Expression.PrettyPrint(prettyPrinter);
         }
 
@@ -65,7 +65,7 @@ namespace dumbo.Compiler.AST
 
         public override void CCAnalyse(ICCAnalyser analyser)
         {
-            
+            Expression.CCAnalyse(analyser);
         }
     }
 }

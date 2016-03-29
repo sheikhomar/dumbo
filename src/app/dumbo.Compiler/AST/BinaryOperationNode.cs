@@ -72,10 +72,6 @@ namespace dumbo.Compiler.AST
                 case BinaryOperatorType.Equals:
                     if(leftOperand == HappyType.Number)
                         check = IsSameType(HappyType.Number, leftOperand, rightOperand);
-                    else if (leftOperand == HappyType.Boolean)
-                        check = IsSameType(HappyType.Boolean, leftOperand, rightOperand);
-                    else if (leftOperand == HappyType.Text)
-                        check = IsSameType(HappyType.Text, leftOperand, rightOperand);
                     else
                         check = false;
                     return TypeAdder(HappyType.Boolean, check);
@@ -121,7 +117,8 @@ namespace dumbo.Compiler.AST
 
         public override void CCAnalyse(ICCAnalyser analyser)
         {
-            
+            LeftOperand.CCAnalyse(analyser);
+            RightOperand.CCAnalyse(analyser);
         }
     }
 }

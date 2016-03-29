@@ -71,9 +71,20 @@ namespace dumbo.Compiler.AST
             CheckGlobalParameters(analyser);
             CheckReturnTypes(analyser);
 
+            EnsureCorrectReturnCalls(analyser);
+
             analyser.SymbolTable.CloseScope();
         }
 
+        private void EnsureCorrectReturnCalls(ICCAnalyser analyser)
+        {
+            var returnStmts = Body.FindDescendants<ReturnStmtNode>().ToList();
+            if (ReturnTypes.Count > 0 && returnStmts.Count == 0)
+            {
+                analyser.ErrorReporter.AddError(
+                    new CCError($"There are no return statement in the function.", Line, Column));
+            }
+        }
 
         private void AddParametersToSymbolTable(ICCAnalyser analyser)
         {

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using dumbo.Compiler.CCAnalysis;
@@ -26,6 +27,13 @@ namespace dumbo.Compiler.AST
         public override void CCAnalyse(ICCAnalyser analyser)
         {
             Body.CCAnalyse(analyser);
+
+            var returnStmts = Body.FindDescendants<ReturnStmtNode>();
+            foreach (var returnStmt in returnStmts)
+            {
+                analyser.ErrorReporter.AddError(
+                    new CCError($"Program cannot return values.", returnStmt.Line, returnStmt.Column));
+            }
         }
         
         public IEnumerable<StmtBlockNode> GetBlocks()

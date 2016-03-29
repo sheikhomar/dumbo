@@ -126,13 +126,6 @@ Program
     NumbEr a , b, c := 1, 2 ,3.222222222222222222222222222224
 End Program
 
-
- //New Program Failing
-Program
-    Number a, b := 1
-End Program
-
-
  //New Program Failing
 Program
     Number a := 1.11111111111111111111111111111111, faLse
@@ -492,7 +485,7 @@ Program
     text a := aa( b(aa(1, false)), true)
 End Program
 
-Function aa(number a, boolean b) return text
+Function aa(number a, boolean bc) return text
 	return ""
 End functIon
 
@@ -897,14 +890,6 @@ Endfunction
 Program
 End Program
 
-Function aa(Number a) return text, text, text, text, text, text, text, text, text, text, text, text, text, text, text, text, text, text, text, text
-End function
-
-
- //New Program Failing
-Program
-End Program
-
 function aa(boolean a, boolean a, boolean a, boolean a, boolean a, boolean a, boolean a, boolean a, boolean a, boolean a, boolean a, boolean a) return nothing
     //Hammertime
 EnD functioN
@@ -1041,7 +1026,7 @@ Program
 		number a := 1
 	else if a = 1 then
 		number test := 0
-	else if a < 2 or (a > 1 and -a <= a) = a  then
+	else if a < 2 or (a > 1 and -a <= a)  then
 		number test
 	else
 		number test := 0
@@ -1292,7 +1277,7 @@ End Program
 
  //New Program 
 Program
-	repeat while 1 > 1 > Truee()
+	repeat while 1 > truee()
 	end repeat
 End Program
 
@@ -1379,7 +1364,7 @@ End Program
 
  //New Program 
 Program
-	number a
+	number a, i
 	text b
 	boolean c
 	a := +--1+1-1/1*1%1 -------------------------i
@@ -1622,10 +1607,10 @@ Program
 End Program
 
 Function aa() return number, number, number
-	return b(), b(), 1
+	return bb(), bb(), 1
 end function
 
-Function b() return number
+Function bb() return number
 	return 1
 end functIon
 
@@ -1662,12 +1647,6 @@ End Program
 
  //New Program Failing
 Program
-	return nothing
-End Program
-
-
- //New Program Failing
-Program
 	return aa(),aa(),b(aa(),a)
 End Program
 
@@ -1675,30 +1654,6 @@ End Program
  //New Program Failing
 Program
 	return false or true and aa()
-End Program
-
-
- //New Program Failing
-Program
-	return a
-End Program
-
-
- //New Program Failing
-Program
-	return a, b
-End Program
-
-
- //New Program Failing
-Program
-	return 1,1,1
-End Program
-
-
- //New Program Failing
-Program
-	return false, true or false
 End Program
 
 // **************************Break***************************
@@ -1750,24 +1705,6 @@ Program
 End Program
 
 
- //New Program Failing
-Program
-	if(true) then
-		break
-	end if
-End Program
-
-
- //New Program Failing
-Program
-	number a := aa()
-End Program
-
-functIon aa() return number
-	break
-	retUrn 1
-end function
-
 // ************************Mini Programs************************
  //New Program 
 Program
@@ -1792,7 +1729,7 @@ End function
  //New Program 
 Program
 
-	number result
+	number result, fahrenheit_temp
 	
 	result := fahrenheit_temperature(0.0, fahrenheit_temp)
 	write("Freezing point: " + result + " F.")
@@ -1852,7 +1789,7 @@ Program
 	Number GuessedNumber
 	Boolean IsNumberGuessed := false
 
-	Repeat while (IsNumberGuessed = false)
+	Repeat while (not (IsNumberGuessed and false) and IsNumberGuessed or false)
 		GuessedNumber := ReadNumber()
 		If(GuessedNumber = TheNumber) then
 			Write("Congrats! You guessed my Number!")
@@ -1909,13 +1846,13 @@ Program
 	input1 := ReadNumber()
 	input2 := ReadNumber()
 
-	if (operator = "+") then
+	if ( cmp(operator, "+")) then
 		result := input1+input2
-	else if (operator = "-") then
+	else if (cmp(operator, "-")) then
 		result := input1-input2
-	else if (operator = "*") then
+	else if (cmp(operator, "*")) then
 		result := input1*input2
-	else if (operator = "/") then
+	else if (cmp(operator, "/")) then
 		result := input1/input2
 	else 
 		Write("Error occured")
@@ -1924,6 +1861,11 @@ Program
 	Write("The result is: " + input1 + operator + input2 + "=" + result)  
 	
 End Program
+
+Function cmp(text operator, text string) return boolean
+	//cmp strings
+	return true
+end function
 
 Function write(text textToPrint) return nothing
 	// Print stuff

@@ -43,7 +43,17 @@ namespace dumbo.Compiler.AST
 
         static public string UnaryOperatorTypeTranslator(UnaryOperatorType input)
         {
-            return "To Be Implemented";
+            switch (input)
+            {
+                case UnaryOperatorType.Minus:
+                    return "-";
+                case UnaryOperatorType.Not:
+                    return "NOT";
+                case UnaryOperatorType.Plus:
+                    return "+";
+                default:
+                    return "__OPR_ERROR__";
+            }
         }
     }
 }

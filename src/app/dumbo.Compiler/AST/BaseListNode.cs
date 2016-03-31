@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using dumbo.Compiler.CCAnalysis;
 using dumbo.Compiler.PrettyPrint;
@@ -54,6 +55,11 @@ namespace dumbo.Compiler.AST
             }
 
             return list;
+        }
+
+        public IEnumerable<T> FindChildren<T>() where T : class, TBaseType
+        {
+            return _internalList.Where(r => r is T).Cast<T>();
         }
 
         public override void PrettyPrint(IPrettyPrinter prettyPrinter)

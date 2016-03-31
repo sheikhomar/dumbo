@@ -27,5 +27,15 @@ namespace dumbo.Compiler.AST
             base.CCAnalyse(analyser);
             analyser.SymbolTable.CloseScope();
         }
+
+        public void CheckBreaksAreNotUsed(ICCAnalyser analyser)
+        {
+            var breakStmts = FindChildren<BreakStmtNode>();
+            foreach (var breakStmt in breakStmts)
+            {
+                analyser.ErrorReporter.AddError(
+                    new CCError($"Wrong use of statemet. 'Break' can only be used inside 'Repeat'.", breakStmt.Line, breakStmt.Column));
+            }
+        }
     }
 }

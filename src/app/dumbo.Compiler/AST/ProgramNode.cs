@@ -34,6 +34,8 @@ namespace dumbo.Compiler.AST
                 analyser.ErrorReporter.AddError(
                     new CCError($"Program cannot return values.", returnStmt.Line, returnStmt.Column));
             }
+
+            Body.CheckBreaksAreNotUsed(analyser);
         }
         
         public IEnumerable<StmtBlockNode> GetBlocks()

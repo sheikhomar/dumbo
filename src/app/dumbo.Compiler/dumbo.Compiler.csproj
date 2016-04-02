@@ -87,6 +87,7 @@
     <Compile Include="PrettyPrint\IPrettyPrint.cs" />
     <Compile Include="PrettyPrint\IPrettyPrinter.cs" />
     <Compile Include="PrettyPrint\PrettyPrinter.cs" />
+    <Compile Include="PrettyPrintVisitor.cs" />
     <Compile Include="SymbolTable\IllegalHideException.cs" />
     <Compile Include="SymbolTable\OutermostScopeException.cs" />
     <Compile Include="SymbolTable\DuplicateDeclarationException.cs" />

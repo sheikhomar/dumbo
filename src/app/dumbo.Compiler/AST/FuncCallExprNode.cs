@@ -8,13 +8,13 @@ namespace dumbo.Compiler.AST
 {
     public class FuncCallExprNode : ExpressionNode
     {
-        public FuncCallExprNode(string identifier)
+        public FuncCallExprNode(string funcName)
         {
-            Identifier = identifier;
+            FuncName = funcName;
             Parameters = new ActualParamListNode();
         }
 
-        public string Identifier { get; }
+        public string FuncName { get; }
         public ActualParamListNode Parameters { get; }
 
         public override VisitResult Accept(IVisitor visitor, VisitorArgs arg)
@@ -24,7 +24,7 @@ namespace dumbo.Compiler.AST
         
         public override TypeDescriptor GetHappyType(ISymbolTable symbolTable)
         {
-            var function = symbolTable.RetrieveSymbol(Identifier);
+            var function = symbolTable.RetrieveSymbol(FuncName);
 
             if (function == null)
             {
@@ -55,7 +55,7 @@ namespace dumbo.Compiler.AST
         
         public override void CCAnalyse(ICCAnalyser analyser)
         {
-            var function = analyser.SymbolTable.RetrieveSymbol(Identifier);
+            var function = analyser.SymbolTable.RetrieveSymbol(FuncName);
 
             if (function == null)
             {

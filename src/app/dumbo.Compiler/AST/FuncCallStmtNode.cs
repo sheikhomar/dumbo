@@ -20,7 +20,7 @@ namespace dumbo.Compiler.AST
 
         public override void CCAnalyse(ICCAnalyser analyser)
         {
-            var function = analyser.SymbolTable.RetrieveSymbol(CallNode.Identifier);
+            var function = analyser.SymbolTable.RetrieveSymbol(CallNode.FuncName);
 
             // Check for formal and actual parameters
             if (function == null)

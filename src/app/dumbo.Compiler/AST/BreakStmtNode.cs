@@ -1,6 +1,5 @@
 ﻿using System.Text;
 using dumbo.Compiler.CCAnalysis;
-using dumbo.Compiler.PrettyPrint;
 using System;
 
 namespace dumbo.Compiler.AST
@@ -10,11 +9,6 @@ namespace dumbo.Compiler.AST
         public override void CCAnalyse(ICCAnalyser analyser)
         {
             // Do nothing
-        }
-
-        public override void PrettyPrint(IPrettyPrinter prettyPrinter)
-        {
-            prettyPrinter.EndLine("Break");
         }
         
         public override VisitResult Accept(IVisitor visitor, VisitorArgs arg)

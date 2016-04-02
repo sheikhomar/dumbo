@@ -1,6 +1,5 @@
 ﻿using System.Text;
 using dumbo.Compiler.CCAnalysis;
-using dumbo.Compiler.PrettyPrint;
 using dumbo.Compiler.SymbolTable;
 using System.Collections.Generic;
 
@@ -23,16 +22,7 @@ namespace dumbo.Compiler.AST
         {
             return visitor.Visit(this, arg);
         }
-
-        public override void PrettyPrint(IPrettyPrinter prettyPrinter)
-        {
-            prettyPrinter.Append(Type.ToString() + " ");
-            Identifiers.PrettyPrint(prettyPrinter);
-            prettyPrinter.Append(" := ");
-            Expressions.PrettyPrint(prettyPrinter);
-            prettyPrinter.EndLine();
-        }
-
+        
         public override void CCAnalyse(ICCAnalyser analyser)
         {
             // Check for the correct count of identifiers and expressions

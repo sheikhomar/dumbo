@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Text;
 using dumbo.Compiler.CCAnalysis;
-using dumbo.Compiler.PrettyPrint;
 using dumbo.Compiler.SymbolTable;
 using System.Collections.Generic;
 
@@ -53,14 +52,7 @@ namespace dumbo.Compiler.AST
                     return new TypeDescriptor(functionType.returntypes[0]);
             }
         }
-
-        public override void PrettyPrint(IPrettyPrinter prettyPrinter)
-        {
-            prettyPrinter.Append(Identifier + "(");
-            Parameters.PrettyPrint(prettyPrinter);
-            prettyPrinter.Append(")");
-        }
-
+        
         public override void CCAnalyse(ICCAnalyser analyser)
         {
             var function = analyser.SymbolTable.RetrieveSymbol(Identifier);

@@ -1,7 +1,6 @@
 using System;
 using System.Text;
 using dumbo.Compiler.CCAnalysis;
-using dumbo.Compiler.PrettyPrint;
 using dumbo.Compiler.SymbolTable;
 
 namespace dumbo.Compiler.AST
@@ -19,12 +18,7 @@ namespace dumbo.Compiler.AST
         {
             return new TypeDescriptor(Type);
         }
-
-        public override void PrettyPrint(IPrettyPrinter prettyPrinter)
-        {
-            prettyPrinter.Append(Value);
-        }
-
+        
         public override void CCAnalyse(ICCAnalyser analyser)
         {
             

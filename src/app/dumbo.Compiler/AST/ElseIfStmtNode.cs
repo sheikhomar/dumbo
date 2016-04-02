@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Text;
 using dumbo.Compiler.CCAnalysis;
-using dumbo.Compiler.PrettyPrint;
 
 namespace dumbo.Compiler.AST
 {
@@ -15,15 +14,7 @@ namespace dumbo.Compiler.AST
 
         public ExpressionNode Predicate { get; }
         public StmtBlockNode Body { get; }
-
-        public override void PrettyPrint(IPrettyPrinter prettyPrinter)
-        {
-            prettyPrinter.Append("Else If (");
-            Predicate.PrettyPrint(prettyPrinter);
-            prettyPrinter.EndLine(") Then");
-            Body.PrettyPrint(prettyPrinter);
-        }
-
+        
         public override void CCAnalyse(ICCAnalyser analyser)
         {
             //Check Predicate

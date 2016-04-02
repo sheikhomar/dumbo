@@ -1,5 +1,4 @@
 using dumbo.Compiler.CCAnalysis;
-using dumbo.Compiler.PrettyPrint;
 
 namespace dumbo.Compiler.AST
 {
@@ -18,12 +17,7 @@ namespace dumbo.Compiler.AST
         {
             // Do nothing
         }
-
-        public override void PrettyPrint(IPrettyPrinter prettyPrinter)
-        {
-            prettyPrinter.Append(Type.ToString() + " " + Name);
-        }
-
+        
         public override VisitResult Accept(IVisitor visitor, VisitorArgs arg)
         {
             return visitor.Visit(this, arg);

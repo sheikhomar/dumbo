@@ -1,7 +1,6 @@
 using System;
 using System.Text;
 using dumbo.Compiler.CCAnalysis;
-using dumbo.Compiler.PrettyPrint;
 using dumbo.Compiler.SymbolTable;
 
 namespace dumbo.Compiler.AST
@@ -18,14 +17,7 @@ namespace dumbo.Compiler.AST
         public ExpressionNode LeftOperand { get; }
         public BinaryOperatorType Operator { get; }
         public ExpressionNode RightOperand { get; }
-
-        public override void PrettyPrint(IPrettyPrinter prettyPrinter)
-        {
-            LeftOperand.PrettyPrint(prettyPrinter);
-            prettyPrinter.Append(" " + OperatorTranslator.BinaryOperatorTypeTranslator(Operator) + " ");
-            RightOperand.PrettyPrint(prettyPrinter);
-        }
-
+        
         public override TypeDescriptor GetHappyType(ISymbolTable symbolTable)
         {
             TypeDescriptor leftOperandDesc = LeftOperand.GetHappyType(symbolTable);

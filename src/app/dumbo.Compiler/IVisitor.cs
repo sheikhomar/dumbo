@@ -1,5 +1,4 @@
 using dumbo.Compiler.AST;
-using dumbo.Compiler.PrettyPrint;
 
 namespace dumbo.Compiler
 {

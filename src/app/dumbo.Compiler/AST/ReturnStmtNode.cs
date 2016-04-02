@@ -1,6 +1,5 @@
 using System.Text;
 using dumbo.Compiler.CCAnalysis;
-using dumbo.Compiler.PrettyPrint;
 using dumbo.Compiler.SymbolTable;
 using System.Collections.Generic;
 
@@ -37,17 +36,7 @@ namespace dumbo.Compiler.AST
         {
             Expressions.CCAnalyse(analyser);
         }
-
-        public override void PrettyPrint(IPrettyPrinter prettyPrinter)
-        {
-            prettyPrinter.Append("Return ");
-            if (Expressions.Count == 0)
-                prettyPrinter.Append("Nothing");
-            else
-                Expressions.PrettyPrint(prettyPrinter);
-            prettyPrinter.EndLine();
-        }
-
+        
         public override VisitResult Accept(IVisitor visitor, VisitorArgs arg)
         {
             return visitor.Visit(this, arg);

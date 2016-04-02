@@ -1,7 +1,6 @@
 using System;
 using System.Text;
 using dumbo.Compiler.CCAnalysis;
-using dumbo.Compiler.PrettyPrint;
 using dumbo.Compiler.SymbolTable;
 
 namespace dumbo.Compiler.AST
@@ -14,12 +13,7 @@ namespace dumbo.Compiler.AST
         }
 
         public string Name { get; }
-
-        public override void PrettyPrint(IPrettyPrinter prettyPrinter)
-        {
-            prettyPrinter.Append(Name);
-        }
-
+        
         public override VisitResult Accept(IVisitor visitor, VisitorArgs arg)
         {
             return visitor.Visit(this, arg);

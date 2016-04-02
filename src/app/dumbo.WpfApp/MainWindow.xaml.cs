@@ -13,7 +13,7 @@ using ICSharpCode.AvalonEdit.Highlighting;
 using Microsoft.Win32;
 using Path = System.IO.Path;
 using dumbo.Compiler.SyntaxAnalysis;
-using dumbo.Compiler.PrettyPrint;
+using dumbo.Compiler;
 using ICSharpCode.AvalonEdit.Highlighting.Xshd;
 
 namespace dumbo.WpfApp
@@ -305,9 +305,9 @@ namespace dumbo.WpfApp
 
         private void PrettyPrint(RootNode root)
         {
-            var prettyPrinter = new PrettyPrinter();
-            var output = prettyPrinter.print(root);
-            ResultTextBox.Text = output.ToString();
+            var ppv = new PrettyPrintVisitor();
+            root.Accept(ppv, new VisitorArgs());
+            ResultTextBox.Text = ppv.GetResult();
         }
 
         private void CheckContextualContraints(RootNode root)

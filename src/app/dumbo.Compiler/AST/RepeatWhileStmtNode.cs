@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Text;
 using dumbo.Compiler.CCAnalysis;
-using dumbo.Compiler.PrettyPrint;
 
 namespace dumbo.Compiler.AST
 {
@@ -15,16 +14,7 @@ namespace dumbo.Compiler.AST
 
         public ExpressionNode Predicate { get; }
         public StmtBlockNode Body { get; }
-
-        public override void PrettyPrint(IPrettyPrinter prettyPrinter)
-        {
-            prettyPrinter.Append("repeat while (");
-            Predicate.PrettyPrint(prettyPrinter);
-            prettyPrinter.EndLine(")");
-            Body.PrettyPrint(prettyPrinter);
-            prettyPrinter.EndLine("end repeat");
-        }
-
+        
         public override VisitResult Accept(IVisitor visitor, VisitorArgs arg)
         {
             return visitor.Visit(this, arg);

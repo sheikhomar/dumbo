@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Text;
 using dumbo.Compiler.CCAnalysis;
-using dumbo.Compiler.PrettyPrint;
 using dumbo.Compiler.SymbolTable;
 
 namespace dumbo.Compiler.AST
@@ -16,14 +15,7 @@ namespace dumbo.Compiler.AST
             Program = program;
             FuncDecls = funcDecls ?? new FuncDeclListNode();
         }
-
-        public override void PrettyPrint(IPrettyPrinter prettyPrinter)
-        {
-            Program.PrettyPrint(prettyPrinter);
-            FuncDecls.PrettyPrint(prettyPrinter);
-        }
-
-
+        
         public override void CCAnalyse(ICCAnalyser analyser)
         {
             //Function in table do here

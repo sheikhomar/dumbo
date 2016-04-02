@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using dumbo.Compiler.CCAnalysis;
-using dumbo.Compiler.PrettyPrint;
 
 namespace dumbo.Compiler.AST
 {
@@ -60,23 +59,6 @@ namespace dumbo.Compiler.AST
         public IEnumerable<T> FindChildren<T>() where T : class, TBaseType
         {
             return _internalList.Where(r => r is T).Cast<T>();
-        }
-
-        public override void PrettyPrint(IPrettyPrinter prettyPrinter)
-        {
-            if (_internalList.Count == 0)
-                return;
-
-            _internalList[0].PrettyPrint(prettyPrinter);
-
-            if (_internalList.Count == 1)
-                return;
-
-            for (int i = 1; i < _internalList.Count; i++)
-            {
-                prettyPrinter.Append(", ");
-                _internalList[i].PrettyPrint(prettyPrinter);
-            }
         }
 
         public IEnumerator<TBaseType> GetEnumerator()

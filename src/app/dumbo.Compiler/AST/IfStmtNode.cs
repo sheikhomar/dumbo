@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Text;
 using dumbo.Compiler.CCAnalysis;
-using dumbo.Compiler.PrettyPrint;
 
 namespace dumbo.Compiler.AST
 {
@@ -17,24 +16,7 @@ namespace dumbo.Compiler.AST
         public ExpressionNode Predicate { get; }
         public StmtBlockNode Body { get;  }
         public ElseIfStmtListNode ElseIfStatements { get; }
-
-        public override void PrettyPrint(IPrettyPrinter prettyPrinter)
-        {
-            //If ... Then
-            prettyPrinter.Append("If (");
-            Predicate.PrettyPrint(prettyPrinter);
-            prettyPrinter.EndLine(") Then");
-            
-            //If Body
-            Body.PrettyPrint(prettyPrinter);
-
-            //Else If...
-            ElseIfStatements.PrettyPrint(prettyPrinter);
-
-            //End if
-            prettyPrinter.EndLine("End If");
-        }
-
+        
         public override VisitResult Accept(IVisitor visitor, VisitorArgs arg)
         {
             return visitor.Visit(this, arg);

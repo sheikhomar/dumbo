@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Text;
 using dumbo.Compiler.CCAnalysis;
-using dumbo.Compiler.PrettyPrint;
 using dumbo.Compiler.SymbolTable;
 
 namespace dumbo.Compiler.AST
@@ -16,13 +15,7 @@ namespace dumbo.Compiler.AST
 
         public UnaryOperatorType Operator { get; }
         public ExpressionNode Expression { get; }
-
-        public override void PrettyPrint(IPrettyPrinter prettyPrinter)
-        {
-            prettyPrinter.Append(OperatorTranslator.UnaryOperatorTypeTranslator(Operator));
-            Expression.PrettyPrint(prettyPrinter);
-        }
-
+        
         public override TypeDescriptor GetHappyType(ISymbolTable symbolTable)
         {
             TypeDescriptor td = Expression.GetHappyType(symbolTable);

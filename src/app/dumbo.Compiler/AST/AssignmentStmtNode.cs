@@ -1,5 +1,4 @@
-﻿using dumbo.Compiler.PrettyPrint;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Text;
 using dumbo.Compiler.SymbolTable;
 using dumbo.Compiler.CCAnalysis;
@@ -18,17 +17,6 @@ namespace dumbo.Compiler.AST
 
         public IdentifierListNode Identifiers { get; }
         public ExpressionListNode Expressions { get; }
-
-        public override void PrettyPrint(IPrettyPrinter prettyPrinter)
-        {
-            Identifiers.PrettyPrint(prettyPrinter);
-
-            prettyPrinter.Append(" := ");
-
-            Expressions.PrettyPrint(prettyPrinter);
-
-            prettyPrinter.EndLine();
-        }
         
         public override VisitResult Accept(IVisitor visitor, VisitorArgs arg)
         {

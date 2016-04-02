@@ -81,6 +81,8 @@
     <Compile Include="CCAnalysis\CCError.cs" />
     <Compile Include="CCAnalysis\ErrorReporter.cs" />
     <Compile Include="CCAnalysis\IErrorReporter.cs" />
+    <Compile Include="IVisitable.cs" />
+    <Compile Include="IVisitor.cs" />
     <Compile Include="PrettyPrint\IndentDecrementException.cs" />
     <Compile Include="PrettyPrint\IPrettyPrint.cs" />
     <Compile Include="PrettyPrint\IPrettyPrinter.cs" />
@@ -112,6 +114,8 @@
     <Compile Include="CCAnalysis\CCAnalyser.cs" />
     <Compile Include="SyntaxAnalysis\TokenData.cs" />
     <Compile Include="Utils.cs" />
+    <Compile Include="VisitorArgs.cs" />
+    <Compile Include="VisitResult.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="CodeGeneration\" />

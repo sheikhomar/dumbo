@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace dumbo.Compiler.AST
 {
-    static public class OperatorTranslator
+    public static class OperatorTranslator
     {
-        static public string BinaryOperatorTypeTranslator(BinaryOperatorType input)
+        public static string BinaryOperatorTypeTranslator(BinaryOperatorType input)
         {
             switch (input)
             {

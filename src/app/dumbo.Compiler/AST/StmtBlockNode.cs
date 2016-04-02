@@ -37,5 +37,10 @@ namespace dumbo.Compiler.AST
                     new CCError($"Wrong use of statemet. 'Break' can only be used inside 'Repeat'.", breakStmt.Line, breakStmt.Column));
             }
         }
+
+        public override VisitResult Accept(IVisitor visitor, VisitorArgs args)
+        {
+            return visitor.Visit(this, args);
+        }
     }
 }

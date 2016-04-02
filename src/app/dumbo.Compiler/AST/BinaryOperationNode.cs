@@ -120,5 +120,10 @@ namespace dumbo.Compiler.AST
             LeftOperand.CCAnalyse(analyser);
             RightOperand.CCAnalyse(analyser);
         }
+
+        public override VisitResult Accept(IVisitor visitor, VisitorArgs arg)
+        {
+            return visitor.Visit(this, arg);
+        }
     }
 }

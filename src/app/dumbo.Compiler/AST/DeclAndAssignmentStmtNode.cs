@@ -18,6 +18,11 @@ namespace dumbo.Compiler.AST
         }
 
         public HappyType Type { get; }
+        
+        public override VisitResult Accept(IVisitor visitor, VisitorArgs arg)
+        {
+            return visitor.Visit(this, arg);
+        }
 
         public override void PrettyPrint(IPrettyPrinter prettyPrinter)
         {

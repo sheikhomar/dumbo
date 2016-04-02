@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace dumbo.Compiler.CCAnalysis
 {
-    internal class ErrorReporter : IErrorReporter
+    public class ErrorReporter : IErrorReporter
     {
         public ErrorReporter()
         {

@@ -23,5 +23,10 @@ namespace dumbo.Compiler.AST
         {
             prettyPrinter.Append(Type.ToString() + " " + Name);
         }
+
+        public override VisitResult Accept(IVisitor visitor, VisitorArgs arg)
+        {
+            return visitor.Visit(this, arg);
+        }
     }
 }

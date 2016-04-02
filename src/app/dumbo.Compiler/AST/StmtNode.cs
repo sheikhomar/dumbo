@@ -1,7 +1,7 @@
 ﻿namespace dumbo.Compiler.AST
 {
-    abstract public class StmtNode : BaseNode
+    public abstract class StmtNode : BaseNode
     {
-
+        
     }
 }

@@ -15,6 +15,11 @@ namespace dumbo.Compiler.AST
 
         public StmtBlockNode Else { get; }
 
+        public override VisitResult Accept(IVisitor visitor, VisitorArgs arg)
+        {
+            return visitor.Visit(this, arg);
+        }
+
         public override void PrettyPrint(IPrettyPrinter prettyPrinter)
         {
             //If .. Then

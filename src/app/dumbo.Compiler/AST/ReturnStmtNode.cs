@@ -47,5 +47,10 @@ namespace dumbo.Compiler.AST
                 Expressions.PrettyPrint(prettyPrinter);
             prettyPrinter.EndLine();
         }
+
+        public override VisitResult Accept(IVisitor visitor, VisitorArgs arg)
+        {
+            return visitor.Visit(this, arg);
+        }
     }
 }

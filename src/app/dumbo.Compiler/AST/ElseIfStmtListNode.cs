@@ -7,13 +7,15 @@ namespace dumbo.Compiler.AST
     {
         public override void PrettyPrint(IPrettyPrinter prettyPrinter)
         {
-            if (this == null)
-                return;
-
             foreach (var node in this)
             {
                 node.PrettyPrint(prettyPrinter);
             }
+        }
+
+        public override VisitResult Accept(IVisitor visitor, VisitorArgs arg)
+        {
+            return visitor.Visit(this, arg);
         }
     }
 }

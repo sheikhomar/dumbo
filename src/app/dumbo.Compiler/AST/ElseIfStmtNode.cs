@@ -38,5 +38,10 @@ namespace dumbo.Compiler.AST
         {
             yield return Body;
         }
+
+        public override VisitResult Accept(IVisitor visitor, VisitorArgs arg)
+        {
+            return visitor.Visit(this, arg);
+        }
     }
 }

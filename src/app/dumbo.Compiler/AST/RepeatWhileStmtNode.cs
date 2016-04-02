@@ -25,6 +25,11 @@ namespace dumbo.Compiler.AST
             prettyPrinter.EndLine("end repeat");
         }
 
+        public override VisitResult Accept(IVisitor visitor, VisitorArgs arg)
+        {
+            return visitor.Visit(this, arg);
+        }
+
         public override void CCAnalyse(ICCAnalyser analyser)
         {
             //Check predicate is bool

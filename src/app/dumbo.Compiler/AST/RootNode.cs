@@ -63,5 +63,10 @@ namespace dumbo.Compiler.AST
             return retList;
         }
         #endregion
+
+        public override VisitResult Accept(IVisitor visitor, VisitorArgs arg)
+        {
+            return visitor.Visit(this, arg);
+        }
     }
 }

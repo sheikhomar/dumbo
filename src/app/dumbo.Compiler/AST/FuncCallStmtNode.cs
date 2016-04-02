@@ -20,6 +20,11 @@ namespace dumbo.Compiler.AST
             prettyPrinter.EndLine();
         }
 
+        public override VisitResult Accept(IVisitor visitor, VisitorArgs arg)
+        {
+            return visitor.Visit(this, arg);
+        }
+
         public override void CCAnalyse(ICCAnalyser analyser)
         {
             var function = analyser.SymbolTable.RetrieveSymbol(CallNode.Identifier);

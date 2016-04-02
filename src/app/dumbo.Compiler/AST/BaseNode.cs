@@ -6,7 +6,7 @@ using dumbo.Compiler.SymbolTable;
 
 namespace dumbo.Compiler.AST
 {
-    public abstract class BaseNode : IPrettyPrint, ICCAnalysable
+    public abstract class BaseNode : IPrettyPrint, ICCAnalysable, IVisitable
     {
         public abstract void CCAnalyse(ICCAnalyser analyser);
 
@@ -17,5 +17,6 @@ namespace dumbo.Compiler.AST
 
         public int Line { get; protected set; }
         public int Column { get; protected set; }
+        public abstract VisitResult Accept(IVisitor visitor, VisitorArgs arg);
     }
 }

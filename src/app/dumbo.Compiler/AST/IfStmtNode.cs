@@ -35,6 +35,11 @@ namespace dumbo.Compiler.AST
             prettyPrinter.EndLine("End If");
         }
 
+        public override VisitResult Accept(IVisitor visitor, VisitorArgs arg)
+        {
+            return visitor.Visit(this, arg);
+        }
+
         public override void CCAnalyse(ICCAnalyser analyser)
         {
             //Check Predicate

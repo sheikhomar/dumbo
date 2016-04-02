@@ -20,6 +20,11 @@ namespace dumbo.Compiler.AST
             prettyPrinter.Append(Name);
         }
 
+        public override VisitResult Accept(IVisitor visitor, VisitorArgs arg)
+        {
+            return visitor.Visit(this, arg);
+        }
+
         public override TypeDescriptor GetHappyType(ISymbolTable symbolTable)
         {
             HappyType? retrivedType = null;

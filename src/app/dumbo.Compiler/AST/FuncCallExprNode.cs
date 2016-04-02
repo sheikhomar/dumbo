@@ -18,6 +18,11 @@ namespace dumbo.Compiler.AST
         public string Identifier { get; }
         public ActualParamListNode Parameters { get; }
 
+        public override VisitResult Accept(IVisitor visitor, VisitorArgs arg)
+        {
+            return visitor.Visit(this, arg);
+        }
+        
         public override TypeDescriptor GetHappyType(ISymbolTable symbolTable)
         {
             var function = symbolTable.RetrieveSymbol(Identifier);

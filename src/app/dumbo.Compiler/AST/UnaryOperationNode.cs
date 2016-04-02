@@ -67,5 +67,10 @@ namespace dumbo.Compiler.AST
         {
             Expression.CCAnalyse(analyser);
         }
+
+        public override VisitResult Accept(IVisitor visitor, VisitorArgs arg)
+        {
+            return visitor.Visit(this, arg);
+        }
     }
 }

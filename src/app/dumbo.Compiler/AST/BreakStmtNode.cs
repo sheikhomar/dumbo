@@ -16,5 +16,10 @@ namespace dumbo.Compiler.AST
         {
             prettyPrinter.EndLine("Break");
         }
+        
+        public override VisitResult Accept(IVisitor visitor, VisitorArgs arg)
+        {
+            return visitor.Visit(this, arg);
+        }
     }
 }

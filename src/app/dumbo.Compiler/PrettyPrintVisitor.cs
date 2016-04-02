@@ -129,7 +129,7 @@ namespace dumbo.Compiler
 
         public VisitResult Visit(FuncCallExprNode node, VisitorArgs arg)
         {
-            Write($"{node.Identifier}(");
+            Write($"{node.FuncName}(");
             node.Parameters.Accept(this, arg);
             Write(")");
 
@@ -155,7 +155,7 @@ namespace dumbo.Compiler
         public VisitResult Visit(FuncDeclNode node, VisitorArgs arg)
         {
             WriteLine();
-            Write($"Function {node.Identifer.Name}(");
+            Write($"Function {node.Name}(");
             node.Parameters.Accept(this, arg);
             Write(") Returns ");
 

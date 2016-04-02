@@ -515,11 +515,10 @@ namespace dumbo.Compiler.SyntaxAnalysis
             Debug.Assert(token.Parent.Name() == "FuncDecl");
             Reduction lhs = (Reduction)token.Data;
 
-            string idToken = GetSpelling(lhs[1]);
+            string funcName = GetSpelling(lhs[1]);
 
-            IdentifierNode id = new IdentifierNode(idToken);
             StmtBlockNode funcBodyNode = BuildStmtsBlock(lhs[8]);
-            FuncDeclNode funcDelc = new FuncDeclNode(id, funcBodyNode);
+            FuncDeclNode funcDelc = new FuncDeclNode(funcName, funcBodyNode);
             
             AppendFormalParameters(lhs[3], funcDelc);
 

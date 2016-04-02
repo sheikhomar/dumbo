@@ -9,17 +9,17 @@ namespace dumbo.Compiler.AST
 {
     public class FuncDeclNode : BaseNode, IHaveBlocks
     {
-        public FuncDeclNode(IdentifierNode identifer, StmtBlockNode body)
+        public FuncDeclNode(string name, StmtBlockNode body)
         {
-            Identifer = identifer;
+            Name = name;
             Body = body;
             ReturnTypes = new List<HappyType>();
             Parameters = new FormalParamListNode();
         }
 
         public FormalParamListNode Parameters { get; }
-        public IdentifierNode Identifer { get; }
         public IList<HappyType> ReturnTypes { get; }
+        public string Name { get; set; }
         public StmtBlockNode Body { get; }
 
         public override void CCAnalyse(ICCAnalyser analyser)

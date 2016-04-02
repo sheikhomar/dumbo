@@ -39,7 +39,7 @@ namespace dumbo.Compiler.AST
         {
             foreach (var funcDecl in funcList)
             {
-                analyser.AddFunctionToSymbolTable(funcDecl.Identifer.Name, parameterTypesMaker(funcDecl.Parameters), funcDecl.ReturnTypes, Line, Column);
+                analyser.AddFunctionToSymbolTable(funcDecl.Name, parameterTypesMaker(funcDecl.Parameters), funcDecl.ReturnTypes, Line, Column);
             }
         }
 

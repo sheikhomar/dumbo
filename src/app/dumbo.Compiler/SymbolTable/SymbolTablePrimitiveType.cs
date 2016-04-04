@@ -9,9 +9,17 @@ namespace dumbo.Compiler.SymbolTable
 {
     public class SymbolTablePrimitiveType : SymbolTableTypeEntry
     {
+        public IVariableDeclNode DeclarationNode { get; }
+
         public SymbolTablePrimitiveType(HappyType type)
         {
             Type = type;
+        }
+
+        public SymbolTablePrimitiveType(IVariableDeclNode declarationNode)
+        {
+            DeclarationNode = declarationNode;
+            Type = declarationNode.Type;
         }
 
         public HappyType Type { get; set; }

@@ -9,6 +9,7 @@ namespace dumbo.Compiler.SymbolTable
 {
     public class SymbolTableFunctionType : SymbolTableTypeEntry
     {
+        public FuncDeclNode DeclarationNode { get; }
         public IList<HappyType> _parametertypes;
         public IList<HappyType> _returntypes;
 
@@ -16,6 +17,14 @@ namespace dumbo.Compiler.SymbolTable
         {
             _parametertypes = parametertypes;
             _returntypes = returntypes;
+        }
+
+        public SymbolTableFunctionType(FuncDeclNode declarationNode)
+        {
+            _parametertypes = declarationNode.Parameters.Select(e => e.Type).ToList();
+            _returntypes = declarationNode.ReturnTypes;
+
+            DeclarationNode = declarationNode;
         }
 
         public IList<HappyType> parametertypes => _parametertypes;

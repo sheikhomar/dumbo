@@ -68,7 +68,10 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="HighlightCurrentLineBackgroundRenderer.cs" />
+    <Compile Include="Editor\ColorizeAvalonEdit.cs" />
+    <Compile Include="Editor\HighlightCurrentLineBackgroundRenderer.cs" />
+    <Compile Include="Editor\ITextMarker.cs" />
+    <Compile Include="Editor\TextMarkerService.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

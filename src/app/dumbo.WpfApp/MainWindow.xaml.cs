@@ -1,19 +1,22 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media;
 using System.Xml;
+using dumbo.Compiler;
 using dumbo.Compiler.AST;
 using dumbo.Compiler.CCAnalysis;
 using ICSharpCode.AvalonEdit.Highlighting;
 using Microsoft.Win32;
 using Path = System.IO.Path;
 using dumbo.Compiler.SyntaxAnalysis;
-using dumbo.Compiler;
+using dumbo.WpfApp.Editor;
 using ICSharpCode.AvalonEdit.Highlighting.Xshd;
 
 namespace dumbo.WpfApp
@@ -30,6 +33,7 @@ namespace dumbo.WpfApp
         private DateTime grammarTableLoadedAt;
         private Parser _myParser;
         private readonly FileSystemWatcher _grammarTableWatcher;
+        private ITextMarkerService _textMarkerService;
 
         public MainWindow()
         {
@@ -54,11 +58,25 @@ namespace dumbo.WpfApp
             textEditor.TextArea.TextView.BackgroundRenderers.Add(
                 new HighlightCurrentLineBackgroundRenderer(textEditor));
 
+            InitializeTextMarkerService();
+
             textEditor.Focus();
 
             UpdateCaretPosition();
             LoadDefaultProgram();
             LoadGrammar(GetGrammarFile());
+        }
+
+
+        void InitializeTextMarkerService()
+        {
+            var textMarkerService = new TextMarkerService(textEditor.Document);
+            textEditor.TextArea.TextView.BackgroundRenderers.Add(textMarkerService);
+            textEditor.TextArea.TextView.LineTransformers.Add(textMarkerService);
+            IServiceContainer services = (IServiceContainer)textEditor.Document.ServiceProvider.GetService(typeof(IServiceContainer));
+            if (services != null)
+                services.AddService(typeof(ITextMarkerService), textMarkerService);
+            _textMarkerService = textMarkerService;
         }
 
 

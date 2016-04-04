@@ -3,7 +3,7 @@ using System.Windows.Media;
 using ICSharpCode.AvalonEdit;
 using ICSharpCode.AvalonEdit.Rendering;
 
-namespace dumbo.WpfApp
+namespace dumbo.WpfApp.Editor
 {
     // Stolen from http://stackoverflow.com/questions/5072761/avalonedit-highlight-current-line-even-when-not-focused
     public class HighlightCurrentLineBackgroundRenderer : IBackgroundRenderer

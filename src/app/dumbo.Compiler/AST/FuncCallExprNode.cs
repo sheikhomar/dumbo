@@ -17,6 +17,7 @@ namespace dumbo.Compiler.AST
 
         public string FuncName { get; }
         public ActualParamListNode Parameters { get; }
+        public FuncDeclNode DeclarationNode { get; set; }
 
         public override VisitResult Accept(IVisitor visitor, VisitorArgs arg)
         {

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace dumbo.Compiler.AST
 {
-    public class DeclAndAssignmentStmtNode : AssignmentStmtNode
+    public class DeclAndAssignmentStmtNode : AssignmentStmtNode, IVariableDeclNode
     {
         public DeclAndAssignmentStmtNode(HappyType type, 
             IdentifierListNode identifiers, 

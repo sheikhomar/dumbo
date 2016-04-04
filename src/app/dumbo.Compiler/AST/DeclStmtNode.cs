@@ -4,7 +4,7 @@ using dumbo.Compiler.SymbolTable;
 
 namespace dumbo.Compiler.AST
 {
-    public class DeclStmtNode : StmtNode
+    public class DeclStmtNode : StmtNode, IVariableDeclNode
     {
         public DeclStmtNode(IdentifierListNode identifiers, HappyType type, SourcePosition sourcePosition)
         {

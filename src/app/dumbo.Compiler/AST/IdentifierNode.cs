@@ -14,7 +14,8 @@ namespace dumbo.Compiler.AST
         }
 
         public string Name { get; }
-        
+        public IVariableDeclNode DeclarationNode { get; set; }
+
         public override VisitResult Accept(IVisitor visitor, VisitorArgs arg)
         {
             return visitor.Visit(this, arg);

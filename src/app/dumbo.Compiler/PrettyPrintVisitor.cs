@@ -106,13 +106,6 @@ namespace dumbo.Compiler
             return _emptyResult;
         }
 
-        public VisitResult Visit(ExpressionNode node, VisitorArgs arg)
-        {
-            Write("<Unknown Expr>");
-
-            return _emptyResult;
-        }
-
         public VisitResult Visit(FormalParamListNode node, VisitorArgs arg)
         {
             VisitChildren(node, ", ", arg);
@@ -286,13 +279,6 @@ namespace dumbo.Compiler
                 Unindent();
             }
             
-            return _emptyResult;
-        }
-
-        public VisitResult Visit(StmtNode node, VisitorArgs arg)
-        {
-            Write("<Unknown Stmt>");
-
             return _emptyResult;
         }
 

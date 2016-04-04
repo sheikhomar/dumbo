@@ -13,7 +13,6 @@ namespace dumbo.Compiler
         VisitResult Visit(ElseIfStmtListNode node, VisitorArgs arg);
         VisitResult Visit(ElseIfStmtNode node, VisitorArgs arg);
         VisitResult Visit(ExpressionListNode node, VisitorArgs arg);
-        VisitResult Visit(ExpressionNode node, VisitorArgs arg);
         VisitResult Visit(FormalParamListNode node, VisitorArgs arg);
         VisitResult Visit(FormalParamNode node, VisitorArgs arg);
         VisitResult Visit(FuncCallExprNode node, VisitorArgs arg);
@@ -31,7 +30,6 @@ namespace dumbo.Compiler
         VisitResult Visit(ReturnStmtNode node, VisitorArgs arg);
         VisitResult Visit(RootNode node, VisitorArgs arg);
         VisitResult Visit(StmtBlockNode node, VisitorArgs arg);
-        VisitResult Visit(StmtNode node, VisitorArgs arg);
         VisitResult Visit(UnaryOperationNode node, VisitorArgs arg);
         VisitResult Visit(ValueNode node, VisitorArgs arg);
     }

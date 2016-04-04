@@ -80,6 +80,7 @@
     <Compile Include="AST\UnaryOperationNode.cs" />
     <Compile Include="AST\UnaryOperatorType.cs" />
     <Compile Include="AST\ValueNode.cs" />
+    <Compile Include="BinaryOperationTypeChecker.cs" />
     <Compile Include="CCAnalysis\CCError.cs" />
     <Compile Include="CCAnalysis\ErrorReporter.cs" />
     <Compile Include="CCAnalysis\IErrorReporter.cs" />
@@ -117,6 +118,8 @@
     <Compile Include="CCAnalysis\ICCAnalysable.cs" />
     <Compile Include="CCAnalysis\CCAnalyser.cs" />
     <Compile Include="SyntaxAnalysis\TokenData.cs" />
+    <Compile Include="TypeCheckVisitor.cs" />
+    <Compile Include="TypeCheckVisitResult.cs" />
     <Compile Include="Utils.cs" />
     <Compile Include="VisitorArgs.cs" />
     <Compile Include="VisitResult.cs" />

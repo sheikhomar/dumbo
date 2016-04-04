@@ -90,6 +90,7 @@
     <Compile Include="IVisitable.cs" />
     <Compile Include="IVisitor.cs" />
     <Compile Include="PrettyPrintVisitor.cs" />
+    <Compile Include="ScopeCheckVisitor.cs" />
     <Compile Include="SymbolTable\IllegalHideException.cs" />
     <Compile Include="SymbolTable\OutermostScopeException.cs" />
     <Compile Include="SymbolTable\DuplicateDeclarationException.cs" />

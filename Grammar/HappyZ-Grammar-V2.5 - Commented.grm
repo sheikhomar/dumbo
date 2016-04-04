@@ -15,7 +15,7 @@ Comment2 @= { Type = Noise }
 Comment2 Line = 'Comment'          
          
 LineContinuation @= {Type = Noise}                  
-LineContinuation = '_' ({CR}{LF} | {CR})
+LineContinuation = '_' {WS}* ({CR}{LF} | {CR})
 
 !===================================================================
 ! Set Specification

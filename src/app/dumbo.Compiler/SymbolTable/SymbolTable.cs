@@ -60,7 +60,7 @@ namespace dumbo.Compiler.SymbolTable
         public bool DeclaredLocally(string name)
         {
             SymbolTableEntry entry = RetrieveSymbol(name);
-            return (entry.Depth == Depth);
+            return entry != null && entry.Depth == Depth;
         }
 
         public void EnterSymbol(string name, SymbolTableTypeEntry type, bool unhideability = false)

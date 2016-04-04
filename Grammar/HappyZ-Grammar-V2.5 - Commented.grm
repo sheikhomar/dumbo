@@ -21,7 +21,7 @@ LineContinuation = '_' ({CR}{LF} | {CR})
 ! Set Specification
 !===================================================================
 {WS} = {WhiteSpace} - {CR} - {LF}
-{CharacterSet} = {All Valid} - {&22} - {&5C}
+{CharacterSet} = {All Valid} - {&22} - {&5C} - {&5F}
                
 !===================================================================
 ! Terminal Specification
@@ -33,7 +33,7 @@ Assign = ':='
 Return = 'Return' | 'Returns'
 
 NumberLiteral = ({Number}+ '.' {Number}+ | '.' {Number}+ | {Number}+) | 'NaN' | 'Inf'    !('-' | '+')? sæt en minus integer eller en plus integer
-TextLiteral = '"' ({CharacterSet}* ('\'('n'|'r'|'\'|'"'))?)* '"'
+TextLiteral = '"' ({CharacterSet}* ('\'('n'|'r'|'\'|'"'|'_'))?)* '"'
 BooleanLiteral = 'TRUE' | 'FALSE'
 
 !===================================================================

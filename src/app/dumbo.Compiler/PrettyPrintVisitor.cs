@@ -289,11 +289,6 @@ namespace dumbo.Compiler
 
             return _emptyResult;
         }
-
-        public VisitResult Visit(ValueNode node, VisitorArgs arg)
-        {
-            return _emptyResult;
-        }
         
         private void VisitChildren<T>(IEnumerable<T> children, string separator, VisitorArgs arg) where T : IVisitable
         {

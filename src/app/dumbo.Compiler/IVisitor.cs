@@ -31,6 +31,5 @@ namespace dumbo.Compiler
         VisitResult Visit(RootNode node, VisitorArgs arg);
         VisitResult Visit(StmtBlockNode node, VisitorArgs arg);
         VisitResult Visit(UnaryOperationNode node, VisitorArgs arg);
-        VisitResult Visit(ValueNode node, VisitorArgs arg);
     }
 }

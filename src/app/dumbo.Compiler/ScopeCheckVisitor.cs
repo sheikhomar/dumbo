@@ -297,11 +297,6 @@ namespace dumbo.Compiler
 
             return _emptyResult;
         }
-
-        public VisitResult Visit(ValueNode node, VisitorArgs arg)
-        {
-            return _emptyResult;
-        }
         
         private void AddVariableToSymbolTable(IdentifierNode idNode, IVariableDeclNode declNode)
         {

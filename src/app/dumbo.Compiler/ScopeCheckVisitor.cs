@@ -51,6 +51,8 @@ namespace dumbo.Compiler
             foreach (var id in node.Identifiers)
                 AddVariableToSymbolTable(id, node);
 
+            node.Expressions.Accept(this, arg);
+
             return _emptyResult;
         }
 

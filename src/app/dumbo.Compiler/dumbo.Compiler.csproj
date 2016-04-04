@@ -83,6 +83,10 @@
     <Compile Include="CCAnalysis\CCError.cs" />
     <Compile Include="CCAnalysis\ErrorReporter.cs" />
     <Compile Include="CCAnalysis\IErrorReporter.cs" />
+    <Compile Include="Event.cs" />
+    <Compile Include="EventKind.cs" />
+    <Compile Include="EventReporter.cs" />
+    <Compile Include="IEventReporter.cs" />
     <Compile Include="IVisitable.cs" />
     <Compile Include="IVisitor.cs" />
     <Compile Include="PrettyPrintVisitor.cs" />

@@ -73,6 +73,7 @@
     <Compile Include="AST\RepeatStmtNode.cs" />
     <Compile Include="AST\RepeatWhileStmtNode.cs" />
     <Compile Include="AST\ReturnStmtNode.cs" />
+    <Compile Include="AST\SourcePosition.cs" />
     <Compile Include="AST\StmtBlockNode.cs" />
     <Compile Include="AST\TypeDescriptor.cs" />
     <Compile Include="AST\UnaryOperationNode.cs" />

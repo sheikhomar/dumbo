@@ -8,9 +8,10 @@ namespace dumbo.Compiler.AST
 {
     public class FuncCallExprNode : ExpressionNode
     {
-        public FuncCallExprNode(string funcName)
+        public FuncCallExprNode(string funcName, SourcePosition sourcePosition)
         {
             FuncName = funcName;
+            SourcePosition = sourcePosition;
             Parameters = new ActualParamListNode();
         }
 

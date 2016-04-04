@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Linq;
 using dumbo.Compiler.AST;
 using GOLD;
 
@@ -51,11 +52,12 @@ namespace dumbo.Compiler.SyntaxAnalysis
             Reduction lhs = (Reduction)programSymbol.Data;
 
             Debug.Assert(lhs.Count() == 5);
+            SourcePosition srcPos = BuildSourcePosition(lhs[0], lhs[4]);
 
             Token stmtsToken = lhs[2];
             StmtBlockNode stmts = BuildStmtsBlock(stmtsToken);
 
-            return new ProgramNode(stmts);
+            return new ProgramNode(stmts, srcPos);
         }
 
         private StmtBlockNode BuildStmtsBlock(Token stmtsToken)
@@ -126,14 +128,23 @@ namespace dumbo.Compiler.SyntaxAnalysis
                 Token exprToken = lhs[1];
                 Token stmtsToken = lhs[3];
 
-                return new RepeatStmtNode(BuildExprNode(exprToken), BuildStmtsBlock(stmtsToken));
+                SourcePosition srcPos = BuildSourcePosition(lhs[0], lhs[5]);
+                ExpressionNode exprNode = BuildExprNode(exprToken);
+                StmtBlockNode stmtsNode = BuildStmtsBlock(stmtsToken);
+                
+                return new RepeatStmtNode(exprNode, stmtsNode, srcPos);
             }
 
             if (lhs.Count() == 7)
             {
                 Token exprToken = lhs[2];
                 Token stmtsToken = lhs[4];
-                return new RepeatWhileStmtNode(BuildExprNode(exprToken), BuildStmtsBlock(stmtsToken));
+
+                SourcePosition srcPos = BuildSourcePosition(lhs[0], lhs[6]);
+                ExpressionNode exprNode = BuildExprNode(exprToken);
+                StmtBlockNode stmtsNode = BuildStmtsBlock(stmtsToken);
+
+                return new RepeatWhileStmtNode(exprNode, stmtsNode, srcPos);
             }
 
             throw new InvalidOperationException("Expected another production.");
@@ -144,14 +155,21 @@ namespace dumbo.Compiler.SyntaxAnalysis
             Debug.Assert(token.Parent.Name() == "ReturnStmt");
             Reduction lhs = (Reduction)token.Data;
             ExpressionListNode expressions = null;
-            
+
+            SourcePosition srcPos;
+
             Reduction data = lhs[1].Data as Reduction;
             if (data != null)
             {
                 expressions = BuildExprList(lhs[1]);
+                srcPos = BuildSourcePosition(lhs[0], expressions);
             }
-
-            return new ReturnStmtNode(expressions);
+            else
+            {
+                srcPos = BuildSourcePosition(lhs[0], lhs[1]);
+            }
+            
+            return new ReturnStmtNode(expressions, srcPos);
         }
 
         private FuncCallStmtNode BuildFuncCallStmt(Token token)
@@ -166,7 +184,9 @@ namespace dumbo.Compiler.SyntaxAnalysis
 
             string identifier = GetSpelling(lhs[0]);
 
-            FuncCallExprNode funcCallNode = new FuncCallExprNode(identifier);
+            var srcPos = BuildSourcePosition(lhs[0], lhs[3]);
+
+            FuncCallExprNode funcCallNode = new FuncCallExprNode(identifier, srcPos);
 
             Token actualParams = lhs[2];
             AppendFuncCallParameters(actualParams, funcCallNode);
@@ -210,14 +230,16 @@ namespace dumbo.Compiler.SyntaxAnalysis
             
             if ("Id".Equals(firstLhfName, StringComparison.InvariantCultureIgnoreCase))
             {
-                return new AssignmentStmtNode(
-                    BuildIdentifierList(lhs[0]), exprListNode, line, column);
+                var idListNode = BuildIdentifierList(lhs[0]);
+                var srcPos = BuildSourcePosition(idListNode, exprListNode);
+                return new AssignmentStmtNode(idListNode, exprListNode, srcPos);
             }
 
             var declNode = BuildDeclStmt(lhs[0]);
+            var srcPos2 = BuildSourcePosition(declNode, exprListNode);
             return new DeclAndAssignmentStmtNode(
                 declNode.Type, declNode.Identifiers, exprListNode,
-                line, column);
+                srcPos2);
         }
         
         private ExpressionListNode BuildExprList(Token token)
@@ -231,6 +253,14 @@ namespace dumbo.Compiler.SyntaxAnalysis
 
             Token multiToken = lhs[1];
             AppendExpression(multiToken, list);
+
+            if (list.Any())
+            {
+                var firstItem = list.First();
+                var lastItem = list.Last();
+                var srcPos = BuildSourcePosition(firstItem, lastItem);
+                list.SourcePosition = srcPos;
+            }
 
             return list;
         }
@@ -260,6 +290,8 @@ namespace dumbo.Compiler.SyntaxAnalysis
             Token elseIfToken = lhs[5];
             Token elseToken = lhs[6];
 
+            var srcPos = BuildSourcePosition(lhs[0], lhs[8]);
+
             ExpressionNode predicate = BuildExprNode(exprToken);
             StmtBlockNode stmtsNode = BuildStmtsBlock(stmtsToken);
 
@@ -271,11 +303,11 @@ namespace dumbo.Compiler.SyntaxAnalysis
             if (hasElseBody)
             {
                 StmtBlockNode  elseStmtsNode = BuildStmtsBlock(elseReduction[2]);
-                ifStmt = new IfElseStmtNode(predicate, stmtsNode, elseStmtsNode);
+                ifStmt = new IfElseStmtNode(predicate, stmtsNode, elseStmtsNode, srcPos);
             }
             else
             {
-                ifStmt = new IfStmtNode(predicate, stmtsNode);
+                ifStmt = new IfStmtNode(predicate, stmtsNode, srcPos);
             }
 
             Reduction elseIfReduction = (Reduction)elseIfToken.Data;
@@ -298,11 +330,13 @@ namespace dumbo.Compiler.SyntaxAnalysis
 
                 Token exprToken = elseIfReduction[1];
                 Token stmtsToken = elseIfReduction[4];
-
+                
                 ExpressionNode predicate = BuildExprNode(exprToken);
                 StmtBlockNode stmtsNode = BuildStmtsBlock(stmtsToken);
 
-                ElseIfStmtNode elseIfStmt = new ElseIfStmtNode(predicate, stmtsNode);
+                SourcePosition srcPos = BuildSourcePosition(elseIfReduction[0], stmtsNode);
+
+                ElseIfStmtNode elseIfStmt = new ElseIfStmtNode(predicate, stmtsNode, srcPos);
                 ifStmtNode.ElseIfStatements.Add(elseIfStmt);
 
                 AppendElseIfStmts(lhs[1], ifStmtNode);
@@ -338,7 +372,9 @@ namespace dumbo.Compiler.SyntaxAnalysis
                 BinaryOperatorType operatorType = ParseOperator(GetSpelling(lhs[1]));
                 ExpressionNode rightOperand = BuildExprNode(lhs[2]);
 
-                return new BinaryOperationNode(leftOperand, operatorType, rightOperand);
+                var srcPos = BuildSourcePosition(leftOperand, rightOperand);
+
+                return new BinaryOperationNode(leftOperand, operatorType, rightOperand, srcPos);
             }
 
             return BuildExprNode(lhs[0]);
@@ -352,9 +388,13 @@ namespace dumbo.Compiler.SyntaxAnalysis
             if (lhs.Count() == 2)
             {
                 string operatorCode = GetSpelling(lhs[0]).ToLower();
+                ExpressionNode unaryExprNode = BuildUnaryExprNode(lhs[1]);
+                SourcePosition srcPos = BuildSourcePosition(lhs[0], unaryExprNode);
+
                 return new UnaryOperationNode(
                     ParseUnaryOperator(operatorCode),
-                    BuildUnaryExprNode(lhs[1]));
+                    unaryExprNode,
+                    srcPos);
             }
 
             return BuildValueNode(lhs[0]);
@@ -384,10 +424,13 @@ namespace dumbo.Compiler.SyntaxAnalysis
                     else
                         throw new InvalidOperationException("Invalid literal type.");
 
-                    return new LiteralValueNode(value, happyType);
+                    SourcePosition srcPos = BuildSourcePosition(lhs2[0], lhs2[0]);
+
+                    return new LiteralValueNode(value, happyType, srcPos);
                 case "Id":
                     string name = GetSpelling(lhs[0]);
-                    return new IdentifierNode(name);
+                    SourcePosition srcPos2 = BuildSourcePosition(lhs[0], lhs[0]);
+                    return new IdentifierNode(name, srcPos2);
                 case "FuncCall":
                     return BuildFuncCallExprNode(lhs[0]);
                 case "(":
@@ -446,7 +489,10 @@ namespace dumbo.Compiler.SyntaxAnalysis
 
             IdentifierListNode idList = BuildIdentifierList(lhs[1]);
             HappyType type = ConvertHappyType(name);
-            return new DeclStmtNode(idList, type);
+
+            SourcePosition srcPos = BuildSourcePosition(lhs[0], idList);
+
+            return new DeclStmtNode(idList, type, srcPos);
         }
 
         private HappyType ConvertHappyType(string typeSpec)
@@ -471,10 +517,19 @@ namespace dumbo.Compiler.SyntaxAnalysis
 
             string name = GetSpelling(lhs[0]);
 
-            listNode.Add(new IdentifierNode(name));
+            var srcPos = BuildSourcePosition(lhs[0], lhs[0]);
+
+            listNode.Add(new IdentifierNode(name, srcPos));
             
             Token multiIdentToken = lhs[1];
             AppendIdentifier(multiIdentToken, listNode);
+
+            if (listNode.Any())
+            {
+                var firstNode = listNode.First();
+                var lastNode = listNode.Last();
+                listNode.SourcePosition = BuildSourcePosition(firstNode, lastNode);
+            }
 
             return listNode;
         }
@@ -486,8 +541,10 @@ namespace dumbo.Compiler.SyntaxAnalysis
 
             if (lhs.Count() > 0)
             {
+                var srcPos = BuildSourcePosition(lhs[1], lhs[1]);
+
                 string name = GetSpelling(lhs[1]);
-                list.Add(new IdentifierNode(name));
+                list.Add(new IdentifierNode(name, srcPos));
 
                 Token multiIdToken2 = lhs[2];
                 AppendIdentifier(multiIdToken2, list);
@@ -517,8 +574,10 @@ namespace dumbo.Compiler.SyntaxAnalysis
 
             string funcName = GetSpelling(lhs[1]);
 
+            var srcPos = BuildSourcePosition(lhs[0], lhs[10]);
+
             StmtBlockNode funcBodyNode = BuildStmtsBlock(lhs[8]);
-            FuncDeclNode funcDelc = new FuncDeclNode(funcName, funcBodyNode);
+            FuncDeclNode funcDelc = new FuncDeclNode(funcName, funcBodyNode, srcPos);
             
             AppendFormalParameters(lhs[3], funcDelc);
 
@@ -561,14 +620,16 @@ namespace dumbo.Compiler.SyntaxAnalysis
                 string paramName = GetSpelling(formalParmReduction[1]);
                 HappyType paramType = ConvertHappyType(typeSpec);
 
-                FormalParamNode paramNode = new FormalParamNode(paramName, paramType);
+                SourcePosition srcPos = BuildSourcePosition(formalParmReduction[0], formalParmReduction[1]);
+
+                FormalParamNode paramNode = new FormalParamNode(paramName, paramType, srcPos);
                 funcCallNode.Parameters.Add(paramNode);
 
                 AppendFormalParameters(multiToken, funcCallNode);
             }
         }
 
-        public T ConvertToEnum<T>(string input) where T : struct, IComparable, IFormattable, IConvertible
+        private T ConvertToEnum<T>(string input) where T : struct, IComparable, IFormattable, IConvertible
         {
             T output;
             
@@ -587,6 +648,43 @@ namespace dumbo.Compiler.SyntaxAnalysis
                     throw new ArgumentException(input + " is not of the type T");
                 }
             }
+        }
+        
+        private SourcePosition BuildSourcePosition(Token startToken, Token endToken)
+        {
+            var startTokenData = startToken.Data as TokenData;
+            if (startTokenData == null)
+                throw new ArgumentException("Is not a terminal node.", nameof(startToken));
+
+            var endTokenData = endToken.Data as TokenData;
+            if (endTokenData == null)
+                throw new ArgumentException("Is not a terminal node.", nameof(endToken));
+
+            int startLine = startTokenData.LineNumber + 1;
+            int startColumn = startTokenData.Column + 1;
+            int endLine = endTokenData.LineNumber + 1;
+            int endColumn = endTokenData.Column + endTokenData.Spelling.Length + 2;
+            return new SourcePosition(startLine, startColumn, endLine, endColumn);
+        }
+
+        private SourcePosition BuildSourcePosition(BaseNode startNode, BaseNode endNode)
+        {
+            int startLine = startNode.SourcePosition.StartLine;
+            int startColumn = startNode.SourcePosition.StartColumn;
+            int endLine = endNode.SourcePosition.EndLine;
+            int endColumn = endNode.SourcePosition.EndColumn;
+            return new SourcePosition(startLine, startColumn, endLine, endColumn);
+        }
+        
+        private SourcePosition BuildSourcePosition(Token startToken, BaseNode endNode)
+        {
+            var startSrcPos = BuildSourcePosition(startToken, startToken);
+
+            int startLine = startSrcPos.StartLine;
+            int startColumn = startSrcPos.StartColumn;
+            int endLine = endNode.SourcePosition.EndLine;
+            int endColumn = endNode.SourcePosition.EndColumn;
+            return new SourcePosition(startLine, startColumn, endLine, endColumn);
         }
     }
 }

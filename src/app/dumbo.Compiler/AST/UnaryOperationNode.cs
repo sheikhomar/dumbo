@@ -7,10 +7,11 @@ namespace dumbo.Compiler.AST
 {
     public class UnaryOperationNode : ExpressionNode
     {
-        public UnaryOperationNode(UnaryOperatorType @operator, ExpressionNode expression)
+        public UnaryOperationNode(UnaryOperatorType @operator, ExpressionNode expression, SourcePosition sourcePosition)
         {
             Operator = @operator;
             Expression = expression;
+            SourcePosition = sourcePosition;
         }
 
         public UnaryOperatorType Operator { get; }

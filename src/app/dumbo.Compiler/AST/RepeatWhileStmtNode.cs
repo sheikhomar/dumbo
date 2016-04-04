@@ -6,10 +6,11 @@ namespace dumbo.Compiler.AST
 {
     public class RepeatWhileStmtNode : StmtNode, IHaveBlocks
     {
-        public RepeatWhileStmtNode(ExpressionNode predicate, StmtBlockNode body)
+        public RepeatWhileStmtNode(ExpressionNode predicate, StmtBlockNode body, SourcePosition sourcePosition)
         {
             Predicate = predicate;
             Body = body;
+            SourcePosition = sourcePosition;
         }
 
         public ExpressionNode Predicate { get; }

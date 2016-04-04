@@ -7,12 +7,11 @@ namespace dumbo.Compiler.AST
 {
     public class AssignmentStmtNode : StmtNode
     {
-        public AssignmentStmtNode(IdentifierListNode identifiers, ExpressionListNode expressions, int line, int column)
+        public AssignmentStmtNode(IdentifierListNode identifiers, ExpressionListNode expressions, SourcePosition sourcePosition)
         {
             Identifiers = identifiers;
             Expressions = expressions;
-            Line = line;
-            Column = column;
+            SourcePosition = sourcePosition;
         }
 
         public IdentifierListNode Identifiers { get; }

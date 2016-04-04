@@ -6,10 +6,11 @@ namespace dumbo.Compiler.AST
 {
     public class DeclStmtNode : StmtNode
     {
-        public DeclStmtNode(IdentifierListNode identifiers, HappyType type)
+        public DeclStmtNode(IdentifierListNode identifiers, HappyType type, SourcePosition sourcePosition)
         {
             Identifiers = identifiers;
             Type = type;
+            SourcePosition = sourcePosition;
         }
 
         public IdentifierListNode Identifiers { get; }

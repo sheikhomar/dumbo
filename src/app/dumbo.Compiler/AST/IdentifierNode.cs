@@ -7,9 +7,10 @@ namespace dumbo.Compiler.AST
 {
     public class IdentifierNode : ExpressionNode
     {
-        public IdentifierNode(string name)
+        public IdentifierNode(string name, SourcePosition sourcePosition)
         {
             Name = name;
+            SourcePosition = sourcePosition;
         }
 
         public string Name { get; }

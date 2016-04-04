@@ -10,8 +10,7 @@ namespace dumbo.Compiler.AST
         public DeclAndAssignmentStmtNode(HappyType type, 
             IdentifierListNode identifiers, 
             ExpressionListNode expressions,
-            int line,
-            int column) : base(identifiers, expressions, line, column)
+            SourcePosition sourcePosition) : base(identifiers, expressions, sourcePosition)
         {
             Type = type;
         }

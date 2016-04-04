@@ -7,9 +7,10 @@ namespace dumbo.Compiler.AST
 {
     public class ReturnStmtNode : StmtNode
     {
-        public ReturnStmtNode(ExpressionListNode expressions)
+        public ReturnStmtNode(ExpressionListNode expressions, SourcePosition srcPos)
         {
             Expressions = expressions ?? new ExpressionListNode();
+            SourcePosition = srcPos;
         }
 
         public ExpressionListNode Expressions { get; }

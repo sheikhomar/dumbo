@@ -6,10 +6,11 @@ namespace dumbo.Compiler.AST
 {
     public class RepeatStmtNode : StmtNode, IHaveBlocks
     {
-        public RepeatStmtNode(ExpressionNode number, StmtBlockNode body)
+        public RepeatStmtNode(ExpressionNode number, StmtBlockNode body, SourcePosition sourcePosition)
         {
             Number = number;
             Body = body;
+            SourcePosition = sourcePosition;
         }
 
         public ExpressionNode Number { get; }

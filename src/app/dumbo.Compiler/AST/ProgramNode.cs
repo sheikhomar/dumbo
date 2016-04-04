@@ -9,9 +9,10 @@ namespace dumbo.Compiler.AST
 {
     public class ProgramNode : BaseNode, IHaveBlocks
     {
-        public ProgramNode(StmtBlockNode body)
+        public ProgramNode(StmtBlockNode body, SourcePosition srcPos)
         {
             Body = body;
+            SourcePosition = srcPos;
         }
 
         public StmtBlockNode Body { get; }

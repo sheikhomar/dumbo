@@ -7,11 +7,12 @@ namespace dumbo.Compiler.AST
 {
     public class BinaryOperationNode : ExpressionNode
     {
-        public BinaryOperationNode(ExpressionNode left, BinaryOperatorType operatorType, ExpressionNode right)
+        public BinaryOperationNode(ExpressionNode left, BinaryOperatorType operatorType, ExpressionNode right, SourcePosition sourcePosition)
         {
             LeftOperand = left;
             Operator = operatorType;
             RightOperand = right;
+            SourcePosition = sourcePosition;
         }
 
         public ExpressionNode LeftOperand { get; }

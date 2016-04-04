@@ -6,11 +6,12 @@ namespace dumbo.Compiler.AST
 {
     public class IfStmtNode : StmtNode, IHaveBlocks
     {
-        public IfStmtNode(ExpressionNode predicate, StmtBlockNode body)
+        public IfStmtNode(ExpressionNode predicate, StmtBlockNode body, SourcePosition sourcePosition)
         {
             Predicate = predicate;
             Body = body;
             ElseIfStatements = new ElseIfStmtListNode();
+            SourcePosition = sourcePosition;
         }
 
         public ExpressionNode Predicate { get; }

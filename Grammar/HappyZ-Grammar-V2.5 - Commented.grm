@@ -26,8 +26,8 @@ LineContinuation = '_' {WS}* ({CR}{LF} | {CR})
 !===================================================================
 ! Terminal Specification
 !===================================================================
-Id = '_'? {Letter}({AlphaNumeric} | '_')*
-WhiteSpace = {WS}+
+Id = {Letter}{AlphaNumeric}*
+WhiteSpace = {WS}
 NewLine = ({CR}{LF}|{CR})+
 Assign = ':='
 Return = 'Return' | 'Returns'
@@ -169,13 +169,13 @@ BooleanLiteral = 'TRUE' | 'FALSE'
 !===================================================================
 ! If Statement
 !===================================================================
-<IfStmt> ::= 'if' <Expr> 'then' <nl> <Stmts> <ElseIfStmt> <ElseStmt> 'end' 'if'
-
+<IfStmt> ::= 'if' <Expr> 'then' <nl> <Stmts> <ElseIfStmt> 'end' 'if'
+                        
+<ElseIfStmt> ::= 'else' 'if' <Expr> 'then' <nl> <Stmts> <ElseIfStmt>
+              | <ElseStmt>     
+               
 <ElseStmt> ::= 'else' <nl> <Stmts>
             | <>
-                        
-<ElseIfStmt> ::= 'else if' <Expr> 'then' <nl> <Stmts> <ElseIfStmt>
-               | <>      
 
 !===================================================================
 ! Repeat Statement
@@ -186,7 +186,7 @@ BooleanLiteral = 'TRUE' | 'FALSE'
 <BreakStmt> ::= 'Break'
              
 !===================================================================
-! Function as stmt
+! Function Call
 !===================================================================
 <FuncCall> ::= Id '(' <ActualParams> ')'
             

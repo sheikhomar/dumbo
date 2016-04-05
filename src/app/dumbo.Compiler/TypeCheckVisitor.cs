@@ -1,7 +1,5 @@
 using System;
-using System.ComponentModel;
 using System.Linq;
-using System.Reflection.Emit;
 using dumbo.Compiler.AST;
 
 namespace dumbo.Compiler
@@ -120,7 +118,39 @@ namespace dumbo.Compiler
 
         public VisitResult Visit(DeclAndAssignmentStmtNode node, VisitorArgs arg)
         {
-            
+            if (node.Expressions.Count > 1)
+            {
+                Reporter.Error($"Multi assignment is not allowed.", node.Expressions.SourcePosition);
+            }
+            else if (node.Expressions.Count == 1)
+            {
+                var expr = node.Expressions.First();
+                var exprResult = GetVisitResult(expr, arg);
+                var exprTypes = exprResult.Types.ToList();
+                var idList = node.Identifiers.ToList();
+                if (exprTypes.Count == idList.Count)
+                {
+                    for (int i = 0; i < exprTypes.Count; i++)
+                    {
+                        var id = idList[i];
+                        if (exprTypes[i] != node.Type)
+                        {
+                            Reporter.Error($"Variable '{id.Name}' has a different type than the expression on the left hand side.", 
+                                id.SourcePosition);
+                        }
+                    }
+                }
+                else if (exprTypes.Count == 0)
+                {
+                    Reporter.Error($"Expression does not return any value.", expr.SourcePosition);
+                }
+                else
+                {
+                    Reporter.Error($"The expression returns {exprTypes.Count} values, but assignment requires {idList.Count} values.",
+                        node.Expressions.SourcePosition);
+                }
+                
+            }
             return EmptyResult;
         }
 
@@ -131,11 +161,18 @@ namespace dumbo.Compiler
 
         public VisitResult Visit(ElseIfStmtListNode node, VisitorArgs arg)
         {
+            foreach (var item in node)
+                item.Accept(this, arg);
+
             return EmptyResult;
         }
 
         public VisitResult Visit(ElseIfStmtNode node, VisitorArgs arg)
         {
+            EnsureCorrectType(node.Predicate, HappyType.Boolean, arg);
+
+            node.Body.Accept(this, arg);
+            
             return EmptyResult;
         }
 
@@ -159,6 +196,9 @@ namespace dumbo.Compiler
 
         public VisitResult Visit(FuncCallExprNode node, VisitorArgs arg)
         {
+            if (node.DeclarationNode == null)
+                return new TypeCheckVisitResult(HappyType.Error);
+
             return new TypeCheckVisitResult(node.DeclarationNode.ReturnTypes);
         }
 
@@ -192,17 +232,29 @@ namespace dumbo.Compiler
 
         public VisitResult Visit(IdentifierNode node, VisitorArgs arg)
         {
+
             HappyType type = node.DeclarationNode?.Type ?? HappyType.Error;
             return new TypeCheckVisitResult(type);
         }
 
         public VisitResult Visit(IfElseStmtNode node, VisitorArgs arg)
         {
+            EnsureCorrectType(node.Predicate, HappyType.Number, arg);
+
+            node.Body.Accept(this, arg);
+            node.ElseIfStatements.Accept(this, arg);
+            node.Else.Accept(this, arg);
+
             return EmptyResult;
         }
 
         public VisitResult Visit(IfStmtNode node, VisitorArgs arg)
         {
+            EnsureCorrectType(node.Predicate, HappyType.Number, arg);
+
+            node.Body.Accept(this, arg);
+            node.ElseIfStatements.Accept(this, arg);
+
             return EmptyResult;
         }
 
@@ -220,22 +272,14 @@ namespace dumbo.Compiler
 
         public VisitResult Visit(RepeatStmtNode node, VisitorArgs arg)
         {
-            var exprRes = GetVisitResult(node.Number, arg);
-            if (exprRes.Types.Count() != 1 || exprRes.Types.First() != HappyType.Number)
-            {
-                Reporter.Error("Expression must be of type Number", node.Number.SourcePosition);
-            }
+            EnsureCorrectType(node.Number, HappyType.Number, arg);
 
             return EmptyResult;
         }
 
         public VisitResult Visit(RepeatWhileStmtNode node, VisitorArgs arg)
         {
-            var exprRes = GetVisitResult(node.Predicate, arg);
-            if (exprRes.Types.Count() != 1 || exprRes.Types.First() != HappyType.Boolean)
-            {
-                Reporter.Error("Predicate must be of type Boolean.", node.Predicate.SourcePosition);
-            }
+            EnsureCorrectType(node.Predicate, HappyType.Boolean, arg);
 
             return EmptyResult;
         }
@@ -308,6 +352,15 @@ namespace dumbo.Compiler
             if (result == null)
                 throw new InvalidOperationException($"Visiting {node.GetType().Name} object should always return a TypeCheckVisitResult object.");
             return result;
+        }
+
+        private void EnsureCorrectType(ExpressionNode expr, HappyType type, VisitorArgs arg)
+        {
+            var exprRes = GetVisitResult(expr, arg);
+            if (exprRes.Types.Count() != 1 || exprRes.Types.First() != type)
+            {
+                Reporter.Error($"Expression must be of type {type}.", expr.SourcePosition);
+            }
         }
     }
 }

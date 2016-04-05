@@ -19,7 +19,7 @@ Comment2 Line = 'Comment'
                
 ! Terminals specifications
 Id = '_'? {Letter}({AlphaNumeric} | '_')*
-WhiteSpace = {WS}+
+WhiteSpace = {WS}
 NewLine = ({CR}{LF}|{CR})+
 Assign = ':='
 Return = 'Return' | 'Returns'

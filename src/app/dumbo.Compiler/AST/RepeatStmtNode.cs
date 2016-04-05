@@ -15,8 +15,8 @@ namespace dumbo.Compiler.AST
 
         public ExpressionNode Number { get; }
         public StmtBlockNode Body { get; }
-        
-        public override VisitResult Accept(IVisitor visitor, VisitorArgs arg)
+
+        public override T Accept<T, K>(IVisitor<T, K> visitor, K arg)
         {
             return visitor.Visit(this, arg);
         }

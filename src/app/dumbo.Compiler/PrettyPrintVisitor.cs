@@ -6,7 +6,7 @@ using dumbo.Compiler.AST;
 
 namespace dumbo.Compiler
 {
-    public class PrettyPrintVisitor : IVisitor
+    public class PrettyPrintVisitor : IVisitor<VisitResult, VisitorArgs>
     {
         private const int TabSize = 2;
         private readonly StringBuilder _buffer;

@@ -23,9 +23,9 @@ namespace dumbo.Compiler.AST
             }
         }
 
-        public override VisitResult Accept(IVisitor visitor, VisitorArgs args)
+        public override T Accept<T, K>(IVisitor<T, K> visitor, K arg)
         {
-            return visitor.Visit(this, args);
+            return visitor.Visit(this, arg);
         }
     }
 }

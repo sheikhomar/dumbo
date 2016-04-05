@@ -6,7 +6,7 @@ using dumbo.Compiler.AST;
 
 namespace dumbo.Compiler
 {
-    public class TypeCheckVisitor : IVisitor
+    public class TypeCheckVisitor : IVisitor<VisitResult, VisitorArgs>
     {
         private IEventReporter Reporter { get; }
         private VisitResult EmptyResult { get; }

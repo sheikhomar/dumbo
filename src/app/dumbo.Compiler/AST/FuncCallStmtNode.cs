@@ -12,8 +12,8 @@ namespace dumbo.Compiler.AST
         }
 
         public FuncCallExprNode CallNode { get; }
-        
-        public override VisitResult Accept(IVisitor visitor, VisitorArgs arg)
+
+        public override T Accept<T, K>(IVisitor<T, K> visitor, K arg)
         {
             return visitor.Visit(this, arg);
         }

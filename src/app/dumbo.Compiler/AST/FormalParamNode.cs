@@ -18,8 +18,8 @@ namespace dumbo.Compiler.AST
         {
             // Do nothing
         }
-        
-        public override VisitResult Accept(IVisitor visitor, VisitorArgs arg)
+
+        public override T Accept<T, K>(IVisitor<T, K> visitor, K arg)
         {
             return visitor.Visit(this, arg);
         }

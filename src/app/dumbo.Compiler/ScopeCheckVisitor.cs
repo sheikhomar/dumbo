@@ -3,7 +3,7 @@ using dumbo.Compiler.SymbolTable;
 
 namespace dumbo.Compiler
 {
-    public class ScopeCheckVisitor : IVisitor
+    public class ScopeCheckVisitor : IVisitor<VisitResult, VisitorArgs>
     {
         private readonly VisitResult _emptyResult;
 

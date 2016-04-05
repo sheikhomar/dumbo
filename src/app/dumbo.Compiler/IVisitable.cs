@@ -2,6 +2,6 @@ namespace dumbo.Compiler
 {
     public interface IVisitable
     {
-        VisitResult Accept(IVisitor visitor, VisitorArgs arg);
+        T Accept<T,K>(IVisitor<T,K> visitor, K arg);
     }
 }

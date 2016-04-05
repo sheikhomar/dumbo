@@ -101,13 +101,18 @@ namespace dumbo.Compiler
 
         public VisitResult Visit(FormalParamNode node, VisitorArgs arg)
         {
-            if (SymbolTable.DeclaredLocally(node.Name))
+            var entry = SymbolTable.RetrieveSymbol(node.Name);
+            if (entry == null)
+            {
+                SymbolTable.EnterSymbol(node.Name, new SymbolTablePrimitiveType(node), true);
+            }
+            else if (SymbolTable.DeclaredLocally(node.Name))
             {
                 Reporter.Error($"Parameter '{node.Name}' is already declared.", node.SourcePosition);
             }
             else
             {
-                SymbolTable.EnterSymbol(node.Name, new SymbolTablePrimitiveType(node), true);
+                Reporter.Error($"Identifier '{node.Name}' cannot be used as parameter since it is already used as function name.", node.SourcePosition);
             }
 
             return _emptyResult;

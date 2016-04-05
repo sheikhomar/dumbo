@@ -44,7 +44,8 @@ namespace dumbo.Compiler.SyntaxAnalysis
                 {
                     case GOLD.ParseMessage.TokenRead:
                         var token = parser.CurrentToken();
-                        token.Data = new TokenData(parser.CurrentPosition(), token.Data);
+                        if (!" ".Equals(token.Data))
+                            token.Data = new TokenData(parser.CurrentPosition(), token.Data);
                         break;
 
                     case GOLD.ParseMessage.Reduction:

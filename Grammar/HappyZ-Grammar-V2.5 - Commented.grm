@@ -33,7 +33,7 @@ Assign = ':='
 Return = 'Return' | 'Returns'
 
 NumberLiteral = ({Number}+ '.' {Number}+ | '.' {Number}+ | {Number}+) | 'NaN' | 'Inf'    !('-' | '+')? sæt en minus integer eller en plus integer
-TextLiteral = '"' ({CharacterSet}* ('\'('n'|'r'|'\'|'"'|'_'))?)* '"'
+TextLiteral = '"' ({CharacterSet} | ('\'('n'|'r'|'\'|'"'|'_'))?)* '"'
 BooleanLiteral = 'TRUE' | 'FALSE'
 
 !===================================================================
@@ -93,20 +93,6 @@ BooleanLiteral = 'TRUE' | 'FALSE'
             | 'Constant' <ArrayType> Id Assign <ArrayAssign>
 
 !===================================================================
-! Declarations
-!===================================================================
-<Decl> ::= <PrimitiveTypes> <Id>
-        
-<ArrayDecl> ::= <ArrayType> <Id>
-                          
-<ArrayId> ::= Id <Entry>
-           
-<Entry> ::= '[' <ArraySize> ']' <Entries>
-         
-<Entries> ::= '[' <ArraySize> ']' <Entries>
-           | <>
-
-!===================================================================
 ! Function Declaration
 !===================================================================
 <FuncDecls> ::= <FuncDecl> <nl> <FuncDecls>
@@ -143,14 +129,28 @@ BooleanLiteral = 'TRUE' | 'FALSE'
 <Stmts> ::= <Stmt> <nl> <Stmts>
          | <>
 
-<Stmt> ::= <AssignStmt> 
+<Stmt> ::= <Decl>
+        | <AssignStmt> 
         | <IfStmt> 
         | <RepeatStmt>
-        | <Decl>
         | <ArrayDecl>
         | <ReturnStmt>
         | <FuncCall>
         | <BreakStmt>
+        
+!===================================================================
+! Declarations
+!===================================================================
+<Decl> ::= <PrimitiveTypes> <Id>
+        
+<ArrayDecl> ::= <ArrayType> <Id>
+                          
+<ArrayId> ::= Id <Entry>
+           
+<Entry> ::= '[' <ArraySize> ']' <Entries>
+         
+<Entries> ::= '[' <ArraySize> ']' <Entries>
+           | <>
         
 !===================================================================
 ! Assignment

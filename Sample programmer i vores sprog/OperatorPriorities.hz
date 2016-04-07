@@ -10,10 +10,10 @@ Program
 	Number res3
 	Number res4
 	
-	Number res1_equiv
-	Number res2_equiv
-	Number res3_equiv
-	Number res4_equiv
+	Number res1Equiv
+	Number res2Equiv
+	Number res3Equiv
+	Number res4Equiv
 	
 	res1 = a > b AND c < x
 	res2 = a < NOT b OR not(not(a))
@@ -25,14 +25,14 @@ Program
 	write("res3 = " + res3)
 	write("res4 = " + res4)
 	
-	res1_equiv = (a > b) and (c < x)
-	res2_equiv = (a < (not(b)) or (not(not(a))
-	res3_equiv = (a + b) < (((not(c)) + c))
-	res4_equiv = (a - x) or ((b * c) and (b / a))
+	res1Equiv = (a > b) and (c < x)
+	res2Equiv = (a < (not(b)) or (not(not(a))
+	res3Equiv = (a + b) < (((not(c)) + c))
+	res4Equiv = (a - x) or ((b * c) and (b / a))
 	
-	write("res1_equiv = " + res1_equiv)
-	write("res2_equiv = " + res2_equiv)
-	write("res3_equiv = " + res3_equiv)
-	write("res4_equiv = " + res4_equiv)
+	write("res1Equiv = " + res1Equiv)
+	write("res2Equiv = " + res2Equiv)
+	write("res3Equiv = " + res3Equiv)
+	write("res4Equiv = " + res4Equiv)
 
 End program

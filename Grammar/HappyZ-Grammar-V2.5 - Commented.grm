@@ -89,8 +89,7 @@ BooleanLiteral = 'TRUE' | 'FALSE'
 <ConstantDecls> ::= <Constant> <nl> <ConstantDecls>
                  | <>
                  
-<Constant> ::= 'Constant' <PrimitiveTypes> Id Assign <Expr>
-            | 'Constant' <ArrayType> Id Assign <ArrayAssign>
+<Constant> ::= 'Constant' <ArrayType> Id Assign <ArrayAssign>
 
 !===================================================================
 ! Function Declaration

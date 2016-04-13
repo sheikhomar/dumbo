@@ -218,6 +218,8 @@ namespace dumbo.WpfApp
                 ResultTextBox.Text = $"File {currentSourcePath} does not exist!";
                 return;
             }
+
+            SaveFile(sender, e);
             
             var data = new StringReader(textEditor.Text);
             var parserResult = _myParser.Parse(data);

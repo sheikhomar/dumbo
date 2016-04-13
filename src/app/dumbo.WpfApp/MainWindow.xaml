@@ -55,9 +55,6 @@
             <Button Command="Paste">
                 <Image Source="Images/Paste.png" Height="16"/>
             </Button>
-            <Button Command="Delete">
-                <Image Source="Images/Delete.png" Height="16"/>
-            </Button>
             <Separator/>
             <Button Command="Undo">
                 <Image Source="Images/Undo.png" Height="16"/>
@@ -146,9 +143,9 @@
 
                     <DataGrid Grid.Row="3" Name="ErrorList" AutoGenerateColumns="False">
                         <DataGrid.Columns>
-                            <DataGridTextColumn Binding="{Binding Status}" Header="Status" IsReadOnly="True" Width="50"/>
-                            <DataGridTextColumn Binding="{Binding Line}" Header="Line" IsReadOnly="True" Width="40"/>
-                            <DataGridTextColumn Binding="{Binding Description}" Header="Description" IsReadOnly="True" Width="*" />
+                            <DataGridTextColumn Binding="{Binding Kind}" Header="Status" IsReadOnly="True" Width="50"/>
+                            <DataGridTextColumn Binding="{Binding SourcePosition.StartLine}" Header="Line" IsReadOnly="True" Width="40"/>
+                            <DataGridTextColumn Binding="{Binding Message}" Header="Description" IsReadOnly="True" Width="*" />
                         </DataGrid.Columns>
                     </DataGrid>
                 </Grid>

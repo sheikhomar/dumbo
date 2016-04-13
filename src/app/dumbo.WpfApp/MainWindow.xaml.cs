@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.IO;
 using System.Linq;
+using System.Security.Policy;
 using System.Text;
 using System.Windows;
 using System.Windows.Input;
@@ -240,7 +241,8 @@ namespace dumbo.WpfApp
             else
             {
                 PrettyPrint(parserResult.Root);
-                CheckContextualContraints(parserResult.Root);
+                //CheckContextualContraints(parserResult.Root);
+                ScopeAndTypeCheck(parserResult.Root);
             }
 
             latestCompiledAt = DateTime.Now;
@@ -323,6 +325,15 @@ namespace dumbo.WpfApp
             }
         }
 
+        private void CheckContextualContraints(RootNode root)
+        {
+            CCAnalyser analyser = new CCAnalyser();
+            root.CCAnalyse(analyser);
+            var errors = analyser.ErrorReporter.Errors;
+            var list = errors.Select(err => new ErrorListItem(err));
+            ErrorList.ItemsSource = list;
+        }
+
         private void PrettyPrint(RootNode root)
         {
             var ppv = new PrettyPrintVisitor();
@@ -330,32 +341,42 @@ namespace dumbo.WpfApp
             ResultTextBox.Text = ppv.GetResult();
         }
 
-        private void CheckContextualContraints(RootNode root)
+        private void ScopeAndTypeCheck(RootNode root)
         {
-            CCAnalyser analyser = new CCAnalyser();
-            root.CCAnalyse(analyser);
+            var reporter = new EventReporter();
+            var scopeChecker = new ScopeCheckVisitor(reporter);
+            var typeChecker = new TypeCheckVisitor(reporter);
+            root.Accept(scopeChecker, new VisitorArgs());
+            root.Accept(typeChecker, new VisitorArgs());
 
-            IList<ErrorListItem> list = new List<ErrorListItem>();
+            var events = reporter.GetEvents().ToArray();
+            ErrorList.ItemsSource = events;
 
-            var errors = analyser.ErrorReporter.Errors;
-            if (errors.Any())
+            _textMarkerService.RemoveAll(m => true);
+
+            foreach (var item in events)
             {
-                
+                var startLine = textEditor.Document.GetLineByNumber(item.SourcePosition.StartLine);
 
-                foreach (var error in errors)
-                {
-                    ResultTextBox.Text += $"\nLine {error.Line}, Col {error.Column}: {error.Message}";
-                    list.Add(new ErrorListItem() { Line = error.Line, Status = "Error", Description = error.Message});
-                }
+                int selectionStart = startLine.Offset + item.SourcePosition.StartColumn;
+                int selectionEnd = item.SourcePosition.EndColumn - item.SourcePosition.StartColumn;
+                ITextMarker marker = _textMarkerService.Create(selectionStart, selectionEnd);
+                marker.MarkerTypes = TextMarkerTypes.SquigglyUnderline;
+                marker.MarkerColor = Colors.Red;
             }
-
-            
-            ErrorList.ItemsSource = list;
         }
+
     }
 
     public class ErrorListItem
     {
+        public ErrorListItem(CCError error)
+        {
+            Line = error.Line;
+            Status = "Error";
+            Description = error.Message;
+        }
+
         public string Status { get; set; }
         public string Description { get; set; }
         public int Line { get; set; }

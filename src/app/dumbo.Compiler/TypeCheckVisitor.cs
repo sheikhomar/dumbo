@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using dumbo.Compiler.AST;
 
@@ -37,8 +38,15 @@ namespace dumbo.Compiler
 
                 if (!idRes.Equals(exprRes))
                 {
-                    var exprType = exprRes.Types.First();
-                    Reporter.Error($"The variable '{id.Name}' cannot be assigned the type {exprType}.", expr.SourcePosition);
+                    if (exprRes.Types.Any())
+                    {
+                        var exprType = exprRes.Types.First();
+                        Reporter.Error($"The variable '{id.Name}' cannot be assigned the type {exprType}.", expr.SourcePosition);
+                    }
+                    else
+                    {
+                        Reporter.Error($"Expression does not return any value.", expr.SourcePosition);
+                    }
                 }
             }
             else if (node.Expressions.Count == 1)
@@ -178,10 +186,15 @@ namespace dumbo.Compiler
 
         public VisitResult Visit(ExpressionListNode node, VisitorArgs arg)
         {
-            foreach (var item in node)
-                item.Accept(this, arg);
+            var list = new List<HappyType>();
 
-            return EmptyResult;
+            foreach (var item in node)
+            {
+                var result = GetVisitResult(item, arg);
+                list.AddRange(result.Types);
+            }
+            
+            return new TypeCheckVisitResult(list);
         }
 
         public VisitResult Visit(FormalParamListNode node, VisitorArgs arg)
@@ -199,13 +212,36 @@ namespace dumbo.Compiler
             if (node.DeclarationNode == null)
                 return new TypeCheckVisitResult(HappyType.Error);
 
+            if (node.DeclarationNode.Parameters.Count != node.Parameters.Count)
+            {
+                Reporter.Error("The number of actual parameters does not correspond to number of formal parameters.",
+                    node.SourcePosition);
+            }
+            else
+            {
+                for (int i = 0; i < node.Parameters.Count; i++)
+                {
+                    var actual = GetVisitResult(node.Parameters[i], arg).Types.First();
+                    var formal = node.DeclarationNode.Parameters[i].Type;
+                    if (actual != formal)
+                    {
+                        Reporter.Error($"The actual parameter {i+1} does not match the formal parameter.", node.Parameters[i].SourcePosition);
+                    }
+                }
+            }
+
             return new TypeCheckVisitResult(node.DeclarationNode.ReturnTypes);
         }
 
         public VisitResult Visit(FuncCallStmtNode node, VisitorArgs arg)
         {
-            node.CallNode.Accept(this, arg);
-
+            var result = node.CallNode.Accept(this, arg) as TypeCheckVisitResult;
+            if (result.Types.Any())
+            {
+                string funcName = node.CallNode.FuncName;
+                Reporter.Error($"Cannot use function '{funcName}' as a statement. The function should return 'Nothing'.", node.CallNode.SourcePosition);
+            }
+            
             return EmptyResult;
         }
 
@@ -219,27 +255,62 @@ namespace dumbo.Compiler
 
         public VisitResult Visit(FuncDeclNode node, VisitorArgs arg)
         {
+            node.Body.Accept(this, arg);
+
+            var returnStmtNodes = node.Body.FindDescendants<ReturnStmtNode>();
+
+            if (!returnStmtNodes.Any() && node.ReturnTypes.Count > 0)
+            {
+                Reporter.Error($"There are no 'Return' statements in the function '{node.Name}'.", node.SourcePosition);
+            }
+
+            foreach (var retStmt in returnStmtNodes)
+            {
+                var retStmtTypes = GetVisitResult(retStmt.Expressions, arg).Types.ToList();
+                if (retStmtTypes.Count != node.ReturnTypes.Count)
+                {
+                    Reporter.Error("Number of return values does not correspond to number of declared return types.",
+                        retStmt.SourcePosition);
+                }
+                else
+                {
+                    for (int i = 0; i < node.ReturnTypes.Count; i++)
+                    {
+                        if (retStmtTypes[i] != node.ReturnTypes[i])
+                        {
+                            Reporter.Error($"Return value {i + 1} is not compatible with the declared return type.",
+                                retStmt.SourcePosition);
+                        }
+                    }
+                }
+            }
+
             return EmptyResult;
         }
 
         public VisitResult Visit(IdentifierListNode node, VisitorArgs arg)
         {
+            var list = new List<HappyType>();
+            // TODO Improve on code dublication. Similar code can be found in 
+            // public VisitResult Visit(ExpressionListNode node, VisitorArgs arg)
             foreach (var item in node)
-                item.Accept(this, arg);
+            {
+                var result = GetVisitResult(item, arg);
+                list.AddRange(result.Types);
+            }
 
-            return EmptyResult;
+            return new TypeCheckVisitResult(list);
         }
 
         public VisitResult Visit(IdentifierNode node, VisitorArgs arg)
         {
-
             HappyType type = node.DeclarationNode?.Type ?? HappyType.Error;
             return new TypeCheckVisitResult(type);
         }
 
         public VisitResult Visit(IfElseStmtNode node, VisitorArgs arg)
         {
-            EnsureCorrectType(node.Predicate, HappyType.Number, arg);
+            EnsureCorrectType(node.Predicate, HappyType.Boolean, arg);
 
             node.Body.Accept(this, arg);
             node.ElseIfStatements.Accept(this, arg);
@@ -250,7 +321,7 @@ namespace dumbo.Compiler
 
         public VisitResult Visit(IfStmtNode node, VisitorArgs arg)
         {
-            EnsureCorrectType(node.Predicate, HappyType.Number, arg);
+            EnsureCorrectType(node.Predicate, HappyType.Boolean, arg);
 
             node.Body.Accept(this, arg);
             node.ElseIfStatements.Accept(this, arg);
@@ -267,6 +338,12 @@ namespace dumbo.Compiler
         {
             node.Body.Accept(this, arg);
 
+            var returnStmts = node.Body.FindDescendants<ReturnStmtNode>();
+            foreach (var returnStmt in returnStmts)
+            {
+                Reporter.Error("Program cannot return values.", returnStmt.SourcePosition);
+            }
+
             return EmptyResult;
         }
 
@@ -274,12 +351,16 @@ namespace dumbo.Compiler
         {
             EnsureCorrectType(node.Number, HappyType.Number, arg);
 
+            node.Body.Accept(this, arg);
+
             return EmptyResult;
         }
 
         public VisitResult Visit(RepeatWhileStmtNode node, VisitorArgs arg)
         {
             EnsureCorrectType(node.Predicate, HappyType.Boolean, arg);
+
+            node.Body.Accept(this, arg);
 
             return EmptyResult;
         }

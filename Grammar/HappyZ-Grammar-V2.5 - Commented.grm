@@ -89,7 +89,7 @@ BooleanLiteral = 'TRUE' | 'FALSE'
 <ConstantDecls> ::= <Constant> <nl> <ConstantDecls>
                  | <>
                  
-<Constant> ::= 'Constant' <PrimitiveTypes> Id Assign <Expr>
+<Constant> ::= 'Constant' <PrimitiveTypes> Id Assign <Literal>
             | 'Constant' <ArrayType> Id Assign <ArrayAssign>
 
 !===================================================================

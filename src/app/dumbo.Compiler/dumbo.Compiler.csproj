@@ -89,6 +89,7 @@
     <Compile Include="EventKind.cs" />
     <Compile Include="EventReporter.cs" />
     <Compile Include="IEventReporter.cs" />
+    <Compile Include="InterpretationVisitor.cs" />
     <Compile Include="IVisitable.cs" />
     <Compile Include="IVisitor.cs" />
     <Compile Include="PrettyPrintVisitor.cs" />

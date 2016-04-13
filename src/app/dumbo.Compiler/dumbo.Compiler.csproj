@@ -84,6 +84,7 @@
     <Compile Include="CCAnalysis\CCError.cs" />
     <Compile Include="CCAnalysis\ErrorReporter.cs" />
     <Compile Include="CCAnalysis\IErrorReporter.cs" />
+    <Compile Include="CodeGeneratorVisitor.cs" />
     <Compile Include="Event.cs" />
     <Compile Include="EventKind.cs" />
     <Compile Include="EventReporter.cs" />

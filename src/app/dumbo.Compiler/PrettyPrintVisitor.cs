@@ -6,18 +6,19 @@ using dumbo.Compiler.AST;
 
 namespace dumbo.Compiler
 {
+
     public class PrettyPrintVisitor : IVisitor<VisitResult, VisitorArgs>
     {
         private const int TabSize = 2;
         private readonly StringBuilder _buffer;
         private int _currentIdentation = 0;
-        private readonly VisitResult _emptyResult;
+        private VisitResult EmptyResult { get; }
         private bool _isNewLine;
 
         public PrettyPrintVisitor()
         {
             _buffer = new StringBuilder();
-            _emptyResult = new VisitResult();
+            EmptyResult = new VisitResult();
             _isNewLine = true;
         }
 
@@ -30,7 +31,7 @@ namespace dumbo.Compiler
         {
             VisitChildren(node, ", ", arg);
 
-            return _emptyResult;
+            return EmptyResult;
         }
 
         public VisitResult Visit(AssignmentStmtNode node, VisitorArgs arg)
@@ -40,7 +41,7 @@ namespace dumbo.Compiler
             node.Expressions.Accept(this, arg);
             WriteLine();
 
-            return _emptyResult;
+            return EmptyResult;
         }
 
         public VisitResult Visit(BinaryOperationNode node, VisitorArgs arg)
@@ -51,14 +52,14 @@ namespace dumbo.Compiler
             Write(" ");
             node.RightOperand.Accept(this, arg);
 
-            return _emptyResult;
+            return EmptyResult;
         }
 
         public VisitResult Visit(BreakStmtNode node, VisitorArgs arg)
         {
             WriteLine("Break");
 
-            return _emptyResult;
+            return EmptyResult;
         }
 
         public VisitResult Visit(DeclAndAssignmentStmtNode node, VisitorArgs arg)
@@ -69,7 +70,7 @@ namespace dumbo.Compiler
             node.Expressions.Accept(this, arg);
             WriteLine();
 
-            return _emptyResult;
+            return EmptyResult;
         }
 
         public VisitResult Visit(DeclStmtNode node, VisitorArgs arg)
@@ -78,7 +79,7 @@ namespace dumbo.Compiler
             node.Identifiers.Accept(this, arg);
             WriteLine();
 
-            return _emptyResult;
+            return EmptyResult;
         }
 
         public VisitResult Visit(ElseIfStmtListNode node, VisitorArgs arg)
@@ -86,7 +87,7 @@ namespace dumbo.Compiler
             foreach (var item in node)
                 item.Accept(this, arg);
 
-            return _emptyResult;
+            return EmptyResult;
         }
 
         public VisitResult Visit(ElseIfStmtNode node, VisitorArgs arg)
@@ -96,28 +97,28 @@ namespace dumbo.Compiler
             WriteLine(") Then");
             node.Body.Accept(this, arg);
 
-            return _emptyResult;
+            return EmptyResult;
         }
 
         public VisitResult Visit(ExpressionListNode node, VisitorArgs arg)
         {
             VisitChildren(node, ", ", arg);
 
-            return _emptyResult;
+            return EmptyResult;
         }
 
         public VisitResult Visit(FormalParamListNode node, VisitorArgs arg)
         {
             VisitChildren(node, ", ", arg);
 
-            return _emptyResult;
+            return EmptyResult;
         }
 
         public VisitResult Visit(FormalParamNode node, VisitorArgs arg)
         {
             Write($"{node.Type} {node.Name}");
 
-            return _emptyResult;
+            return EmptyResult;
         }
 
         public VisitResult Visit(FuncCallExprNode node, VisitorArgs arg)
@@ -126,7 +127,7 @@ namespace dumbo.Compiler
             node.Parameters.Accept(this, arg);
             Write(")");
 
-            return _emptyResult;
+            return EmptyResult;
         }
 
         public VisitResult Visit(FuncCallStmtNode node, VisitorArgs arg)
@@ -134,7 +135,7 @@ namespace dumbo.Compiler
             node.CallNode.Accept(this, arg);
             WriteLine();
 
-            return _emptyResult;
+            return EmptyResult;
         }
 
         public VisitResult Visit(FuncDeclListNode node, VisitorArgs arg)
@@ -142,7 +143,7 @@ namespace dumbo.Compiler
             foreach (var item in node)
                 item.Accept(this, arg);
 
-            return _emptyResult;
+            return EmptyResult;
         }
 
         public VisitResult Visit(FuncDeclNode node, VisitorArgs arg)
@@ -166,21 +167,21 @@ namespace dumbo.Compiler
             node.Body.Accept(this, arg);
             WriteLine("End Function");
 
-            return _emptyResult;
+            return EmptyResult;
         }
 
         public VisitResult Visit(IdentifierListNode node, VisitorArgs arg)
         {
             VisitChildren(node, ", ", arg);
 
-            return _emptyResult;
+            return EmptyResult;
         }
 
         public VisitResult Visit(IdentifierNode node, VisitorArgs arg)
         {
             Write(node.Name);
 
-            return _emptyResult;
+            return EmptyResult;
         }
 
         public VisitResult Visit(IfElseStmtNode node, VisitorArgs arg)
@@ -194,7 +195,7 @@ namespace dumbo.Compiler
             node.Else.Accept(this, arg);
             WriteLine("End If");
 
-            return _emptyResult;
+            return EmptyResult;
         }
 
         public VisitResult Visit(IfStmtNode node, VisitorArgs arg)
@@ -206,14 +207,14 @@ namespace dumbo.Compiler
             node.ElseIfStatements.Accept(this, arg);
             WriteLine("End If");
 
-            return _emptyResult;
+            return EmptyResult;
         }
 
         public VisitResult Visit(LiteralValueNode node, VisitorArgs arg)
         {
             Write(node.Value);
 
-            return _emptyResult;
+            return EmptyResult;
         }
 
         public VisitResult Visit(ProgramNode node, VisitorArgs arg)
@@ -222,7 +223,7 @@ namespace dumbo.Compiler
             node.Body.Accept(this, arg);
             WriteLine("End Program");
 
-            return _emptyResult;
+            return EmptyResult;
         }
 
         public VisitResult Visit(RepeatStmtNode node, VisitorArgs arg)
@@ -233,7 +234,7 @@ namespace dumbo.Compiler
             node.Body.Accept(this, arg);
             WriteLine("End Repeat");
 
-            return _emptyResult;
+            return EmptyResult;
         }
 
         public VisitResult Visit(RepeatWhileStmtNode node, VisitorArgs arg)
@@ -244,7 +245,7 @@ namespace dumbo.Compiler
             node.Body.Accept(this, arg);
             WriteLine("End Repeat");
 
-            return _emptyResult;
+            return EmptyResult;
         }
 
         public VisitResult Visit(ReturnStmtNode node, VisitorArgs arg)
@@ -256,7 +257,7 @@ namespace dumbo.Compiler
                 node.Expressions.Accept(this, arg);
             WriteLine();
 
-            return _emptyResult;
+            return EmptyResult;
         }
 
         public VisitResult Visit(RootNode node, VisitorArgs arg)
@@ -264,7 +265,7 @@ namespace dumbo.Compiler
             node.Program.Accept(this, arg);
             node.FuncDecls.Accept(this, arg);
 
-            return _emptyResult;
+            return EmptyResult;
         }
 
         public VisitResult Visit(StmtBlockNode node, VisitorArgs arg)
@@ -279,7 +280,7 @@ namespace dumbo.Compiler
                 Unindent();
             }
             
-            return _emptyResult;
+            return EmptyResult;
         }
 
         public VisitResult Visit(UnaryOperationNode node, VisitorArgs arg)
@@ -287,7 +288,7 @@ namespace dumbo.Compiler
             Write(OperatorTranslator.UnaryOperatorTypeTranslator(node.Operator));
             node.Expression.Accept(this, arg);
 
-            return _emptyResult;
+            return EmptyResult;
         }
         
         private void VisitChildren<T>(IEnumerable<T> children, string separator, VisitorArgs arg) where T : IVisitable

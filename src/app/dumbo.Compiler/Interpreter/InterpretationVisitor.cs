@@ -11,10 +11,13 @@ namespace dumbo.Compiler.Interpreter
 
         private Dictionary<string, KnownAddress> identifierDictionary;
 
+        private Stack<FuncDeclNode> callStack;
+
         public InterpretationVisitor(EventReporter reporter)
         {
             Reporter = reporter;
             identifierDictionary = new Dictionary<string, KnownAddress>();
+            callStack = new Stack<FuncDeclNode>();
         }
 
         public Value Visit(ActualParamListNode node, VisitorArgs arg)
@@ -30,7 +33,16 @@ namespace dumbo.Compiler.Interpreter
             {
                 var identifierNode = node.Identifiers.First();
                 var knownAddress = identifierNode.Accept(this, arg) as KnownAddress;
-                _data[knownAddress.Address] = value;
+
+                if (value is ReturnValue)
+                {
+                    var returnValue = value as ReturnValue;
+                    _data[knownAddress.Address] = returnValue.ReturnValues.First();
+                }
+                else
+                {
+                    _data[knownAddress.Address] = value;
+                }
             }
             else
             {
@@ -53,8 +65,7 @@ namespace dumbo.Compiler.Interpreter
         {
             foreach (var identifier in node.Identifiers)
             {
-                _data.Add(new UndefinedValue());
-                identifierDictionary.Add(identifier.Name, new KnownAddress(_data.Count - 1));
+                AllocateMemory(identifier.Name, new UndefinedValue());
             }
             // TODO Copy assignment code
             return null;
@@ -64,8 +75,7 @@ namespace dumbo.Compiler.Interpreter
         {
             foreach (var identifier in node.Identifiers)
             {
-                _data.Add(new UndefinedValue());
-                identifierDictionary.Add(identifier.Name, new KnownAddress(_data.Count - 1));
+                AllocateMemory(identifier.Name, new UndefinedValue());
             }
             return null;
         }
@@ -97,22 +107,57 @@ namespace dumbo.Compiler.Interpreter
 
         public Value Visit(FuncCallExprNode node, VisitorArgs arg)
         {
-            throw new System.NotImplementedException();
+            callStack.Push(node.DeclarationNode);
+
+            for (int i = 0; i < node.DeclarationNode.Parameters.Count; i++)
+            {
+                var formalParam = node.DeclarationNode.Parameters[i];
+                var actualParam = node.Parameters[i];
+                var knownAddress = identifierDictionary[formalParam.Name];
+                _data[knownAddress.Address] = actualParam.Accept(this, arg);
+            }
+
+            try
+            {
+                node.DeclarationNode.Body.Accept(this, arg);
+            }
+            catch (StopFunctionException)
+            {
+
+            }
+
+            return null;
         }
 
         public Value Visit(FuncCallStmtNode node, VisitorArgs arg)
         {
-            throw new System.NotImplementedException();
+            node.CallNode.Accept(this, arg);
+            return null;
         }
 
         public Value Visit(FuncDeclListNode node, VisitorArgs arg)
         {
+            foreach (var func in node)
+            {
+                func.Accept(this, arg);
+            }
             return null;
         }
 
         public Value Visit(FuncDeclNode node, VisitorArgs arg)
         {
-            throw new System.NotImplementedException();
+            foreach (var parameter in node.Parameters)
+            {
+                AllocateMemory(parameter.Name, new UndefinedValue());
+            }
+
+            var values = new ReturnValue();
+            foreach (var returnType in node.ReturnTypes)
+            {
+                values.ReturnValues.Add(new UndefinedValue());
+            }
+            AllocateMemory(node.Name, values);
+            return null;
         }
 
         public Value Visit(IdentifierListNode node, VisitorArgs arg)
@@ -168,13 +213,29 @@ namespace dumbo.Compiler.Interpreter
 
         public Value Visit(ReturnStmtNode node, VisitorArgs arg)
         {
-            throw new System.NotImplementedException();
+            if (callStack.Count == 0)
+            {
+                Reporter.Error("Wrong return statement call.", new SourcePosition(0, 0, 0, 0));
+            }
+            else
+            {
+                var funcDeclNode = callStack.Pop();
+                var knownAddress = identifierDictionary[funcDeclNode.Name];
+                var returnValue = _data[knownAddress.Address] as ReturnValue;
+                for (int i = 0; i < node.Expressions.Count; i++)
+                {
+                    returnValue.ReturnValues[i] = node.Expressions[i].Accept(this, arg);
+                }
+                throw new StopFunctionException();
+            }
+
+            return null;
         }
 
         public Value Visit(RootNode node, VisitorArgs arg)
         {
-            node.Program.Accept(this, arg);
             node.FuncDecls.Accept(this, arg);
+            node.Program.Accept(this, arg);
             return null;
         }
 
@@ -190,6 +251,12 @@ namespace dumbo.Compiler.Interpreter
         public Value Visit(UnaryOperationNode node, VisitorArgs arg)
         {
             throw new System.NotImplementedException();
+        }
+
+        private void AllocateMemory(string name, Value value)
+        {
+            _data.Add(value);
+            identifierDictionary.Add(name, new KnownAddress(_data.Count - 1));
         }
     }
 }

@@ -83,6 +83,8 @@
     <Compile Include="Interpreter\InterpreterState.cs" />
     <Compile Include="Interpreter\BooleanValue.cs" />
     <Compile Include="Interpreter\KnownAddress.cs" />
+    <Compile Include="Interpreter\ReturnValue.cs" />
+    <Compile Include="Interpreter\StopFunctionException.cs" />
     <Compile Include="Interpreter\UndefinedValue.cs" />
     <Compile Include="Interpreter\Value.cs" />
     <Compile Include="BinaryOperationTypeChecker.cs" />

@@ -81,9 +81,6 @@
     <Compile Include="AST\UnaryOperatorType.cs" />
     <Compile Include="AST\ValueNode.cs" />
     <Compile Include="BinaryOperationTypeChecker.cs" />
-    <Compile Include="CCAnalysis\CCError.cs" />
-    <Compile Include="CCAnalysis\ErrorReporter.cs" />
-    <Compile Include="CCAnalysis\IErrorReporter.cs" />
     <Compile Include="CodeGeneratorVisitor.cs" />
     <Compile Include="Event.cs" />
     <Compile Include="EventKind.cs" />
@@ -116,9 +113,6 @@
     <Compile Include="SyntaxAnalysis\StmtProduction.cs" />
     <Compile Include="SyntaxAnalysis\SyntaxError.cs" />
     <Compile Include="SyntaxAnalysis\AbstractSyntaxTreeBuilder.cs" />
-    <Compile Include="CCAnalysis\ICCAnalyser.cs" />
-    <Compile Include="CCAnalysis\ICCAnalysable.cs" />
-    <Compile Include="CCAnalysis\CCAnalyser.cs" />
     <Compile Include="SyntaxAnalysis\TokenData.cs" />
     <Compile Include="TypeCheckVisitor.cs" />
     <Compile Include="TypeCheckVisitResult.cs" />
@@ -126,9 +120,7 @@
     <Compile Include="VisitorArgs.cs" />
     <Compile Include="VisitResult.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="CodeGeneration\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

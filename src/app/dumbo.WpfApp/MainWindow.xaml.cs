@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.IO;
 using System.Linq;
-using System.Security.Policy;
 using System.Text;
 using System.Windows;
 using System.Windows.Input;
@@ -12,7 +9,6 @@ using System.Windows.Media;
 using System.Xml;
 using dumbo.Compiler;
 using dumbo.Compiler.AST;
-using dumbo.Compiler.CCAnalysis;
 using ICSharpCode.AvalonEdit.Highlighting;
 using Microsoft.Win32;
 using Path = System.IO.Path;
@@ -325,15 +321,6 @@ namespace dumbo.WpfApp
             }
         }
 
-        private void CheckContextualContraints(RootNode root)
-        {
-            CCAnalyser analyser = new CCAnalyser();
-            root.CCAnalyse(analyser);
-            var errors = analyser.ErrorReporter.Errors;
-            var list = errors.Select(err => new ErrorListItem(err));
-            ErrorList.ItemsSource = list;
-        }
-
         private void PrettyPrint(RootNode root)
         {
             var ppv = new PrettyPrintVisitor();
@@ -365,21 +352,5 @@ namespace dumbo.WpfApp
                 marker.MarkerColor = Colors.Red;
             }
         }
-
-    }
-
-    public class ErrorListItem
-    {
-        public ErrorListItem(CCError error)
-        {
-            Line = error.Line;
-            Status = "Error";
-            Description = error.Message;
-        }
-
-        public string Status { get; set; }
-        public string Description { get; set; }
-        public int Line { get; set; }
-        public int Column { get; set; }
     }
 }

@@ -1,8 +1,4 @@
-﻿using System.Text;
-using dumbo.Compiler.CCAnalysis;
-using dumbo.Compiler.SymbolTable;
-
-namespace dumbo.Compiler.AST
+﻿namespace dumbo.Compiler.AST
 {
     public class DeclStmtNode : StmtNode, IVariableDeclNode
     {
@@ -20,17 +16,5 @@ namespace dumbo.Compiler.AST
         {
             return visitor.Visit(this, arg);
         }
-
-        public override void CCAnalyse(ICCAnalyser analyser)
-        {
-            foreach (var id in Identifiers)
-            {
-                analyser.AddVariableToSymbolTable(id.Name, Type, false, Line, Column);
-            }
-
-            //
-        }
-
-
     }
 }

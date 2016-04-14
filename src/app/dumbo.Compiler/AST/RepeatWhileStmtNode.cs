@@ -1,6 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Text;
-using dumbo.Compiler.CCAnalysis;
 
 namespace dumbo.Compiler.AST
 {
@@ -20,17 +18,7 @@ namespace dumbo.Compiler.AST
         {
             return visitor.Visit(this, arg);
         }
-
-        public override void CCAnalyse(ICCAnalyser analyser)
-        {
-            //Check predicate is bool
-            if (Predicate.GetHappyType(analyser.SymbolTable).GetFirst() != HappyType.Boolean)
-                analyser.ErrorReporter.AddError("Repeat While Statement must have a predicate of type Boolean");
-
-            //Check that body is type correct
-            Body.CCAnalyse(analyser);
-        }
-
+        
         public IEnumerable<StmtBlockNode> GetBlocks()
         {
             yield return Body;

@@ -1,8 +1,3 @@
-using System;
-using System.Text;
-using dumbo.Compiler.CCAnalysis;
-using dumbo.Compiler.SymbolTable;
-
 namespace dumbo.Compiler.AST
 {
     public class IdentifierNode : ExpressionNode
@@ -19,26 +14,6 @@ namespace dumbo.Compiler.AST
         public override T Accept<T, K>(IVisitor<T, K> visitor, K arg)
         {
             return visitor.Visit(this, arg);
-        }
-
-        public override TypeDescriptor GetHappyType(ISymbolTable symbolTable)
-        {
-            HappyType? retrivedType = null;
-            var symbolEntry = symbolTable.RetrieveSymbol(Name);
-            if (symbolEntry != null)
-            {
-                retrivedType = (symbolEntry.Type as SymbolTablePrimitiveType)?.Type;
-            }
-
-            if (retrivedType.HasValue)
-                return new TypeDescriptor(retrivedType.Value);
-            else
-                return new TypeDescriptor(HappyType.Error);
-        }
-
-        public override void CCAnalyse(ICCAnalyser analyser)
-        {
-
         }
     }
 }

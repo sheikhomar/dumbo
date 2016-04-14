@@ -1,6 +1,4 @@
 using System.Collections.Generic;
-using System.Text;
-using dumbo.Compiler.CCAnalysis;
 
 namespace dumbo.Compiler.AST
 {
@@ -22,20 +20,7 @@ namespace dumbo.Compiler.AST
         {
             return visitor.Visit(this, arg);
         }
-
-        public override void CCAnalyse(ICCAnalyser analyser)
-        {
-            //Check Predicate
-            if (Predicate.GetHappyType(analyser.SymbolTable).GetFirst() != HappyType.Boolean)
-                analyser.ErrorReporter.AddError("If Statement did not have a predicate of type Boolean");
-
-            //Check body
-            Body.CCAnalyse(analyser);
-
-            //Check Else If Statements
-            ElseIfStatements.CCAnalyse(analyser);
-        }
-
+        
         public virtual IEnumerable<StmtBlockNode> GetBlocks()
         {
             yield return Body;

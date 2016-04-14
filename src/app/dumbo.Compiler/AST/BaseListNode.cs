@@ -1,8 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using dumbo.Compiler.CCAnalysis;
 
 namespace dumbo.Compiler.AST
 {
@@ -69,14 +67,6 @@ namespace dumbo.Compiler.AST
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
-        }
-
-        public override void CCAnalyse(ICCAnalyser analyser)
-        {
-            foreach (var item in _internalList)
-            {
-                item.CCAnalyse(analyser);
-            }
         }
     }
 }

@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using dumbo.Compiler;
 using dumbo.Compiler.AST;
-using dumbo.Compiler.CCAnalysis;
 using dumbo.Compiler.SyntaxAnalysis;
 using NUnit.Framework;
 

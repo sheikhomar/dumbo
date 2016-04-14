@@ -1,5 +1,3 @@
-using dumbo.Compiler.CCAnalysis;
-
 namespace dumbo.Compiler.AST
 {
     public class FormalParamNode : BaseNode, IVariableDeclNode
@@ -13,12 +11,7 @@ namespace dumbo.Compiler.AST
 
         public string Name { get; }
         public HappyType Type { get; }
-
-        public override void CCAnalyse(ICCAnalyser analyser)
-        {
-            // Do nothing
-        }
-
+        
         public override T Accept<T, K>(IVisitor<T, K> visitor, K arg)
         {
             return visitor.Visit(this, arg);

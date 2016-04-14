@@ -80,6 +80,7 @@
     <Compile Include="AST\UnaryOperationNode.cs" />
     <Compile Include="AST\UnaryOperatorType.cs" />
     <Compile Include="AST\ValueNode.cs" />
+    <Compile Include="Interpreter\CallFrame.cs" />
     <Compile Include="Interpreter\InterpreterState.cs" />
     <Compile Include="Interpreter\BooleanValue.cs" />
     <Compile Include="Interpreter\KnownAddress.cs" />

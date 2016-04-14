@@ -1,4 +1,5 @@
 using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.Linq;
 using dumbo.Compiler.AST;
@@ -11,13 +12,13 @@ namespace dumbo.Compiler.Interpreter
 
         private Dictionary<string, KnownAddress> identifierDictionary;
 
-        private Stack<FuncDeclNode> callStack;
+        private Stack<CallFrame> callStack;
 
         public InterpretationVisitor(EventReporter reporter)
         {
             Reporter = reporter;
             identifierDictionary = new Dictionary<string, KnownAddress>();
-            callStack = new Stack<FuncDeclNode>();
+            callStack = new Stack<CallFrame>();
         }
 
         public Value Visit(ActualParamListNode node, VisitorArgs arg)
@@ -107,7 +108,8 @@ namespace dumbo.Compiler.Interpreter
 
         public Value Visit(FuncCallExprNode node, VisitorArgs arg)
         {
-            callStack.Push(node.DeclarationNode);
+            CallFrame frame = new CallFrame(node.DeclarationNode);
+            callStack.Push(frame);
 
             for (int i = 0; i < node.DeclarationNode.Parameters.Count; i++)
             {
@@ -123,7 +125,6 @@ namespace dumbo.Compiler.Interpreter
             }
             catch (StopFunctionException)
             {
-
             }
 
             return null;
@@ -219,7 +220,8 @@ namespace dumbo.Compiler.Interpreter
             }
             else
             {
-                var funcDeclNode = callStack.Pop();
+                var callFrame = callStack.Pop();
+                var funcDeclNode = callFrame.Function;
                 var knownAddress = identifierDictionary[funcDeclNode.Name];
                 var returnValue = _data[knownAddress.Address] as ReturnValue;
                 for (int i = 0; i < node.Expressions.Count; i++)
@@ -255,6 +257,8 @@ namespace dumbo.Compiler.Interpreter
 
         private void AllocateMemory(string name, Value value)
         {
+            var latestCallFrame = callStack.Peek();
+            latestCallFrame.Allocate(name, value);
             _data.Add(value);
             identifierDictionary.Add(name, new KnownAddress(_data.Count - 1));
         }

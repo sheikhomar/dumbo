@@ -9,6 +9,7 @@ using System.Windows.Media;
 using System.Xml;
 using dumbo.Compiler;
 using dumbo.Compiler.AST;
+using dumbo.Compiler.Interpreter;
 using ICSharpCode.AvalonEdit.Highlighting;
 using Microsoft.Win32;
 using Path = System.IO.Path;
@@ -333,8 +334,14 @@ namespace dumbo.WpfApp
             var reporter = new EventReporter();
             var scopeChecker = new ScopeCheckVisitor(reporter);
             var typeChecker = new TypeCheckVisitor(reporter);
+            var interpreter = new InterpretationVisitor(reporter);
             root.Accept(scopeChecker, new VisitorArgs());
             root.Accept(typeChecker, new VisitorArgs());
+            if (!reporter.HasErrors)
+            {
+                root.Accept(interpreter, new VisitorArgs());
+            }
+            
 
             var events = reporter.GetEvents().ToArray();
             ErrorList.ItemsSource = events;

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using dumbo.Compiler.AST;
 
 namespace dumbo.Compiler
@@ -10,7 +11,12 @@ namespace dumbo.Compiler
         public EventReporter()
         {
             _events = new List<Event>();
-        } 
+        }
+
+        public bool HasErrors
+        {
+            get { return _events.Any(e => e.Kind == EventKind.Error); }
+        }
 
         public void Error(string message, SourcePosition sourcePosition)
         {

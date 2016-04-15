@@ -288,7 +288,7 @@ namespace dumbo.Compiler.Interpreter
 
         public Value Visit(IdentifierNode node, VisitorArgs arg)
         {
-            return CurrentCallFrame.CurrentBlockFrame.Get<Value>(node.Name);
+            return CurrentCallFrame.Get<Value>(node.Name);
         }
 
         public Value Visit(IfElseStmtNode node, VisitorArgs arg)
@@ -326,6 +326,21 @@ namespace dumbo.Compiler.Interpreter
 
         public Value Visit(RepeatStmtNode node, VisitorArgs arg)
         {
+            var accept = node.Number.Accept(this, arg) as NumberValue;
+            double currentValue = 1;
+            double toValue = accept.Number;
+
+            while (true)
+            {
+                if (currentValue >= toValue || currentValue < 0)
+                {
+                    break;
+                }
+
+                currentValue++;
+                node.Body.Accept(this, arg);
+            }
+
             return null;
         }
 

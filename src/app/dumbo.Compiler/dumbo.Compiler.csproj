@@ -82,6 +82,10 @@
     <Compile Include="AST\ValueNode.cs" />
     <Compile Include="Interpreter\BlockFrame.cs" />
     <Compile Include="Interpreter\BreakException.cs" />
+    <Compile Include="CodeGenerator\FuncVisitorArgs.cs" />
+    <Compile Include="CodeGenerator\Program.cs" />
+    <Compile Include="CodeGenerator\Stmt.cs" />
+    <Compile Include="CodeGenerator\Module.cs" />
     <Compile Include="Interpreter\CallFrame.cs" />
     <Compile Include="Interpreter\InterpreterState.cs" />
     <Compile Include="Interpreter\BooleanValue.cs" />
@@ -91,7 +95,7 @@
     <Compile Include="Interpreter\UndefinedValue.cs" />
     <Compile Include="Interpreter\Value.cs" />
     <Compile Include="BinaryOperationTypeChecker.cs" />
-    <Compile Include="CodeGeneratorVisitor.cs" />
+    <Compile Include="CodeGenerator\CodeGeneratorVisitor.cs" />
     <Compile Include="Event.cs" />
     <Compile Include="EventKind.cs" />
     <Compile Include="EventReporter.cs" />

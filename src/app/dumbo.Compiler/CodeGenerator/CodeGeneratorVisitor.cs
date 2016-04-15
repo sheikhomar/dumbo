@@ -1,6 +1,7 @@
 using dumbo.Compiler.AST;
+using System.Text;
 
-namespace dumbo.Compiler
+namespace dumbo.Compiler.CodeGenerator
 {
     public class RuntimeEntity
     {
@@ -8,6 +9,14 @@ namespace dumbo.Compiler
 
     public class CodeGeneratorVisitor : IVisitor<RuntimeEntity, VisitorArgs>
     {
+        private Program _program;
+        private Module _currentModule;
+
+        public CodeGeneratorVisitor()
+        {
+            _program = new Program();
+        }
+
         public RuntimeEntity Visit(ActualParamListNode node, VisitorArgs arg)
         {
             throw new System.NotImplementedException();
@@ -75,12 +84,38 @@ namespace dumbo.Compiler
 
         public RuntimeEntity Visit(FuncDeclListNode node, VisitorArgs arg)
         {
-            throw new System.NotImplementedException();
+            node.Accept(this, arg);
+            return null;
         }
 
         public RuntimeEntity Visit(FuncDeclNode node, VisitorArgs arg)
         {
+            FuncVisitorArgs funcArg = arg as FuncVisitorArgs;
+
+            if (funcArg != null && funcArg.VisitBody)
+            {
+                
+            }
             throw new System.NotImplementedException();
+        }
+
+        private void FuncHeader(FuncDeclNode node, bool body)
+        {
+            StringBuilder builder = new StringBuilder();
+
+            //ret type
+
+            //name
+
+            //parameters + ()
+            
+
+            if (body)
+                builder.Append('{');
+            else
+                builder.Append(';');
+
+            _currentModule.Append(new Stmt(builder.ToString()));
         }
 
         public RuntimeEntity Visit(IdentifierListNode node, VisitorArgs arg)
@@ -100,6 +135,8 @@ namespace dumbo.Compiler
 
         public RuntimeEntity Visit(IfStmtNode node, VisitorArgs arg)
         {
+            _currentModule.Append(new Stmt($"if ({node.Predicate.Accept(this, arg)})"));
+
             throw new System.NotImplementedException();
         }
 
@@ -130,7 +167,11 @@ namespace dumbo.Compiler
 
         public RuntimeEntity Visit(RootNode node, VisitorArgs arg)
         {
-            throw new System.NotImplementedException();
+            /// Todo -- Add const + libraries?
+            node.FuncDecls.Accept(this, new FuncVisitorArgs(false));
+            node.Program.Accept(this, arg);
+            node.FuncDecls.Accept(this, new FuncVisitorArgs(true));
+            return null;
         }
 
         public RuntimeEntity Visit(StmtBlockNode node, VisitorArgs arg)

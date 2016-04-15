@@ -18,7 +18,7 @@ namespace dumbo.Tests
             var parser = new Parser(Utils.GetGrammarTablePath());
 
             var dir = Path.GetDirectoryName(GetType().Assembly.Location);
-            var path = Path.Combine(dir, "SemanticTests.v2.txt");
+            var path = Path.Combine(dir, "SemanticTests.txt");
             using (var fs = new StreamReader(path))
             {
                 StringBuilder programBuilder = new StringBuilder();

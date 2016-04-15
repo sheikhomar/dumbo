@@ -1,29 +1,3 @@
-// ********************Empty***************
- //New Program 
-Program
-End Program
-
-
- //New Program 
-Program
-
-End Program
-
-
- //New Program 
-Program
-
-
-
-
-
-ENd Program
-
-
- //New Program 
-Program
-End PrOgram
-
 // *********************Decls***************
  //New Program 
 Program
@@ -33,19 +7,7 @@ End Program
 
  //New Program 
 Program
-    NUMBER a
-End Program
-
-
- //New Program 
-Program
     Number a, b
-End Program
-
-
- //New Program 
-Program
-    Number a , b
 End Program
 
 
@@ -63,12 +25,6 @@ End Program
 
  //New Program 
 Program
-    BooleAn a , b
-End Program
-
-
- //New Program 
-Program
     Text a
 End Program
 
@@ -79,62 +35,51 @@ Program
 End Program
 
 
- //New Program 
-Program
-    Text a , b
-End Program
-
-
- //New Program 
-Program
-    TexT a
-End Program
-
 // ************************DeclAss***********************
- //New Program 
-Program
-    Number a := 1
-End Program
-
-
  //New Program 
 Program
     Number a := 1.11111111111111111111111111111111
 End Program
 
-
  //New Program 
 Program
-    text a, b := "",""
+    Boolean a := true
 End Program
 
 
  //New Program 
 Program
-    boolean a, b := true, false
+    Text a := "This is some text"
 End Program
 
 
- //New Program 
+ //New Program Failing
+Program
+    Text a, b := "",""
+End Program
+
+
+ //New Program Failing
+Program
+    Boolean a, b := true, false
+End Program
+
+
+ //New Program Failing
+Program
+    Number a := 1,2
+End Program
+
+
+ //New Program Failing
 Program
     Number a, b := 1, 2
 End Program
 
 
- //New Program 
-Program
-    NumbEr a , b, c := 1, 2 ,3.222222222222222222222222222224
-End Program
-
  //New Program Failing
 Program
     Number a := 1.11111111111111111111111111111111, faLse
-End Program
-
-
- //New Program Failing
-Program
-    Number a := 1,2,3
 End Program
 
 
@@ -155,6 +100,11 @@ Program
     NumbEr a , b := 1, 2 ,3.222222222222222222222222222224
 End Program
 
+
+
+
+
+
 // *******************Ass*************************
  //New Program 
 Program
@@ -166,48 +116,28 @@ End Program
  //New Program 
 Program
 	Number a, b
-    a, b := 1.2 , 2.5
-End Program
-
-
- //New Program 
-Program
-	Number a, b, c
-    a, b, c := 1,2,3
-End Program
-
-
- //New Program 
-Program
-	Number a, b
-    a, b := 1,2
+    a := 1.2
+    b := 2.5
 End Program
 
 
  //New Program 
 Program
 	Boolean a
-    a := false
+    a := False
 End Program
 
 
  //New Program 
 Program
 	Boolean a
-    a := truE
+    a := True
 End Program
 
 
  //New Program 
 Program
-	Boolean a
-    a := faLse
-End Program
-
-
- //New Program 
-Program
-	text a
+	Text a
     a := ""
 End Program
 
@@ -219,14 +149,7 @@ Program
 End Program
 
 
- //New Program 
-Program
-	text a
-    a :="Program"
-End Program
-
-
- //New Program 
+ //New Program Failing
 Program
 	number a
 	boolean b
@@ -234,7 +157,7 @@ Program
 End Program
 
 
- //New Program 
+ //New Program Failing
 Program
 	number a
 	text b
@@ -242,15 +165,15 @@ Program
 End Program
 
 
- //New Program 
+ //New Program Failing
 Program
 	number a, b
 	boolean c
-    a, b,c := 1,2,false 
+    a, b, c := 1,2,false 
 End Program
 
 
- //New Program 
+ //New Program Failing
 Program
 	number a
 	text b
@@ -268,23 +191,16 @@ End Program
 
  //New Program 
 Program
-	boolean a, b
-    a, b := 1 = 1, true or 2 < 2
-End Program
-
-
- //New Program 
-Program
 	number a, b
-    a, b := test("test")
+    a, b := test()
 End Program
 
-Function test(text a) return number, number
+Function test() Returns Number, Number
 	Return 1,1
 End function
 
 
- //New Program 
+ //New Program Failing
 Program
 	boolean a, b
     a, b := test(), false or 1 % 2 = 0

@@ -28,5 +28,10 @@ namespace dumbo.Compiler.Interpreter
         {
             return _data[name] as T;
         }
+
+        public bool Contains(string name)
+        {
+            return _data.ContainsKey(name);
+        }
     }
 }

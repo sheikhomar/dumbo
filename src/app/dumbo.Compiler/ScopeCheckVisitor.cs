@@ -120,6 +120,7 @@ namespace dumbo.Compiler
 
         public VisitResult Visit(FuncCallExprNode node, VisitorArgs arg)
         {
+            node.Parameters.Accept(this, arg);
             var function = SymbolTable.RetrieveSymbol(node.FuncName);
             if (function == null)
             {

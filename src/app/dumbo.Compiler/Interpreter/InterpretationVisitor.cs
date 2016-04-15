@@ -216,17 +216,18 @@ namespace dumbo.Compiler.Interpreter
 
         public Value Visit(ExpressionListNode node, VisitorArgs arg)
         {
+            // TODO Refactor nodes that use expression list
             throw new System.NotImplementedException();
         }
 
         public Value Visit(FormalParamListNode node, VisitorArgs arg)
         {
-            throw new System.NotImplementedException();
+            return null;
         }
 
         public Value Visit(FormalParamNode node, VisitorArgs arg)
         {
-            throw new System.NotImplementedException();
+            return null;
         }
 
         public Value Visit(FuncCallExprNode node, VisitorArgs arg)
@@ -277,30 +278,17 @@ namespace dumbo.Compiler.Interpreter
 
         public Value Visit(FuncDeclNode node, VisitorArgs arg)
         {
-            //foreach (var parameter in node.Parameters)
-            //{
-            //    AllocateMemory(parameter.Name, new UndefinedValue());
-            //}
-
-            //var values = new ReturnValue();
-            //foreach (var returnType in node.ReturnTypes)
-            //{
-            //    values.ReturnValues.Add(new UndefinedValue());
-            //}
-            //AllocateMemory(node.Name, values);
             return null;
         }
 
         public Value Visit(IdentifierListNode node, VisitorArgs arg)
         {
-            throw new System.NotImplementedException();
+            return null;
         }
 
         public Value Visit(IdentifierNode node, VisitorArgs arg)
         {
-            //return identifierDictionary[node.Name];
-            // TODO Shall return value
-            return null;
+            return CurrentCallFrame.CurrentBlockFrame.Get<Value>(node.Name);
         }
 
         public Value Visit(IfElseStmtNode node, VisitorArgs arg)
@@ -332,12 +320,13 @@ namespace dumbo.Compiler.Interpreter
         {
             callStack.Push(new CallFrame(node));
             node.Body.Accept(this, arg);
+            callStack.Pop();
             return null;
         }
 
         public Value Visit(RepeatStmtNode node, VisitorArgs arg)
         {
-            throw new System.NotImplementedException();
+            return null;
         }
 
         public Value Visit(RepeatWhileStmtNode node, VisitorArgs arg)
@@ -360,14 +349,6 @@ namespace dumbo.Compiler.Interpreter
                     returnValue.ReturnValues.Add(value);
 
                 }
-                //var callFrame = callStack.Pop();
-                //var funcDeclNode = callFrame.Function;
-                //var knownAddress = identifierDictionary[funcDeclNode.Name];
-                //var returnValue = _data[knownAddress.Address] as ReturnValue;
-                //for (int i = 0; i < node.Expressions.Count; i++)
-                //{
-                //    returnValue.ReturnValues[i] = node.Expressions[i].Accept(this, arg);
-                //}
                 throw new ReturnFromFunctionException(returnValue);
             }
 
@@ -418,12 +399,6 @@ namespace dumbo.Compiler.Interpreter
                 default:
                     throw new ArgumentOutOfRangeException();
             }
-        }
-
-        private void AllocateMemory(string name, Value value)
-        {
-            var latestCallFrame = callStack.Peek();
-            latestCallFrame.CurrentBlockFrame.Allocate(name);
         }
     }
 }

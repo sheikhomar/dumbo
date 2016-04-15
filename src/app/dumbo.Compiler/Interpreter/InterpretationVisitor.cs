@@ -383,10 +383,14 @@ namespace dumbo.Compiler.Interpreter
 
         public Value Visit(StmtBlockNode node, VisitorArgs arg)
         {
+            CurrentCallFrame.EnterBlock();
+
             foreach (var stmt in node)
             {
                 stmt.Accept(this, arg);
             }
+
+            CurrentCallFrame.ExitBlock();
             return null;
         }
 

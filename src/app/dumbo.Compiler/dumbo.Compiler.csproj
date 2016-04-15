@@ -80,12 +80,13 @@
     <Compile Include="AST\UnaryOperationNode.cs" />
     <Compile Include="AST\UnaryOperatorType.cs" />
     <Compile Include="AST\ValueNode.cs" />
+    <Compile Include="Interpreter\BlockFrame.cs" />
     <Compile Include="Interpreter\CallFrame.cs" />
     <Compile Include="Interpreter\InterpreterState.cs" />
     <Compile Include="Interpreter\BooleanValue.cs" />
     <Compile Include="Interpreter\KnownAddress.cs" />
     <Compile Include="Interpreter\ReturnValue.cs" />
-    <Compile Include="Interpreter\StopFunctionException.cs" />
+    <Compile Include="Interpreter\ReturnFromFunctionException.cs" />
     <Compile Include="Interpreter\UndefinedValue.cs" />
     <Compile Include="Interpreter\Value.cs" />
     <Compile Include="BinaryOperationTypeChecker.cs" />

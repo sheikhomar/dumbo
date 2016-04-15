@@ -73,8 +73,8 @@ namespace dumbo.Compiler
                 }
                 else
                 {
-                    
-                    Reporter.Error($"The expression returns {exprTypes.Count} values, but assignment requires {idList.Count} values.", 
+
+                    Reporter.Error($"The expression returns {exprTypes.Count} values, but assignment requires {idList.Count} values.",
                         node.Expressions.SourcePosition);
                 }
             }
@@ -86,7 +86,7 @@ namespace dumbo.Compiler
             {
                 Reporter.Error("Multi variable assignment is not allowed.", node.Identifiers.SourcePosition);
             }
-            
+
             return EmptyResult;
         }
 
@@ -100,13 +100,13 @@ namespace dumbo.Compiler
                 Reporter.Error("Left operand returns too many values.", node.LeftOperand.SourcePosition);
                 return new TypeCheckVisitResult(HappyType.Error);
             }
-            
+
             if (rr.Types.Count() > 1)
             {
                 Reporter.Error("Right operand returns too many values.", node.RightOperand.SourcePosition);
                 return new TypeCheckVisitResult(HappyType.Error);
             }
-                
+
             var leftType = lr.Types.First();
             var rightType = rr.Types.First();
             var resultType = BinaryOperation.GetInferredType(node.Operator, leftType, rightType);
@@ -143,7 +143,7 @@ namespace dumbo.Compiler
                         var id = idList[i];
                         if (exprTypes[i] != node.Type)
                         {
-                            Reporter.Error($"Variable '{id.Name}' has a different type than the expression on the left hand side.", 
+                            Reporter.Error($"Variable '{id.Name}' has a different type than the expression on the left hand side.",
                                 id.SourcePosition);
                         }
                     }
@@ -157,7 +157,7 @@ namespace dumbo.Compiler
                     Reporter.Error($"The expression returns {exprTypes.Count} values, but assignment requires {idList.Count} values.",
                         node.Expressions.SourcePosition);
                 }
-                
+
             }
             return EmptyResult;
         }
@@ -180,7 +180,7 @@ namespace dumbo.Compiler
             EnsureCorrectType(node.Predicate, HappyType.Boolean, arg);
 
             node.Body.Accept(this, arg);
-            
+
             return EmptyResult;
         }
 
@@ -193,7 +193,7 @@ namespace dumbo.Compiler
                 var result = GetVisitResult(item, arg);
                 list.AddRange(result.Types);
             }
-            
+
             return new TypeCheckVisitResult(list);
         }
 
@@ -212,6 +212,8 @@ namespace dumbo.Compiler
             if (node.DeclarationNode == null)
                 return new TypeCheckVisitResult(HappyType.Error);
 
+            node.Parameters.Accept(this, arg);
+
             if (node.DeclarationNode.Parameters.Count != node.Parameters.Count)
             {
                 Reporter.Error("The number of actual parameters does not correspond to number of formal parameters.",
@@ -225,7 +227,7 @@ namespace dumbo.Compiler
                     var formal = node.DeclarationNode.Parameters[i].Type;
                     if (actual != formal)
                     {
-                        Reporter.Error($"The actual parameter {i+1} does not match the formal parameter.", node.Parameters[i].SourcePosition);
+                        Reporter.Error($"The actual parameter {i + 1} does not match the formal parameter.", node.Parameters[i].SourcePosition);
                     }
                 }
             }
@@ -241,7 +243,7 @@ namespace dumbo.Compiler
                 string funcName = node.CallNode.FuncName;
                 Reporter.Error($"Cannot use function '{funcName}' as a statement. The function should return 'Nothing'.", node.CallNode.SourcePosition);
             }
-            
+
             return EmptyResult;
         }
 
@@ -426,7 +428,7 @@ namespace dumbo.Compiler
 
             return new TypeCheckVisitResult(exprType);
         }
-        
+
         private TypeCheckVisitResult GetVisitResult(BaseNode node, VisitorArgs args)
         {
             var result = node.Accept(this, args) as TypeCheckVisitResult;

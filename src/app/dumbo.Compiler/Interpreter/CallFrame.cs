@@ -6,31 +6,26 @@ namespace dumbo.Compiler.Interpreter
 {
     public class CallFrame
     {
-        private readonly Dictionary<string, Value> _data;
+        private readonly Stack<BlockFrame> _blockFrames;
 
         public CallFrame(FuncDeclNode function)
         {
             Function = function;
-            _data = new Dictionary<string, Value>();
+            _blockFrames = new Stack<BlockFrame>();
+            _blockFrames.Push(new BlockFrame());
         }
 
-        public FuncDeclNode Function { get; set; }
+        public BlockFrame CurrentBlockFrame => _blockFrames.Peek();
+        public FuncDeclNode Function { get; }
 
-        public void Allocate(string name)
+        public void EnterBlock()
         {
-            _data.Add(name, new UndefinedValue());
+            _blockFrames.Push(new BlockFrame());
         }
 
-        public void Set(string name, Value value)
+        public void ExitBlock()
         {
-            if (!_data.ContainsKey(name))
-                throw new ArgumentOutOfRangeException(nameof(name), $"Variable '{name}' has not been allocated.");
-            _data[name] = value;
-        }
-        
-        public T Get<T>(string name) where T : Value
-        {
-            return _data[name] as T;
+            _blockFrames.Pop();
         }
     }
 }

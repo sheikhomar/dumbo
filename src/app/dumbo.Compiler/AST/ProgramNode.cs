@@ -2,25 +2,16 @@
 
 namespace dumbo.Compiler.AST
 {
-    public class ProgramNode : BaseNode, IHaveBlocks
+    public class ProgramNode : FuncDeclNode, IHaveBlocks
     {
-        public ProgramNode(StmtBlockNode body, SourcePosition srcPos)
+        public ProgramNode(StmtBlockNode body, SourcePosition srcPos) : 
+            base("Program", body, srcPos)
         {
-            Body = body;
-            SourcePosition = srcPos;
         }
-
-        public StmtBlockNode Body { get; }
         
-        public IEnumerable<StmtBlockNode> GetBlocks()
-        {
-            yield return Body;
-        }
-
         public override T Accept<T, K>(IVisitor<T, K> visitor, K arg)
         {
             return visitor.Visit(this, arg);
         }
     }
-
 }

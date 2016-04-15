@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using dumbo.Compiler.AST;
 
 namespace dumbo.Compiler.Interpreter
@@ -16,7 +15,7 @@ namespace dumbo.Compiler.Interpreter
             _blockFrames.Push(new BlockFrame());
         }
 
-        public BlockFrame CurrentBlockFrame => _blockFrames.Peek();
+        private BlockFrame CurrentBlockFrame => _blockFrames.Peek();
         public FuncDeclNode Function { get; }
 
         public void EnterBlock()
@@ -55,6 +54,11 @@ namespace dumbo.Compiler.Interpreter
                 }
             }
             throw new ArgumentOutOfRangeException(nameof(name), $"Variable '{name}' has not been allocated.");
+        }
+
+        public void Allocate(string name)
+        {
+            CurrentBlockFrame.Allocate(name);
         }
     }
 }

@@ -39,11 +39,11 @@ namespace dumbo.Compiler.Interpreter
                 {
                     var returnValue = value as ReturnValue;
                     var firstReturnValue = returnValue.ReturnValues.First();
-                    CurrentCallFrame.CurrentBlockFrame.Set(identifierNode.Name, firstReturnValue);
+                    CurrentCallFrame.Set(identifierNode.Name, firstReturnValue);
                 }
                 else
                 {
-                    CurrentCallFrame.CurrentBlockFrame.Set(identifierNode.Name, value);
+                    CurrentCallFrame.Set(identifierNode.Name, value);
                 }
             }
             else
@@ -54,7 +54,7 @@ namespace dumbo.Compiler.Interpreter
                 {
                     var returnValue = returnValues.ReturnValues[i];
                     var identifier = node.Identifiers[i];
-                    CurrentCallFrame.CurrentBlockFrame.Set(identifier.Name, returnValue);
+                    CurrentCallFrame.Set(identifier.Name, returnValue);
                 }
             }
             return null;
@@ -188,9 +188,9 @@ namespace dumbo.Compiler.Interpreter
         {
             foreach (var identifier in node.Identifiers)
             {
-                CurrentCallFrame.CurrentBlockFrame.Allocate(identifier.Name);
+                CurrentCallFrame.Allocate(identifier.Name);
                 Value value = node.Expressions.First().Accept(this, arg);
-                CurrentCallFrame.CurrentBlockFrame.Set(identifier.Name, value);
+                CurrentCallFrame.Set(identifier.Name, value);
             }
             return null;
         }
@@ -199,7 +199,7 @@ namespace dumbo.Compiler.Interpreter
         {
             foreach (var identifier in node.Identifiers)
             {
-                CurrentCallFrame.CurrentBlockFrame.Allocate(identifier.Name);
+                CurrentCallFrame.Allocate(identifier.Name);
             }
             return null;
         }
@@ -241,8 +241,8 @@ namespace dumbo.Compiler.Interpreter
                 var formalParam = node.DeclarationNode.Parameters[i];
                 var value = actualParam.Accept(this, arg);
 
-                CurrentCallFrame.CurrentBlockFrame.Allocate(formalParam.Name);
-                CurrentCallFrame.CurrentBlockFrame.Set(formalParam.Name, value);
+                CurrentCallFrame.Allocate(formalParam.Name);
+                CurrentCallFrame.Set(formalParam.Name, value);
             }
 
             var val = new ReturnValue();

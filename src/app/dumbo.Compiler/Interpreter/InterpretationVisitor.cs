@@ -9,17 +9,13 @@ namespace dumbo.Compiler.Interpreter
     public class InterpretationVisitor : InterpreterState, IVisitor<Value, VisitorArgs>
     {
         public EventReporter Reporter { get; }
-        public CallFrame CurrentCallFrame => callStack.Peek();
-
-        //private Dictionary<string, KnownAddress> identifierDictionary;
-
-        private Stack<CallFrame> callStack;
+        public CallFrame CurrentCallFrame => _callStack.Peek();
+        private Stack<CallFrame> _callStack;
 
         public InterpretationVisitor(EventReporter reporter)
         {
             Reporter = reporter;
-            //identifierDictionary = new Dictionary<string, KnownAddress>();
-            callStack = new Stack<CallFrame>();
+            _callStack = new Stack<CallFrame>();
         }
 
         public Value Visit(ActualParamListNode node, VisitorArgs arg)
@@ -233,7 +229,7 @@ namespace dumbo.Compiler.Interpreter
         public Value Visit(FuncCallExprNode node, VisitorArgs arg)
         {
             CallFrame frame = new CallFrame(node.DeclarationNode);
-            callStack.Push(frame);
+            _callStack.Push(frame);
 
             for (int i = 0; i < node.DeclarationNode.Parameters.Count; i++)
             {
@@ -256,7 +252,7 @@ namespace dumbo.Compiler.Interpreter
                 val = e.ReturnValue;
             }
 
-            callStack.Pop();
+            _callStack.Pop();
 
             return val;
         }
@@ -318,9 +314,9 @@ namespace dumbo.Compiler.Interpreter
 
         public Value Visit(ProgramNode node, VisitorArgs arg)
         {
-            callStack.Push(new CallFrame(node));
+            _callStack.Push(new CallFrame(node));
             node.Body.Accept(this, arg);
-            callStack.Pop();
+            _callStack.Pop();
             return null;
         }
 
@@ -351,7 +347,7 @@ namespace dumbo.Compiler.Interpreter
 
         public Value Visit(ReturnStmtNode node, VisitorArgs arg)
         {
-            if (callStack.Count == 0)
+            if (_callStack.Count == 0)
             {
                 Reporter.Error("Wrong return statement call.", new SourcePosition(0, 0, 0, 0));
             }

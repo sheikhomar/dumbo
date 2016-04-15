@@ -81,6 +81,7 @@
     <Compile Include="AST\UnaryOperatorType.cs" />
     <Compile Include="AST\ValueNode.cs" />
     <Compile Include="Interpreter\BlockFrame.cs" />
+    <Compile Include="Interpreter\BreakException.cs" />
     <Compile Include="Interpreter\CallFrame.cs" />
     <Compile Include="Interpreter\InterpreterState.cs" />
     <Compile Include="Interpreter\BooleanValue.cs" />

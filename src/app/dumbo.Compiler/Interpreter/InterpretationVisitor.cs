@@ -328,7 +328,7 @@ namespace dumbo.Compiler.Interpreter
 
             while (true)
             {
-                if (currentValue >= toValue || currentValue < 0)
+                if (currentValue > toValue || currentValue < 0)
                 {
                     break;
                 }

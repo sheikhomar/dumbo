@@ -181,7 +181,7 @@ namespace dumbo.Compiler.Interpreter
 
         public Value Visit(BreakStmtNode node, VisitorArgs arg)
         {
-            throw new System.NotImplementedException();
+            throw new BreakException();
         }
 
         public Value Visit(DeclAndAssignmentStmtNode node, VisitorArgs arg)

@@ -258,9 +258,6 @@ namespace dumbo.Compiler.Interpreter
         private void AllocateMemory(string name, Value value)
         {
             var latestCallFrame = callStack.Peek();
-            latestCallFrame.Allocate(name, value);
-            _data.Add(value);
-            identifierDictionary.Add(name, new KnownAddress(_data.Count - 1));
         }
     }
 }

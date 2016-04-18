@@ -249,10 +249,10 @@ namespace dumbo.WpfApp
 
         private void IncludeBuiltInFunctions(RootNode root)
         {
-            var write = new BuiltFuncDeclNode(BuiltFunction.Write);
+            var write = new BuiltInFuncDeclNode(BuiltInFunction.Write);
             write.Parameters.Add(new FormalParamNode("input", HappyType.Text, new SourcePosition(0, 0, 0, 0)));
-            var readText = new BuiltFuncDeclNode(BuiltFunction.ReadText);
-            var readNumber = new BuiltFuncDeclNode(BuiltFunction.ReadNumber);
+            var readText = new BuiltInFuncDeclNode(BuiltInFunction.ReadText);
+            var readNumber = new BuiltInFuncDeclNode(BuiltInFunction.ReadNumber);
 
             root.FuncDecls.Add(write);
             root.FuncDecls.Add(readText);

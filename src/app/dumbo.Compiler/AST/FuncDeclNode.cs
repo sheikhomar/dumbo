@@ -17,7 +17,8 @@ namespace dumbo.Compiler.AST
         public IList<HappyType> ReturnTypes { get; }
         public string Name { get; set; }
         public StmtBlockNode Body { get; }
-        
+        public virtual bool IsBuiltIn => false;
+
         public IEnumerable<StmtBlockNode> GetBlocks()
         {
             yield return Body;

@@ -148,6 +148,11 @@ namespace dumbo.Compiler
 
         public VisitResult Visit(FuncDeclNode node, VisitorArgs arg)
         {
+            if (node.IsBuiltIn)
+            {
+                return null;
+            }
+            
             WriteLine();
             Write($"Function {node.Name}(");
             node.Parameters.Accept(this, arg);

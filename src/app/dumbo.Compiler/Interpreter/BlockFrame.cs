@@ -14,27 +14,33 @@ namespace dumbo.Compiler.Interpreter
 
         public void Allocate(string name)
         {
-            _data.Add(name, new UndefinedValue());
+            var key = GetKey(name);
+            _data.Add(key, new UndefinedValue());
         }
 
         public void Set(string name, Value value)
         {
-            if (!_data.ContainsKey(name))
-            {
-
+            var key = GetKey(name);
+            if (!_data.ContainsKey(key))
                 throw new ArgumentOutOfRangeException(nameof(name), $"Variable '{name}' has not been allocated.");
-            }
-            _data[name] = value;
+            _data[key] = value;
         }
 
         public T Get<T>(string name) where T : Value
         {
-            return _data[name] as T;
+            var key = GetKey(name);
+            return _data[key] as T;
         }
 
         public bool Contains(string name)
         {
-            return _data.ContainsKey(name);
+            var key = GetKey(name);
+            return _data.ContainsKey(key);
+        }
+
+        private string GetKey(string name)
+        {
+            return name.ToLower();
         }
     }
 }

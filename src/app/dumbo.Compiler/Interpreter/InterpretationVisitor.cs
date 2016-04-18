@@ -460,6 +460,7 @@ namespace dumbo.Compiler.Interpreter
         private Value CallBuiltInFunction(FuncCallExprNode node, VisitorArgs arg)
         {
             var builtIn = node.DeclarationNode as BuiltInFuncDeclNode;
+
             switch (builtIn.Type)
             {
                 case BuiltInFunction.Write:
@@ -467,14 +468,12 @@ namespace dumbo.Compiler.Interpreter
                     _shell.Write(text.Text);
                     return null;
                 case BuiltInFunction.ReadNumber:
-                    break;
+                    return _shell.ReadNumber();
                 case BuiltInFunction.ReadText:
-                    break;
+                    return _shell.ReadText();
                 default:
                     throw new ArgumentOutOfRangeException();
             }
-
-            return null;
         }
     }
 }

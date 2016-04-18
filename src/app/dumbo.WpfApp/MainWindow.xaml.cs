@@ -252,7 +252,9 @@ namespace dumbo.WpfApp
             var write = new BuiltInFuncDeclNode(BuiltInFunction.Write);
             write.Parameters.Add(new FormalParamNode("input", HappyType.Text, new SourcePosition(0, 0, 0, 0)));
             var readText = new BuiltInFuncDeclNode(BuiltInFunction.ReadText);
+            readText.ReturnTypes.Add(HappyType.Text);
             var readNumber = new BuiltInFuncDeclNode(BuiltInFunction.ReadNumber);
+            readNumber.ReturnTypes.Add(HappyType.Number);
 
             root.FuncDecls.Add(write);
             root.FuncDecls.Add(readText);
@@ -363,6 +365,8 @@ namespace dumbo.WpfApp
 
             foreach (var item in events)
             {
+                if (item.SourcePosition.StartLine == 0)
+                    continue;
                 var startLine = textEditor.Document.GetLineByNumber(item.SourcePosition.StartLine);
 
                 int selectionStart = startLine.Offset + item.SourcePosition.StartColumn;
@@ -380,12 +384,19 @@ namespace dumbo.WpfApp
 
         public NumberValue ReadNumber()
         {
-            throw new NotImplementedException();
+            var rw = new ReaderWindow();
+            rw.ShowDialog();
+            double val;
+            if (double.TryParse(rw.ReturnValue, out val))
+                return new NumberValue(val);
+            return null;
         }
 
         public TextValue ReadText()
         {
-            throw new NotImplementedException();
+            var rw = new ReaderWindow();
+            rw.Show();
+                return new TextValue(rw.ReturnValue);
         }
     }
 }

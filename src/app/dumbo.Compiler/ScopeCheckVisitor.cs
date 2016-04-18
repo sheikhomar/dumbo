@@ -48,6 +48,16 @@ namespace dumbo.Compiler
 
         public VisitResult Visit(BuiltInFuncDeclNode node, VisitorArgs arg)
         {
+            var entry = SymbolTable.RetrieveSymbol(node.Name);
+            if (entry != null)
+            {
+                Reporter.Error($"Function '{node.Name}' is already declared.", node.SourcePosition);
+            }
+            else
+            {
+                SymbolTable.EnterSymbol(node.Name, new SymbolTableFunctionType(node), true);
+            }
+
             return _emptyResult;
         }
 

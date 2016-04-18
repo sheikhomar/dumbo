@@ -379,7 +379,7 @@ namespace dumbo.WpfApp
 
         public void Write(string writeParameter)
         {
-            ResultTextBox.Text += writeParameter;
+            ResultTextBox.Text += writeParameter + "\n";
         }
 
         public NumberValue ReadNumber()
@@ -395,8 +395,8 @@ namespace dumbo.WpfApp
         public TextValue ReadText()
         {
             var rw = new ReaderWindow();
-            rw.Show();
-                return new TextValue(rw.ReturnValue);
+            rw.ShowDialog();
+            return new TextValue(rw.ReturnValue);
         }
     }
 }

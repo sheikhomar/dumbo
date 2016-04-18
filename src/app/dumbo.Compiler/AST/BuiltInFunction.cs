@@ -1,6 +1,6 @@
 namespace dumbo.Compiler.AST
 {
-    public enum BuiltFunction
+    public enum BuiltInFunction
     {
         Write,
         ReadNumber,

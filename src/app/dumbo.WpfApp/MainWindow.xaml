@@ -131,7 +131,7 @@
                         <RowDefinition Height="60" />
                         <RowDefinition Height="4*" />
                         <RowDefinition Height="10" />
-                        <RowDefinition Height="1*" />
+                        <RowDefinition Height="4*" />
                     </Grid.RowDefinitions>
                     <TextBlock Name="InformationBox" Grid.Row="0" />
 
@@ -139,20 +139,22 @@
 
                     <GridSplitter Grid.Row="2" Height="4" Width="Auto" ResizeDirection="Rows" HorizontalAlignment="Stretch" />
 
-                    <TextBlock Text="Error List" Grid.Row="3"></TextBlock>
-
-                    <DataGrid Grid.Row="3" Name="ErrorList" AutoGenerateColumns="False">
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Binding="{Binding Kind}" Header="Status" IsReadOnly="True" Width="50"/>
-                            <DataGridTextColumn Binding="{Binding SourcePosition.StartLine}" Header="Line" IsReadOnly="True" Width="40"/>
-                            <DataGridTextColumn Binding="{Binding Message}" Header="Description" IsReadOnly="True" Width="*" />
-                        </DataGrid.Columns>
-                    </DataGrid>
+                    <TabControl Grid.Row="3">
+                        <TabItem Header="Error Reports">
+                            <DataGrid Name="ErrorList" AutoGenerateColumns="False">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Binding="{Binding Kind}" Header="Status" IsReadOnly="True" Width="50"/>
+                                    <DataGridTextColumn Binding="{Binding SourcePosition.StartLine}" Header="Line" IsReadOnly="True" Width="40"/>
+                                    <DataGridTextColumn Binding="{Binding Message}" Header="Description" IsReadOnly="True" Width="*" />
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </TabItem>
+                        <TabItem Header="Shell" Name="ShellTab">
+                            <TextBox Margin="2" Name="ShellTextBox" Background="Black" Foreground="LimeGreen" FontFamily="Consolas" FontSize="12"/>
+                        </TabItem>
+                    </TabControl>
                 </Grid>
-
-
             </DockPanel>
         </Grid>
-
     </DockPanel>
 </Window>

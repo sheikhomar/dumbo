@@ -25,6 +25,15 @@ namespace dumbo.WpfApp
         public ReaderWindow()
         {
             InitializeComponent();
+            InputTextBox.Focusable = true;
+            Keyboard.Focus(InputTextBox);
+        }
+
+        protected override void OnActivated(EventArgs e)
+        {
+            InputTextBox.Focusable = true;
+            Keyboard.Focus(InputTextBox);
+            base.OnActivated(e);
         }
 
         private void InputTextBox_OnKeyDown(object sender, KeyEventArgs e)

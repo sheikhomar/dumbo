@@ -3,6 +3,7 @@ using System.ComponentModel.Design;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -386,7 +387,15 @@ namespace dumbo.WpfApp
 
         public void Write(string writeParameter)
         {
-            ResultTextBox.Text += writeParameter + "\n";
+            ShellTab.Focusable = true;
+            ShellTab.Focus();
+            ShellTab.Focusable = false;
+
+            ShellTextBox.Text += writeParameter + "\n";
+
+            textEditor.Focusable = true;
+            textEditor.Focus();
+            textEditor.Focusable = false;
         }
 
         public NumberValue ReadNumber()

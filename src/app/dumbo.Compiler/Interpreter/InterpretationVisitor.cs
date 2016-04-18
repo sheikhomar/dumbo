@@ -1,6 +1,7 @@
 using System;
 using System.CodeDom;
 using System.Collections.Generic;
+using System.Diagnostics.Eventing;
 using System.Linq;
 using dumbo.Compiler.AST;
 
@@ -8,12 +9,14 @@ namespace dumbo.Compiler.Interpreter
 {
     public class InterpretationVisitor : InterpreterState, IVisitor<Value, VisitorArgs>
     {
+        private readonly IInteractiveShell _shell;
         public EventReporter Reporter { get; }
         public CallFrame CurrentCallFrame => _callStack.Peek();
         private Stack<CallFrame> _callStack;
 
-        public InterpretationVisitor(EventReporter reporter)
+        public InterpretationVisitor(EventReporter reporter, IInteractiveShell shell)
         {
+            _shell = shell;
             Reporter = reporter;
             _callStack = new Stack<CallFrame>();
         }
@@ -234,9 +237,12 @@ namespace dumbo.Compiler.Interpreter
 
         public Value Visit(FuncCallExprNode node, VisitorArgs arg)
         {
+            if (IsBuiltIn(node.DeclarationNode))
+                return CallBuiltInFunction(node, arg);
+
             CallFrame frame = new CallFrame(node.DeclarationNode);
             _callStack.Push(frame);
-
+            
             for (int i = 0; i < node.DeclarationNode.Parameters.Count; i++)
             {
                 var actualParam = node.Parameters[i];
@@ -376,15 +382,7 @@ namespace dumbo.Compiler.Interpreter
 
         public Value Visit(RepeatWhileStmtNode node, VisitorArgs arg)
         {
-            var value = node.Predicate.Accept(this, arg) as BooleanValue;
-
-            while (value.Boolean)
-            {
-                node.Body.Accept(this, arg);
-                value = node.Predicate.Accept(this, arg) as BooleanValue;
-            }
-
-            return null;
+            throw new System.NotImplementedException();
         }
 
         public Value Visit(ReturnStmtNode node, VisitorArgs arg)
@@ -452,6 +450,31 @@ namespace dumbo.Compiler.Interpreter
                 default:
                     throw new ArgumentOutOfRangeException();
             }
+        }
+
+        private bool IsBuiltIn(FuncDeclNode declarationNode)
+        {
+            return declarationNode is BuiltInFuncDeclNode;
+        }
+
+        private Value CallBuiltInFunction(FuncCallExprNode node, VisitorArgs arg)
+        {
+            var builtIn = node.DeclarationNode as BuiltInFuncDeclNode;
+            switch (builtIn.Type)
+            {
+                case BuiltInFunction.Write:
+                    var text = node.Parameters[0].Accept(this, arg) as TextValue;
+                    _shell.Write(text.Text);
+                    return null;
+                case BuiltInFunction.ReadNumber:
+                    break;
+                case BuiltInFunction.ReadText:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+
+            return null;
         }
     }
 }

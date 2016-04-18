@@ -89,6 +89,7 @@
     <Compile Include="CodeGenerator\Stmt.cs" />
     <Compile Include="CodeGenerator\Module.cs" />
     <Compile Include="Interpreter\CallFrame.cs" />
+    <Compile Include="Interpreter\IInteractiveShell.cs" />
     <Compile Include="Interpreter\InterpreterState.cs" />
     <Compile Include="Interpreter\BooleanValue.cs" />
     <Compile Include="Interpreter\KnownAddress.cs" />

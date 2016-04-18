@@ -22,7 +22,7 @@ namespace dumbo.WpfApp
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : Window, IInteractiveShell
     {
         private string currentSourcePath;
         private string currentGrammarTablePath;
@@ -36,7 +36,7 @@ namespace dumbo.WpfApp
         public MainWindow()
         {
             InitializeComponent();
-
+            
             _grammarTableWatcher = new FileSystemWatcher();
             _grammarTableWatcher.NotifyFilter = NotifyFilters.LastWrite;
             _grammarTableWatcher.EnableRaisingEvents = false;
@@ -44,7 +44,7 @@ namespace dumbo.WpfApp
 
             textEditor.TextArea.Caret.PositionChanged += CaretOnPositionChanged;
 
-
+            
             using (var s = GetType().Assembly.GetManifestResourceStream("dumbo.WpfApp.HappyZSyntaxHighlighting.xshd"))
             {
                 using (var reader = new XmlTextReader(s))
@@ -218,7 +218,7 @@ namespace dumbo.WpfApp
             }
 
             SaveFile(sender, e);
-
+            
             var data = new StringReader(textEditor.Text);
             var parserResult = _myParser.Parse(data);
 
@@ -347,13 +347,14 @@ namespace dumbo.WpfApp
             var reporter = new EventReporter();
             var scopeChecker = new ScopeCheckVisitor(reporter);
             var typeChecker = new TypeCheckVisitor(reporter);
-            var interpreter = new InterpretationVisitor(reporter);
+            var interpreter = new InterpretationVisitor(reporter, this);
             root.Accept(scopeChecker, new VisitorArgs());
             root.Accept(typeChecker, new VisitorArgs());
             if (!reporter.HasErrors)
             {
                 root.Accept(interpreter, new VisitorArgs());
             }
+            
 
             var events = reporter.GetEvents().ToArray();
             ErrorList.ItemsSource = events;
@@ -370,6 +371,21 @@ namespace dumbo.WpfApp
                 marker.MarkerTypes = TextMarkerTypes.SquigglyUnderline;
                 marker.MarkerColor = Colors.Red;
             }
+        }
+
+        public void Write(string writeParameter)
+        {
+            ResultTextBox.Text += writeParameter;
+        }
+
+        public NumberValue ReadNumber()
+        {
+            throw new NotImplementedException();
+        }
+
+        public TextValue ReadText()
+        {
+            throw new NotImplementedException();
         }
     }
 }

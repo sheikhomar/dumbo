@@ -418,7 +418,10 @@ namespace dumbo.Compiler.SyntaxAnalysis
                     if (literalType == "NumberLiteral")
                         happyType = HappyType.Number;
                     else if (literalType == "TextLiteral")
+                    {
                         happyType = HappyType.Text;
+                        value = value.Substring(1, value.Length - 2);
+                    }
                     else if (literalType == "BooleanLiteral")
                         happyType = HappyType.Boolean;
                     else

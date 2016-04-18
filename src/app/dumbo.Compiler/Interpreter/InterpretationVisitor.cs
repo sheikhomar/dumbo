@@ -204,13 +204,30 @@ namespace dumbo.Compiler.Interpreter
             foreach (var identifier in node.Identifiers)
             {
                 CurrentCallFrame.Allocate(identifier.Name);
+                Value defaultValue = new UndefinedValue();
+                switch (node.Type)
+                {
+                    case HappyType.Number:
+                        defaultValue = new NumberValue(0);
+                        break;
+                    case HappyType.Text:
+                        defaultValue = new TextValue(string.Empty);
+                        break;
+                    case HappyType.Boolean:
+                        defaultValue = new BooleanValue(false);
+                        break;
+                }
+                CurrentCallFrame.Set(identifier.Name, defaultValue);
             }
             return null;
         }
 
         public Value Visit(ElseIfStmtListNode node, VisitorArgs arg)
         {
-            throw new System.NotImplementedException();
+            foreach (var item in node)
+                item.Accept(this, arg);
+
+            return null;
         }
 
         public Value Visit(ElseIfStmtNode node, VisitorArgs arg)
@@ -379,7 +396,16 @@ namespace dumbo.Compiler.Interpreter
                 }
 
                 currentValue++;
-                node.Body.Accept(this, arg);
+
+                try
+                {
+                    node.Body.Accept(this, arg);
+                }
+                catch (BreakException)
+                {
+                    break;
+                }
+                
             }
 
             return null;
@@ -387,7 +413,21 @@ namespace dumbo.Compiler.Interpreter
 
         public Value Visit(RepeatWhileStmtNode node, VisitorArgs arg)
         {
-            throw new System.NotImplementedException();
+            var predicateVal = node.Predicate.Accept(this, arg) as BooleanValue;
+            while (predicateVal.Boolean)
+            {
+                try
+                {
+                    node.Body.Accept(this, arg);
+                }
+                catch (BreakException)
+                {
+                    break;
+                }
+                predicateVal = node.Predicate.Accept(this, arg) as BooleanValue;
+            }
+
+            return null;
         }
 
         public Value Visit(ReturnStmtNode node, VisitorArgs arg)

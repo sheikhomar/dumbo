@@ -40,6 +40,8 @@ namespace dumbo.Compiler
 
             // Rules for relational expressions
             Add(BinaryOperatorType.Equals, HappyType.Number, HappyType.Number, HappyType.Boolean);
+            Add(BinaryOperatorType.Equals, HappyType.Boolean, HappyType.Boolean, HappyType.Boolean);
+            Add(BinaryOperatorType.Equals, HappyType.Text, HappyType.Text, HappyType.Boolean);
             Add(BinaryOperatorType.GreaterThan, HappyType.Number, HappyType.Number, HappyType.Boolean);
             Add(BinaryOperatorType.GreaterOrEqual, HappyType.Number, HappyType.Number, HappyType.Boolean);
             Add(BinaryOperatorType.LessThan, HappyType.Number, HappyType.Number, HappyType.Boolean);

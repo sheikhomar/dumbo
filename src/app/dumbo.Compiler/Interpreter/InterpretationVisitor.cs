@@ -376,7 +376,15 @@ namespace dumbo.Compiler.Interpreter
 
         public Value Visit(RepeatWhileStmtNode node, VisitorArgs arg)
         {
-            throw new System.NotImplementedException();
+            var value = node.Predicate.Accept(this, arg) as BooleanValue;
+
+            while (value.Boolean)
+            {
+                node.Body.Accept(this, arg);
+                value = node.Predicate.Accept(this, arg) as BooleanValue;
+            }
+
+            return null;
         }
 
         public Value Visit(ReturnStmtNode node, VisitorArgs arg)

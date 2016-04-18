@@ -9,7 +9,7 @@ namespace dumbo.Compiler.Interpreter
 
         public BlockFrame()
         {
-            _data = new Dictionary<string, Value>();   
+            _data = new Dictionary<string, Value>();
         }
 
         public void Allocate(string name)

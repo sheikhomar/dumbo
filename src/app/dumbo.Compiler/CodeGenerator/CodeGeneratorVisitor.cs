@@ -37,6 +37,11 @@ namespace dumbo.Compiler.CodeGenerator
             throw new System.NotImplementedException();
         }
 
+        public RuntimeEntity Visit(BuiltInFuncDeclNode node, VisitorArgs arg)
+        {
+            throw new System.NotImplementedException();
+        }
+
         public RuntimeEntity Visit(DeclAndAssignmentStmtNode node, VisitorArgs arg)
         {
             throw new System.NotImplementedException();

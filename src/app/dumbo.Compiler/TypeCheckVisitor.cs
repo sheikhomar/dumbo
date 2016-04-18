@@ -124,6 +124,11 @@ namespace dumbo.Compiler
             return EmptyResult;
         }
 
+        public VisitResult Visit(BuiltInFuncDeclNode node, VisitorArgs arg)
+        {
+            return EmptyResult;
+        }
+
         public VisitResult Visit(DeclAndAssignmentStmtNode node, VisitorArgs arg)
         {
             if (node.Expressions.Count > 1)

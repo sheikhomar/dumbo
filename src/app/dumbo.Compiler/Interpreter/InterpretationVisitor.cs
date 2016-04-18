@@ -183,6 +183,11 @@ namespace dumbo.Compiler.Interpreter
             throw new BreakException();
         }
 
+        public Value Visit(BuiltInFuncDeclNode node, VisitorArgs arg)
+        {
+            return null;
+        }
+
         public Value Visit(DeclAndAssignmentStmtNode node, VisitorArgs arg)
         {
             foreach (var identifier in node.Identifiers)

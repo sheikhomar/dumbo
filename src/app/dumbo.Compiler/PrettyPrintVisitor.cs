@@ -62,6 +62,11 @@ namespace dumbo.Compiler
             return EmptyResult;
         }
 
+        public VisitResult Visit(BuiltInFuncDeclNode node, VisitorArgs arg)
+        {
+            return EmptyResult;
+        }
+
         public VisitResult Visit(DeclAndAssignmentStmtNode node, VisitorArgs arg)
         {
             Write($"{node.Type} ");
@@ -148,11 +153,6 @@ namespace dumbo.Compiler
 
         public VisitResult Visit(FuncDeclNode node, VisitorArgs arg)
         {
-            if (node.IsBuiltIn)
-            {
-                return null;
-            }
-            
             WriteLine();
             Write($"Function {node.Name}(");
             node.Parameters.Accept(this, arg);

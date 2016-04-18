@@ -46,6 +46,11 @@ namespace dumbo.Compiler
             return _emptyResult;
         }
 
+        public VisitResult Visit(BuiltInFuncDeclNode node, VisitorArgs arg)
+        {
+            return _emptyResult;
+        }
+
         public VisitResult Visit(DeclAndAssignmentStmtNode node, VisitorArgs arg)
         {
             foreach (var id in node.Identifiers)

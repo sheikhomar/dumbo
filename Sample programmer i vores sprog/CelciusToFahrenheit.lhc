@@ -12,6 +12,5 @@ Program
 End program
 
 Function FahrenheitTemperature(number celciusTemp, number fahrenheitTemp) return number
-	
 	return (9.0 / 5.0) * celciusTemp + 32.0
 end function

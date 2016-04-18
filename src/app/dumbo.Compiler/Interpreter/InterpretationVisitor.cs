@@ -240,18 +240,18 @@ namespace dumbo.Compiler.Interpreter
             if (IsBuiltIn(node.DeclarationNode))
                 return CallBuiltInFunction(node, arg);
 
-            CallFrame frame = new CallFrame(node.DeclarationNode);
-            _callStack.Push(frame);
-            
+            CallFrame newFrame = new CallFrame(node.DeclarationNode);
             for (int i = 0; i < node.DeclarationNode.Parameters.Count; i++)
             {
                 var actualParam = node.Parameters[i];
                 var formalParam = node.DeclarationNode.Parameters[i];
                 var value = actualParam.Accept(this, arg);
 
-                CurrentCallFrame.Allocate(formalParam.Name);
-                CurrentCallFrame.Set(formalParam.Name, value);
+                newFrame.Allocate(formalParam.Name);
+                newFrame.Set(formalParam.Name, value);
             }
+
+            _callStack.Push(newFrame);
 
             var val = new ReturnValue();
 

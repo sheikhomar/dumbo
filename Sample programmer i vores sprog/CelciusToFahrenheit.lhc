@@ -1,15 +1,17 @@
 Program
 
 	number result
+	number fahrenheittemp
 	
-	fahrenheitTemperature(0.0, fahrenheitTemp)
+	result := fahrenheitTemperature(0.0, fahrenheitTemp)
 	write("Freezing point: " + result + " F.")
 	
-	fahrenheitTemperature(100.0, fahrenheitTemp)
+	result := fahrenheitTemperature(100.0, fahrenheitTemp)
 	write("Boiling point: " + result + " F.")
 	
 End program
 
-Function FahrenheitTemperature(number celciusTemp, number fahrenheitTemp)
-	fahrenheitTemp = (9.0 / 5.0) * celciusTemp + 32.0
+Function FahrenheitTemperature(number celciusTemp, number fahrenheitTemp) return number
+	
+	return (9.0 / 5.0) * celciusTemp + 32.0
 end function

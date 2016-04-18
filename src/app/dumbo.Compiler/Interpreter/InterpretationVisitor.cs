@@ -275,7 +275,7 @@ namespace dumbo.Compiler.Interpreter
 
             _callStack.Push(newFrame);
 
-            var val = new ReturnValue();
+            Value val = null;
 
             try
             {
@@ -283,7 +283,14 @@ namespace dumbo.Compiler.Interpreter
             }
             catch (ReturnFromFunctionException e)
             {
-                val = e.ReturnValue;
+                if (e.ReturnValue.ReturnValues.Count == 1)
+                {
+                    val = e.ReturnValue.ReturnValues[0];
+                }
+                else
+                {
+                    val = e.ReturnValue;
+                }
             }
 
             _callStack.Pop();
@@ -405,7 +412,7 @@ namespace dumbo.Compiler.Interpreter
                 {
                     break;
                 }
-                
+
             }
 
             return null;

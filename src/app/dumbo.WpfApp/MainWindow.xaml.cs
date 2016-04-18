@@ -249,16 +249,23 @@ namespace dumbo.WpfApp
 
         private void IncludeBuiltInFunctions(RootNode root)
         {
+            var srcPos = new SourcePosition(0, 0, 0, 0);
             var write = new BuiltInFuncDeclNode(BuiltInFunction.Write);
-            write.Parameters.Add(new FormalParamNode("input", HappyType.Text, new SourcePosition(0, 0, 0, 0)));
+            write.Parameters.Add(new FormalParamNode("input", HappyType.Text, srcPos));
             var readText = new BuiltInFuncDeclNode(BuiltInFunction.ReadText);
             readText.ReturnTypes.Add(HappyType.Text);
             var readNumber = new BuiltInFuncDeclNode(BuiltInFunction.ReadNumber);
             readNumber.ReturnTypes.Add(HappyType.Number);
 
+            var random = new BuiltInFuncDeclNode(BuiltInFunction.Random);
+            random.Parameters.Add(new FormalParamNode("n1", HappyType.Number, srcPos));
+            random.Parameters.Add(new FormalParamNode("n2", HappyType.Number, srcPos));
+            random.ReturnTypes.Add(HappyType.Number);
+
             root.FuncDecls.Add(write);
             root.FuncDecls.Add(readText);
             root.FuncDecls.Add(readNumber);
+            root.FuncDecls.Add(random);
         }
 
         private void SaveFile(object sender, ExecutedRoutedEventArgs e)

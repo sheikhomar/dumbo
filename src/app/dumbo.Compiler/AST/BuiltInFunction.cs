@@ -4,6 +4,7 @@ namespace dumbo.Compiler.AST
     {
         Write,
         ReadNumber,
-        ReadText
+        ReadText,
+        Random
     }
 }

@@ -523,6 +523,13 @@ namespace dumbo.Compiler.Interpreter
                     return _shell.ReadNumber();
                 case BuiltInFunction.ReadText:
                     return _shell.ReadText();
+                case BuiltInFunction.Random:
+                    var minValue = node.Parameters[0].Accept(this, arg) as NumberValue;
+                    var maxValue = node.Parameters[1].Accept(this, arg) as NumberValue;
+                    var min = (int)minValue.Number;
+                    var max = (int)maxValue.Number;
+                    var randomNumber = new Random().Next(min, max);
+                    return new NumberValue(randomNumber);
                 default:
                     throw new ArgumentOutOfRangeException();
             }

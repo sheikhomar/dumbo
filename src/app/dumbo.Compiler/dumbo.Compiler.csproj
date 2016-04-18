@@ -50,6 +50,8 @@
     <Compile Include="AST\BinaryOperationNode.cs" />
     <Compile Include="AST\BinaryOperatorType.cs" />
     <Compile Include="AST\BreakStmtNode.cs" />
+    <Compile Include="AST\BuiltFuncDeclNode.cs" />
+    <Compile Include="AST\BuiltFunction.cs" />
     <Compile Include="AST\DeclAndAssignmentStmtNode.cs" />
     <Compile Include="AST\DeclStmtNode.cs" />
     <Compile Include="AST\ElseIfStmtListNode.cs" />

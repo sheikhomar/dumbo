@@ -207,7 +207,13 @@ namespace dumbo.Compiler.Interpreter
 
         public Value Visit(ElseIfStmtNode node, VisitorArgs arg)
         {
-            throw new System.NotImplementedException();
+            var value = node.Predicate.Accept(this, arg) as BooleanValue;
+            if (value.Boolean)
+            {
+                node.Body.Accept(this, arg);
+            }
+
+            return value;
         }
 
         public Value Visit(ExpressionListNode node, VisitorArgs arg)
@@ -289,12 +295,40 @@ namespace dumbo.Compiler.Interpreter
 
         public Value Visit(IfElseStmtNode node, VisitorArgs arg)
         {
-            throw new System.NotImplementedException();
+            var value = node.Predicate.Accept(this, arg) as BooleanValue;
+            if (value.Boolean)
+            {
+                node.Body.Accept(this, arg);
+            }
+            else
+            {
+                foreach (var stmt in node.ElseIfStatements)
+                {
+                    var stmtValue = stmt.Accept(this, arg) as BooleanValue;
+                    if (stmtValue.Boolean)
+                    {
+                        return null;
+                    }
+
+                    node.Else.Accept(this, arg);
+                }
+            }
+            return null;
         }
 
         public Value Visit(IfStmtNode node, VisitorArgs arg)
         {
-            throw new System.NotImplementedException();
+            var value = node.Predicate.Accept(this, arg) as BooleanValue;
+            if (value.Boolean)
+            {
+                node.Body.Accept(this, arg);
+            }
+            else
+            {
+                node.ElseIfStatements.Accept(this, arg);
+            }
+
+            return null;
         }
 
         public Value Visit(LiteralValueNode node, VisitorArgs arg)

@@ -20,7 +20,10 @@ namespace dumbo.Compiler.Interpreter
         public void Set(string name, Value value)
         {
             if (!_data.ContainsKey(name))
+            {
+
                 throw new ArgumentOutOfRangeException(nameof(name), $"Variable '{name}' has not been allocated.");
+            }
             _data[name] = value;
         }
 

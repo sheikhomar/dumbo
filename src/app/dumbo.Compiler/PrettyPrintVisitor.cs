@@ -148,6 +148,9 @@ namespace dumbo.Compiler
             foreach (var item in node)
                 item.Accept(this, arg);
 
+            WriteLine();
+            WriteLine();
+
             return EmptyResult;
         }
 

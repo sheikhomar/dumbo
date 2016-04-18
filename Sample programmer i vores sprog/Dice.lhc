@@ -8,7 +8,7 @@ Program
   wRite("Press enter to roll your new " + a + "-sided dice")  
 
   repeat (99)
-    readnumbER()
+    a := readnumber()
     b := Random(1,a)
     Write("You've rolled: " + b)
   End Repeat

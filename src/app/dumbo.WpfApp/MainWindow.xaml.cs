@@ -36,7 +36,7 @@ namespace dumbo.WpfApp
         public MainWindow()
         {
             InitializeComponent();
-            
+
             _grammarTableWatcher = new FileSystemWatcher();
             _grammarTableWatcher.NotifyFilter = NotifyFilters.LastWrite;
             _grammarTableWatcher.EnableRaisingEvents = false;
@@ -44,7 +44,7 @@ namespace dumbo.WpfApp
 
             textEditor.TextArea.Caret.PositionChanged += CaretOnPositionChanged;
 
-            
+
             using (var s = GetType().Assembly.GetManifestResourceStream("dumbo.WpfApp.HappyZSyntaxHighlighting.xshd"))
             {
                 using (var reader = new XmlTextReader(s))
@@ -218,7 +218,7 @@ namespace dumbo.WpfApp
             }
 
             SaveFile(sender, e);
-            
+
             var data = new StringReader(textEditor.Text);
             var parserResult = _myParser.Parse(data);
 
@@ -237,6 +237,7 @@ namespace dumbo.WpfApp
             }
             else
             {
+                IncludeBuiltInFunctions(parserResult.Root);
                 PrettyPrint(parserResult.Root);
                 //CheckContextualContraints(parserResult.Root);
                 ScopeAndTypeCheck(parserResult.Root);
@@ -244,6 +245,18 @@ namespace dumbo.WpfApp
 
             latestCompiledAt = DateTime.Now;
             UpdateInformationBox();
+        }
+
+        private void IncludeBuiltInFunctions(RootNode root)
+        {
+            var write = new BuiltFuncDeclNode(BuiltFunction.Write);
+            write.Parameters.Add(new FormalParamNode("input", HappyType.Text, new SourcePosition(0, 0, 0, 0)));
+            var readText = new BuiltFuncDeclNode(BuiltFunction.ReadText);
+            var readNumber = new BuiltFuncDeclNode(BuiltFunction.ReadNumber);
+
+            root.FuncDecls.Add(write);
+            root.FuncDecls.Add(readText);
+            root.FuncDecls.Add(readNumber);
         }
 
         private void SaveFile(object sender, ExecutedRoutedEventArgs e)
@@ -341,7 +354,6 @@ namespace dumbo.WpfApp
             {
                 root.Accept(interpreter, new VisitorArgs());
             }
-            
 
             var events = reporter.GetEvents().ToArray();
             ErrorList.ItemsSource = events;

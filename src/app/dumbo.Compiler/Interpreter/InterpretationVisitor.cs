@@ -225,9 +225,15 @@ namespace dumbo.Compiler.Interpreter
         public Value Visit(ElseIfStmtListNode node, VisitorArgs arg)
         {
             foreach (var item in node)
-                item.Accept(this, arg);
-
-            return null;
+            {
+                var val = item.Accept(this, arg) as BooleanValue;
+                if (val.Boolean)
+                {
+                    return val;
+                }
+            }
+            
+            return new BooleanValue(false);
         }
 
         public Value Visit(ElseIfStmtNode node, VisitorArgs arg)
@@ -337,14 +343,9 @@ namespace dumbo.Compiler.Interpreter
             }
             else
             {
-                foreach (var stmt in node.ElseIfStatements)
+                var elseIfVal = node.ElseIfStatements.Accept(this, arg) as BooleanValue;
+                if (!elseIfVal.Boolean)
                 {
-                    var stmtValue = stmt.Accept(this, arg) as BooleanValue;
-                    if (stmtValue.Boolean)
-                    {
-                        return null;
-                    }
-
                     node.Else.Accept(this, arg);
                 }
             }

@@ -3,6 +3,7 @@ using System.CodeDom;
 using System.Collections.Generic;
 using System.Diagnostics.Eventing;
 using System.Linq;
+using System.Runtime.InteropServices;
 using dumbo.Compiler.AST;
 
 namespace dumbo.Compiler.Interpreter
@@ -385,7 +386,14 @@ namespace dumbo.Compiler.Interpreter
         public Value Visit(ProgramNode node, VisitorArgs arg)
         {
             _callStack.Push(new CallFrame(node));
-            node.Body.Accept(this, arg);
+            try
+            {
+                node.Body.Accept(this, arg);
+            }
+            catch (InterpretationErrorException e)
+            {
+                Reporter.Error(e.Message, e.Node.SourcePosition);
+            }
             _callStack.Pop();
             return null;
         }
@@ -529,15 +537,22 @@ namespace dumbo.Compiler.Interpreter
                     var maxValue = node.Parameters[1].Accept(this, arg) as NumberValue;
                     var min = (int)minValue.Number;
                     var max = (int)maxValue.Number;
-                    var randomNumber = new Random().Next(min, max);
-                    return new NumberValue(randomNumber);
+                    if (min < max)
+                    {
+                        var randomNumber = new Random().Next(min, max);
+                        return new NumberValue(randomNumber);
+                    }
+                    else
+                    {
+                        throw new InterpretationErrorException("Maximum value less than the minimum value", node);
+                    }
                 case BuiltInFunction.Floor:
                     var floorValue = node.Parameters[0].Accept(this, arg) as NumberValue;
                     var floor = (double)floorValue.Number;
                     return new NumberValue(Math.Floor(floor));
                 case BuiltInFunction.Ceiling:
                     var ceilingValue = node.Parameters[0].Accept(this, arg) as NumberValue;
-                    var ceiling = (double) ceilingValue.Number;
+                    var ceiling = (double)ceilingValue.Number;
                     return new NumberValue(Math.Ceiling(ceiling));
                 default:
                     throw new ArgumentOutOfRangeException();

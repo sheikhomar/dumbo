@@ -7,12 +7,13 @@ Program
 	
 	input := ReadNumber()
 	
-	Repeat while (input > 0)	
+	repeat while input > 0	
 		if (input % 4 = 0) then
 			wRiTe("It is a leap year.")
 		else if (NOT(input % 4 = 0)) then
 			Write("It is not a leap year.")
-		end if	
+		end if
+		input := input - 4
 	end repeat
 
 end program

@@ -1,23 +1,27 @@
 Program 
-	Number input
+	Number n
 	Number reverse := 0
 	Number temp
+	Number rem := 0
 	
 	Write("Enter a number to check if it is a palindrome or not")
-	input := ReadNumber()
+	n := ReadNumber()
 	
-	temp := input
+	temp := n
 	
 	repeat while (not(temp = 0))
-		reverse := reverse * 10
-		reverse := reverse + 10%10
-		temp := temp / 10
+		rem := temp % 10
+		reverse := reverse * 10 + rem
+		temp := temp / 10 //Needs math.floor - gives decimal numbers and we fail
 	end repeat
 	
-	if (input = reverse) then
-		write(input + " is a palindrome number.")
-	else if (not(input = reverse)) then
-		write(input + " is not a palindrome number.")
+	write("Your number was: " + n)
+	write("The reverse is: " + reverse)
+	
+	if (reverse = n) then
+		write(n + " is a palindrome number.")
+	else if (not(reverse = n)) then
+		write(n + " is not a palindrome number.")
 	else
 		write("You hit the cat out of the barrel... or encountered a problem.")
 	end if

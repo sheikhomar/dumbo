@@ -150,7 +150,7 @@
                             </DataGrid>
                         </TabItem>
                         <TabItem Header="Shell" Name="ShellTab">
-                            <TextBox Margin="2" Name="ShellTextBox" Background="Black" Foreground="LimeGreen" FontFamily="Consolas" FontSize="12"/>
+                            <TextBox Margin="2" Name="ShellTextBox" Background="Black" Foreground="Chartreuse" FontFamily="Consolas" FontSize="14"/>
                         </TabItem>
                     </TabControl>
                 </Grid>

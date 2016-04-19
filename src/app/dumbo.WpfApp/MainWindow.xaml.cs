@@ -387,15 +387,9 @@ namespace dumbo.WpfApp
 
         public void Write(string writeParameter)
         {
-            ShellTab.Focusable = true;
             ShellTab.Focus();
-            ShellTab.Focusable = false;
-
             ShellTextBox.Text += writeParameter + "\n";
-
-            textEditor.Focusable = true;
             textEditor.Focus();
-            textEditor.Focusable = false;
         }
 
         public NumberValue ReadNumber()

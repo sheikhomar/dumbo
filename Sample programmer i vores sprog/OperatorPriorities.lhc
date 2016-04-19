@@ -5,30 +5,30 @@ Program
 	Number c := 3
 	Number x := 1.0
 	
-	Number res1
-	Number res2
-	Number res3
-	Number res4
+	boolean res1
+	boolean res2
+	boolean res3
+	boolean res4
 	
-	Number res1Equiv
-	Number res2Equiv
-	Number res3Equiv
-	Number res4Equiv
+	boolean res1Equiv
+	boolean res2Equiv
+	boolean res3Equiv
+	boolean res4Equiv
 	
-	res1 = a > b AND c < x
-	res2 = a < NOT b OR not(not(a))
-	res3 = a + b < not(c) + c
-	res4 = a - x or b * c and b / a
+	res1 := a > b AND c < x
+	res2 := a < b OR a
+	res3 := a + b < c + c
+	res4 := a - x or b * c and b / a
 	
 	write("res1 = " + res1)
 	write("res2 = " + res2)
 	write("res3 = " + res3)
 	write("res4 = " + res4)
 	
-	res1Equiv = (a > b) and (c < x)
-	res2Equiv = (a < (not(b)) or (not(not(a))
-	res3Equiv = (a + b) < (((not(c)) + c))
-	res4Equiv = (a - x) or ((b * c) and (b / a))
+	res1Equiv := (a > b) and (c < x)
+	res2Equiv := (a < b) or (a)
+	res3Equiv := (a + b) < (c + c)
+	res4Equiv := (a - x) or ((b * c) and (b / a))
 	
 	write("res1Equiv = " + res1Equiv)
 	write("res2Equiv = " + res2Equiv)

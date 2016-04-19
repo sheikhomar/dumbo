@@ -8,7 +8,7 @@ Program
 	Write("Enter operator either +, -, * or / ")
 	operator := ReadText()
 
-	Write("Write the two operands you want to calcute using " + operator + "seperanted by 'Enter'")
+	Write("Write the two operands you want to calcute using " + operator + "seperated by 'Enter'")
 
 	input1 := ReadNumber()
 	input2 := ReadNumber()

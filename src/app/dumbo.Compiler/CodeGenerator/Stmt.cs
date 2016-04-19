@@ -13,6 +13,11 @@ namespace dumbo.Compiler.CodeGenerator
             Line = line;
         }
 
-        public string Line { get; }
+        public string Line { get; private set; }
+
+        public void Append(string linePart)
+        {
+            Line += linePart;
+        }
     }
 }

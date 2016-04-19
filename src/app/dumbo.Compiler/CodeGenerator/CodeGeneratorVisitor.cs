@@ -1,4 +1,5 @@
 using dumbo.Compiler.AST;
+using System;
 using System.Text;
 
 namespace dumbo.Compiler.CodeGenerator
@@ -11,6 +12,7 @@ namespace dumbo.Compiler.CodeGenerator
     {
         private Program _program;
         private Module _currentModule;
+        private Stmt _stmt;
 
         public CodeGeneratorVisitor()
         {
@@ -24,47 +26,99 @@ namespace dumbo.Compiler.CodeGenerator
 
         public RuntimeEntity Visit(AssignmentStmtNode node, VisitorArgs arg)
         {
+            
+
             throw new System.NotImplementedException();
         }
 
         public RuntimeEntity Visit(BinaryOperationNode node, VisitorArgs arg)
         {
-            throw new System.NotImplementedException();
+            node.LeftOperand.Accept(this, arg);
+            _stmt.Append($" {ConvertBinaryOperator(node.Operator)} ");
+            node.RightOperand.Accept(this, arg);
+
+            return null;
         }
 
         public RuntimeEntity Visit(BreakStmtNode node, VisitorArgs arg)
         {
-            throw new System.NotImplementedException();
+            _currentModule.Append(new Stmt("Break;"));
+
+            return null;
         }
 
         public RuntimeEntity Visit(BuiltInFuncDeclNode node, VisitorArgs arg)
         {
+            /// Todo -- All predefined functions the user can call
+
             throw new System.NotImplementedException();
         }
 
         public RuntimeEntity Visit(DeclAndAssignmentStmtNode node, VisitorArgs arg)
         {
-            throw new System.NotImplementedException();
+            int declAssCount = node.Identifiers.Count;
+            _stmt = new Stmt("");
+            _stmt.Append($"{ConvertType(node.Type)} ");
+            for (int i = 0; i < declAssCount; i++)
+            {
+                node.Identifiers[i].Accept(this, arg);
+                _stmt.Append(" = ");
+                node.Expressions[i].Accept(this, arg);
+                if (i != 0)
+                {
+                    _stmt.Append(", ");
+                }
+            }
+            _stmt.Append(";");
+
+            return null;
         }
 
         public RuntimeEntity Visit(DeclStmtNode node, VisitorArgs arg)
         {
-            throw new System.NotImplementedException();
+            _stmt = new Stmt("");
+            _stmt.Append($"{ConvertType(node.Type)} ");
+            node.Identifiers.Accept(this, arg);
+            _currentModule.Append(_stmt);
+
+            return null;
         }
 
         public RuntimeEntity Visit(ElseIfStmtListNode node, VisitorArgs arg)
         {
-            throw new System.NotImplementedException();
+            foreach (var item in node)
+            {
+                item.Accept(this, arg);
+            }
+
+            return null;
         }
 
         public RuntimeEntity Visit(ElseIfStmtNode node, VisitorArgs arg)
         {
-            throw new System.NotImplementedException();
+            _stmt = new Stmt("else if (");
+            node.Predicate.Accept(this, arg);
+            _stmt.Append(")");
+            _currentModule.Append(_stmt);
+            node.Body.Accept(this, arg);
+
+            return null;
         }
 
         public RuntimeEntity Visit(ExpressionListNode node, VisitorArgs arg)
         {
-            throw new System.NotImplementedException();
+            int count = node.Count;
+
+            for (int i = 0; i < count; i++)
+            {
+                node[i].Accept(this, arg);
+                if (i != 0)
+                {
+                    _stmt.Append(", ");
+                }
+            }
+
+            return null;
         }
 
         public RuntimeEntity Visit(FormalParamListNode node, VisitorArgs arg)
@@ -125,34 +179,67 @@ namespace dumbo.Compiler.CodeGenerator
 
         public RuntimeEntity Visit(IdentifierListNode node, VisitorArgs arg)
         {
-            throw new System.NotImplementedException();
+            int length = node.Count;
+
+            for (int i = 0; i < length; i++)
+            {
+                node[i].Accept(this, arg);
+                if (i != 0)
+                {
+                    _stmt.Append(", ");
+                }
+            }
+            _stmt.Append($";");
+
+            return null;
         }
 
         public RuntimeEntity Visit(IdentifierNode node, VisitorArgs arg)
         {
-            throw new System.NotImplementedException();
+            _stmt.Append(node.Name);
+
+            return null;
         }
 
         public RuntimeEntity Visit(IfElseStmtNode node, VisitorArgs arg)
         {
-            throw new System.NotImplementedException();
+            _stmt = new Stmt("if (");
+            node.Predicate.Accept(this, arg);
+            _stmt.Append(")");
+            _currentModule.Append(_stmt);
+            node.Body.Accept(this, arg);
+            node.ElseIfStatements.Accept(this, arg);
+            _currentModule.Append(new Stmt($"else"));
+            node.Else.Accept(this, arg);
+
+            return null;
         }
 
         public RuntimeEntity Visit(IfStmtNode node, VisitorArgs arg)
         {
-            _currentModule.Append(new Stmt($"if ({node.Predicate.Accept(this, arg)})"));
+            _stmt = new Stmt("if (");
+            node.Predicate.Accept(this, arg);
+            _stmt.Append(")");
+            _currentModule.Append(_stmt);
+            node.Body.Accept(this, arg);
+            node.ElseIfStatements.Accept(this, arg);
 
-            throw new System.NotImplementedException();
+            return null;
         }
 
         public RuntimeEntity Visit(LiteralValueNode node, VisitorArgs arg)
         {
-            throw new System.NotImplementedException();
+            _stmt.Append(node.Value);
+
+            return null;
         }
 
         public RuntimeEntity Visit(ProgramNode node, VisitorArgs arg)
         {
-            throw new System.NotImplementedException();
+            _currentModule.Append(new Stmt($"int main()"));
+            node.Body.Accept(this, arg);
+
+            return null;
         }
 
         public RuntimeEntity Visit(RepeatStmtNode node, VisitorArgs arg)
@@ -167,7 +254,11 @@ namespace dumbo.Compiler.CodeGenerator
 
         public RuntimeEntity Visit(ReturnStmtNode node, VisitorArgs arg)
         {
-            throw new System.NotImplementedException();
+            _stmt = new Stmt("return ");
+            node.Expressions.Accept(this, arg);
+            _stmt.Append(";");
+
+            return null;
         }
 
         public RuntimeEntity Visit(RootNode node, VisitorArgs arg)
@@ -181,12 +272,72 @@ namespace dumbo.Compiler.CodeGenerator
 
         public RuntimeEntity Visit(StmtBlockNode node, VisitorArgs arg)
         {
-            throw new System.NotImplementedException();
+            _currentModule.Append(new Stmt("{"));
+            foreach (var item in node)
+            {
+                item.Accept(this, arg);
+            }
+            _currentModule.Append(new Stmt("}"));
+
+            return null;
         }
 
         public RuntimeEntity Visit(UnaryOperationNode node, VisitorArgs arg)
         {
-            throw new System.NotImplementedException();
+            _currentModule.Append(new Stmt(ConvertUnaryOperator(node.Operator)));
+            node.Expression.Accept(this, arg);
+
+            return null;
+        }
+
+        private string ConvertType(HappyType input)
+        {
+            switch (input)
+            {
+                case HappyType.Nothing: return "void";
+                case HappyType.Number:
+                    break;
+                case HappyType.Text:
+                    break;
+                case HappyType.Boolean:
+                    break;
+                case HappyType.Error: throw new ArgumentException($"{input} is not a valid type.");
+                default:
+                    break;
+            }
+
+            return default(string);
+        }
+
+        private string ConvertBinaryOperator(BinaryOperatorType input)
+        {
+            switch (input)
+            {
+                case BinaryOperatorType.Plus: return "+";
+                case BinaryOperatorType.Minus: return "-";
+                case BinaryOperatorType.Times: return "*";
+                case BinaryOperatorType.Division: return "/";
+                case BinaryOperatorType.Modulo: return "%";
+                case BinaryOperatorType.Equals: return "==";
+                case BinaryOperatorType.GreaterThan: return ">";
+                case BinaryOperatorType.GreaterOrEqual: return ">=";
+                case BinaryOperatorType.LessThan: return "<";
+                case BinaryOperatorType.LessOrEqual: return "<=";
+                case BinaryOperatorType.Or: return "||";
+                case BinaryOperatorType.And: return "&&";
+                default: throw new ArgumentException($"{input} is not a valid binary operator.");
+            }
+        }
+
+        private string ConvertUnaryOperator(UnaryOperatorType input)
+        {
+            switch (input)
+            {
+                case UnaryOperatorType.Not: return "!";
+                case UnaryOperatorType.Minus: return "-";
+                case UnaryOperatorType.Plus: return "+";
+                default: throw new ArgumentException($"{input} is not a valid binary operator.");
+            }
         }
     }
 }

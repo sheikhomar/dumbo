@@ -12,7 +12,7 @@ Program
     operator := ReadText()
     
     if (operator = "+" Or operator = "-" Or operator = "*" Or operator = "/") then
-       Break()                // This is not correct - syntax doesn't allow this yet - Marc
+       Break  // This is not correct - syntax doesn't allow this yet - Marc
     end if
   end repeat
   

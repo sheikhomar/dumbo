@@ -15,27 +15,26 @@ int main()
   a.v = 10.0;
   b.v = 5.0;
   result.v = 0.0;
-  
-	
+
   printf("Hello, World!\n");
 	
 	result = f32_add(a, b);
   
-	printf("Add %f and %f = %f", a.v, b.v, result.v);
-	//
-	//result = f32_sub( float32_t a, float32_t b);
-	////printf("Add %f and %f = %f", a, b, result);
-	//
-	//result = f32_mul( float32_t a, float32_t b);
-	////printf("Add %f and %f = %f", a, b, result);
-	//
-	//result = f32_mulAdd( float32_t a, float32_t b, float32_t a);
-	////printf("Add %f and %f = %f", a, b, result);
-	//
-	//result = f32_div( float32_t a, float32_t b);
-	////printf("Add %f and %f = %f", a, b, result);
-	//
-	//printf("Yay, success!");
+	printf("f32_add: %d and %d = %d\n", a.v, b.v, result.v);
+	
+	result = f32_sub(a, b);
+	printf("f32_sub: %d and %d = %d\n", a, b, result);
+	
+	result = f32_mul(a, b);
+	printf("f32_mul: %d and %d = %d\n", a, b, result);
+	
+	result = f32_mulAdd(a, b, a);
+	printf("f32_mulAdd: %d and %d = %d\n", a, b, result);
+	
+	result = f32_div(a, b);
+	printf("f32_div: %d and %d = %d\n", a, b, result);
+	
+	printf("Yay, success!");
 
     return 0;
 }

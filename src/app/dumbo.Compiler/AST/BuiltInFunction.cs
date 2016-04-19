@@ -5,6 +5,8 @@ namespace dumbo.Compiler.AST
         Write,
         ReadNumber,
         ReadText,
-        Random
+        Random,
+        Floor, 
+        Ceiling
     }
 }

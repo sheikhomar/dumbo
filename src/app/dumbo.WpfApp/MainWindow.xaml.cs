@@ -37,7 +37,7 @@ namespace dumbo.WpfApp
         public MainWindow()
         {
             InitializeComponent();
-            
+
             _grammarTableWatcher = new FileSystemWatcher();
             _grammarTableWatcher.NotifyFilter = NotifyFilters.LastWrite;
             _grammarTableWatcher.EnableRaisingEvents = false;
@@ -45,7 +45,7 @@ namespace dumbo.WpfApp
 
             textEditor.TextArea.Caret.PositionChanged += CaretOnPositionChanged;
 
-            
+
             using (var s = GetType().Assembly.GetManifestResourceStream("dumbo.WpfApp.HappyZSyntaxHighlighting.xshd"))
             {
                 using (var reader = new XmlTextReader(s))
@@ -219,7 +219,7 @@ namespace dumbo.WpfApp
             }
 
             SaveFile(sender, e);
-            
+
             var data = new StringReader(textEditor.Text);
             var parserResult = _myParser.Parse(data);
 
@@ -257,6 +257,12 @@ namespace dumbo.WpfApp
             readText.ReturnTypes.Add(HappyType.Text);
             var readNumber = new BuiltInFuncDeclNode(BuiltInFunction.ReadNumber);
             readNumber.ReturnTypes.Add(HappyType.Number);
+            var floor = new BuiltInFuncDeclNode(BuiltInFunction.Floor);
+            floor.Parameters.Add(new FormalParamNode("n1", HappyType.Number, srcPos));
+            floor.ReturnTypes.Add(HappyType.Number);
+            var ceiling = new BuiltInFuncDeclNode(BuiltInFunction.Ceiling);
+            ceiling.Parameters.Add(new FormalParamNode("n1", HappyType.Number, srcPos));
+            ceiling.ReturnTypes.Add(HappyType.Number);
 
             var random = new BuiltInFuncDeclNode(BuiltInFunction.Random);
             random.Parameters.Add(new FormalParamNode("n1", HappyType.Number, srcPos));
@@ -267,6 +273,8 @@ namespace dumbo.WpfApp
             root.FuncDecls.Add(readText);
             root.FuncDecls.Add(readNumber);
             root.FuncDecls.Add(random);
+            root.FuncDecls.Add(floor);
+            root.FuncDecls.Add(ceiling);
         }
 
         private void SaveFile(object sender, ExecutedRoutedEventArgs e)
@@ -364,7 +372,7 @@ namespace dumbo.WpfApp
             {
                 root.Accept(interpreter, new VisitorArgs());
             }
-            
+
 
             var events = reporter.GetEvents().ToArray();
             ErrorList.ItemsSource = events;

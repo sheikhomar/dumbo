@@ -232,7 +232,7 @@ namespace dumbo.Compiler.Interpreter
                     return val;
                 }
             }
-            
+
             return new BooleanValue(false);
         }
 
@@ -531,6 +531,14 @@ namespace dumbo.Compiler.Interpreter
                     var max = (int)maxValue.Number;
                     var randomNumber = new Random().Next(min, max);
                     return new NumberValue(randomNumber);
+                case BuiltInFunction.Floor:
+                    var floorValue = node.Parameters[0].Accept(this, arg) as NumberValue;
+                    var floor = (double)floorValue.Number;
+                    return new NumberValue(Math.Floor(floor));
+                case BuiltInFunction.Ceiling:
+                    var ceilingValue = node.Parameters[0].Accept(this, arg) as NumberValue;
+                    var ceiling = (double) ceilingValue.Number;
+                    return new NumberValue(Math.Ceiling(ceiling));
                 default:
                     throw new ArgumentOutOfRangeException();
             }

@@ -7,12 +7,9 @@ Program
 	if (input % 2 = 0) then
 		Write("The number is even")
 	else if (NOT(input % 2 = 0)) then
-		Write("The number is odd")
+		Write("The number " + input + " is odd")
 	else
 		Write("Error occured. Please close the program and try again")
 	end if
 	
 End Program
-
-
-

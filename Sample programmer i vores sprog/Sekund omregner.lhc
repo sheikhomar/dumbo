@@ -10,11 +10,12 @@ Program
 	
 	seconds := ReadNumber()
 
+    //All this shit requires math.floor
 	hour := seconds / 3600
 	remainder := seconds % 3600
 	min := remainder / 60
 	sec := remainder % 60
 
-	Write(seconds + "is equal to " + hour + "hours, " + min + " minutes and " + sec + " seconds.")
+	Write(seconds + " seconds is equal to " + hour + " hours, " + min + " minutes and " + sec + " seconds.")
 	
 End Program

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -20,15 +21,21 @@ namespace dumbo.WpfApp
     /// </summary>
     public partial class ReaderWindow : Window
     {
+        private readonly Regex _regex;
+        private readonly HappyType _requestedType;
+
         public string ReturnValue { get; private set; }
 
-        public ReaderWindow()
+        public ReaderWindow(HappyType requestedType)
         {
             InitializeComponent();
             InputTextBox.Focusable = true;
             Keyboard.Focus(InputTextBox);
+            _requestedType = requestedType;
+            _regex = new Regex("[^0-9.-]+");
+            Title = "Expecting " + requestedType;
         }
-
+        
         protected override void OnActivated(EventArgs e)
         {
             InputTextBox.Focusable = true;
@@ -42,6 +49,19 @@ namespace dumbo.WpfApp
             {
                 ReturnValue = InputTextBox.Text;
                 Close();
+            }
+            else if (e.Key == Key.Escape)
+            {
+                ReturnValue = string.Empty;
+                Close();
+            }
+        }
+
+        private void InputTextBox_OnPreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            if (_requestedType == HappyType.Number)
+            {
+                e.Handled = _regex.IsMatch(e.Text);
             }
         }
     }

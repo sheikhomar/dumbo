@@ -400,17 +400,17 @@ namespace dumbo.WpfApp
 
         public NumberValue ReadNumber()
         {
-            var rw = new ReaderWindow();
+            var rw = new ReaderWindow(HappyType.Number);
             rw.ShowDialog();
             double val;
             if (double.TryParse(rw.ReturnValue, out val))
                 return new NumberValue(val);
-            return null;
+            return new NumberValue(0);
         }
 
         public TextValue ReadText()
         {
-            var rw = new ReaderWindow();
+            var rw = new ReaderWindow(HappyType.Text);
             rw.ShowDialog();
             return new TextValue(rw.ReturnValue);
         }

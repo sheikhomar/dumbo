@@ -5,9 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:dumbo.WpfApp"
         mc:Ignorable="d"
-        Title="Expecting Input..." Height="300" Width="400">
+        Title="Expecting Input..." Height="103" Width="400" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" WindowStyle="ToolWindow">
     <Grid>
-        <TextBox Name="InputTextBox" KeyDown="InputTextBox_OnKeyDown">
+        <TextBox Margin="5" Name="InputTextBox" KeyDown="InputTextBox_OnKeyDown" FontSize="28" Padding="5" PreviewTextInput="InputTextBox_OnPreviewTextInput">
             
         </TextBox>
     </Grid>

@@ -1,6 +1,6 @@
 Program
 	Number TheNumber 
-    TheNumber := Random() % 100
+    TheNumber := Random(1, 10) % 100
 	Write("Guess my number: ")
 	Number GuessedNumber
 	Boolean IsNumberGuessed := false
@@ -11,10 +11,10 @@ Program
 			Write("Congrats! You guessed my Number!")
 			IsNumberGuessed := true
 		Else if(GuessedNumber < TheNumber) then
-			Write("My number is bigger")
+			Write("My number is bigger than " + GuessedNumber)
 			Write("Guess again")
 		Else if (GuessedNumber > TheNumber) then
-			Write("My number is less than")
+			Write("My number is less than " + GuessedNumber)
 			Write("Guess again")
 		Else
 			Write("Error... Restart program")

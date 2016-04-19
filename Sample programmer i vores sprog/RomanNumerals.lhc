@@ -8,30 +8,30 @@ Program
   OriginalInput := input
   
   repeat while (input > 0)
-    if (input > 1000) then
+    if (input >= 1000) then
 	  output := output + "M"
 	  input := input - 1000
-	else if (input > 500) then
+	else if (input >= 500) then
 	  output := output + "D"
 	  input := input - 500
-	else if (input > 100) then
+	else if (input >= 100) then
 	  output := output + "C"
 	  input := input - 100
-	else if (input > 50) then
+	else if (input >= 50) then
 	  output := output + "L"
 	  input := input - 50
-	else if (input > 10) then
+	else if (input >= 10) then
 	  output := output + "X"
 	  input := input - 10
-	else if (input > 5) then
+	else if (input >= 5) then
 	  output := output + "V"
 	  input := input - 5
-	else if (input > 1) then
+	else if (input >= 1) then
 	  output := output + "I"
 	  input := input - 1
 	end if
   end repeat
   
-  write(OriginalInput + " is the same as " + output + " in Roman numerals")
+  write("" + OriginalInput + " is the same as " + output + " in Roman numerals")
   
 end Program

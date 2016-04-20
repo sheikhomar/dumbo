@@ -1,0 +1,18 @@
+Program 
+  number i 
+  repeat 10
+    write("" + fibonacci(i))
+  end repeat
+End program
+
+function fibonacci(number i) return number
+	if(i = 0) then
+		return 0
+	end if
+	
+	if (i = 1) then
+		return 1
+	end if
+	
+	return fibonacci(i-1) + fibonacci(i-2)
+end function

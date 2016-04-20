@@ -397,7 +397,7 @@ namespace dumbo.Compiler.CodeGenerator
         private void CreateNewModule()
         {
             var module = new Module();
-            _program.AddModule(module);
+            CProgram.AddModule(module);
             _currentModule = module;
         }
     }

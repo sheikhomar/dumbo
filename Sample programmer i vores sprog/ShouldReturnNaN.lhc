@@ -1,0 +1,9 @@
+program
+	number cap := foo()
+	write("" + cap)
+end program
+
+function foo() returns number
+	number ret := 23.33453 + 34.4546
+	return ret
+end function

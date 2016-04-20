@@ -7,6 +7,7 @@ namespace dumbo.Compiler.AST
         ReadText,
         Random,
         Floor, 
-        Ceiling
+        Ceiling,
+        IsEqual
     }
 }

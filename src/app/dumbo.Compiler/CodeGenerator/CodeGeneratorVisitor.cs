@@ -124,21 +124,34 @@ namespace dumbo.Compiler.CodeGenerator
 
         public RuntimeEntity Visit(FormalParamListNode node, VisitorArgs arg)
         {
-            throw new System.NotImplementedException();
+            return null;
         }
 
         public RuntimeEntity Visit(FormalParamNode node, VisitorArgs arg)
         {
-            throw new System.NotImplementedException();
+            return null;
         }
 
         public RuntimeEntity Visit(FuncCallExprNode node, VisitorArgs arg)
         {
-            throw new System.NotImplementedException();
+            //a := ... MyFunction(myInt)+5
+            var builder = new StringBuilder();
+
+            builder.Append("_" + node.FuncName + "(");
+
+            foreach (var parameter in node.Parameters)
+            {
+                builder.Append(parameter.ToString() + ", ");
+            }
+            RemoveExtraComma(builder);
+            _currentStmt.Append(builder.ToString());
+
+            return null;
         }
 
         public RuntimeEntity Visit(FuncCallStmtNode node, VisitorArgs arg)
         {
+            //a,b := MyFunction2(myInt)
             throw new System.NotImplementedException();
         }
 
@@ -397,14 +410,15 @@ namespace dumbo.Compiler.CodeGenerator
 
             if(multiReturn)
             {
-                for (int i = 0; i < funcNode.ReturnTypes.Count; i++)
+                int i = 1;
+                foreach (var retType in funcNode.ReturnTypes)
                 {
-                    builder.Append("void _ ret" + i + ", ");
+                    string type = ConvertType(retType);
+                    builder.Append(type + " _ ret" + i + ", ");
+                    i++;
                 }
             }
-
-            builder.Remove(builder.Length - 2, 2);
-            builder.Append(")");
+            RemoveExtraComma(builder);
         }
 
         private void CreateNewModule()
@@ -412,6 +426,12 @@ namespace dumbo.Compiler.CodeGenerator
             var module = new Module();
             CProgram.AddModule(module);
             _currentModule = module;
+        }
+
+        private void RemoveExtraComma(StringBuilder builder)
+        {
+            builder.Remove(builder.Length - 2, 2);
+            builder.Append(")");
         }
     }
 }

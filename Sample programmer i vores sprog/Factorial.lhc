@@ -1,0 +1,11 @@
+Program
+  number i := 25
+  write("" + factorial(i))
+End program
+
+function factorial(number i) returns number
+  if(i <= 1) then
+	return 1
+  end if
+  return i * factorial(i - 1)
+end function

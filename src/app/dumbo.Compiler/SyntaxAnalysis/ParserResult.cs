@@ -22,6 +22,8 @@ namespace dumbo.Compiler.SyntaxAnalysis
 
         public IEnumerable<ParserError> Errors => _errors;
 
+        public bool IsSuccess => _errors.Count == 0;
+
         public RootNode Root
         {
             get { return _root; }

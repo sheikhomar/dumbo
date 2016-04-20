@@ -10,6 +10,7 @@ using System.Windows.Media;
 using System.Xml;
 using dumbo.Compiler;
 using dumbo.Compiler.AST;
+using dumbo.Compiler.CodeGenerator;
 using dumbo.Compiler.Interpreter;
 using ICSharpCode.AvalonEdit.Highlighting;
 using Microsoft.Win32;
@@ -217,10 +218,38 @@ namespace dumbo.WpfApp
 
             SaveFile(sender, e);
 
-            var data = new StringReader(textEditor.Text);
+            var parserResult = Parse(textEditor.Text);
+
+            if (parserResult.IsSuccess)
+            {
+                var root = parserResult.Root;
+                PrettyPrint(root);
+                EventReporter reporter = new EventReporter();
+                ScopeAndTypeCheck(parserResult.Root, reporter);
+                if (!reporter.HasErrors)
+                {
+                    var interpreter = new InterpretationVisitor(reporter, this);
+                    root.Accept(interpreter, new VisitorArgs());
+                }
+
+                MarkErrors(reporter);
+            }
+
+            latestCompiledAt = DateTime.Now;
+            UpdateInformationBox();
+        }
+
+        private ParserResult Parse(string text)
+        {
+            var data = new StringReader(text);
             var parserResult = _myParser.Parse(data);
 
-            if (parserResult.Errors.Any())
+            if (parserResult.IsSuccess)
+            {
+                foreach (var node in BuiltInFuncDeclNode.GetBuiltInFunctions())
+                    parserResult.Root.FuncDecls.InsertAt(0, node);
+            }
+            else
             {
                 StringBuilder errorMessage = new StringBuilder();
 
@@ -233,22 +262,8 @@ namespace dumbo.WpfApp
 
                 ResultTextBox.Text = errorMessage.ToString();
             }
-            else
-            {
-                IncludeBuiltInFunctions(parserResult.Root);
-                PrettyPrint(parserResult.Root);
-                //CheckContextualContraints(parserResult.Root);
-                ScopeAndTypeCheck(parserResult.Root);
-            }
 
-            latestCompiledAt = DateTime.Now;
-            UpdateInformationBox();
-        }
-
-        private void IncludeBuiltInFunctions(RootNode root)
-        {
-            foreach (var node in BuiltInFuncDeclNode.GetBuiltInFunctions())
-                root.FuncDecls.InsertAt(0, node);
+            return parserResult;
         }
 
         private void SaveFile(object sender, ExecutedRoutedEventArgs e)
@@ -334,20 +349,16 @@ namespace dumbo.WpfApp
             ResultTextBox.Text = ppv.GetResult();
         }
 
-        private void ScopeAndTypeCheck(RootNode root)
+        private void ScopeAndTypeCheck(RootNode root, EventReporter reporter)
         {
-            var reporter = new EventReporter();
             var scopeChecker = new ScopeCheckVisitor(reporter);
             var typeChecker = new TypeCheckVisitor(reporter);
-            var interpreter = new InterpretationVisitor(reporter, this);
             root.Accept(scopeChecker, new VisitorArgs());
             root.Accept(typeChecker, new VisitorArgs());
-            if (!reporter.HasErrors)
-            {
-                root.Accept(interpreter, new VisitorArgs());
-            }
+        }
 
-
+        private void MarkErrors(EventReporter reporter)
+        {
             var events = reporter.GetEvents().ToArray();
             ErrorList.ItemsSource = events;
 
@@ -391,9 +402,35 @@ namespace dumbo.WpfApp
             return new TextValue(rw.ReturnValue);
         }
 
-        private void BreakExecution(object sender, ExecutedRoutedEventArgs e)
+        private void GenerateCode(object sender, ExecutedRoutedEventArgs e)
         {
-            Environment.Exit(0);
+            if (!File.Exists(currentSourcePath))
+            {
+                ResultTextBox.Text = $"File {currentSourcePath} does not exist!";
+                return;
+            }
+
+            SaveFile(sender, e);
+
+            var parserResult = Parse(textEditor.Text);
+
+            if (parserResult.IsSuccess)
+            {
+                var root = parserResult.Root;
+                EventReporter reporter = new EventReporter();
+                ScopeAndTypeCheck(parserResult.Root, reporter);
+                if (!reporter.HasErrors)
+                {
+                    var codeGen = new CodeGeneratorVisitor();
+                    root.Accept(codeGen, new VisitorArgs());
+                    
+                }
+
+                MarkErrors(reporter);
+            }
+
+            latestCompiledAt = DateTime.Now;
+            UpdateInformationBox();
         }
     }
 }

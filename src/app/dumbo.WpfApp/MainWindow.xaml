@@ -14,7 +14,7 @@
         <RoutedUICommand x:Key="PickGrammar" Text="Pick another grammar table file." />
         <RoutedUICommand x:Key="ReloadGrammar" Text="Reload current grammar table." />
         <RoutedUICommand x:Key="PrintCommand" Text="Print" />
-        <RoutedUICommand x:Key="BreakCommand" Text="Break execution"/>
+        <RoutedUICommand x:Key="CodeGenCommand" Text="Generate code" />
     </Window.Resources>
     <Window.CommandBindings>
         <CommandBinding Command="{StaticResource CompileCommand}" Executed="Compile" />
@@ -22,14 +22,14 @@
         <CommandBinding Command="{StaticResource PickGrammar}" Executed="PickGrammar" />
         <CommandBinding Command="{StaticResource ReloadGrammar}" Executed="ReloadGrammar" />
         <CommandBinding Command="{StaticResource PrintCommand}" Executed="Print" />
-        <CommandBinding Command="{StaticResource BreakCommand}" Executed="BreakExecution" />
+        <CommandBinding Command="{StaticResource CodeGenCommand}" Executed="GenerateCode" />
     </Window.CommandBindings>
     <Window.InputBindings>
         <KeyBinding Modifiers="Control" Key="S" Command="{StaticResource SaveCommand}" />
         <KeyBinding Modifiers="Control" Key="R" Command="{StaticResource ReloadGrammar}" />
         <KeyBinding Modifiers="Control" Key="Enter" Command="{StaticResource CompileCommand}" />
         <KeyBinding Modifiers="Control" Key="P" Command="{StaticResource PrintCommand}" />
-        <KeyBinding Modifiers="Control" Key="Z" Command="{StaticResource BreakCommand}" />
+        <KeyBinding Modifiers="Control" Key="O" Command="{StaticResource CodeGenCommand}" />
     </Window.InputBindings>
 
     <DockPanel>
@@ -85,6 +85,9 @@
             </Button>
             <Button ToolTip="Compile (Ctrl + Enter)" Command="{StaticResource CompileCommand}">
                 <Image Source="Images/Compile.png" Height="16"/>
+            </Button>
+            <Button ToolTip="Generate code (Ctrl + O)" Command="{StaticResource CodeGenCommand}">
+                <Image Source="Images/CodeGen.png" Height="16"/>
             </Button>
         </ToolBar>
         <StatusBar DockPanel.Dock="Bottom">

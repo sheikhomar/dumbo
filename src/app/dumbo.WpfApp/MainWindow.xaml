@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:dumbo.WpfApp"
         xmlns:avalonedit="http://icsharpcode.net/sharpdevelop/avalonedit"
+        xmlns:input="clr-namespace:System.Windows.Input;assembly=System"
         mc:Ignorable="d"
         Title="Happy Z Development Enviroment" Height="450" Width="905" WindowState="Maximized">
     <Window.Resources>
@@ -13,6 +14,7 @@
         <RoutedUICommand x:Key="PickGrammar" Text="Pick another grammar table file." />
         <RoutedUICommand x:Key="ReloadGrammar" Text="Reload current grammar table." />
         <RoutedUICommand x:Key="PrintCommand" Text="Print" />
+        <RoutedUICommand x:Key="BreakCommand" Text="Break execution"/>
     </Window.Resources>
     <Window.CommandBindings>
         <CommandBinding Command="{StaticResource CompileCommand}" Executed="Compile" />
@@ -20,12 +22,14 @@
         <CommandBinding Command="{StaticResource PickGrammar}" Executed="PickGrammar" />
         <CommandBinding Command="{StaticResource ReloadGrammar}" Executed="ReloadGrammar" />
         <CommandBinding Command="{StaticResource PrintCommand}" Executed="Print" />
+        <CommandBinding Command="{StaticResource BreakCommand}" Executed="BreakExecution" />
     </Window.CommandBindings>
     <Window.InputBindings>
         <KeyBinding Modifiers="Control" Key="S" Command="{StaticResource SaveCommand}" />
         <KeyBinding Modifiers="Control" Key="R" Command="{StaticResource ReloadGrammar}" />
         <KeyBinding Modifiers="Control" Key="Enter" Command="{StaticResource CompileCommand}" />
         <KeyBinding Modifiers="Control" Key="P" Command="{StaticResource PrintCommand}" />
+        <KeyBinding Modifiers="Control" Key="Z" Command="{StaticResource BreakCommand}" />
     </Window.InputBindings>
 
     <DockPanel>

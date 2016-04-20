@@ -66,7 +66,6 @@ namespace dumbo.WpfApp
             LoadGrammar(GetGrammarFile());
         }
 
-
         void InitializeTextMarkerService()
         {
             var textMarkerService = new TextMarkerService(textEditor.Document);
@@ -77,7 +76,6 @@ namespace dumbo.WpfApp
                 services.AddService(typeof(ITextMarkerService), textMarkerService);
             _textMarkerService = textMarkerService;
         }
-
 
         private void LoadGrammar(string path)
         {
@@ -104,7 +102,6 @@ namespace dumbo.WpfApp
 
             ResultTextBox.Text = message;
         }
-
 
         private void GrammarHasChanged(object sender, FileSystemEventArgs e)
         {
@@ -392,6 +389,11 @@ namespace dumbo.WpfApp
             var rw = new ReaderWindow(HappyType.Text);
             rw.ShowDialog();
             return new TextValue(rw.ReturnValue);
+        }
+
+        private void BreakExecution(object sender, ExecutedRoutedEventArgs e)
+        {
+            Environment.Exit(0);
         }
     }
 }

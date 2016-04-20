@@ -49,6 +49,19 @@ void UpdateText(char *inputText, int length, Text *text) {
 	(*text).Text = textContent;
 }
 
+// Copy a value of a Text given a char pointer to the old value, the length of the old value and the Text to be copied to (it's null - empty)
+void CopyText(char *inputText, int length, Text *text) {
+	char *textContent = (char*)malloc(length);
+	int i;
+
+	for (i = 0; i<length; i++)
+		*(textContent + i) = *(inputText + i);
+	
+	//Copy the Text
+	(*text).Length = length;
+	(*text).Text = textContent;
+}
+
 // Concatenating to Texts' values
 void ConcatText(Text *inputText1, Text *inputText2, Text *resText) {
 	int i, j, size1 = (*inputText1).Length, size2 = (*inputText2).Length;

@@ -12,7 +12,7 @@ namespace dumbo.Compiler.Interpreter
     {
         private readonly IInteractiveShell _shell;
         public EventReporter Reporter { get; }
-        public CallFrame CurrentCallFrame => _callStack.Peek();
+        private CallFrame CurrentCallFrame => _callStack.Peek();
         private Stack<CallFrame> _callStack;
 
         public InterpretationVisitor(EventReporter reporter, IInteractiveShell shell)

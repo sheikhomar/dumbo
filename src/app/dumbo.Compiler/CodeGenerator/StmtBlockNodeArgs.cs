@@ -8,13 +8,16 @@ namespace dumbo.Compiler.CodeGenerator
 {
     internal class StmtBlockNodeArgs : VisitorArgs
     {
-        public StmtBlockNodeArgs(IList<Stmt> prefix, IList<Stmt> suffix)
+        public StmtBlockNodeArgs(IList<Stmt> prefix, IList<Stmt> suffix, BodyVisitorArgs bodyArgs = null)
         {
             Prefix = prefix;
             Suffix = suffix;
+            BodyVisitorArgs = bodyArgs;
+
         }
 
         public IList<Stmt> Prefix { get; }
         public IList<Stmt> Suffix { get; }
+        public BodyVisitorArgs BodyVisitorArgs { get; }
     }
 }

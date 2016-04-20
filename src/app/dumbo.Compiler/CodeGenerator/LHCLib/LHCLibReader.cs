@@ -12,7 +12,8 @@ namespace dumbo.Compiler.CodeGenerator.LHCLib
         public Module CreateLHCLIb()
         {
             Module output = new Module();
-            StreamReader reader = new StreamReader("LHCLib.c");
+            string currentPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"CodeGenerator\LHCLib.c");
+            StreamReader reader = new StreamReader(currentPath);
             string currentLine = reader.ReadLine();
 
             while (currentLine != null)

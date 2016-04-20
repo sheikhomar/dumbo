@@ -45,6 +45,7 @@ namespace dumbo.Compiler.CodeGenerator
             if (isFunction)
             {
                 int i = 1;
+                _currentModule.Append(new Stmt("{"));
                 foreach (var identifier in node.Identifiers)
                 {
                     //type *ret[i] = &name;
@@ -54,6 +55,7 @@ namespace dumbo.Compiler.CodeGenerator
                     _currentModule.Append(_currentStmt);
                     i++;
                 }
+                _currentModule.Append(new Stmt("}"));
             }
             else
             {
@@ -62,6 +64,7 @@ namespace dumbo.Compiler.CodeGenerator
                     //id = expression;
                     _currentStmt = new Stmt("");
                     node.Identifiers[index].Accept(this, arg);
+                    _currentStmt.Append(" = ");
                     node.Expressions[0].Accept(this, arg);
                     _currentStmt.Append(";");
                     _currentModule.Append(_currentStmt);
@@ -173,7 +176,6 @@ namespace dumbo.Compiler.CodeGenerator
         public RuntimeEntity Visit(FuncCallExprNode node, VisitorArgs arg)
         {
             //a := ... MyFunction(myInt)+5
-            _currentStmt = new Stmt("");
             _currentStmt.Append("_" + node.FuncName + "(");
             node.Parameters.Accept(this, arg);
             _currentStmt.Append(")");

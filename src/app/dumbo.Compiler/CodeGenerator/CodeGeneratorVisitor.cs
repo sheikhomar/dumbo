@@ -164,24 +164,25 @@ namespace dumbo.Compiler.CodeGenerator
             throw new System.NotImplementedException();
         }
 
-        private void FuncHeader(FuncDeclNode node, bool body)
+        private void FuncHeader(FuncDeclNode node, bool includeBody)
         {
             StringBuilder builder = new StringBuilder();
 
-            //ret type
+            WriteFunctionHeader(node, builder);
 
-            //name
-
-            //parameters + ()
+            if (!includeBody)
+            {
+                builder.Append(";");
+                _currentModule.Append(new Stmt(builder.ToString()));
+                return;
+            }
             
-
-            if (body)
-                builder.Append('{');
-            else
-                builder.Append(';');
-
+            CreateNewModule();
             _currentModule.Append(new Stmt(builder.ToString()));
+            node.Body.Accept(this, new BodyVisitorArgs(node.ReturnTypes));
         }
+
+        
 
         public RuntimeEntity Visit(IdentifierListNode node, VisitorArgs arg)
         {
@@ -356,6 +357,47 @@ namespace dumbo.Compiler.CodeGenerator
                 case UnaryOperatorType.Plus: return "+";
                 default: throw new ArgumentException($"{input} is not a valid binary operator.");
             }
+        }
+
+
+        private void WriteFunctionHeader(FuncDeclNode funcNode, StringBuilder builder)
+        {
+            bool multiReturn = funcNode.ReturnTypes.Count > 1;
+
+            //Return type
+            if (multiReturn)
+                builder.Append("void");
+            else
+                builder.Append(ConvertType(funcNode.ReturnTypes[0]));
+
+            //Name
+            builder.Append("_" + funcNode.Name + " ");
+
+            //Parameters
+            builder.Append("(");
+            foreach (var formalParameter in funcNode.Parameters)
+            {
+                string type = ConvertType(formalParameter.Type);
+                builder.Append(type + " _" + formalParameter.Name + ", ");
+            }
+
+            if(multiReturn)
+            {
+                for (int i = 0; i < funcNode.ReturnTypes.Count; i++)
+                {
+                    builder.Append("void _ ret" + i + ", ");
+                }
+            }
+
+            builder.Remove(builder.Length - 2, 2);
+            builder.Append(")");
+        }
+
+        private void CreateNewModule()
+        {
+            var module = new Module();
+            _program.AddModule(module);
+            _currentModule = module;
         }
     }
 }

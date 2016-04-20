@@ -70,6 +70,7 @@ namespace dumbo.Compiler.CodeGenerator
                 }
             }
             _stmt.Append(";");
+            _currentModule.Append(_stmt);
 
             return null;
         }

@@ -1,6 +1,7 @@
 using dumbo.Compiler.AST;
 using dumbo.Compiler.CodeGenerator.LHCLib;
 using System;
+using System.Collections.Generic;
 using System.Text;
 
 namespace dumbo.Compiler.CodeGenerator
@@ -261,7 +262,11 @@ namespace dumbo.Compiler.CodeGenerator
         {
             _currentModule = new Module();
             _currentModule.Append(new Stmt($"int main()"));
-            node.Body.Accept(this, arg);
+
+            var suffix = new List<Stmt>();
+            suffix.Add(new Stmt("return 0;"));
+
+            node.Body.Accept(this, new StmtBlockNodeArgs(null,suffix));
             CProgram.AddMainModule(_currentModule);
 
             return null;
@@ -323,11 +328,15 @@ namespace dumbo.Compiler.CodeGenerator
 
         public RuntimeEntity Visit(StmtBlockNode node, VisitorArgs arg)
         {
+            var customArgs = arg as StmtBlockNodeArgs;
+
             _currentModule.Append(new Stmt("{"));
+            AddItemsToCurrentModule(customArgs?.Prefix);
             foreach (var item in node)
             {
                 item.Accept(this, arg);
             }
+            AddItemsToCurrentModule(customArgs?.Suffix);
             _currentModule.Append(new Stmt("}"));
 
             return null;
@@ -431,6 +440,17 @@ namespace dumbo.Compiler.CodeGenerator
         {
             builder.Remove(builder.Length - 2, 2);
             builder.Append(")");
+        }
+
+        private void AddItemsToCurrentModule(IList<Stmt> statements)
+        {
+            if (statements == null)
+                return;
+
+            foreach (var stmt in statements)
+            {
+                _currentModule.Append(stmt);
+            }
         }
     }
 }

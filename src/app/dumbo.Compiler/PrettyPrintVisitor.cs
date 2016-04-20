@@ -11,7 +11,7 @@ namespace dumbo.Compiler
     {
         private const int TabSize = 2;
         private readonly StringBuilder _buffer;
-        private int _currentIdentation = 0;
+        private int _currentIndentation = 0;
         private VisitResult EmptyResult { get; }
         private bool _isNewLine;
 
@@ -316,7 +316,7 @@ namespace dumbo.Compiler
         {
             if (_isNewLine)
             {
-                _buffer.Append(new string(' ', _currentIdentation * TabSize));
+                _buffer.Append(new string(' ', _currentIndentation * TabSize));
                 _isNewLine = false;
             }
             
@@ -332,15 +332,15 @@ namespace dumbo.Compiler
 
         private void Indent()
         {
-            _currentIdentation++;
+            _currentIndentation++;
         }
 
         private void Unindent()
         {
-            if (_currentIdentation == 0)
+            if (_currentIndentation == 0)
                 throw new InvalidOperationException("Cannot unindent beyond zero.");
 
-            _currentIdentation--;    
+            _currentIndentation--;    
         }
     }
 }

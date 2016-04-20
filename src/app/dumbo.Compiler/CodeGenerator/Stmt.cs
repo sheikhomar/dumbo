@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace dumbo.Compiler.CodeGenerator
 {
-    internal class Stmt
+    public class Stmt
     {
         public Stmt(string line)
         {

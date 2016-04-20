@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace dumbo.Compiler.CodeGenerator
 {
-    internal class Program
+    public class Program
     {
         private IList<Module> _moduleList;
 

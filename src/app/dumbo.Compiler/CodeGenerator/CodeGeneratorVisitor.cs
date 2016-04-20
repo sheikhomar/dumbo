@@ -11,14 +11,15 @@ namespace dumbo.Compiler.CodeGenerator
 
     public class CodeGeneratorVisitor : IVisitor<RuntimeEntity, VisitorArgs>
     {
-        private Program _program;
         private Module _currentModule;
         private Stmt _stmt;
 
         public CodeGeneratorVisitor()
         {
-            _program = new Program();
+            CProgram = new Program();
         }
+
+        public Program CProgram { get; }
 
         public RuntimeEntity Visit(ActualParamListNode node, VisitorArgs arg)
         {
@@ -246,7 +247,7 @@ namespace dumbo.Compiler.CodeGenerator
             _currentModule = new Module();
             _currentModule.Append(new Stmt($"int main()"));
             node.Body.Accept(this, arg);
-            _program.AddModule(_currentModule);
+            CProgram.AddModule(_currentModule);
 
             return null;
         }
@@ -286,10 +287,10 @@ namespace dumbo.Compiler.CodeGenerator
         {
             /// Todo -- Add const + libraries?
             LHCLibReader lhcLibReader = new LHCLibReader();
-            _program.AddModule(lhcLibReader.CreateLHCLIb());
+            CProgram.AddModule(lhcLibReader.CreateLHCLIb());
             _currentModule = new Module();
             node.FuncDecls.Accept(this, new FuncVisitorArgs(false));
-            _program.AddModule(_currentModule);
+            CProgram.AddModule(_currentModule);
             node.Program.Accept(this, arg);
             node.FuncDecls.Accept(this, new FuncVisitorArgs(true));
             return null;

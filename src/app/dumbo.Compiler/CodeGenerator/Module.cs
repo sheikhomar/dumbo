@@ -20,16 +20,16 @@ namespace dumbo.Compiler.CodeGenerator
             _stmtList.Add(stmt);
         }
 
-        public override string ToString()
+        public string Print()
         {
-            string output = "";
+            var builder = new StringBuilder();
 
             foreach (var item in _stmtList)
             {
-                output += $"{item}\n";
+                builder.AppendLine(item.Print());
             }
 
-            return output;
+            return builder.ToString();
         }
     }
 }

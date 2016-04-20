@@ -20,7 +20,7 @@ namespace dumbo.Compiler.CodeGenerator
             _line += linePart;
         }
 
-        public override string ToString()
+        public string Print()
         {
             return _line;
         }

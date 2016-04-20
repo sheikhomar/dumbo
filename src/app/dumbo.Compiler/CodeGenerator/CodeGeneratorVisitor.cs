@@ -50,7 +50,7 @@ namespace dumbo.Compiler.CodeGenerator
         public RuntimeEntity Visit(BuiltInFuncDeclNode node, VisitorArgs arg)
         {
             /// Todo -- All predefined functions the user can call
-
+            
             throw new System.NotImplementedException();
         }
 
@@ -244,12 +244,24 @@ namespace dumbo.Compiler.CodeGenerator
 
         public RuntimeEntity Visit(RepeatStmtNode node, VisitorArgs arg)
         {
-            throw new System.NotImplementedException();
+            _stmt = new Stmt("for (int i=0; i<");
+            node.Number.Accept(this, arg);
+            _stmt.Append(" ; i++;");
+            _currentModule.Append(_stmt);
+            node.Body.Accept(this, arg);
+
+            return null;
         }
 
         public RuntimeEntity Visit(RepeatWhileStmtNode node, VisitorArgs arg)
         {
-            throw new System.NotImplementedException();
+            _stmt = new Stmt("while (");
+            node.Predicate.Accept(this, arg);
+            _stmt.Append(")");
+            _currentModule.Append(_stmt);
+            node.Body.Accept(this, arg);
+
+            return null;
         }
 
         public RuntimeEntity Visit(ReturnStmtNode node, VisitorArgs arg)
@@ -284,7 +296,7 @@ namespace dumbo.Compiler.CodeGenerator
 
         public RuntimeEntity Visit(UnaryOperationNode node, VisitorArgs arg)
         {
-            _currentModule.Append(new Stmt(ConvertUnaryOperator(node.Operator)));
+            _stmt.Append(ConvertUnaryOperator(node.Operator));
             node.Expression.Accept(this, arg);
 
             return null;
@@ -295,18 +307,12 @@ namespace dumbo.Compiler.CodeGenerator
             switch (input)
             {
                 case HappyType.Nothing: return "void";
-                case HappyType.Number:
-                    break;
-                case HappyType.Text:
-                    break;
-                case HappyType.Boolean:
-                    break;
+                case HappyType.Number: return "double";
+                case HappyType.Text: return "Text";
+                case HappyType.Boolean: return "Boolean";
                 case HappyType.Error: throw new ArgumentException($"{input} is not a valid type.");
-                default:
-                    break;
+                default: throw new ArgumentException($"{input} is not a valid type.");
             }
-
-            return default(string);
         }
 
         private string ConvertBinaryOperator(BinaryOperatorType input)

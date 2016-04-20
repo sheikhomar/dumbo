@@ -1,4 +1,5 @@
 using dumbo.Compiler.AST;
+using dumbo.Compiler.CodeGenerator.LHCLib;
 using System;
 using System.Text;
 
@@ -49,9 +50,7 @@ namespace dumbo.Compiler.CodeGenerator
 
         public RuntimeEntity Visit(BuiltInFuncDeclNode node, VisitorArgs arg)
         {
-            /// Todo -- All predefined functions the user can call
-            
-            throw new System.NotImplementedException();
+            return null;
         }
 
         public RuntimeEntity Visit(DeclAndAssignmentStmtNode node, VisitorArgs arg)
@@ -143,13 +142,20 @@ namespace dumbo.Compiler.CodeGenerator
 
         public RuntimeEntity Visit(FuncDeclListNode node, VisitorArgs arg)
         {
-            node.Accept(this, arg);
+            int count = node.Count;
+
+            for (int i = 0; i < count; i++)
+            {
+                node[i].Accept(this, arg);
+            }
+
             return null;
         }
 
         public RuntimeEntity Visit(FuncDeclNode node, VisitorArgs arg)
         {
             FuncVisitorArgs funcArg = arg as FuncVisitorArgs;
+            
 
             if (funcArg != null && funcArg.VisitBody)
             {
@@ -236,8 +242,10 @@ namespace dumbo.Compiler.CodeGenerator
 
         public RuntimeEntity Visit(ProgramNode node, VisitorArgs arg)
         {
+            _currentModule = new Module();
             _currentModule.Append(new Stmt($"int main()"));
             node.Body.Accept(this, arg);
+            _program.AddModule(_currentModule);
 
             return null;
         }
@@ -276,7 +284,11 @@ namespace dumbo.Compiler.CodeGenerator
         public RuntimeEntity Visit(RootNode node, VisitorArgs arg)
         {
             /// Todo -- Add const + libraries?
+            LHCLibReader lhcLibReader = new LHCLibReader();
+            _program.AddModule(lhcLibReader.CreateLHCLIb());
+            _currentModule = new Module();
             node.FuncDecls.Accept(this, new FuncVisitorArgs(false));
+            _program.AddModule(_currentModule);
             node.Program.Accept(this, arg);
             node.FuncDecls.Accept(this, new FuncVisitorArgs(true));
             return null;

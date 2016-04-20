@@ -82,6 +82,7 @@
     <Compile Include="AST\UnaryOperationNode.cs" />
     <Compile Include="AST\UnaryOperatorType.cs" />
     <Compile Include="AST\ValueNode.cs" />
+    <Compile Include="CodeGenerator\LHCLib\LHCLibReader.cs" />
     <Compile Include="Interpreter\BlockFrame.cs" />
     <Compile Include="Interpreter\BreakException.cs" />
     <Compile Include="CodeGenerator\FuncVisitorArgs.cs" />
@@ -141,7 +142,11 @@
     <Compile Include="VisitorArgs.cs" />
     <Compile Include="VisitResult.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="CodeGenerator\LHCLib\LHCLib.c">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

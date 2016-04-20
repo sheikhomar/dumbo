@@ -1,0 +1,38 @@
+Program
+	number input := 0
+	number total := 0
+	number low 
+	number high 
+	number average := 0
+	number count 
+	
+	low := 41290439120349102940231624921649 //Should be replaced with +infinity
+	high := 0
+	
+	repeat while (input >= 0)
+		write("Enter a positive number to continue, or a negative number to stop")
+		input := readnumber()
+		
+		if (input >= 0) then
+		count := count + 1
+		total := total + input
+		
+		if (low > input) then
+			low := input
+		end if
+		
+		if(input > high) then
+			high := input
+		end if
+		
+		average := total / count
+		end if
+	end repeat
+	
+	write("Count = " + count)
+	write("Total = " + total)
+	write("Average = " + average)
+	write("Low = " + low)
+	write("High = " + high)
+	
+End program

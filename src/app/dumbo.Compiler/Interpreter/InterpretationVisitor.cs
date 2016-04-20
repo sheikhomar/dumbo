@@ -2,6 +2,7 @@ using System;
 using System.CodeDom;
 using System.Collections.Generic;
 using System.Diagnostics.Eventing;
+using System.Globalization;
 using System.Linq;
 using System.Runtime.InteropServices;
 using dumbo.Compiler.AST;
@@ -14,7 +15,8 @@ namespace dumbo.Compiler.Interpreter
         public EventReporter Reporter { get; }
         private CallFrame CurrentCallFrame => _callStack.Peek();
         private Stack<CallFrame> _callStack;
-
+        private IFormatProvider EnglishCulture = new CultureInfo("en");
+        
         public InterpretationVisitor(EventReporter reporter, IInteractiveShell shell)
         {
             _shell = shell;
@@ -373,7 +375,7 @@ namespace dumbo.Compiler.Interpreter
             switch (node.Type)
             {
                 case HappyType.Number:
-                    return new NumberValue(double.Parse(node.Value));
+                    return new NumberValue(double.Parse(node.Value, EnglishCulture));
                 case HappyType.Text:
                     return new TextValue(node.Value);
                 case HappyType.Boolean:

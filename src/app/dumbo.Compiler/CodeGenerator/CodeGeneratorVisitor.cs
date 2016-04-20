@@ -40,7 +40,35 @@ namespace dumbo.Compiler.CodeGenerator
 
         public RuntimeEntity Visit(AssignmentStmtNode node, VisitorArgs arg)
         {
-            throw new System.NotImplementedException();
+            bool isFunction = node.Identifiers.Count > node.Expressions.Count;
+
+            if (isFunction)
+            {
+                int i = 1;
+                foreach (var identifier in node.Identifiers)
+                {
+                    //type *ret[i] = &name;
+                    _currentStmt = new Stmt("");
+                    _currentStmt.Append(ConvertType(identifier.DeclarationNode.Type));
+                    _currentStmt.Append(" *ret" + i + " = &" + identifier.Name);
+                    _currentModule.Append(_currentStmt);
+                    i++;
+                }
+            }
+            else
+            {
+                for (int index = 0; index < node.Identifiers.Count; index++)
+                {
+                    //id = expression;
+                    _currentStmt = new Stmt("");
+                    node.Identifiers[index].Accept(this, arg);
+                    node.Expressions[0].Accept(this, arg);
+                    _currentStmt.Append(";");
+                    _currentModule.Append(_currentStmt);
+                }
+            }
+
+            return null;
         }
 
         public RuntimeEntity Visit(BinaryOperationNode node, VisitorArgs arg)

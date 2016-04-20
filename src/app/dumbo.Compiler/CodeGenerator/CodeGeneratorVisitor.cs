@@ -279,6 +279,7 @@ namespace dumbo.Compiler.CodeGenerator
             _stmt = new Stmt("return ");
             node.Expressions.Accept(this, arg);
             _stmt.Append(";");
+            _currentModule.Append(_stmt);
 
             return null;
         }

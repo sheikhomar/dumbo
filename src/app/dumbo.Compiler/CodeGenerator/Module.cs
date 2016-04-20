@@ -19,5 +19,17 @@ namespace dumbo.Compiler.CodeGenerator
         {
             _stmtList.Add(stmt);
         }
+
+        public override string ToString()
+        {
+            string output = "";
+
+            foreach (var item in _stmtList)
+            {
+                output += $"{item}\n";
+            }
+
+            return output;
+        }
     }
 }

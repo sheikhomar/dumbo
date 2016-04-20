@@ -8,16 +8,21 @@ namespace dumbo.Compiler.CodeGenerator
 {
     public class Stmt
     {
+        private string _line;
+
         public Stmt(string line)
         {
-            Line = line;
+            _line = line;
         }
-
-        public string Line { get; private set; }
 
         public void Append(string linePart)
         {
-            Line += linePart;
+            _line += linePart;
+        }
+
+        public override string ToString()
+        {
+            return _line;
         }
     }
 }

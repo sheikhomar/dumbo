@@ -180,34 +180,25 @@ namespace dumbo.Compiler.CodeGenerator
         public RuntimeEntity Visit(FuncDeclNode node, VisitorArgs arg)
         {
             FuncVisitorArgs funcArg = arg as FuncVisitorArgs;
+
+            if (funcArg == null)
+                throw new Exception("FuncDeclNode must have FuncVisitorArgs as arg");
+
+            _currentStmt = new Stmt("");
             
 
-            if (funcArg != null && funcArg.VisitBody)
+            if (!funcArg.VisitBody)
             {
-                
+                WriteFunctionHeader(node, arg);
+                _currentStmt.Append(";");
+                return null;
             }
-            throw new System.NotImplementedException();
-        }
 
-        private void FuncHeader(FuncDeclNode node, bool includeBody)
-        {
-            StringBuilder builder = new StringBuilder();
-
-            WriteFunctionHeader(node, builder);
-
-            if (!includeBody)
-            {
-                builder.Append(";");
-                _currentModule.Append(new Stmt(builder.ToString()));
-                return;
-            }
-            
             CreateNewModule();
-            _currentModule.Append(new Stmt(builder.ToString()));
+            WriteFunctionHeader(node, arg);
             node.Body.Accept(this, new BodyVisitorArgs(node.ReturnTypes));
+            return null;
         }
-
-        
 
         public RuntimeEntity Visit(IdentifierListNode node, VisitorArgs arg)
         {
@@ -274,7 +265,7 @@ namespace dumbo.Compiler.CodeGenerator
             var suffix = new List<Stmt>();
             suffix.Add(new Stmt("return 0;"));
 
-            node.Body.Accept(this, new StmtBlockNodeArgs(null,suffix));
+            node.Body.Accept(this, new StmtBlockNodeArgs(null, suffix));
             CProgram.AddMainModule(_currentModule);
 
             return null;
@@ -307,10 +298,10 @@ namespace dumbo.Compiler.CodeGenerator
             int i = 1;
 
             _currentModule.Append(new Stmt("{"));
-            
+
 
             foreach (var ret in node.Expressions)
-            { 
+            {
                 _currentStmt = new Stmt("*ret" + i);
                 node.Expressions.Accept(this, arg);
                 _currentModule.Append(_currentStmt);
@@ -403,38 +394,33 @@ namespace dumbo.Compiler.CodeGenerator
         }
 
 
-        private void WriteFunctionHeader(FuncDeclNode funcNode, StringBuilder builder)
+        private void WriteFunctionHeader(FuncDeclNode funcNode, VisitorArgs arg)
         {
             bool multiReturn = funcNode.ReturnTypes.Count > 1;
 
             //Return type
             if (multiReturn)
-                builder.Append("void");
+                _currentStmt.Append("void");
             else
-                builder.Append(ConvertType(funcNode.ReturnTypes[0]));
+                _currentStmt.Append(ConvertType(funcNode.ReturnTypes[0]));
 
             //Name
-            builder.Append("_" + funcNode.Name + " ");
+            _currentStmt.Append("_" + funcNode.Name + " ");
 
             //Parameters
-            builder.Append("(");
-            foreach (var formalParameter in funcNode.Parameters)
-            {
-                string type = ConvertType(formalParameter.Type);
-                builder.Append(type + " _" + formalParameter.Name + ", ");
-            }
+            funcNode.Parameters.Accept(this, arg);
 
-            if(multiReturn)
+            if (multiReturn)
             {
-                int i = 1;
-                foreach (var retType in funcNode.ReturnTypes)
+                for (int i = 0; i < funcNode.ReturnTypes.Count; i++)
                 {
-                    string type = ConvertType(retType);
-                    builder.Append(type + " _ ret" + i + ", ");
-                    i++;
+                    string type = ConvertType(funcNode.ReturnTypes[i]);
+                    if (i < funcNode.ReturnTypes.Count - 1)
+                        _currentStmt.Append(type + " _ ret" + (i + 1) + ", ");
+                    else
+                        _currentStmt.Append(type + " _ ret" + (i + 1));
                 }
             }
-            RemoveExtraComma(builder);
         }
 
         private void CreateNewModule()

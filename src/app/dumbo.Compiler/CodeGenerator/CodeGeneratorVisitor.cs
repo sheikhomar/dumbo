@@ -12,7 +12,7 @@ namespace dumbo.Compiler.CodeGenerator
     public class CodeGeneratorVisitor : IVisitor<RuntimeEntity, VisitorArgs>
     {
         private Module _currentModule;
-        private Stmt _stmt;
+        private Stmt _currentStmt;
 
         public CodeGeneratorVisitor()
         {
@@ -36,7 +36,7 @@ namespace dumbo.Compiler.CodeGenerator
         public RuntimeEntity Visit(BinaryOperationNode node, VisitorArgs arg)
         {
             node.LeftOperand.Accept(this, arg);
-            _stmt.Append($" {ConvertBinaryOperator(node.Operator)} ");
+            _currentStmt.Append($" {ConvertBinaryOperator(node.Operator)} ");
             node.RightOperand.Accept(this, arg);
 
             return null;
@@ -57,30 +57,30 @@ namespace dumbo.Compiler.CodeGenerator
         public RuntimeEntity Visit(DeclAndAssignmentStmtNode node, VisitorArgs arg)
         {
             int declAssCount = node.Identifiers.Count;
-            _stmt = new Stmt("");
-            _stmt.Append($"{ConvertType(node.Type)} ");
+            _currentStmt = new Stmt("");
+            _currentStmt.Append($"{ConvertType(node.Type)} ");
             for (int i = 0; i < declAssCount; i++)
             {
                 node.Identifiers[i].Accept(this, arg);
-                _stmt.Append(" = ");
+                _currentStmt.Append(" = ");
                 node.Expressions[i].Accept(this, arg);
                 if (i != 0)
                 {
-                    _stmt.Append(", ");
+                    _currentStmt.Append(", ");
                 }
             }
-            _stmt.Append(";");
-            _currentModule.Append(_stmt);
+            _currentStmt.Append(";");
+            _currentModule.Append(_currentStmt);
 
             return null;
         }
 
         public RuntimeEntity Visit(DeclStmtNode node, VisitorArgs arg)
         {
-            _stmt = new Stmt("");
-            _stmt.Append($"{ConvertType(node.Type)} ");
+            _currentStmt = new Stmt("");
+            _currentStmt.Append($"{ConvertType(node.Type)} ");
             node.Identifiers.Accept(this, arg);
-            _currentModule.Append(_stmt);
+            _currentModule.Append(_currentStmt);
 
             return null;
         }
@@ -97,10 +97,10 @@ namespace dumbo.Compiler.CodeGenerator
 
         public RuntimeEntity Visit(ElseIfStmtNode node, VisitorArgs arg)
         {
-            _stmt = new Stmt("else if (");
+            _currentStmt = new Stmt("else if (");
             node.Predicate.Accept(this, arg);
-            _stmt.Append(")");
-            _currentModule.Append(_stmt);
+            _currentStmt.Append(")");
+            _currentModule.Append(_currentStmt);
             node.Body.Accept(this, arg);
 
             return null;
@@ -115,7 +115,7 @@ namespace dumbo.Compiler.CodeGenerator
                 node[i].Accept(this, arg);
                 if (i != 0)
                 {
-                    _stmt.Append(", ");
+                    _currentStmt.Append(", ");
                 }
             }
 
@@ -195,27 +195,27 @@ namespace dumbo.Compiler.CodeGenerator
                 node[i].Accept(this, arg);
                 if (i != 0)
                 {
-                    _stmt.Append(", ");
+                    _currentStmt.Append(", ");
                 }
             }
-            _stmt.Append($";");
+            _currentStmt.Append($";");
 
             return null;
         }
 
         public RuntimeEntity Visit(IdentifierNode node, VisitorArgs arg)
         {
-            _stmt.Append(node.Name);
+            _currentStmt.Append(node.Name);
 
             return null;
         }
 
         public RuntimeEntity Visit(IfElseStmtNode node, VisitorArgs arg)
         {
-            _stmt = new Stmt("if (");
+            _currentStmt = new Stmt("if (");
             node.Predicate.Accept(this, arg);
-            _stmt.Append(")");
-            _currentModule.Append(_stmt);
+            _currentStmt.Append(")");
+            _currentModule.Append(_currentStmt);
             node.Body.Accept(this, arg);
             node.ElseIfStatements.Accept(this, arg);
             _currentModule.Append(new Stmt($"else"));
@@ -226,10 +226,10 @@ namespace dumbo.Compiler.CodeGenerator
 
         public RuntimeEntity Visit(IfStmtNode node, VisitorArgs arg)
         {
-            _stmt = new Stmt("if (");
+            _currentStmt = new Stmt("if (");
             node.Predicate.Accept(this, arg);
-            _stmt.Append(")");
-            _currentModule.Append(_stmt);
+            _currentStmt.Append(")");
+            _currentModule.Append(_currentStmt);
             node.Body.Accept(this, arg);
             node.ElseIfStatements.Accept(this, arg);
 
@@ -238,7 +238,7 @@ namespace dumbo.Compiler.CodeGenerator
 
         public RuntimeEntity Visit(LiteralValueNode node, VisitorArgs arg)
         {
-            _stmt.Append(node.Value);
+            _currentStmt.Append(node.Value);
 
             return null;
         }
@@ -255,10 +255,10 @@ namespace dumbo.Compiler.CodeGenerator
 
         public RuntimeEntity Visit(RepeatStmtNode node, VisitorArgs arg)
         {
-            _stmt = new Stmt("for (int i=0; i<");
+            _currentStmt = new Stmt("for (int i=0; i<");
             node.Number.Accept(this, arg);
-            _stmt.Append(" ; i++;");
-            _currentModule.Append(_stmt);
+            _currentStmt.Append(" ; i++;");
+            _currentModule.Append(_currentStmt);
             node.Body.Accept(this, arg);
 
             return null;
@@ -266,10 +266,10 @@ namespace dumbo.Compiler.CodeGenerator
 
         public RuntimeEntity Visit(RepeatWhileStmtNode node, VisitorArgs arg)
         {
-            _stmt = new Stmt("while (");
+            _currentStmt = new Stmt("while (");
             node.Predicate.Accept(this, arg);
-            _stmt.Append(")");
-            _currentModule.Append(_stmt);
+            _currentStmt.Append(")");
+            _currentModule.Append(_currentStmt);
             node.Body.Accept(this, arg);
 
             return null;
@@ -277,10 +277,21 @@ namespace dumbo.Compiler.CodeGenerator
 
         public RuntimeEntity Visit(ReturnStmtNode node, VisitorArgs arg)
         {
-            _stmt = new Stmt("return ");
-            node.Expressions.Accept(this, arg);
-            _stmt.Append(";");
-            _currentModule.Append(_stmt);
+            int i = 1;
+
+            _currentModule.Append(new Stmt("{"));
+            
+
+            foreach (var ret in node.Expressions)
+            { 
+                _currentStmt = new Stmt("*ret" + i);
+                node.Expressions.Accept(this, arg);
+                _currentModule.Append(_currentStmt);
+                i++;
+            }
+
+            _currentModule.Append(new Stmt("return ;"));
+            _currentModule.Append(new Stmt("}"));
 
             return null;
         }
@@ -312,7 +323,7 @@ namespace dumbo.Compiler.CodeGenerator
 
         public RuntimeEntity Visit(UnaryOperationNode node, VisitorArgs arg)
         {
-            _stmt.Append(ConvertUnaryOperator(node.Operator));
+            _currentStmt.Append(ConvertUnaryOperator(node.Operator));
             node.Expression.Accept(this, arg);
 
             return null;

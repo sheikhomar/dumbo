@@ -250,31 +250,8 @@ namespace dumbo.WpfApp
 
         private void IncludeBuiltInFunctions(RootNode root)
         {
-            var srcPos = new SourcePosition(0, 0, 0, 0);
-            var write = new BuiltInFuncDeclNode(BuiltInFunction.Write);
-            write.Parameters.Add(new FormalParamNode("input", HappyType.Text, srcPos));
-            var readText = new BuiltInFuncDeclNode(BuiltInFunction.ReadText);
-            readText.ReturnTypes.Add(HappyType.Text);
-            var readNumber = new BuiltInFuncDeclNode(BuiltInFunction.ReadNumber);
-            readNumber.ReturnTypes.Add(HappyType.Number);
-            var floor = new BuiltInFuncDeclNode(BuiltInFunction.Floor);
-            floor.Parameters.Add(new FormalParamNode("n1", HappyType.Number, srcPos));
-            floor.ReturnTypes.Add(HappyType.Number);
-            var ceiling = new BuiltInFuncDeclNode(BuiltInFunction.Ceiling);
-            ceiling.Parameters.Add(new FormalParamNode("n1", HappyType.Number, srcPos));
-            ceiling.ReturnTypes.Add(HappyType.Number);
-
-            var random = new BuiltInFuncDeclNode(BuiltInFunction.Random);
-            random.Parameters.Add(new FormalParamNode("n1", HappyType.Number, srcPos));
-            random.Parameters.Add(new FormalParamNode("n2", HappyType.Number, srcPos));
-            random.ReturnTypes.Add(HappyType.Number);
-
-            root.FuncDecls.Add(write);
-            root.FuncDecls.Add(readText);
-            root.FuncDecls.Add(readNumber);
-            root.FuncDecls.Add(random);
-            root.FuncDecls.Add(floor);
-            root.FuncDecls.Add(ceiling);
+            foreach (var node in BuiltInFuncDeclNode.GetBuiltInFunctions())
+                root.FuncDecls.InsertAt(0, node);
         }
 
         private void SaveFile(object sender, ExecutedRoutedEventArgs e)

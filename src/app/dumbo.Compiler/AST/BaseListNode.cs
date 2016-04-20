@@ -18,6 +18,11 @@ namespace dumbo.Compiler.AST
             _internalList.Add(node);
         }
 
+        public void InsertAt(int index, TBaseType node)
+        {
+            _internalList.Insert(index, node);
+        }
+
         public TBaseType this[int index] => _internalList[index];
 
         public int Count => _internalList.Count;

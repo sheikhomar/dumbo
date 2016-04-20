@@ -25,13 +25,21 @@ namespace dumbo.Compiler.CodeGenerator
 
         public RuntimeEntity Visit(ActualParamListNode node, VisitorArgs arg)
         {
-            throw new System.NotImplementedException();
+            for (int index = 0; index < node.Count; index++)
+            {
+                var currentParameter = node.GetAs<ExpressionNode>(index);
+
+                if (index < node.Count - 1)
+                    _currentStmt.Append(currentParameter.ToString() + ", ");
+                else
+                    _currentStmt.Append(currentParameter.ToString());
+            }
+
+            return null;
         }
 
         public RuntimeEntity Visit(AssignmentStmtNode node, VisitorArgs arg)
         {
-            
-
             throw new System.NotImplementedException();
         }
 
@@ -137,16 +145,10 @@ namespace dumbo.Compiler.CodeGenerator
         public RuntimeEntity Visit(FuncCallExprNode node, VisitorArgs arg)
         {
             //a := ... MyFunction(myInt)+5
-            var builder = new StringBuilder();
-
-            builder.Append("_" + node.FuncName + "(");
-
-            foreach (var parameter in node.Parameters)
-            {
-                builder.Append(parameter.ToString() + ", ");
-            }
-            RemoveExtraComma(builder);
-            _currentStmt.Append(builder.ToString());
+            _currentStmt = new Stmt("");
+            _currentStmt.Append("_" + node.FuncName + "(");
+            node.Parameters.Accept(this, arg);
+            _currentStmt.Append(")");
 
             return null;
         }
@@ -154,7 +156,13 @@ namespace dumbo.Compiler.CodeGenerator
         public RuntimeEntity Visit(FuncCallStmtNode node, VisitorArgs arg)
         {
             //a,b := MyFunction2(myInt)
-            throw new System.NotImplementedException();
+            var actualNode = node.CallNode;
+
+            _currentStmt.Append(actualNode.FuncName + "(");
+            actualNode.Parameters.Accept(this, arg);
+            _currentStmt.Append(")");
+
+            return null;
         }
 
         public RuntimeEntity Visit(FuncDeclListNode node, VisitorArgs arg)

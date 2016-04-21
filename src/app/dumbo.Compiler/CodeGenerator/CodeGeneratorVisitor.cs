@@ -31,10 +31,8 @@ namespace dumbo.Compiler.CodeGenerator
             {
                 node[index].Accept(this, arg);
 
-                if (count != 0)
-                {
+                if (index < count - 1)
                     _currentStmt.Append(", ");
-                }
             }
 
             return null;
@@ -156,10 +154,8 @@ namespace dumbo.Compiler.CodeGenerator
             for (int i = 0; i < count; i++)
             {
                 node[i].Accept(this, arg);
-                if (i != 0)
-                {
+                if (i < count - 1)
                     _currentStmt.Append(", ");
-                }
             }
 
             return null;
@@ -171,13 +167,10 @@ namespace dumbo.Compiler.CodeGenerator
             {
                 var currentParameter = node[index];
 
+                currentParameter.Accept(this, arg);
+
                 if (index < node.Count - 1)
-                {
-                    currentParameter.Accept(this, arg);
                     _currentStmt.Append(", ");
-                }
-                else
-                    currentParameter.Accept(this, arg);
             }
 
             return null;
@@ -257,10 +250,8 @@ namespace dumbo.Compiler.CodeGenerator
             for (int i = 0; i < length; i++)
             {
                 node[i].Accept(this, arg);
-                if (i != 0)
-                {
+                if (i < length - 1)
                     _currentStmt.Append(", ");
-                }
             }
             _currentStmt.Append($";");
 

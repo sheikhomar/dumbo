@@ -1,8 +1,7 @@
 Program 
-  number i 
-  repeat 10
-    write("" + fibonacci(i))
-  end repeat
+  number i := 10
+  number result := Fibonacci(i)
+  write("Fib(" + i + ") = " + result)
 End program
 
 function fibonacci(number i) return number

@@ -54,7 +54,7 @@ namespace dumbo.Compiler.CodeGenerator
                     //type *ret[i] = &name;
                     _currentStmt = new Stmt("");
                     _currentStmt.Append(ConvertType(identifier.DeclarationNode.Type));
-                    _currentStmt.Append(" *ret" + i + " = &" + identifier.Name);
+                    _currentStmt.Append(" *ret" + i + " = &" + identifier.Name.ToLower());
                     _currentModule.Append(_currentStmt);
                     i++;
                 }
@@ -186,7 +186,7 @@ namespace dumbo.Compiler.CodeGenerator
 
         public RuntimeEntity Visit(FormalParamNode node, VisitorArgs arg)
         {
-            _currentStmt.Append(node.Name);
+            _currentStmt.Append(node.Name.ToLower());
 
             return null;
         }
@@ -194,7 +194,7 @@ namespace dumbo.Compiler.CodeGenerator
         public RuntimeEntity Visit(FuncCallExprNode node, VisitorArgs arg)
         {
             //a := ... MyFunction(myInt)+5
-            _currentStmt.Append("_" + node.FuncName + "(");
+            _currentStmt.Append("_" + node.FuncName.ToLower() + "(");
             node.Parameters.Accept(this, arg);
             _currentStmt.Append(")");
 
@@ -206,7 +206,7 @@ namespace dumbo.Compiler.CodeGenerator
             //a,b := MyFunction2(myInt)
             var actualNode = node.CallNode;
 
-            _currentStmt.Append(actualNode.FuncName + "(");
+            _currentStmt.Append(actualNode.FuncName.ToLower() + "(");
             actualNode.Parameters.Accept(this, arg);
             _currentStmt.Append(")");
 
@@ -269,7 +269,7 @@ namespace dumbo.Compiler.CodeGenerator
 
         public RuntimeEntity Visit(IdentifierNode node, VisitorArgs arg)
         {
-            _currentStmt.Append(node.Name);
+            _currentStmt.Append(node.Name.ToLower());
 
             return null;
         }
@@ -470,7 +470,7 @@ namespace dumbo.Compiler.CodeGenerator
                 _currentStmt.Append(ConvertType(funcNode.ReturnTypes[0]));
 
             //Name
-            _currentStmt.Append(" _" + funcNode.Name + " ");
+            _currentStmt.Append(" _" + funcNode.Name.ToLower() + " ");
 
             //Parameters
             _currentStmt.Append("(");

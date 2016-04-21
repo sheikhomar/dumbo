@@ -1,5 +1,8 @@
 ﻿namespace dumbo.Compiler.AST
 {
+    /// <summary>
+    /// An encapsulation of  Nothing FuncCall ie a procedure :=)
+    /// </summary>
     public class FuncCallStmtNode : StmtNode
     {
         public FuncCallStmtNode(FuncCallExprNode funcCallNode)

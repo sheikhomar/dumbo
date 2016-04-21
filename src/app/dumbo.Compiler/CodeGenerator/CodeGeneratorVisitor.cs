@@ -44,24 +44,35 @@ namespace dumbo.Compiler.CodeGenerator
 
             if (isFunction)
             {
-                int i = 1;
-                _currentModule.Append(new Stmt("{"));
-                foreach (var identifier in node.Identifiers)
+                int i = 0;
+                var funcExp = node.Expressions[0] as FuncCallExprNode;
+
+                if (funcExp == null)
+                    throw new Exception("Programming error, should be a function");
+
+                //MyFunction(formalParameters, &ret1, &ret2 ...) | How it looks in C for a function
+                _currentStmt = new Stmt("");
+                _currentStmt.Append(funcExp.FuncName + "(");
+                funcExp.Parameters.Accept(this, arg);
+
+                if (node.Identifiers.Count > 0)
+                    _currentStmt.Append(", ");
+
+                foreach (var ret in node.Identifiers)
                 {
-                    //type *ret[i] = &name;    -- How it looks in C
-                    _currentStmt = new Stmt("");
-                    _currentStmt.Append(ConvertType(identifier.DeclarationNode.Type));
-                    _currentStmt.Append(" *ret" + i + " = &" + identifier.Name.ToLower());
-                    _currentModule.Append(_currentStmt);
+                    _currentStmt.Append("&" + ret.Name);
+                    if (i < node.Identifiers.Count - 1)
+                        _currentStmt.Append(", ");
                     i++;
                 }
-                _currentModule.Append(new Stmt("}"));
+                _currentStmt.Append(");");
+                _currentModule.Append(_currentStmt);
             }
             else
             {
                 for (int index = 0; index < node.Identifiers.Count; index++)
                 {
-                    //id = expression;    -- How it looks in C
+                    //id = expression;    -- How it looks in C for id
                     _currentStmt = new Stmt("");
                     node.Identifiers[index].Accept(this, arg);
                     _currentStmt.Append(" = ");
@@ -217,7 +228,7 @@ namespace dumbo.Compiler.CodeGenerator
 
         public RuntimeEntity Visit(FuncCallStmtNode node, VisitorArgs arg)
         {
-            //a,b := MyFunction2(myInt)
+            //void MyFunction2(myInt)
             var actualNode = node.CallNode;
 
             _currentStmt.Append(actualNode.FuncName.ToLower() + "(");
@@ -489,6 +500,7 @@ namespace dumbo.Compiler.CodeGenerator
 
             if (multiReturn)
             {
+                _currentStmt.Append(", ");
                 for (int i = 0; i < funcNode.ReturnTypes.Count; i++)
                 {
                     string type = ConvertType(funcNode.ReturnTypes[i]);

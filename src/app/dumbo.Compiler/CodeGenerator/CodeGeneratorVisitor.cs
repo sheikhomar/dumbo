@@ -170,7 +170,7 @@ namespace dumbo.Compiler.CodeGenerator
         {
             for (int index = 0; index < node.Count; index++)
             {
-                var currentParameter = node.GetAs<FormalParamNode>(index);
+                var currentParameter = node[index];
 
                 if (index < node.Count - 1)
                 {
@@ -186,7 +186,8 @@ namespace dumbo.Compiler.CodeGenerator
 
         public RuntimeEntity Visit(FormalParamNode node, VisitorArgs arg)
         {
-            _currentStmt.Append(node.Name.ToLower());
+            string type = ConvertType(node.Type);
+            _currentStmt.Append(type + " " + node.Name.ToLower());
 
             return null;
         }
@@ -470,7 +471,7 @@ namespace dumbo.Compiler.CodeGenerator
                 _currentStmt.Append(ConvertType(funcNode.ReturnTypes[0]));
 
             //Name
-            _currentStmt.Append(" _" + funcNode.Name.ToLower() + " ");
+            _currentStmt.Append(" _" + funcNode.Name.ToLower());
 
             //Parameters
             _currentStmt.Append("(");

@@ -389,6 +389,10 @@ namespace dumbo.Compiler.CodeGenerator
         public RuntimeEntity Visit(StmtBlockNode node, VisitorArgs arg)
         {
             var customArgs = arg as StmtBlockNodeArgs;
+            if (customArgs != null && customArgs.Handled == false)
+                customArgs.Handled = true;
+            else
+                customArgs = null;
 
             _currentModule.Append(new Stmt("{"));
             AddItemsToCurrentModule(customArgs?.Prefix);

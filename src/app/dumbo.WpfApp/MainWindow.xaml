@@ -32,7 +32,7 @@
         <KeyBinding Modifiers="Control" Key="Enter" Command="{StaticResource CompileCommand}" />
         <KeyBinding Modifiers="Control" Key="P" Command="{StaticResource PrintCommand}" />
         <KeyBinding Modifiers="Control" Key="O" Command="{StaticResource CodeGenCommand}" />
-        <KeyBinding Modifiers="Control" Key="C" Command="{StaticResource BreakExecution}" />
+        <KeyBinding Modifiers="Control" Key="B" Command="{StaticResource BreakExecution}" />
     </Window.InputBindings>
 
     <DockPanel>

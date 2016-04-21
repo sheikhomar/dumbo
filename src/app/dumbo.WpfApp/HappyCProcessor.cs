@@ -27,12 +27,12 @@ namespace dumbo.WpfApp
 
         public event EventHandler<ProcessorResult> Success;
 
-        public event EventHandler<IEnumerable<Exception>> Failure;  
-
+        public event EventHandler<IEnumerable<Exception>> Failure;
+        
         public void Start(EventReporter reporter, IInteractiveShell shell, RootNode root)
         {
             var args = new RunnerArgument(reporter, shell, root);
-            var task = Task.Factory.StartNew<ProcessorResult>(Run, args);
+            var task = Task.Factory.StartNew(Run, args);
 
             TaskScheduler currentContext = TaskScheduler.FromCurrentSynchronizationContext();
 
@@ -40,7 +40,7 @@ namespace dumbo.WpfApp
             task.ContinueWith(TaskFaulted, CancellationToken.None, TaskContinuationOptions.OnlyOnFaulted, currentContext);
         }
 
-        public static ProcessorResult Run(Object args)
+        public static ProcessorResult Run(object args)
         {
             RunnerArgument arguments = args as RunnerArgument;
             var scopeChecker = new ScopeCheckVisitor(arguments.Reporter);

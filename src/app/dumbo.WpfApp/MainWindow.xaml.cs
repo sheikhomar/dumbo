@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.IO;
 using System.Linq;
@@ -34,10 +35,14 @@ namespace dumbo.WpfApp
         private Parser _myParser;
         private readonly FileSystemWatcher _grammarTableWatcher;
         private ITextMarkerService _textMarkerService;
+        private HappyCProcessor _processor;
 
         public MainWindow()
         {
             InitializeComponent();
+            _processor = new HappyCProcessor();
+            _processor.Success += ProcessorOnSuccess;
+            _processor.Failure += ProcessorOnFailure;
 
             _grammarTableWatcher = new FileSystemWatcher();
             _grammarTableWatcher.NotifyFilter = NotifyFilters.LastWrite;
@@ -225,13 +230,7 @@ namespace dumbo.WpfApp
                 var root = parserResult.Root;
                 PrettyPrint(root);
                 EventReporter reporter = new EventReporter();
-                ScopeAndTypeCheck(parserResult.Root, reporter);
-                if (!reporter.HasErrors)
-                {
-                    var interpreter = new InterpretationVisitor(reporter, this);
-                    root.Accept(interpreter, new VisitorArgs());
-                }
-
+                _processor.Start(reporter, this, root);
                 MarkErrors(reporter);
             }
 
@@ -380,26 +379,35 @@ namespace dumbo.WpfApp
 
         public void Write(string writeParameter)
         {
-            ShellTab.Focus();
-            ShellTextBox.Text += writeParameter + "\n";
-            textEditor.Focus();
+            Dispatcher.Invoke(() =>
+            {
+                ShellTab.Focus();
+                ShellTextBox.Text += writeParameter + "\n";
+                textEditor.Focus();
+            });
         }
 
         public NumberValue ReadNumber()
         {
-            var rw = new ReaderWindow(HappyType.Number);
-            rw.ShowDialog();
-            double val;
-            if (double.TryParse(rw.ReturnValue, out val))
-                return new NumberValue(val);
-            return new NumberValue(0);
+            return Dispatcher.Invoke(() =>
+            {
+                var rw = new ReaderWindow(HappyType.Number);
+                rw.ShowDialog();
+                double val;
+                if (double.TryParse(rw.ReturnValue, out val))
+                    return new NumberValue(val);
+                return new NumberValue(0);
+            });
         }
 
         public TextValue ReadText()
         {
-            var rw = new ReaderWindow(HappyType.Text);
-            rw.ShowDialog();
-            return new TextValue(rw.ReturnValue);
+            return Dispatcher.Invoke(() =>
+            {
+                var rw = new ReaderWindow(HappyType.Text);
+                rw.ShowDialog();
+                return new TextValue(rw.ReturnValue);
+            });
         }
 
         private void GenerateCode(object sender, ExecutedRoutedEventArgs e)
@@ -436,6 +444,16 @@ namespace dumbo.WpfApp
         private void BreakExecution(object sender, ExecutedRoutedEventArgs e)
         {
             Environment.Exit(0);
+        }
+        
+        private void ProcessorOnFailure(object sender, IEnumerable<Exception> exceptions)
+        {
+            ErrorList.ItemsSource = exceptions.Select(e => new Event(EventKind.Error, e.Message, null));
+        }
+
+        private void ProcessorOnSuccess(object sender, ProcessorResult processorResult)
+        {
+            MarkErrors(processorResult.Reporter);
         }
     }
 }

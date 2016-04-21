@@ -423,7 +423,7 @@ namespace dumbo.WpfApp
                 {
                     var codeGen = new CodeGeneratorVisitor();
                     root.Accept(codeGen, new VisitorArgs());
-                    ResultTextBox.Text = codeGen.CProgram.Print(true,false);
+                    ResultTextBox.Text = codeGen.CProgram.Print(true, false);
                 }
 
                 MarkErrors(reporter);
@@ -431,6 +431,11 @@ namespace dumbo.WpfApp
 
             latestCompiledAt = DateTime.Now;
             UpdateInformationBox();
+        }
+
+        private void BreakExecution(object sender, ExecutedRoutedEventArgs e)
+        {
+            Environment.Exit(0);
         }
     }
 }

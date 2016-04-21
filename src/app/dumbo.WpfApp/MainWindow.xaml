@@ -15,6 +15,7 @@
         <RoutedUICommand x:Key="ReloadGrammar" Text="Reload current grammar table." />
         <RoutedUICommand x:Key="PrintCommand" Text="Print" />
         <RoutedUICommand x:Key="CodeGenCommand" Text="Generate code" />
+        <RoutedUICommand x:Key="BreakExecution" Text="Compile C-code" />
     </Window.Resources>
     <Window.CommandBindings>
         <CommandBinding Command="{StaticResource CompileCommand}" Executed="Compile" />
@@ -23,6 +24,7 @@
         <CommandBinding Command="{StaticResource ReloadGrammar}" Executed="ReloadGrammar" />
         <CommandBinding Command="{StaticResource PrintCommand}" Executed="Print" />
         <CommandBinding Command="{StaticResource CodeGenCommand}" Executed="GenerateCode" />
+        <CommandBinding Command="{StaticResource BreakExecution}" Executed="BreakExecution" />
     </Window.CommandBindings>
     <Window.InputBindings>
         <KeyBinding Modifiers="Control" Key="S" Command="{StaticResource SaveCommand}" />
@@ -30,6 +32,7 @@
         <KeyBinding Modifiers="Control" Key="Enter" Command="{StaticResource CompileCommand}" />
         <KeyBinding Modifiers="Control" Key="P" Command="{StaticResource PrintCommand}" />
         <KeyBinding Modifiers="Control" Key="O" Command="{StaticResource CodeGenCommand}" />
+        <KeyBinding Modifiers="Control" Key="C" Command="{StaticResource BreakExecution}" />
     </Window.InputBindings>
 
     <DockPanel>
@@ -88,6 +91,9 @@
             </Button>
             <Button ToolTip="Generate code (Ctrl + O)" Command="{StaticResource CodeGenCommand}">
                 <Image Source="Images/CodeGen.png" Height="16"/>
+            </Button>
+            <Button ToolTip="Jeg er en trold.">
+                <Image Source="Images/trold.jpg" Height="16"/>
             </Button>
         </ToolBar>
         <StatusBar DockPanel.Dock="Bottom">

@@ -16,7 +16,7 @@ namespace dumbo.Compiler.Interpreter
         private CallFrame CurrentCallFrame => _callStack.Peek();
         private Stack<CallFrame> _callStack;
         private IFormatProvider EnglishCulture = new CultureInfo("en");
-        
+
         public InterpretationVisitor(EventReporter reporter, IInteractiveShell shell)
         {
             _shell = shell;
@@ -64,116 +64,126 @@ namespace dumbo.Compiler.Interpreter
 
         public Value Visit(BinaryOperationNode node, VisitorArgs arg)
         {
-            var left = node.LeftOperand.Accept(this, arg);
-            var right = node.RightOperand.Accept(this, arg);
-
             switch (node.Operator)
             {
                 case BinaryOperatorType.Plus:
-                    if (left is NumberValue && right is TextValue)
                     {
-                        var leftNumb = left as NumberValue;
-                        var rightText = right as TextValue;
-                        return new TextValue(leftNumb.Number + rightText.Text);
+                        var left = node.LeftOperand.Accept(this, arg);
+                        var right = node.RightOperand.Accept(this, arg);
+
+                        if (left is NumberValue && right is TextValue)
+                        {
+                            var leftNumb = left as NumberValue;
+                            var rightText = right as TextValue;
+                            return new TextValue(leftNumb.Number + rightText.Text);
+                        }
+                        else if (left is TextValue && right is NumberValue)
+                        {
+                            var leftText = left as TextValue;
+                            var rightNumb = right as NumberValue;
+                            return new TextValue(leftText.Text + rightNumb.Number);
+                        }
+                        else if (left is TextValue)
+                        {
+                            var leftText = left as TextValue;
+                            var rightText = right as TextValue;
+                            return new TextValue(leftText.Text + rightText.Text);
+                        }
+                        else if (left is NumberValue)
+                        {
+                            var leftNumb = left as NumberValue;
+                            var rightNumb = right as NumberValue;
+                            return new NumberValue(leftNumb.Number + rightNumb.Number);
+                        }
+                        break;
                     }
-                    else if (left is TextValue && right is NumberValue)
-                    {
-                        var leftText = left as TextValue;
-                        var rightNumb = right as NumberValue;
-                        return new TextValue(leftText.Text + rightNumb.Number);
-                    }
-                    else if (left is TextValue)
-                    {
-                        var leftText = left as TextValue;
-                        var rightText = right as TextValue;
-                        return new TextValue(leftText.Text + rightText.Text);
-                    }
-                    else if (left is NumberValue)
-                    {
-                        var leftNumb = left as NumberValue;
-                        var rightNumb = right as NumberValue;
-                        return new NumberValue(leftNumb.Number + rightNumb.Number);
-                    }
-                    break;
                 case BinaryOperatorType.Minus:
                     {
-                        var leftNumb = left as NumberValue;
-                        var rightNumb = right as NumberValue;
-                        return new NumberValue(leftNumb.Number - rightNumb.Number);
+                        var left = node.LeftOperand.Accept(this, arg) as NumberValue;
+                        var right = node.RightOperand.Accept(this, arg) as NumberValue;
+                        return new NumberValue(left.Number - right.Number);
                     }
                 case BinaryOperatorType.Times:
                     {
-                        var leftNumb = left as NumberValue;
-                        var rightNumb = right as NumberValue;
-                        return new NumberValue(leftNumb.Number * rightNumb.Number);
+                        var left = node.LeftOperand.Accept(this, arg) as NumberValue;
+                        var right = node.RightOperand.Accept(this, arg) as NumberValue;
+                        return new NumberValue(left.Number * right.Number);
                     }
                 case BinaryOperatorType.Division:
                     {
-                        var leftNumb = left as NumberValue;
-                        var rightNumb = right as NumberValue;
-                        return new NumberValue(leftNumb.Number / rightNumb.Number);
+                        var left = node.LeftOperand.Accept(this, arg) as NumberValue;
+                        var right = node.RightOperand.Accept(this, arg) as NumberValue;
+                        return new NumberValue(left.Number / right.Number);
                     }
                 case BinaryOperatorType.Modulo:
                     {
-                        var leftNumb = left as NumberValue;
-                        var rightNumb = right as NumberValue;
-                        return new NumberValue(leftNumb.Number % rightNumb.Number);
+                        var left = node.LeftOperand.Accept(this, arg) as NumberValue;
+                        var right = node.RightOperand.Accept(this, arg) as NumberValue;
+                        return new NumberValue(left.Number % right.Number);
                     }
                 case BinaryOperatorType.Equals:
-                    if (left is NumberValue)
                     {
-                        var leftNumb = left as NumberValue;
-                        var rightNumb = right as NumberValue;
-                        return new BooleanValue(leftNumb.Number == rightNumb.Number);
+                        var left = node.LeftOperand.Accept(this, arg);
+                        var right = node.RightOperand.Accept(this, arg);
+                        if (left is NumberValue)
+                        {
+                            var leftNumb = left as NumberValue;
+                            var rightNumb = right as NumberValue;
+                            return new BooleanValue(leftNumb.Number == rightNumb.Number);
+                        }
+                        else if (left is BooleanValue)
+                        {
+                            var leftBool = left as BooleanValue;
+                            var rightBool = right as BooleanValue;
+                            return new BooleanValue(leftBool.Boolean == rightBool.Boolean);
+                        }
+                        else if (left is TextValue)
+                        {
+                            var leftText = left as TextValue;
+                            var rightText = right as TextValue;
+                            return new BooleanValue(leftText.Text == rightText.Text);
+                        }
+                        break;
                     }
-                    else if (left is BooleanValue)
-                    {
-                        var leftBool = left as BooleanValue;
-                        var rightBool = right as BooleanValue;
-                        return new BooleanValue(leftBool.Boolean == rightBool.Boolean);
-                    }
-                    else if (left is TextValue)
-                    {
-                        var leftText = left as TextValue;
-                        var rightText = right as TextValue;
-                        return new BooleanValue(leftText.Text == rightText.Text);
-                    }
-                    break;
                 case BinaryOperatorType.GreaterThan:
                     {
-                        var leftNumb = left as NumberValue;
-                        var rightNumb = right as NumberValue;
-                        return new BooleanValue(leftNumb.Number > rightNumb.Number);
+                        var left = node.LeftOperand.Accept(this, arg) as NumberValue;
+                        var right = node.RightOperand.Accept(this, arg) as NumberValue;
+                        return new BooleanValue(left.Number > right.Number);
                     }
                 case BinaryOperatorType.GreaterOrEqual:
                     {
-                        var leftNumb = left as NumberValue;
-                        var rightNumb = right as NumberValue;
-                        return new BooleanValue(leftNumb.Number >= rightNumb.Number);
+                        var left = node.LeftOperand.Accept(this, arg) as NumberValue;
+                        var right = node.RightOperand.Accept(this, arg) as NumberValue;
+                        return new BooleanValue(left.Number >= right.Number);
                     }
                 case BinaryOperatorType.LessThan:
                     {
-                        var leftNumb = left as NumberValue;
-                        var rightNumb = right as NumberValue;
-                        return new BooleanValue(leftNumb.Number < rightNumb.Number);
+                        var left = node.LeftOperand.Accept(this, arg) as NumberValue;
+                        var right = node.RightOperand.Accept(this, arg) as NumberValue;
+                        return new BooleanValue(left.Number < right.Number);
                     }
                 case BinaryOperatorType.LessOrEqual:
                     {
-                        var leftNumb = left as NumberValue;
-                        var rightNumb = right as NumberValue;
-                        return new BooleanValue(leftNumb.Number <= rightNumb.Number);
+                        var left = node.LeftOperand.Accept(this, arg) as NumberValue;
+                        var right = node.RightOperand.Accept(this, arg) as NumberValue;
+                        return new BooleanValue(left.Number <= right.Number);
                     }
                 case BinaryOperatorType.Or:
                     {
-                        var leftBool = left as BooleanValue;
-                        var rightBool = right as BooleanValue;
-                        return new BooleanValue(leftBool.Boolean || rightBool.Boolean);
+                        var left = node.LeftOperand.Accept(this, arg) as BooleanValue;
+                        if (left.Boolean == true)
+                            return left;
+                        var right = node.RightOperand.Accept(this, arg) as BooleanValue;
+                        return right;
                     }
                 case BinaryOperatorType.And:
                     {
-                        var leftBool = left as BooleanValue;
-                        var rightBool = right as BooleanValue;
-                        return new BooleanValue(leftBool.Boolean && rightBool.Boolean);
+                        var left = node.LeftOperand.Accept(this, arg) as BooleanValue;
+                        if (left.Boolean == false)
+                            return left;
+                        var right = node.RightOperand.Accept(this, arg) as BooleanValue;
+                        return right;
                     }
                 default:
                     throw new ArgumentOutOfRangeException();

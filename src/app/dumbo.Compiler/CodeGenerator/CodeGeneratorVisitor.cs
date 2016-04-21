@@ -472,9 +472,9 @@ namespace dumbo.Compiler.CodeGenerator
                 {
                     string type = ConvertType(funcNode.ReturnTypes[i]);
                     if (i < funcNode.ReturnTypes.Count - 1)
-                        _currentStmt.Append(type + " _ ret" + (i + 1) + ", ");
+                        _currentStmt.Append(type + " _ret" + (i + 1) + ", ");
                     else
-                        _currentStmt.Append(type + " _ ret" + (i + 1));
+                        _currentStmt.Append(type + " _ret" + (i + 1));
                 }
             }
             _currentStmt.Append(")");

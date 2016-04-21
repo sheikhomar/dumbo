@@ -25,17 +25,16 @@ namespace dumbo.Compiler.CodeGenerator
 
         public RuntimeEntity Visit(ActualParamListNode node, VisitorArgs arg)
         {
-            for (int index = 0; index < node.Count; index++)
-            {
-                var currentParameter = node.GetAs<ExpressionNode>(index);
+            int count = node.Count;
 
-                if (index < node.Count - 1)
+            for (int index = 0; index < count; index++)
+            {
+                node[index].Accept(this, arg);
+
+                if (count != 0)
                 {
-                    currentParameter.Accept(this, arg);
                     _currentStmt.Append(", ");
                 }
-                else
-                    currentParameter.Accept(this, arg);
             }
 
             return null;
@@ -458,8 +457,7 @@ namespace dumbo.Compiler.CodeGenerator
                 default: throw new ArgumentException($"{input} is not a valid binary operator.");
             }
         }
-
-
+        
         private void WriteFunctionHeader(FuncDeclNode funcNode, VisitorArgs arg)
         {
             bool multiReturn = funcNode.ReturnTypes.Count > 1;

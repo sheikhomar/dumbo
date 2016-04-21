@@ -325,7 +325,7 @@ namespace dumbo.Compiler.CodeGenerator
         {
             _currentStmt = new Stmt("for (int i=0; i<");
             node.Number.Accept(this, arg);
-            _currentStmt.Append(" ; i++;");
+            _currentStmt.Append(" ; i++)");
             _currentModule.Append(_currentStmt);
             node.Body.Accept(this, arg);
 

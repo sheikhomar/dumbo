@@ -50,7 +50,7 @@ namespace dumbo.Compiler.CodeGenerator
                 _currentModule.Append(new Stmt("{"));
                 foreach (var identifier in node.Identifiers)
                 {
-                    //type *ret[i] = &name;
+                    //type *ret[i] = &name;    -- How it looks in C
                     _currentStmt = new Stmt("");
                     _currentStmt.Append(ConvertType(identifier.DeclarationNode.Type));
                     _currentStmt.Append(" *ret" + i + " = &" + identifier.Name.ToLower());
@@ -63,11 +63,11 @@ namespace dumbo.Compiler.CodeGenerator
             {
                 for (int index = 0; index < node.Identifiers.Count; index++)
                 {
-                    //id = expression;
+                    //id = expression;    -- How it looks in C
                     _currentStmt = new Stmt("");
                     node.Identifiers[index].Accept(this, arg);
                     _currentStmt.Append(" = ");
-                    node.Expressions[0].Accept(this, arg);
+                    node.Expressions[index].Accept(this, arg);
                     _currentStmt.Append(";");
                     _currentModule.Append(_currentStmt);
                 }

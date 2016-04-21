@@ -92,9 +92,6 @@
             <Button ToolTip="Generate code (Ctrl + O)" Command="{StaticResource CodeGenCommand}">
                 <Image Source="Images/CodeGen.png" Height="16"/>
             </Button>
-            <Button ToolTip="Jeg er en trold.">
-                <Image Source="Images/trold.jpg" Height="16"/>
-            </Button>
         </ToolBar>
         <StatusBar DockPanel.Dock="Bottom">
             <StatusBar.ItemsPanel>

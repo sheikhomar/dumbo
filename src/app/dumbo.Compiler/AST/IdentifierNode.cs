@@ -4,7 +4,7 @@ namespace dumbo.Compiler.AST
     {
         public IdentifierNode(string name, SourcePosition sourcePosition)
         {
-            Name = name;
+            Name = name.ToLower();
             SourcePosition = sourcePosition;
         }
 

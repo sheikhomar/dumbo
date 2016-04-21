@@ -2,27 +2,24 @@
 #include <stdlib.h>
 #include <string.h>
 
-//LHC Text Type
+//LHC Type
 typedef struct Text {
 	int Length;
 	char *Text;
 } Text;
-//LHC Boolean Type
+
 typedef enum { false, true } Boolean;
 
 
-//LHC Text HelperFunctions
+//LHC HelperFunctions
 void TextPrint(Text *input);
 void UpdateText(char *inputText, int Length, Text *text);
 void ConcatText(Text *inputText1, Text *inputText2, Text *resText);
 void RemoveText(Text *input);
-//LHC Boolean HelperFunctions
 void BooleanPrint(Boolean *input);
-Boolean CreateTrueBoolean();
-Boolean CreateFalseBoolean();
 
 
-// Text functions
+// Text functions //
 // Print a Text value given a pointer to a Text
 void TextPrint(Text *input) {
 	int i = 0;
@@ -91,19 +88,7 @@ void RemoveText(Text *input) {
 }
 
 
-// Boolean functions
-// Creating a Boolean with the value true
-Boolean CreateTrueBoolean() {
-	Boolean ret = true;
-	return ret;
-}
-
-// Creating a Boolean with the value false
-Boolean CreateFalseBoolean() {
-	Boolean ret = false;
-	return ret;
-}
-
+// Boolean functions //
 // Printing the value of a Boolean given with a pointer
 void BooleanPrint(Boolean *input) {
 	if ((*input) == true)

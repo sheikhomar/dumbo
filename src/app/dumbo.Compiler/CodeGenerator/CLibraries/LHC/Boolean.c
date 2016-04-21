@@ -6,14 +6,11 @@ typedef enum {false, true} Boolean;
 
 //LHC HelperFunctions
 void BooleanPrint(Boolean *input);
-Boolean CreateTrueBoolean();
-Boolean CreateFalseBoolean();
-
 
 int main()
 {
-	Boolean boolT = CreateTrueBoolean();
-	Boolean boolF = CreateFalseBoolean();
+	Boolean boolT = true;
+	Boolean boolF = true;
 	
 	//Print, and or not
 	
@@ -55,18 +52,6 @@ int main()
 	
     return 0;
 }
-
-
-Boolean CreateTrueBoolean(){
-	Boolean ret = true;
-	return ret;
-}
-
-Boolean CreateFalseBoolean(){
-	Boolean ret = false;
-	return ret;
-}
-
 
 void BooleanPrint(Boolean *input){
 	if((*input) == true)

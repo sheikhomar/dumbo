@@ -2,9 +2,9 @@
 #include <stdlib.h>
 
 //Single Return Function | Number MyFunction(Number a)
-int MyFunction(void *for1);
+int MyFunction(int a);
 //Multiple Return Function | Number, Text MyFunction(Text a)
-void MyFunctionMul(void *for1, void *ret1,  void *ret2);
+void MyFunctionMul(char a, int *ret1,  int *ret2);
 
 int main()
 {
@@ -14,7 +14,7 @@ int main()
 	
 	//Single Ret Function
 	printf("Before call int is %d\n",myInt);
-	printf("(%d + 42 = %d)\n",myInt,MyFunction(&myInt)+5);
+	printf("(%d + 42 = %d)\n",myInt,MyFunction(myInt)+5);
 	printf("After call int is %d || no change\n",myInt);
 	printf("\n");
 	
@@ -23,12 +23,7 @@ int main()
 	printf("Before call int is %d and %d, char is %c\n",myInt,myInt2,myChar);
 	
 	//Function call
-	{
-		char *for1 = &myChar;
-		int *ret1 = &myInt;
-		int *ret2 = &myInt2;
-		MyFunctionMul(for1,ret1,ret2);
-	}
+	MyFunctionMul(myChar,&myInt,&myInt2);
 	
 	printf("After call int is %d and %d, char is %c || int changed, char same\n",myInt,myInt2,myChar);
 	
@@ -36,10 +31,7 @@ int main()
 }
 
 //Single return function
-int MyFunction(void *for1){
-	//Assignment of formal parameters
-	int a = (*(int*)for1);
-
+int MyFunction(int a){
 	//Body
 	int ret = 42;
 	a = 9001;
@@ -49,10 +41,7 @@ int MyFunction(void *for1){
 }
 
 //Multiple return function
-void MyFunctionMul(void *for1, void *ret1,void *ret2){
-	//Assignment of formal parameters
-	char a = (*(char*)for1);
-
+void MyFunctionMul(char a, int *ret1,int *ret2){
 	//Body
 	int retVal = 42;
 	int retVal2 = 55;
@@ -60,8 +49,8 @@ void MyFunctionMul(void *for1, void *ret1,void *ret2){
 	
 	//Return assignment
 	{
-		*(int*)ret1 = retVal; 
-		*(int*)ret2 = retVal2;
+		*ret1 = retVal; 
+		*ret2 = retVal2;
 		return;
 	}
 }

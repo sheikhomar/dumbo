@@ -1,6 +1,7 @@
 ﻿namespace dumbo.Compiler
 {
-    internal class ReachabilityArgument
+    public class ReachabilityArgument
     {
+        public bool IsReachable { get; set;  }
     }
 }

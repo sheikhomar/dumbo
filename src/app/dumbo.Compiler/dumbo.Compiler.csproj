@@ -113,6 +113,9 @@
     <Compile Include="IVisitor.cs" />
     <Compile Include="Interpreter\NumberValue.cs" />
     <Compile Include="PrettyPrintVisitor.cs" />
+    <Compile Include="ReachabilityArgument.cs" />
+    <Compile Include="ReachabilityResult.cs" />
+    <Compile Include="ReachabilityVisitor.cs" />
     <Compile Include="ScopeCheckVisitor.cs" />
     <Compile Include="SymbolTable\IllegalHideException.cs" />
     <Compile Include="SymbolTable\OutermostScopeException.cs" />

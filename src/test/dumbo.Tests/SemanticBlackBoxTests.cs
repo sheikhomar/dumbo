@@ -98,6 +98,9 @@ namespace dumbo.Tests
 
         private IEnumerable<Event> RunSemanticAnalysis(RootNode root)
         {
+            foreach (var func in BuiltInFuncDeclNode.GetBuiltInFunctions())
+                root.FuncDecls.Add(func);
+
             var reporter = new EventReporter();
             var scopeChecker = new ScopeCheckVisitor(reporter);
             var typeChecker = new TypeCheckVisitor(reporter);

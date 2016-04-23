@@ -437,15 +437,14 @@ namespace dumbo.Compiler.CodeGenerator
             return null;
         }
 
-        private string ConvertType(HappyType input)
+        private string ConvertType(TypeNode typeNode)
         {
-            switch (input)
+            var input = typeNode as PrimitiveTypeNode;
+            switch (input.Type)
             {
-                case HappyType.Nothing: return "void";
-                case HappyType.Number: return "double";
-                case HappyType.Text: return "Text";
-                case HappyType.Boolean: return "Boolean";
-                case HappyType.Error: throw new ArgumentException($"{input} is not a valid type.");
+                case PrimitiveType.Number: return "double";
+                case PrimitiveType.Text: return "Text";
+                case PrimitiveType.Boolean: return "Boolean";
                 default: throw new ArgumentException($"{input} is not a valid type.");
             }
         }

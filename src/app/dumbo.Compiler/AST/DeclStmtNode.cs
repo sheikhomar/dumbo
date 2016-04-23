@@ -2,7 +2,7 @@
 {
     public class DeclStmtNode : StmtNode, IVariableDeclNode
     {
-        public DeclStmtNode(IdentifierListNode identifiers, HappyType type, SourcePosition sourcePosition)
+        public DeclStmtNode(IdentifierListNode identifiers, TypeNode type, SourcePosition sourcePosition)
         {
             Identifiers = identifiers;
             Type = type;
@@ -10,7 +10,9 @@
         }
 
         public IdentifierListNode Identifiers { get; }
-        public HappyType Type { get; }
+
+        public TypeNode Type { get; }
+        
 
         public override T Accept<T, K>(IVisitor<T, K> visitor, K arg)
         {

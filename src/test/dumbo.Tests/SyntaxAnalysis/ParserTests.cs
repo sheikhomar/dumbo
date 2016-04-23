@@ -9,6 +9,10 @@ namespace dumbo.Tests.SyntaxAnalysis
     [TestFixture]
     public class ParserTests
     {
+        private readonly PrimitiveTypeNode BooleanType = new PrimitiveTypeNode(PrimitiveType.Boolean);
+        private readonly PrimitiveTypeNode TextType = new PrimitiveTypeNode(PrimitiveType.Text);
+        private readonly PrimitiveTypeNode NumberType = new PrimitiveTypeNode(PrimitiveType.Number);
+
         private RootNode ParseAndGetRootNode(string programText)
         {
             var parser = new Parser(Utils.GetGrammarTablePath());
@@ -55,7 +59,7 @@ End Program";
             var rootNode = ParseAndGetRootNode(programText);
             var node = rootNode.Program.Body.GetAs<DeclStmtNode>(0);
             Assert.IsNotNull(node);
-            Assert.AreEqual(HappyType.Number, node.Type);
+            Assert.AreEqual(NumberType, node.Type);
             Assert.AreEqual(1, node.Identifiers.Count);
             Assert.AreEqual("age", node.Identifiers[0].Name);
         }
@@ -70,7 +74,7 @@ End Program";
             var rootNode = ParseAndGetRootNode(programText);
             var node = rootNode.Program.Body.GetAs<DeclStmtNode>(0);
             Assert.IsNotNull(node);
-            Assert.AreEqual(HappyType.Text, node.Type);
+            Assert.AreEqual(TextType, node.Type);
             Assert.AreEqual(1, node.Identifiers.Count);
             Assert.AreEqual("name", node.Identifiers[0].Name);
         }
@@ -85,7 +89,7 @@ End Program";
             var rootNode = ParseAndGetRootNode(programText);
             var node = rootNode.Program.Body.GetAs<DeclStmtNode>(0);
             Assert.IsNotNull(node);
-            Assert.AreEqual(HappyType.Boolean, node.Type);
+            Assert.AreEqual(BooleanType, node.Type);
             Assert.AreEqual(1, node.Identifiers.Count);
             Assert.AreEqual("isStudent", node.Identifiers[0].Name);
         }
@@ -100,14 +104,14 @@ End Program";
             var rootNode = ParseAndGetRootNode(programText);
             var node = rootNode.Program.Body.GetAs<DeclAndAssignmentStmtNode>(0);
             Assert.IsNotNull(node);
-            Assert.AreEqual(HappyType.Text, node.Type);
+            Assert.AreEqual(TextType, node.Type);
             Assert.AreEqual(1, node.Identifiers.Count);
             Assert.AreEqual("name", node.Identifiers[0].Name);
 
             Assert.AreEqual(1, node.Expressions.Count);
             var expr = node.Expressions.GetAs<LiteralValueNode>(0);
-            Assert.AreEqual(HappyType.Text, expr.Type);
-            Assert.AreEqual("\"Karen Blixen\"", expr.Value);
+            Assert.AreEqual(TextType, expr.Type);
+            Assert.AreEqual("Karen Blixen", expr.Value);
         }
     }
 }

@@ -5,6 +5,6 @@ namespace dumbo.Compiler.AST
     /// </summary>
     public interface IVariableDeclNode
     {
-        HappyType Type { get; }
+        TypeNode Type { get; }
     }
 }

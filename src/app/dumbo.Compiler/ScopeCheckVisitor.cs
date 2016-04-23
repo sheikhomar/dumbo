@@ -3,13 +3,10 @@ using dumbo.Compiler.SymbolTable;
 
 namespace dumbo.Compiler
 {
-    public class ScopeCheckVisitor : IVisitor<VisitResult, VisitorArgs>
+    public class ScopeCheckVisitor : IVisitor<object, VisitorArgs>
     {
-        private readonly VisitResult _emptyResult;
-
         public ScopeCheckVisitor(IEventReporter reporter)
         {
-            _emptyResult = new VisitResult();
             SymbolTable = new SymbolTable.SymbolTable();
             Reporter = reporter;
         }
@@ -17,77 +14,67 @@ namespace dumbo.Compiler
         public IEventReporter Reporter { get; }
         public SymbolTable.SymbolTable SymbolTable { get; }
 
-        public VisitResult Visit(ActualParamListNode node, VisitorArgs arg)
+        public object Visit(ActualParamListNode node, VisitorArgs arg)
         {
             foreach (var item in node)
                 item.Accept(this, arg);
 
-            return _emptyResult;
+            return null;
         }
 
-        public VisitResult Visit(AssignmentStmtNode node, VisitorArgs arg)
+        public object Visit(AssignmentStmtNode node, VisitorArgs arg)
         {
             node.Identifiers.Accept(this, arg);
             node.Expressions.Accept(this, arg);
 
-            return _emptyResult;
+            return null;
         }
 
-        public VisitResult Visit(BinaryOperationNode node, VisitorArgs arg)
+        public object Visit(BinaryOperationNode node, VisitorArgs arg)
         {
             node.LeftOperand.Accept(this, arg);
             node.RightOperand.Accept(this, arg);
             
-            return _emptyResult;
+            return null;
         }
 
-        public VisitResult Visit(BreakStmtNode node, VisitorArgs arg)
+        public object Visit(BreakStmtNode node, VisitorArgs arg)
         {
-            return _emptyResult;
+            return null;
         }
 
-        public VisitResult Visit(BuiltInFuncDeclNode node, VisitorArgs arg)
+        public object Visit(BuiltInFuncDeclNode node, VisitorArgs arg)
         {
-            var entry = SymbolTable.RetrieveSymbol(node.Name);
-            if (entry != null)
-            {
-                Reporter.Error($"Function '{node.Name}' is already declared.", node.SourcePosition);
-            }
-            else
-            {
-                SymbolTable.EnterSymbol(node.Name, new SymbolTableFunctionType(node), true);
-            }
-
-            return _emptyResult;
+            return null;
         }
 
-        public VisitResult Visit(DeclAndAssignmentStmtNode node, VisitorArgs arg)
+        public object Visit(DeclAndAssignmentStmtNode node, VisitorArgs arg)
         {
             foreach (var id in node.Identifiers)
                 AddVariableToSymbolTable(id, node);
 
             node.Expressions.Accept(this, arg);
 
-            return _emptyResult;
+            return null;
         }
 
-        public VisitResult Visit(DeclStmtNode node, VisitorArgs arg)
+        public object Visit(DeclStmtNode node, VisitorArgs arg)
         {
             foreach (var id in node.Identifiers)
                 AddVariableToSymbolTable(id, node);
 
-            return _emptyResult;
+            return null;
         }
 
-        public VisitResult Visit(ElseIfStmtListNode node, VisitorArgs arg)
+        public object Visit(ElseIfStmtListNode node, VisitorArgs arg)
         {
             foreach (var item in node)
                 item.Accept(this, arg);
 
-            return _emptyResult;
+            return null;
         }
 
-        public VisitResult Visit(ElseIfStmtNode node, VisitorArgs arg)
+        public object Visit(ElseIfStmtNode node, VisitorArgs arg)
         {
             node.Predicate.Accept(this, arg);
 
@@ -95,26 +82,26 @@ namespace dumbo.Compiler
             node.Body.Accept(this, arg);
             SymbolTable.CloseScope();
 
-            return _emptyResult;
+            return null;
         }
 
-        public VisitResult Visit(ExpressionListNode node, VisitorArgs arg)
+        public object Visit(ExpressionListNode node, VisitorArgs arg)
         {
             foreach (var item in node)
                 item.Accept(this, arg);
 
-            return _emptyResult;
+            return null;
         }
         
-        public VisitResult Visit(FormalParamListNode node, VisitorArgs arg)
+        public object Visit(FormalParamListNode node, VisitorArgs arg)
         {
             foreach (var item in node)
                 item.Accept(this, arg);
 
-            return _emptyResult;
+            return null;
         }
 
-        public VisitResult Visit(FormalParamNode node, VisitorArgs arg)
+        public object Visit(FormalParamNode node, VisitorArgs arg)
         {
             var entry = SymbolTable.RetrieveSymbol(node.Name);
             if (entry == null)
@@ -130,10 +117,10 @@ namespace dumbo.Compiler
                 Reporter.Error($"Identifier '{node.Name}' cannot be used as parameter since it is already used as function name.", node.SourcePosition);
             }
 
-            return _emptyResult;
+            return null;
         }
 
-        public VisitResult Visit(FuncCallExprNode node, VisitorArgs arg)
+        public object Visit(FuncCallExprNode node, VisitorArgs arg)
         {
             node.Parameters.Accept(this, arg);
             var function = SymbolTable.RetrieveSymbol(node.FuncName);
@@ -154,36 +141,39 @@ namespace dumbo.Compiler
                 }
             }
 
-            return _emptyResult;
+            return null;
         }
 
-        public VisitResult Visit(FuncCallStmtNode node, VisitorArgs arg)
+        public object Visit(FuncCallStmtNode node, VisitorArgs arg)
         {
             node.CallNode.Accept(this, arg);
 
-            return _emptyResult;
+            return null;
         }
 
-        public VisitResult Visit(FuncDeclListNode node, VisitorArgs arg)
+        public object Visit(FuncDeclListNode node, VisitorArgs arg)
         {
+            foreach (var item in node)
+            {
+                var entry = SymbolTable.RetrieveSymbol(item.Name);
+                if (entry != null)
+                {
+                    Reporter.Error($"Function '{item.Name}' is already declared.", node.SourcePosition);
+                }
+                else
+                {
+                    SymbolTable.EnterSymbol(item.Name, new SymbolTableFunctionType(item), true);
+                }
+            }
+
             foreach (var item in node)
                 item.Accept(this, arg);
 
-            return _emptyResult;
+            return null;
         }
 
-        public VisitResult Visit(FuncDeclNode node, VisitorArgs arg)
+        public object Visit(FuncDeclNode node, VisitorArgs arg)
         {
-            var entry = SymbolTable.RetrieveSymbol(node.Name);
-            if (entry != null)
-            {
-                Reporter.Error($"Function '{node.Name}' is already declared.", node.SourcePosition);
-            }
-            else
-            {
-                SymbolTable.EnterSymbol(node.Name, new SymbolTableFunctionType(node), true);
-            }
-
             SymbolTable.OpenScope();
 
             node.Parameters.Accept(this, arg);
@@ -191,18 +181,18 @@ namespace dumbo.Compiler
 
             SymbolTable.CloseScope();
             
-            return _emptyResult;
+            return null;
         }
 
-        public VisitResult Visit(IdentifierListNode node, VisitorArgs arg)
+        public object Visit(IdentifierListNode node, VisitorArgs arg)
         {
             foreach (var item in node)
                 item.Accept(this, arg);
 
-            return _emptyResult;
+            return null;
         }
 
-        public VisitResult Visit(IdentifierNode node, VisitorArgs arg)
+        public object Visit(IdentifierNode node, VisitorArgs arg)
         {
             var symbolEntry = SymbolTable.RetrieveSymbol(node.Name);
             if (symbolEntry == null)
@@ -222,10 +212,10 @@ namespace dumbo.Compiler
                 }
             }
 
-            return _emptyResult;
+            return null;
         }
 
-        public VisitResult Visit(IfElseStmtNode node, VisitorArgs arg)
+        public object Visit(IfElseStmtNode node, VisitorArgs arg)
         {
             node.Predicate.Accept(this, arg);
 
@@ -239,10 +229,10 @@ namespace dumbo.Compiler
             node.Else.Accept(this, arg);
             SymbolTable.CloseScope();
 
-            return _emptyResult;
+            return null;
         }
 
-        public VisitResult Visit(IfStmtNode node, VisitorArgs arg)
+        public object Visit(IfStmtNode node, VisitorArgs arg)
         {
             node.Predicate.Accept(this, arg);
 
@@ -252,24 +242,24 @@ namespace dumbo.Compiler
 
             node.ElseIfStatements.Accept(this, arg);
 
-            return _emptyResult;
+            return null;
         }
 
-        public VisitResult Visit(LiteralValueNode node, VisitorArgs arg)
+        public object Visit(LiteralValueNode node, VisitorArgs arg)
         {
-            return _emptyResult;
+            return null;
         }
 
-        public VisitResult Visit(ProgramNode node, VisitorArgs arg)
+        public object Visit(ProgramNode node, VisitorArgs arg)
         {
             SymbolTable.OpenScope();
             node.Body.Accept(this, arg);
             SymbolTable.CloseScope();
 
-            return _emptyResult;
+            return null;
         }
 
-        public VisitResult Visit(RepeatStmtNode node, VisitorArgs arg)
+        public object Visit(RepeatStmtNode node, VisitorArgs arg)
         {
             node.Number.Accept(this, arg);
 
@@ -277,10 +267,10 @@ namespace dumbo.Compiler
             node.Body.Accept(this, arg);
             SymbolTable.CloseScope();
 
-            return _emptyResult;
+            return null;
         }
 
-        public VisitResult Visit(RepeatWhileStmtNode node, VisitorArgs arg)
+        public object Visit(RepeatWhileStmtNode node, VisitorArgs arg)
         {
             node.Predicate.Accept(this, arg);
 
@@ -288,37 +278,37 @@ namespace dumbo.Compiler
             node.Body.Accept(this, arg);
             SymbolTable.CloseScope();
 
-            return _emptyResult;
+            return null;
         }
 
-        public VisitResult Visit(ReturnStmtNode node, VisitorArgs arg)
+        public object Visit(ReturnStmtNode node, VisitorArgs arg)
         {
             node.Expressions.Accept(this, arg);
 
-            return _emptyResult;
+            return null;
         }
 
-        public VisitResult Visit(RootNode node, VisitorArgs arg)
+        public object Visit(RootNode node, VisitorArgs arg)
         {
             node.FuncDecls.Accept(this, arg);
             node.Program.Accept(this, arg);
 
-            return _emptyResult;
+            return null;
         }
 
-        public VisitResult Visit(StmtBlockNode node, VisitorArgs arg)
+        public object Visit(StmtBlockNode node, VisitorArgs arg)
         {
             foreach (var stmt in node)
                 stmt.Accept(this, arg);
 
-            return _emptyResult;
+            return null;
         }
 
-        public VisitResult Visit(UnaryOperationNode node, VisitorArgs arg)
+        public object Visit(UnaryOperationNode node, VisitorArgs arg)
         {
             node.Expression.Accept(this, arg);
 
-            return _emptyResult;
+            return null;
         }
         
         private void AddVariableToSymbolTable(IdentifierNode idNode, IVariableDeclNode declNode)

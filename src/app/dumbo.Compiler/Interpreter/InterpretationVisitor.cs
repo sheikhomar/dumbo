@@ -218,15 +218,16 @@ namespace dumbo.Compiler.Interpreter
             {
                 CurrentCallFrame.Allocate(identifier.Name);
                 Value defaultValue = new UndefinedValue();
-                switch (node.Type)
+                var typeNode = node.Type as PrimitiveTypeNode;
+                switch (typeNode.Type)
                 {
-                    case HappyType.Number:
+                    case PrimitiveType.Number:
                         defaultValue = new NumberValue(0);
                         break;
-                    case HappyType.Text:
+                    case PrimitiveType.Text:
                         defaultValue = new TextValue(string.Empty);
                         break;
-                    case HappyType.Boolean:
+                    case PrimitiveType.Boolean:
                         defaultValue = new BooleanValue(false);
                         break;
                 }
@@ -382,17 +383,21 @@ namespace dumbo.Compiler.Interpreter
 
         public Value Visit(LiteralValueNode node, VisitorArgs arg)
         {
-            switch (node.Type)
+            var primitiveTypeNode = node.Type as PrimitiveTypeNode;
+            if (primitiveTypeNode != null)
             {
-                case HappyType.Number:
-                    return new NumberValue(double.Parse(node.Value, EnglishCulture));
-                case HappyType.Text:
-                    return new TextValue(node.Value);
-                case HappyType.Boolean:
-                    return new BooleanValue("true".Equals(node.Value, StringComparison.InvariantCultureIgnoreCase));
-                default:
-                    return new UndefinedValue();
+                switch (primitiveTypeNode.Type)
+                {
+                    case PrimitiveType.Number:
+                        return new NumberValue(double.Parse(node.Value, EnglishCulture));
+                    case PrimitiveType.Text:
+                        return new TextValue(node.Value);
+                    case PrimitiveType.Boolean:
+                        return new BooleanValue("true".Equals(node.Value, StringComparison.InvariantCultureIgnoreCase));
+                }
             }
+
+            throw new InvalidOperationException("Unknown type");
         }
 
         public Value Visit(ProgramNode node, VisitorArgs arg)

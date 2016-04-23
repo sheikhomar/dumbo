@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using dumbo.Compiler.AST;
+﻿using dumbo.Compiler.AST;
 
 namespace dumbo.Compiler.SymbolTable
 {
@@ -11,7 +6,7 @@ namespace dumbo.Compiler.SymbolTable
     {
         public IVariableDeclNode DeclarationNode { get; }
 
-        public SymbolTablePrimitiveType(HappyType type)
+        public SymbolTablePrimitiveType(TypeNode type)
         {
             Type = type;
         }
@@ -22,6 +17,6 @@ namespace dumbo.Compiler.SymbolTable
             Type = declarationNode.Type;
         }
 
-        public HappyType Type { get; set; }
+        public TypeNode Type { get; set; }
     }
 }

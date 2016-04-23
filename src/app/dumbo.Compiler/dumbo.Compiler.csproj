@@ -64,7 +64,6 @@
     <Compile Include="AST\FuncCallStmtNode.cs" />
     <Compile Include="AST\FuncDeclListNode.cs" />
     <Compile Include="AST\FuncDeclNode.cs" />
-    <Compile Include="AST\HappyType.cs" />
     <Compile Include="AST\IdentifierListNode.cs" />
     <Compile Include="AST\IdentifierNode.cs" />
     <Compile Include="AST\IfElseStmtNode.cs" />
@@ -73,12 +72,14 @@
     <Compile Include="AST\IVariableDeclNode.cs" />
     <Compile Include="AST\LiteralValueNode.cs" />
     <Compile Include="AST\OperatorTranslator.cs" />
+    <Compile Include="AST\PrimitiveType.cs" />
+    <Compile Include="AST\PrimitiveTypeNode.cs" />
     <Compile Include="AST\RepeatStmtNode.cs" />
     <Compile Include="AST\RepeatWhileStmtNode.cs" />
     <Compile Include="AST\ReturnStmtNode.cs" />
     <Compile Include="AST\SourcePosition.cs" />
     <Compile Include="AST\StmtBlockNode.cs" />
-    <Compile Include="AST\TypeDescriptor.cs" />
+    <Compile Include="AST\TypeNode.cs" />
     <Compile Include="AST\UnaryOperationNode.cs" />
     <Compile Include="AST\UnaryOperatorType.cs" />
     <Compile Include="AST\ValueNode.cs" />

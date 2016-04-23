@@ -2,7 +2,7 @@ namespace dumbo.Compiler.AST
 {
     public class LiteralValueNode : ValueNode
     {
-        public LiteralValueNode(string value, HappyType type, SourcePosition sourcePosition) : base(type)
+        public LiteralValueNode(string value, TypeNode type, SourcePosition sourcePosition) : base(type)
         {
             Value = value;
             SourcePosition = sourcePosition;

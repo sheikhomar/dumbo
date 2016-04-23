@@ -9,11 +9,11 @@ namespace dumbo.Compiler.CodeGenerator
 {
     internal class BodyVisitorArgs : VisitorArgs
     {
-        public BodyVisitorArgs(IList<HappyType> returnTypes)
+        public BodyVisitorArgs(IList<TypeNode> returnTypes)
         {
             ReturnTypes = returnTypes;
         }
 
-        public IList<HappyType> ReturnTypes { get; } //todo, can currently be change.
+        public IList<TypeNode> ReturnTypes { get; } //todo, can currently be change.
     }
 }

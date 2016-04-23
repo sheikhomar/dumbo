@@ -1,11 +1,9 @@
 ﻿namespace dumbo.Compiler.AST
 {
-    public enum HappyType
+    public enum PrimitiveType
     {
-        Nothing,
         Number,
         Text,
-        Boolean,
-        Error
+        Boolean
     }
 }

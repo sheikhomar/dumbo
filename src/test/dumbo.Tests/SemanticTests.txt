@@ -429,7 +429,7 @@ Function aa(booLean a, boolean b, text c, number d) return nothing
 End functIon
 
 
- //New Program 
+ //New Program Failing
 Program
 	boolean a, b
 	Number c, d
@@ -442,7 +442,7 @@ Function aa() return boolean, boolean
 End function
 
 
- //New Program 
+ //New Program Failing
 Program
 	boolean a, b
 	Number c, d
@@ -454,19 +454,6 @@ Function aa() return boolean, boolean
 	return true, false
 End function
 
-
- //New Program 
-Program
-	text t := aa(bb(11))
-End Program
-
-Function aa(number a, boolean b) return text
-	return "ALLO"
-End Function
-
-Function bb(Number a) return number, boolean
-	return 11, true
-End Function
 
 
  //New Program Failing
@@ -1003,7 +990,7 @@ Program
 End Program
 
 
- //New Program Failing
+ //New Program
 Program
 	if "" = ""  then
 	else if false then
@@ -1164,7 +1151,7 @@ End Program
 
  //New Program Failing
 Program
-	repeat 1 = 1 = 1 //Evaluerer til false :D
+	repeat 1 = 1
 	end repeat
 End Program
 
@@ -1414,7 +1401,7 @@ Program
 End Program
 
 
- //New Program Failing
+ //New Program
 Program
 	boolean a := "" = ""
 End Program
@@ -1426,10 +1413,13 @@ Program
 End Program
 
 
- //New Program Failing
+ //New Program
 Program
 	boolean a := true = true
 End Program
+
+
+
 // ********************************Id********************************
  //New Program 
 Program
@@ -1637,31 +1627,23 @@ Program
 	WrITe("Sum3 = " + sum3)
 End program
 
-Function write(text textToPrint) return nothing
-	// Print stuff
-End function
-
 
  //New Program 
 Program
 
-	number result, fahrenheit_temp
+	number result
 	
-	result := fahrenheit_temperature(0.0, fahrenheit_temp)
+	result := fahrenheit_temperature(0.0)
 	write("Freezing point: " + result + " F.")
 	
-	result := fahrenheit_temperature(100.0, fahrenheit_temp)
+	result := fahrenheit_temperature(100.0)
 	write("Boiling point: " + result + " F.")
 	
 End program
 
-Function Fahrenheit_temperature(number celcius_temp, number fahrenheit_temp) return number
-	fahrenheit_temp := (9.0 / 5.0) * celcius_temp + 32.0
+Function Fahrenheit_temperature(number celcius_temp) return number
+	return (9.0 / 5.0) * celcius_temp + 32.0
 end function
-
-Function write(text textToPrint) return nothing
-	// Print stuff
-End function
 
 
  //New Program 
@@ -1684,23 +1666,11 @@ End function
 
 End Program
 
-Function write(text textToPrint) return nothing
-	// Print stuff
-End function
-
-Function readnumber() return number
-	return 1
-End function
-
-Function random(number a, number b) return number
-	return 1
-End function
-
 
  //New Program 
 Program
 	Number TheNumber 
-    TheNumber := Random() % 100
+    TheNumber := Random(1, 100)
 	Write("Guess my number: ")
 	Number GuessedNumber
 	Boolean IsNumberGuessed := false
@@ -1723,27 +1693,11 @@ Program
 	
 End Program
 
-Function write(text textToPrint) return nothing
-	// Print stuff
-End function
-
-Function readnumber() return number
-	return 1
-End function
-
-Function random() return number
-	return 1
-End function
-
 
  //New Program 
 Program
   Write("Hello World!")
 End Program
-
-Function write(text textToPrint) return nothing
-	// Print stuff
-End function
 
 
  //New Program 
@@ -1783,18 +1737,6 @@ Function cmp(text operator, text string) return boolean
 	return true
 end function
 
-Function write(text textToPrint) return nothing
-	// Print stuff
-End function
-
-Function readtext() return text
-	return ""
-End function
-
-Function readnumber() return number
-	return 1
-End function
-
 
  //New Program 
 program 
@@ -1829,13 +1771,6 @@ program
 	
 end program
 
-Function write(text textToPrint) return nothing
-	// Print stuff
-End function
-
-Function readnumber() return number
-	return 1
-End function
 
 
  //New Program 
@@ -1858,13 +1793,6 @@ Program
 
 end program
 
-Function write(text textToPrint) return nothing
-	// Print stuff
-End function
-
-Function readnumber() return number
-	return 1
-End function
 
 
  //New Program 
@@ -1883,14 +1811,6 @@ Program
 	end if
 	
 End Program
-
-Function write(text textToPrint) return nothing
-	// Print stuff
-End function
-
-Function readnumber() return number
-	return 1
-End function
 
 
  //New Program 
@@ -1920,13 +1840,6 @@ Program
 
 End program
 
-Function write(text textToPrint) return nothing
-	// Print stuff
-End function
-
-Function readnumber() return number
-	return 1
-End function
 
 
  //New Program 
@@ -1955,13 +1868,6 @@ Program
 
 End Program
 
-Function write(text textToPrint) return nothing
-	// Print stuff
-End function
-
-Function readnumber() return number
-	return 1
-End function
 
 
  //New Program 
@@ -1985,14 +1891,6 @@ Program
 	end if
 	
 End program
-
-Function write(text textToPrint) return nothing
-	// Print stuff
-End function
-
-Function readnumber() return number
-	return 1
-End function
 
 
  //New Program 
@@ -2034,13 +1932,6 @@ Program
   
 end Program
 
-Function write(text textToPrint) return nothing
-	// Print stuff
-End function
-
-Function readnumber() return number
-	return 1
-End function
 
 
  //New Program 
@@ -2065,13 +1956,7 @@ Program
 	
 End Program
 
-Function write(text textToPrint) return nothing
-	// Print stuff
-End function
 
-Function readnumber() return number
-	return 1
-End function
 
 // **************************Scope*******************************
  //New Program 

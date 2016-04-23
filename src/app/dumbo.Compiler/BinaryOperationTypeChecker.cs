@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using dumbo.Compiler.AST;
 
@@ -7,16 +8,16 @@ namespace dumbo.Compiler
     {
         private class Rule
         {
-            public Rule(HappyType operandType1, HappyType operandType2, HappyType resultType)
+            public Rule(PrimitiveType operandType1, PrimitiveType operandType2, PrimitiveType resultType)
             {
                 OperandType1 = operandType1;
                 OperandType2 = operandType2;
                 ResultType = resultType;
             }
 
-            public HappyType OperandType1 { get; }
-            public HappyType OperandType2 { get; }
-            public HappyType ResultType { get; }
+            public PrimitiveType OperandType1 { get; }
+            public PrimitiveType OperandType2 { get; }
+            public PrimitiveType ResultType { get; }
         }
 
         private readonly Dictionary<BinaryOperatorType, IList<Rule>> _container;
@@ -30,30 +31,30 @@ namespace dumbo.Compiler
         private void Initialise()
         {
             // Rules for arithmetic expressions
-            Add(BinaryOperatorType.Plus, HappyType.Number, HappyType.Number, HappyType.Number);
-            Add(BinaryOperatorType.Plus, HappyType.Text, HappyType.Text, HappyType.Text);
-            Add(BinaryOperatorType.Plus, HappyType.Text, HappyType.Number, HappyType.Text);
-            Add(BinaryOperatorType.Minus, HappyType.Number, HappyType.Number, HappyType.Number);
-            Add(BinaryOperatorType.Times, HappyType.Number, HappyType.Number, HappyType.Number);
-            Add(BinaryOperatorType.Division, HappyType.Number, HappyType.Number, HappyType.Number);
-            Add(BinaryOperatorType.Modulo, HappyType.Number, HappyType.Number, HappyType.Number);
+            Add(BinaryOperatorType.Plus, PrimitiveType.Number, PrimitiveType.Number, PrimitiveType.Number);
+            Add(BinaryOperatorType.Plus, PrimitiveType.Text, PrimitiveType.Text, PrimitiveType.Text);
+            Add(BinaryOperatorType.Plus, PrimitiveType.Text, PrimitiveType.Number, PrimitiveType.Text);
+            Add(BinaryOperatorType.Minus, PrimitiveType.Number, PrimitiveType.Number, PrimitiveType.Number);
+            Add(BinaryOperatorType.Times, PrimitiveType.Number, PrimitiveType.Number, PrimitiveType.Number);
+            Add(BinaryOperatorType.Division, PrimitiveType.Number, PrimitiveType.Number, PrimitiveType.Number);
+            Add(BinaryOperatorType.Modulo, PrimitiveType.Number, PrimitiveType.Number, PrimitiveType.Number);
 
             // Rules for relational expressions
-            Add(BinaryOperatorType.Equals, HappyType.Number, HappyType.Number, HappyType.Boolean);
-            Add(BinaryOperatorType.Equals, HappyType.Boolean, HappyType.Boolean, HappyType.Boolean);
-            Add(BinaryOperatorType.Equals, HappyType.Text, HappyType.Text, HappyType.Boolean);
-            Add(BinaryOperatorType.GreaterThan, HappyType.Number, HappyType.Number, HappyType.Boolean);
-            Add(BinaryOperatorType.GreaterOrEqual, HappyType.Number, HappyType.Number, HappyType.Boolean);
-            Add(BinaryOperatorType.LessThan, HappyType.Number, HappyType.Number, HappyType.Boolean);
-            Add(BinaryOperatorType.LessOrEqual, HappyType.Number, HappyType.Number, HappyType.Boolean);
+            Add(BinaryOperatorType.Equals, PrimitiveType.Number, PrimitiveType.Number, PrimitiveType.Boolean);
+            Add(BinaryOperatorType.Equals, PrimitiveType.Boolean, PrimitiveType.Boolean, PrimitiveType.Boolean);
+            Add(BinaryOperatorType.Equals, PrimitiveType.Text, PrimitiveType.Text, PrimitiveType.Boolean);
+            Add(BinaryOperatorType.GreaterThan, PrimitiveType.Number, PrimitiveType.Number, PrimitiveType.Boolean);
+            Add(BinaryOperatorType.GreaterOrEqual, PrimitiveType.Number, PrimitiveType.Number, PrimitiveType.Boolean);
+            Add(BinaryOperatorType.LessThan, PrimitiveType.Number, PrimitiveType.Number, PrimitiveType.Boolean);
+            Add(BinaryOperatorType.LessOrEqual, PrimitiveType.Number, PrimitiveType.Number, PrimitiveType.Boolean);
 
             // Rules for logical expressions
-            Add(BinaryOperatorType.Or, HappyType.Boolean, HappyType.Boolean, HappyType.Boolean);
-            Add(BinaryOperatorType.And, HappyType.Boolean, HappyType.Boolean, HappyType.Boolean);
+            Add(BinaryOperatorType.Or, PrimitiveType.Boolean, PrimitiveType.Boolean, PrimitiveType.Boolean);
+            Add(BinaryOperatorType.And, PrimitiveType.Boolean, PrimitiveType.Boolean, PrimitiveType.Boolean);
         }
 
-        private void Add(BinaryOperatorType operationType, HappyType operandType1, 
-            HappyType operandType2, HappyType resultType)
+        private void Add(BinaryOperatorType operationType, PrimitiveType operandType1, 
+            PrimitiveType operandType2, PrimitiveType resultType)
         {
             if (!_container.ContainsKey(operationType))
             {
@@ -63,9 +64,13 @@ namespace dumbo.Compiler
             _container[operationType].Add(new Rule(operandType1, operandType2, resultType));
         }
 
-        public HappyType GetInferredType(BinaryOperatorType operationType, HappyType leftOperand,
-            HappyType rightOperand)
+        public Tuple<bool,PrimitiveType> GetInferredType(BinaryOperatorType operationType, 
+            TypeNode leftNode,
+            TypeNode rightNode)
         {
+            PrimitiveType leftOperand = (leftNode as PrimitiveTypeNode).Type;
+            PrimitiveType rightOperand = (rightNode as PrimitiveTypeNode).Type;
+
             if (_container.ContainsKey(operationType))
             {
                 var specList = _container[operationType];
@@ -74,12 +79,12 @@ namespace dumbo.Compiler
                     if ((leftOperand == spec.OperandType1 && rightOperand == spec.OperandType2) ||
                         (leftOperand == spec.OperandType2 && rightOperand == spec.OperandType1))
                     {
-                        return spec.ResultType;
+                        return new Tuple<bool, PrimitiveType>(true, spec.ResultType);
                     }
                 }
             }
 
-            return HappyType.Error;
+            return new Tuple<bool, PrimitiveType>(false, default(PrimitiveType));
         }
     }
 }

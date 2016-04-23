@@ -2,7 +2,7 @@
 {
     public class DeclAndAssignmentStmtNode : AssignmentStmtNode, IVariableDeclNode
     {
-        public DeclAndAssignmentStmtNode(HappyType type, 
+        public DeclAndAssignmentStmtNode(TypeNode type, 
             IdentifierListNode identifiers, 
             ExpressionListNode expressions,
             SourcePosition sourcePosition) : base(identifiers, expressions, sourcePosition)
@@ -10,7 +10,7 @@
             Type = type;
         }
 
-        public HappyType Type { get; }
+        public TypeNode Type { get; }
 
         public override T Accept<T, K>(IVisitor<T, K> visitor, K arg)
         {

@@ -5,28 +5,26 @@ using dumbo.Compiler.AST;
 
 namespace dumbo.Compiler
 {
-    public class TypeCheckVisitor : IVisitor<VisitResult, VisitorArgs>
+    public class TypeCheckVisitor : IVisitor<TypeCheckVisitResult, VisitorArgs>
     {
         private IEventReporter Reporter { get; }
-        private VisitResult EmptyResult { get; }
         private BinaryOperationTypeChecker BinaryOperation { get; }
 
         public TypeCheckVisitor(IEventReporter reporter)
         {
             Reporter = reporter;
-            EmptyResult = new VisitResult();
             BinaryOperation = new BinaryOperationTypeChecker();
         }
 
-        public VisitResult Visit(ActualParamListNode node, VisitorArgs arg)
+        public TypeCheckVisitResult Visit(ActualParamListNode node, VisitorArgs arg)
         {
             foreach (var item in node)
                 item.Accept(this, arg);
 
-            return EmptyResult;
+            return null;
         }
 
-        public VisitResult Visit(AssignmentStmtNode node, VisitorArgs arg)
+        public TypeCheckVisitResult Visit(AssignmentStmtNode node, VisitorArgs arg)
         {
             if (node.Identifiers.Count == 1 && node.Expressions.Count == 1)
             {
@@ -64,7 +62,7 @@ namespace dumbo.Compiler
                         var id = idList[i];
                         var idResult = GetVisitResult(idList[i], arg);
                         var idType = idResult.Types.First();
-                        if (idType != exprType)
+                        if (!idType.Equals(exprType))
                         {
                             Reporter.Error($"The variable '{id.Name}' cannot be assigned the type {exprType}.",
                                 expr.SourcePosition);
@@ -87,49 +85,49 @@ namespace dumbo.Compiler
                 Reporter.Error("Multi variable assignment is not allowed.", node.Identifiers.SourcePosition);
             }
 
-            return EmptyResult;
+            return null;
         }
 
-        public VisitResult Visit(BinaryOperationNode node, VisitorArgs arg)
+        public TypeCheckVisitResult Visit(BinaryOperationNode node, VisitorArgs arg)
         {
             var lr = GetVisitResult(node.LeftOperand, arg);
             var rr = GetVisitResult(node.RightOperand, arg);
 
-            if (lr.Types.Count() > 1)
+            if (lr.Types.Count() != 1)
             {
-                Reporter.Error("Left operand returns too many values.", node.LeftOperand.SourcePosition);
-                return new TypeCheckVisitResult(HappyType.Error);
+                Reporter.Error("Left operand must return a single value.", node.LeftOperand.SourcePosition);
+                return ErrorType();
             }
 
-            if (rr.Types.Count() > 1)
+            if (rr.Types.Count() != 1)
             {
-                Reporter.Error("Right operand returns too many values.", node.RightOperand.SourcePosition);
-                return new TypeCheckVisitResult(HappyType.Error);
+                Reporter.Error("Right operand must return a single value.", node.RightOperand.SourcePosition);
+                return ErrorType();
             }
 
             var leftType = lr.Types.First();
             var rightType = rr.Types.First();
             var resultType = BinaryOperation.GetInferredType(node.Operator, leftType, rightType);
 
-            if (resultType == HappyType.Error)
+            if (!resultType.Item1)
             {
-                Reporter.Error($"The types {leftType} and {rightType} are not compatable.", node.SourcePosition);
+                Reporter.Error($"The types {leftType} and {rightType} are not compatible.", node.SourcePosition);
             }
 
-            return new TypeCheckVisitResult(resultType);
+            return new TypeCheckVisitResult(new PrimitiveTypeNode(resultType.Item2));
         }
 
-        public VisitResult Visit(BreakStmtNode node, VisitorArgs arg)
+        public TypeCheckVisitResult Visit(BreakStmtNode node, VisitorArgs arg)
         {
-            return EmptyResult;
+            return null;
         }
 
-        public VisitResult Visit(BuiltInFuncDeclNode node, VisitorArgs arg)
+        public TypeCheckVisitResult Visit(BuiltInFuncDeclNode node, VisitorArgs arg)
         {
-            return EmptyResult;
+            return null;
         }
 
-        public VisitResult Visit(DeclAndAssignmentStmtNode node, VisitorArgs arg)
+        public TypeCheckVisitResult Visit(DeclAndAssignmentStmtNode node, VisitorArgs arg)
         {
             if (node.Expressions.Count > 1)
             {
@@ -139,6 +137,7 @@ namespace dumbo.Compiler
             {
                 var expr = node.Expressions.First();
                 var exprResult = GetVisitResult(expr, arg);
+                
                 var exprTypes = exprResult.Types.ToList();
                 var idList = node.Identifiers.ToList();
                 if (exprTypes.Count == idList.Count)
@@ -146,7 +145,7 @@ namespace dumbo.Compiler
                     for (int i = 0; i < exprTypes.Count; i++)
                     {
                         var id = idList[i];
-                        if (exprTypes[i] != node.Type)
+                        if (!exprTypes[i].Equals(node.Type))
                         {
                             Reporter.Error($"Variable '{id.Name}' has a different type than the expression on the left hand side.",
                                 id.SourcePosition);
@@ -164,34 +163,34 @@ namespace dumbo.Compiler
                 }
 
             }
-            return EmptyResult;
+            return null;
         }
 
-        public VisitResult Visit(DeclStmtNode node, VisitorArgs arg)
+        public TypeCheckVisitResult Visit(DeclStmtNode node, VisitorArgs arg)
         {
-            return EmptyResult;
+            return null;
         }
 
-        public VisitResult Visit(ElseIfStmtListNode node, VisitorArgs arg)
+        public TypeCheckVisitResult Visit(ElseIfStmtListNode node, VisitorArgs arg)
         {
             foreach (var item in node)
                 item.Accept(this, arg);
 
-            return EmptyResult;
+            return null;
         }
 
-        public VisitResult Visit(ElseIfStmtNode node, VisitorArgs arg)
+        public TypeCheckVisitResult Visit(ElseIfStmtNode node, VisitorArgs arg)
         {
-            EnsureCorrectType(node.Predicate, HappyType.Boolean, arg);
+            EnsureCorrectType(node.Predicate, PrimitiveType.Boolean, arg);
 
             node.Body.Accept(this, arg);
 
-            return EmptyResult;
+            return null;
         }
 
-        public VisitResult Visit(ExpressionListNode node, VisitorArgs arg)
+        public TypeCheckVisitResult Visit(ExpressionListNode node, VisitorArgs arg)
         {
-            var list = new List<HappyType>();
+            var list = new List<TypeNode>();
 
             foreach (var item in node)
             {
@@ -202,21 +201,21 @@ namespace dumbo.Compiler
             return new TypeCheckVisitResult(list);
         }
 
-        public VisitResult Visit(FormalParamListNode node, VisitorArgs arg)
+        public TypeCheckVisitResult Visit(FormalParamListNode node, VisitorArgs arg)
         {
-            return EmptyResult;
+            return null;
         }
 
-        public VisitResult Visit(FormalParamNode node, VisitorArgs arg)
+        public TypeCheckVisitResult Visit(FormalParamNode node, VisitorArgs arg)
         {
-            return EmptyResult;
+            return null;
         }
 
-        public VisitResult Visit(FuncCallExprNode node, VisitorArgs arg)
+        public TypeCheckVisitResult Visit(FuncCallExprNode node, VisitorArgs arg)
         {
             if (node.DeclarationNode == null)
-                return new TypeCheckVisitResult(HappyType.Error);
-
+                return ErrorType();
+            
             node.Parameters.Accept(this, arg);
 
             if (node.DeclarationNode.Parameters.Count != node.Parameters.Count)
@@ -228,9 +227,16 @@ namespace dumbo.Compiler
             {
                 for (int i = 0; i < node.Parameters.Count; i++)
                 {
-                    var actual = GetVisitResult(node.Parameters[i], arg).Types.First();
+                    var actualParamRes = GetVisitResult(node.Parameters[i], arg);
+                    if (actualParamRes.Types.Count() != 1)
+                    {
+                        Reporter.Error($"The actual parameter {i + 1} does not have correct value.", node.Parameters[i].SourcePosition);
+                        continue;
+                    }
+
+                    var actual = actualParamRes.Types.First();
                     var formal = node.DeclarationNode.Parameters[i].Type;
-                    if (actual != formal)
+                    if (!actual.Equals(formal))
                     {
                         Reporter.Error($"The actual parameter {i + 1} does not match the formal parameter.", node.Parameters[i].SourcePosition);
                     }
@@ -240,7 +246,7 @@ namespace dumbo.Compiler
             return new TypeCheckVisitResult(node.DeclarationNode.ReturnTypes);
         }
 
-        public VisitResult Visit(FuncCallStmtNode node, VisitorArgs arg)
+        public TypeCheckVisitResult Visit(FuncCallStmtNode node, VisitorArgs arg)
         {
             var result = node.CallNode.Accept(this, arg) as TypeCheckVisitResult;
             if (result.Types.Any())
@@ -249,18 +255,18 @@ namespace dumbo.Compiler
                 Reporter.Error($"Cannot use function '{funcName}' as a statement. The function should return 'Nothing'.", node.CallNode.SourcePosition);
             }
 
-            return EmptyResult;
+            return null;
         }
 
-        public VisitResult Visit(FuncDeclListNode node, VisitorArgs arg)
+        public TypeCheckVisitResult Visit(FuncDeclListNode node, VisitorArgs arg)
         {
             foreach (var item in node)
                 item.Accept(this, arg);
 
-            return EmptyResult;
+            return null;
         }
 
-        public VisitResult Visit(FuncDeclNode node, VisitorArgs arg)
+        public TypeCheckVisitResult Visit(FuncDeclNode node, VisitorArgs arg)
         {
             node.Body.Accept(this, arg);
 
@@ -283,7 +289,7 @@ namespace dumbo.Compiler
                 {
                     for (int i = 0; i < node.ReturnTypes.Count; i++)
                     {
-                        if (retStmtTypes[i] != node.ReturnTypes[i])
+                        if (!retStmtTypes[i].Equals(node.ReturnTypes[i]))
                         {
                             Reporter.Error($"Return value {i + 1} is not compatible with the declared return type.",
                                 retStmt.SourcePosition);
@@ -292,14 +298,14 @@ namespace dumbo.Compiler
                 }
             }
 
-            return EmptyResult;
+            return null;
         }
 
-        public VisitResult Visit(IdentifierListNode node, VisitorArgs arg)
+        public TypeCheckVisitResult Visit(IdentifierListNode node, VisitorArgs arg)
         {
-            var list = new List<HappyType>();
+            var list = new List<TypeNode>();
             // TODO Improve on code dublication. Similar code can be found in 
-            // public VisitResult Visit(ExpressionListNode node, VisitorArgs arg)
+            // public TypeCheckVisitResult Visit(ExpressionListNode node, VisitorArgs arg)
             foreach (var item in node)
             {
                 var result = GetVisitResult(item, arg);
@@ -309,39 +315,41 @@ namespace dumbo.Compiler
             return new TypeCheckVisitResult(list);
         }
 
-        public VisitResult Visit(IdentifierNode node, VisitorArgs arg)
+        public TypeCheckVisitResult Visit(IdentifierNode node, VisitorArgs arg)
         {
-            HappyType type = node.DeclarationNode?.Type ?? HappyType.Error;
-            return new TypeCheckVisitResult(type);
+            if (node.DeclarationNode == null)
+                return ErrorType();
+
+            return new TypeCheckVisitResult(node.DeclarationNode.Type);
         }
 
-        public VisitResult Visit(IfElseStmtNode node, VisitorArgs arg)
+        public TypeCheckVisitResult Visit(IfElseStmtNode node, VisitorArgs arg)
         {
-            EnsureCorrectType(node.Predicate, HappyType.Boolean, arg);
+            EnsureCorrectType(node.Predicate, PrimitiveType.Boolean, arg);
 
             node.Body.Accept(this, arg);
             node.ElseIfStatements.Accept(this, arg);
             node.Else.Accept(this, arg);
 
-            return EmptyResult;
+            return null;
         }
 
-        public VisitResult Visit(IfStmtNode node, VisitorArgs arg)
+        public TypeCheckVisitResult Visit(IfStmtNode node, VisitorArgs arg)
         {
-            EnsureCorrectType(node.Predicate, HappyType.Boolean, arg);
+            EnsureCorrectType(node.Predicate, PrimitiveType.Boolean, arg);
 
             node.Body.Accept(this, arg);
             node.ElseIfStatements.Accept(this, arg);
 
-            return EmptyResult;
+            return null;
         }
 
-        public VisitResult Visit(LiteralValueNode node, VisitorArgs arg)
+        public TypeCheckVisitResult Visit(LiteralValueNode node, VisitorArgs arg)
         {
             return new TypeCheckVisitResult(node.Type);
         }
 
-        public VisitResult Visit(ProgramNode node, VisitorArgs arg)
+        public TypeCheckVisitResult Visit(ProgramNode node, VisitorArgs arg)
         {
             node.Body.Accept(this, arg);
 
@@ -351,80 +359,91 @@ namespace dumbo.Compiler
                 Reporter.Error("Program cannot return values.", returnStmt.SourcePosition);
             }
 
-            return EmptyResult;
+            return null;
         }
 
-        public VisitResult Visit(RepeatStmtNode node, VisitorArgs arg)
+        public TypeCheckVisitResult Visit(RepeatStmtNode node, VisitorArgs arg)
         {
-            EnsureCorrectType(node.Number, HappyType.Number, arg);
+            EnsureCorrectType(node.Number, PrimitiveType.Number, arg);
 
             node.Body.Accept(this, arg);
 
-            return EmptyResult;
+            return null;
         }
 
-        public VisitResult Visit(RepeatWhileStmtNode node, VisitorArgs arg)
+        public TypeCheckVisitResult Visit(RepeatWhileStmtNode node, VisitorArgs arg)
         {
-            EnsureCorrectType(node.Predicate, HappyType.Boolean, arg);
+            EnsureCorrectType(node.Predicate, PrimitiveType.Boolean, arg);
 
             node.Body.Accept(this, arg);
 
-            return EmptyResult;
+            return null;
         }
 
-        public VisitResult Visit(ReturnStmtNode node, VisitorArgs arg)
+        public TypeCheckVisitResult Visit(ReturnStmtNode node, VisitorArgs arg)
         {
             node.Expressions.Accept(this, arg);
 
-            return EmptyResult;
+            return null;
         }
 
-        public VisitResult Visit(RootNode node, VisitorArgs arg)
+        public TypeCheckVisitResult Visit(RootNode node, VisitorArgs arg)
         {
             node.FuncDecls.Accept(this, arg);
             node.Program.Accept(this, arg);
 
-            return EmptyResult;
+            return null;
         }
 
-        public VisitResult Visit(StmtBlockNode node, VisitorArgs arg)
+        public TypeCheckVisitResult Visit(StmtBlockNode node, VisitorArgs arg)
         {
             foreach (var item in node)
                 item.Accept(this, arg);
 
-            return EmptyResult;
+            return null;
         }
 
-        public VisitResult Visit(UnaryOperationNode node, VisitorArgs arg)
+        public TypeCheckVisitResult Visit(UnaryOperationNode node, VisitorArgs arg)
         {
             var exprRes = GetVisitResult(node.Expression, arg);
             if (exprRes.Types.Count() != 1)
             {
                 Reporter.Error("Expression must return a single value.", node.Expression.SourcePosition);
-                return new TypeCheckVisitResult(HappyType.Error);
+                return ErrorType();
             }
-            var exprType = exprRes.Types.First();
+
+            var exprType = exprRes.Types.First() as PrimitiveTypeNode;
+            if (exprType == null)
+            {
+                Reporter.Error("Unary operators can only be used with primitive types.", node.Expression.SourcePosition);
+                return ErrorType();
+            }
+            
             switch (node.Operator)
             {
                 case UnaryOperatorType.Not:
-                    if (exprType != HappyType.Boolean)
+                    if (exprType.Type != PrimitiveType.Boolean)
                     {
-                        Reporter.Error("The 'Not' operator is only applicable for Boolean expressions.", node.Expression.SourcePosition);
-                        return new TypeCheckVisitResult(HappyType.Error);
+                        Reporter.Error("The 'Not' operator is only applicable for Boolean expressions.",
+                            node.Expression.SourcePosition);
+                        return ErrorType();
                     }
                     break;
+
                 case UnaryOperatorType.Minus:
-                    if (exprType != HappyType.Number)
+                    if (exprType.Type != PrimitiveType.Number)
                     {
-                        Reporter.Error("The '-' operator is only applicable for numberic expressions.", node.Expression.SourcePosition);
-                        return new TypeCheckVisitResult(HappyType.Error);
+                        Reporter.Error("The '-' operator is only applicable for numberic expressions.",
+                            node.Expression.SourcePosition);
+                        return ErrorType();
                     }
                     break;
                 case UnaryOperatorType.Plus:
-                    if (exprType != HappyType.Number)
+                    if (exprType.Type != PrimitiveType.Number)
                     {
-                        Reporter.Error("The '+' operator is only applicable for numberic expressions.", node.Expression.SourcePosition);
-                        return new TypeCheckVisitResult(HappyType.Error);
+                        Reporter.Error("The '+' operator is only applicable for numberic expressions.",
+                            node.Expression.SourcePosition);
+                        return ErrorType();
                     }
                     break;
                 default:
@@ -436,19 +455,25 @@ namespace dumbo.Compiler
 
         private TypeCheckVisitResult GetVisitResult(BaseNode node, VisitorArgs args)
         {
-            var result = node.Accept(this, args) as TypeCheckVisitResult;
+            var result = node.Accept(this, args);
             if (result == null)
                 throw new InvalidOperationException($"Visiting {node.GetType().Name} object should always return a TypeCheckVisitResult object.");
             return result;
         }
 
-        private void EnsureCorrectType(ExpressionNode expr, HappyType type, VisitorArgs arg)
+        private void EnsureCorrectType(ExpressionNode expr, PrimitiveType type, VisitorArgs arg)
         {
             var exprRes = GetVisitResult(expr, arg);
-            if (exprRes.Types.Count() != 1 || exprRes.Types.First() != type)
+            var typeNode = exprRes.Types.FirstOrDefault() as PrimitiveTypeNode;
+            if (exprRes.Types.Count() != 1 || (typeNode != null && typeNode.Type != type))
             {
-                Reporter.Error($"Expression must be of type {type}.", expr.SourcePosition);
+                Reporter.Error($"Expression must be of type '{type}'.", expr.SourcePosition);
             }
+        }
+
+        private TypeCheckVisitResult ErrorType()
+        {
+            return new TypeCheckVisitResult(isError: true);
         }
     }
 }

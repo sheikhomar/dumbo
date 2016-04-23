@@ -5,10 +5,10 @@
         public ProgramNode Program { get; set; }
         public FuncDeclListNode FuncDecls { get; }
 
-        public RootNode(ProgramNode program, FuncDeclListNode funcDecls = null)
+        public RootNode(ProgramNode program)
         {
             Program = program;
-            FuncDecls = funcDecls ?? new FuncDeclListNode();
+            FuncDecls = new FuncDeclListNode();
         }
         
         public override T Accept<T, K>(IVisitor<T, K> visitor, K arg)

@@ -8,13 +8,13 @@ namespace dumbo.Compiler.AST
         {
             Name = name;
             Body = body;
-            ReturnTypes = new List<HappyType>();
+            ReturnTypes = new List<TypeNode>();
             Parameters = new FormalParamListNode();
             SourcePosition = sourcePosition;
         }
 
         public FormalParamListNode Parameters { get; }
-        public IList<HappyType> ReturnTypes { get; }
+        public IList<TypeNode> ReturnTypes { get; }
         public string Name { get; set; }
         public StmtBlockNode Body { get; }
         public virtual bool IsBuiltIn => false;

@@ -22,18 +22,18 @@ namespace dumbo.WpfApp
     public partial class ReaderWindow : Window
     {
         private readonly Regex _regex;
-        private readonly HappyType _requestedType;
+        private readonly bool _isRequestedTypeNumber;
 
         public string ReturnValue { get; private set; }
 
-        public ReaderWindow(HappyType requestedType)
+        public ReaderWindow(bool isNumber)
         {
             InitializeComponent();
             InputTextBox.Focusable = true;
             Keyboard.Focus(InputTextBox);
-            _requestedType = requestedType;
+            _isRequestedTypeNumber = isNumber;
             _regex = new Regex("[^0-9.-]+");
-            Title = "Expecting " + requestedType;
+            Title = "Expecting " + (_isRequestedTypeNumber ? "Number" : "Text");
         }
         
         protected override void OnActivated(EventArgs e)
@@ -59,10 +59,8 @@ namespace dumbo.WpfApp
 
         private void InputTextBox_OnPreviewTextInput(object sender, TextCompositionEventArgs e)
         {
-            if (_requestedType == HappyType.Number)
-            {
+            if (_isRequestedTypeNumber)
                 e.Handled = _regex.IsMatch(e.Text);
-            }
         }
     }
 }

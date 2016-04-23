@@ -4,11 +4,11 @@ namespace dumbo.Compiler.AST
 {
     public abstract class ValueNode : ExpressionNode
     {
-        protected ValueNode(HappyType type)
+        protected ValueNode(TypeNode type)
         {
             Type = type;
         }
 
-        public HappyType Type { get; }
+        public TypeNode Type { get; }
     }
 }

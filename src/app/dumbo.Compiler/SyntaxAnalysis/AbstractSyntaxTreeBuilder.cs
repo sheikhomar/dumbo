@@ -413,17 +413,17 @@ namespace dumbo.Compiler.SyntaxAnalysis
                     Reduction lhs2 = (Reduction) lhs[0].Data;
                     string value = GetSpelling(lhs2[0]);
                     string literalType = lhs2[0].Parent.Name();
-                    HappyType happyType;
+                    PrimitiveTypeNode happyType;
 
                     if (literalType == "NumberLiteral")
-                        happyType = HappyType.Number;
+                        happyType = new PrimitiveTypeNode(PrimitiveType.Number);
                     else if (literalType == "TextLiteral")
                     {
-                        happyType = HappyType.Text;
+                        happyType = new PrimitiveTypeNode(PrimitiveType.Text);
                         value = value.Substring(1, value.Length - 2);
                     }
                     else if (literalType == "BooleanLiteral")
-                        happyType = HappyType.Boolean;
+                        happyType = new PrimitiveTypeNode(PrimitiveType.Boolean);
                     else
                         throw new InvalidOperationException("Invalid literal type.");
 
@@ -486,27 +486,23 @@ namespace dumbo.Compiler.SyntaxAnalysis
             Debug.Assert(declStmtToken.Parent.Name() == "Decl");
             Reduction lhs = (Reduction)declStmtToken.Data;
 
-            Token underToken = lhs[0];
-
-            string name = GetSpelling(underToken);
-
+            TypeNode type = BuildTypeNode(lhs[0]);
             IdentifierListNode idList = BuildIdentifierList(lhs[1]);
-            HappyType type = ConvertHappyType(name);
-
+            
             SourcePosition srcPos = BuildSourcePosition(lhs[0], idList);
 
             return new DeclStmtNode(idList, type, srcPos);
         }
 
-        private HappyType ConvertHappyType(string typeSpec)
+        private TypeNode BuildTypeNode(Token token)
         {
-            string newTypeSpec = typeSpec.ToLower();
-            if ("number".Equals(newTypeSpec))
-                return HappyType.Number;
-            if ("boolean".Equals(newTypeSpec))
-                return HappyType.Boolean;
-            if ("text".Equals(newTypeSpec))
-                return HappyType.Text;
+            string typeSpec = GetSpelling(token).ToLower();
+            if ("number".Equals(typeSpec))
+                return new PrimitiveTypeNode(PrimitiveType.Number);
+            if ("boolean".Equals(typeSpec))
+                return new PrimitiveTypeNode(PrimitiveType.Boolean);
+            if ("text".Equals(typeSpec))
+                return new PrimitiveTypeNode(PrimitiveType.Text);
 
             throw new InvalidOperationException("Invalid type found: " + typeSpec);
         }
@@ -600,8 +596,7 @@ namespace dumbo.Compiler.SyntaxAnalysis
                 Token multiToken = lhs.Count() == 2 ? lhs[1] : lhs[2];
 
                 Reduction retReduction = (Reduction) singleToken.Data;
-                string retTypeRef = GetSpelling(retReduction[0]);
-                HappyType retType = ConvertHappyType(retTypeRef);
+                TypeNode retType = BuildTypeNode(retReduction[0]);
                 funcDeclNode.ReturnTypes.Add(retType);
 
                 AppendReturnTypes(multiToken, funcDeclNode);
@@ -619,9 +614,8 @@ namespace dumbo.Compiler.SyntaxAnalysis
                 Token multiToken = lhs.Count() == 2 ? lhs[1] : lhs[2];
 
                 Reduction formalParmReduction = (Reduction) singleToken.Data;
-                string typeSpec =  GetSpelling(formalParmReduction[0]);
+                TypeNode paramType = BuildTypeNode(formalParmReduction[0]);
                 string paramName = GetSpelling(formalParmReduction[1]);
-                HappyType paramType = ConvertHappyType(typeSpec);
 
                 SourcePosition srcPos = BuildSourcePosition(formalParmReduction[0], formalParmReduction[1]);
 

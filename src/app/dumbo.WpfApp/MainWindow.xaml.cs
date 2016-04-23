@@ -391,7 +391,7 @@ namespace dumbo.WpfApp
         {
             return Dispatcher.Invoke(() =>
             {
-                var rw = new ReaderWindow(HappyType.Number);
+                var rw = new ReaderWindow(true);
                 rw.ShowDialog();
                 double val;
                 if (double.TryParse(rw.ReturnValue, out val))
@@ -404,7 +404,7 @@ namespace dumbo.WpfApp
         {
             return Dispatcher.Invoke(() =>
             {
-                var rw = new ReaderWindow(HappyType.Text);
+                var rw = new ReaderWindow(false);
                 rw.ShowDialog();
                 return new TextValue(rw.ReturnValue);
             });

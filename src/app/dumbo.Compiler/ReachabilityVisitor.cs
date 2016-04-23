@@ -124,6 +124,11 @@ namespace dumbo.Compiler
             throw new NotImplementedException();
         }
 
+        public ReachabilityResult Visit(PrimitiveTypeNode node, ReachabilityArgument arg)
+        {
+            throw new NotImplementedException();
+        }
+
         public ReachabilityResult Visit(ProgramNode node, ReachabilityArgument arg)
         {
             throw new NotImplementedException();

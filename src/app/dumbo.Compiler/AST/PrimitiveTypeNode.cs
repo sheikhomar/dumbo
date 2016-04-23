@@ -13,8 +13,7 @@ namespace dumbo.Compiler.AST
 
         public override T Accept<T, K>(IVisitor<T, K> visitor, K arg)
         {
-            //return visitor.Visit(this, arg);
-            return default(T);
+            return visitor.Visit(this, arg);
         }
 
         public override bool Equals(object obj)

@@ -114,6 +114,11 @@ namespace dumbo.Compiler
             throw new NotImplementedException();
         }
 
+        public VisitResult Visit(PrimitiveTypeNode node, VisitorArgs arg)
+        {
+            throw new NotImplementedException();
+        }
+
         public VisitResult Visit(ProgramNode node, VisitorArgs arg)
         {
             throw new NotImplementedException();

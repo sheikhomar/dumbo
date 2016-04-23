@@ -250,6 +250,11 @@ namespace dumbo.Compiler
             return null;
         }
 
+        public object Visit(PrimitiveTypeNode node, VisitorArgs arg)
+        {
+            return null;
+        }
+
         public object Visit(ProgramNode node, VisitorArgs arg)
         {
             SymbolTable.OpenScope();

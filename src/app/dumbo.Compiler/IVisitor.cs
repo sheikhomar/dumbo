@@ -25,6 +25,7 @@ namespace dumbo.Compiler
         T Visit(IfElseStmtNode node, K arg);
         T Visit(IfStmtNode node, K arg);
         T Visit(LiteralValueNode node, K arg);
+        T Visit(PrimitiveTypeNode node, K arg);
         T Visit(ProgramNode node, K arg);
         T Visit(RepeatStmtNode node, K arg);
         T Visit(RepeatWhileStmtNode node, K arg);

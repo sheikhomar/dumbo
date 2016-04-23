@@ -400,6 +400,11 @@ namespace dumbo.Compiler.Interpreter
             throw new InvalidOperationException("Unknown type");
         }
 
+        public Value Visit(PrimitiveTypeNode node, VisitorArgs arg)
+        {
+            return null;
+        }
+
         public Value Visit(ProgramNode node, VisitorArgs arg)
         {
             _callStack.Push(new CallFrame(node));

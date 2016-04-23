@@ -225,6 +225,13 @@ namespace dumbo.Compiler
             return EmptyResult;
         }
 
+        public VisitResult Visit(PrimitiveTypeNode node, VisitorArgs arg)
+        {
+            Write(node.Type.ToString());
+
+            return EmptyResult;
+        }
+
         public VisitResult Visit(ProgramNode node, VisitorArgs arg)
         {
             WriteLine("Program");

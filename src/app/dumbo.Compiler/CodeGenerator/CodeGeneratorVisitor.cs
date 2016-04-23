@@ -330,6 +330,11 @@ namespace dumbo.Compiler.CodeGenerator
             return null;
         }
 
+        public RuntimeEntity Visit(PrimitiveTypeNode node, VisitorArgs arg)
+        {
+            throw new NotImplementedException();
+        }
+
         public RuntimeEntity Visit(ProgramNode node, VisitorArgs arg)
         {
             _currentModule = new Module();

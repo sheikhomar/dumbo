@@ -1,9 +1,8 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using dumbo.Compiler.AST;
 
-namespace dumbo.Compiler
+namespace dumbo.Compiler.TypeChecking
 {
     public class TypeCheckVisitResult : VisitResult
     {

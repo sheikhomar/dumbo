@@ -103,7 +103,7 @@
     <Compile Include="Interpreter\ReturnFromFunctionException.cs" />
     <Compile Include="Interpreter\UndefinedValue.cs" />
     <Compile Include="Interpreter\Value.cs" />
-    <Compile Include="BinaryOperationTypeChecker.cs" />
+    <Compile Include="TypeChecking\BinaryOperationTypeChecker.cs" />
     <Compile Include="CodeGenerator\CodeGeneratorVisitor.cs" />
     <Compile Include="Event.cs" />
     <Compile Include="EventKind.cs" />
@@ -143,8 +143,9 @@
     <Compile Include="SyntaxAnalysis\AbstractSyntaxTreeBuilder.cs" />
     <Compile Include="SyntaxAnalysis\TokenData.cs" />
     <Compile Include="Interpreter\TextValue.cs" />
-    <Compile Include="TypeCheckVisitor.cs" />
-    <Compile Include="TypeCheckVisitResult.cs" />
+    <Compile Include="TypeChecking\InternalType.cs" />
+    <Compile Include="TypeChecking\TypeCheckVisitor.cs" />
+    <Compile Include="TypeChecking\TypeCheckVisitResult.cs" />
     <Compile Include="Utils.cs" />
     <Compile Include="VisitorArgs.cs" />
     <Compile Include="VisitResult.cs" />

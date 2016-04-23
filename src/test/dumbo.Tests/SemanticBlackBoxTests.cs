@@ -5,6 +5,7 @@ using System.Text;
 using dumbo.Compiler;
 using dumbo.Compiler.AST;
 using dumbo.Compiler.SyntaxAnalysis;
+using dumbo.Compiler.TypeChecking;
 using NUnit.Framework;
 
 namespace dumbo.Tests

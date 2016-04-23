@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using dumbo.Compiler.AST;
 
-namespace dumbo.Compiler
+namespace dumbo.Compiler.TypeChecking
 {
     public class TypeCheckVisitor : IVisitor<TypeCheckVisitResult, VisitorArgs>
     {
@@ -347,6 +347,11 @@ namespace dumbo.Compiler
         public TypeCheckVisitResult Visit(LiteralValueNode node, VisitorArgs arg)
         {
             return new TypeCheckVisitResult(node.Type);
+        }
+
+        public TypeCheckVisitResult Visit(PrimitiveTypeNode node, VisitorArgs arg)
+        {
+            return null;
         }
 
         public TypeCheckVisitResult Visit(ProgramNode node, VisitorArgs arg)

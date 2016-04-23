@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using dumbo.Compiler.AST;
 
-namespace dumbo.Compiler
+namespace dumbo.Compiler.TypeChecking
 {
     public class BinaryOperationTypeChecker
     {

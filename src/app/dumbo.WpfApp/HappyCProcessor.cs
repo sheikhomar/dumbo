@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using dumbo.Compiler;
 using dumbo.Compiler.AST;
 using dumbo.Compiler.Interpreter;
+using dumbo.Compiler.TypeChecking;
 
 namespace dumbo.WpfApp
 {

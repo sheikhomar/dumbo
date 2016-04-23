@@ -17,6 +17,7 @@ using ICSharpCode.AvalonEdit.Highlighting;
 using Microsoft.Win32;
 using Path = System.IO.Path;
 using dumbo.Compiler.SyntaxAnalysis;
+using dumbo.Compiler.TypeChecking;
 using dumbo.WpfApp.Editor;
 using ICSharpCode.AvalonEdit.Highlighting.Xshd;
 

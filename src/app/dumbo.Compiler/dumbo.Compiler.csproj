@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AST\ActualParamListNode.cs" />
+    <Compile Include="AST\ArrayTypeNode.cs" />
     <Compile Include="AST\AssignmentStmtNode.cs" />
     <Compile Include="AST\BaseListNode.cs" />
     <Compile Include="AST\BaseNode.cs" />
@@ -52,6 +53,8 @@
     <Compile Include="AST\BreakStmtNode.cs" />
     <Compile Include="AST\BuiltInFuncDeclNode.cs" />
     <Compile Include="AST\BuiltInFunction.cs" />
+    <Compile Include="AST\ConstDeclListNode.cs" />
+    <Compile Include="AST\ConstDeclNode.cs" />
     <Compile Include="AST\DeclAndAssignmentStmtNode.cs" />
     <Compile Include="AST\DeclStmtNode.cs" />
     <Compile Include="AST\ElseIfStmtListNode.cs" />

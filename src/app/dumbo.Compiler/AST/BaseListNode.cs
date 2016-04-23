@@ -64,6 +64,12 @@ namespace dumbo.Compiler.AST
             return _internalList.Where(r => r is T).Cast<T>();
         }
 
+        public void UpdateSourcePosition()
+        {
+            if (Count > 0)
+                SourcePosition = new SourcePosition(this.First(), this.Last());
+        }
+
         public IEnumerator<TBaseType> GetEnumerator()
         {
             return _internalList.GetEnumerator();

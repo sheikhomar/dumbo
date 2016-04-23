@@ -10,6 +10,14 @@
             EndColumn = endColumn;
         }
 
+        public SourcePosition(BaseNode first, BaseNode second)
+        {
+            StartLine = first.SourcePosition.StartLine;
+            StartColumn = first.SourcePosition.StartColumn;
+            EndLine = second.SourcePosition.EndLine;
+            EndColumn = second.SourcePosition.EndColumn;
+        }
+
         public int StartLine { get; }
         public int StartColumn { get; }
         public int EndLine { get; }

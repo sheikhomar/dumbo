@@ -6,9 +6,10 @@ namespace dumbo.Compiler.AST
     {
         public PrimitiveType Type { get; }
 
-        public PrimitiveTypeNode(PrimitiveType type)
+        public PrimitiveTypeNode(PrimitiveType type, SourcePosition srcPos = null)
         {
             Type = type;
+            SourcePosition = srcPos;
         }
 
         public override T Accept<T, K>(IVisitor<T, K> visitor, K arg)

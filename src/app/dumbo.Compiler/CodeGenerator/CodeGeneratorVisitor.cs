@@ -442,10 +442,7 @@ namespace dumbo.Compiler.CodeGenerator
 
         public RuntimeEntity Visit(RootNode node, VisitorArgs arg)
         {
-            /// Todo -- Add const + libraries?
-            _currentModule = new Module();
             node.FuncDecls.Accept(this, new FuncVisitorArgs(false));
-            CProgram.AddModule(_currentModule);
             node.Program.Accept(this, arg);
             node.FuncDecls.Accept(this, new FuncVisitorArgs(true));
             return null;

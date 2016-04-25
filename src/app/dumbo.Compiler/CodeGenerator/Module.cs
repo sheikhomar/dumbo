@@ -27,7 +27,12 @@ namespace dumbo.Compiler.CodeGenerator
             foreach (var item in _stmtList)
             {
                 builder.AppendLine(item.Print());
+                string pet = builder.ToString();
             }
+
+            builder.AppendLine("");
+
+            string hans = builder.ToString();
 
             return builder.ToString();
         }

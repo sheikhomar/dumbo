@@ -150,6 +150,7 @@ namespace dumbo.Compiler.CodeGenerator
                 int assCount = node.Identifiers.Count;
                 _currentStmt = new Stmt("");
                 node.Type.Accept(this, arg);
+                _currentStmt.Append(" ");
                 for (int i = 0; i < assCount; i++)
                 {
                     node.Identifiers[i].Accept(this, arg);
@@ -282,8 +283,7 @@ namespace dumbo.Compiler.CodeGenerator
                 throw new Exception("FuncDeclNode must have FuncVisitorArgs as arg");
 
             _currentStmt = new Stmt("");
-
-
+            
             if (!funcArg.VisitBody)
             {
                 WriteFunctionHeader(node, arg);
@@ -295,7 +295,15 @@ namespace dumbo.Compiler.CodeGenerator
             _currentStmt = new Stmt("");
             WriteFunctionHeader(node, arg);
             _currentModule.Append(_currentStmt);
-            node.Body.Accept(this, new BodyVisitorArgs(node.ReturnTypes));
+
+            if (node.ReturnTypes.Count == 0)
+            {
+                var suffix = new List<Stmt>();
+                suffix.Add(new Stmt("return ;"));
+                node.Body.Accept(this, new StmtBlockNodeArgs(null, suffix, arg));
+            }
+            else
+                node.Body.Accept(this, arg);
             return null;
         }
 
@@ -309,7 +317,7 @@ namespace dumbo.Compiler.CodeGenerator
                 if (i < length - 1)
                     _currentStmt.Append(", ");
             }
-            _currentStmt.Append($";");
+            _currentStmt.Append(";");
 
             return null;
         }
@@ -378,7 +386,7 @@ namespace dumbo.Compiler.CodeGenerator
             var suffix = new List<Stmt>();
             suffix.Add(new Stmt("return 0;"));
 
-            node.Body.Accept(this, new StmtBlockNodeArgs(null, suffix));
+            node.Body.Accept(this, new StmtBlockNodeArgs(null, suffix, arg));
             CProgram.AddMainModule(_currentModule);
 
             return null;
@@ -388,7 +396,7 @@ namespace dumbo.Compiler.CodeGenerator
         {
             _currentStmt = new Stmt("for (int i=0; i<");
             node.Number.Accept(this, arg);
-            _currentStmt.Append(" ; i++)");
+            _currentStmt.Append("; i++)");
             _currentModule.Append(_currentStmt);
             node.Body.Accept(this, arg);
 
@@ -410,8 +418,7 @@ namespace dumbo.Compiler.CodeGenerator
         {
             bool isMultipleReturn = node.Expressions.Count > 1;
             int i = 1;
-
-
+            
             if (!isMultipleReturn)
             {
                 _currentStmt = new Stmt("return ");
@@ -426,8 +433,8 @@ namespace dumbo.Compiler.CodeGenerator
 
                 foreach (var ret in node.Expressions)
                 {
-                    _currentStmt = new Stmt("*ret" + i);
-                    _currentStmt.Append(" ");
+                    _currentStmt = new Stmt("*_ret" + i);
+                    _currentStmt.Append(" = ");
                     ret.Accept(this, arg);
                     _currentModule.Append(_currentStmt);
                     i++;
@@ -455,7 +462,7 @@ namespace dumbo.Compiler.CodeGenerator
                 customArgs.Handled = true;
             else
                 customArgs = null;
-
+            
             _currentModule.Append(new Stmt("{"));
             AddItemsToCurrentModule(customArgs?.Prefix);
             foreach (var statement in node)
@@ -549,12 +556,6 @@ namespace dumbo.Compiler.CodeGenerator
             var module = new Module();
             CProgram.AddModule(module);
             _currentModule = module;
-        }
-
-        private void RemoveExtraComma(StringBuilder builder)
-        {
-            builder.Remove(builder.Length - 2, 2);
-            builder.Append(")");
         }
 
         private void AddItemsToCurrentModule(IList<Stmt> statements)

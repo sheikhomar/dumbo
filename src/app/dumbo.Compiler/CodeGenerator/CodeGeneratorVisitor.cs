@@ -513,9 +513,12 @@ namespace dumbo.Compiler.CodeGenerator
         private void WriteFunctionHeader(FuncDeclNode funcNode, VisitorArgs arg)
         {
             bool multiReturn = funcNode.ReturnTypes.Count > 1;
+            bool noReturn = funcNode.ReturnTypes.Count == 0;
 
             //Return type
             if (multiReturn)
+                _currentStmt.Append("void");
+            else if (noReturn)
                 _currentStmt.Append("void");
             else
                 funcNode.ReturnTypes[0].Accept(this, arg);

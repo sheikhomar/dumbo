@@ -177,5 +177,10 @@ namespace dumbo.Compiler
         {
             return null;
         }
+
+        public VisitResult Visit(PrimitiveTypeNode node, VisitorArgs arg)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -120,7 +120,9 @@ namespace dumbo.Compiler.CodeGenerator
 
                 for (int j = 0; j < idenCount; j++)
                 {
-                    _currentStmt = new Stmt($"{ConvertType(node.Type)} {node.Identifiers[j].Name};");
+                    _currentStmt = new Stmt("");
+                    node.Type.Accept(this, arg);
+                    _currentStmt.Append(" " + node.Identifiers[j].Name + ";");
                     _currentModule.Append(_currentStmt);
                 }
 
@@ -144,9 +146,10 @@ namespace dumbo.Compiler.CodeGenerator
             }
             else
             {
+                //type 
                 int assCount = node.Identifiers.Count;
                 _currentStmt = new Stmt("");
-                _currentStmt.Append($"{ConvertType(node.Type)} ");
+                node.Type.Accept(this, arg);
                 for (int i = 0; i < assCount; i++)
                 {
                     node.Identifiers[i].Accept(this, arg);
@@ -167,7 +170,8 @@ namespace dumbo.Compiler.CodeGenerator
         public RuntimeEntity Visit(DeclStmtNode node, VisitorArgs arg)
         {
             _currentStmt = new Stmt("");
-            _currentStmt.Append($"{ConvertType(node.Type)} ");
+            node.Type.Accept(this, arg);
+            _currentStmt.Append(" ");
             node.Identifiers.Accept(this, arg);
             _currentModule.Append(_currentStmt);
 
@@ -228,7 +232,8 @@ namespace dumbo.Compiler.CodeGenerator
 
         public RuntimeEntity Visit(FormalParamNode node, VisitorArgs arg)
         {
-            _currentStmt.Append(ConvertType(node.Type) + " " + node.Name.ToLower());
+            node.Type.Accept(this, arg);
+            _currentStmt.Append(" " + node.Name.ToLower());
 
             return null;
         }
@@ -349,7 +354,18 @@ namespace dumbo.Compiler.CodeGenerator
 
         public RuntimeEntity Visit(PrimitiveTypeNode node, VisitorArgs arg)
         {
-            throw new NotImplementedException();
+            switch (node.Type)
+            {
+                case PrimitiveType.Number:
+                    _currentStmt.Append("double"); break;
+                case PrimitiveType.Text:
+                    _currentStmt.Append("Text"); break;
+                case PrimitiveType.Boolean:
+                    _currentStmt.Append("Boolean"); break;
+                default: throw new ArgumentException($"{node.Type} is not a valid type.");
+            }
+
+            return null;
         }
 
         public RuntimeEntity Visit(ProgramNode node, VisitorArgs arg)
@@ -459,18 +475,6 @@ namespace dumbo.Compiler.CodeGenerator
             return null;
         }
 
-        private string ConvertType(TypeNode typeNode)
-        {
-            var input = typeNode as PrimitiveTypeNode;
-            switch (input.Type)
-            {
-                case PrimitiveType.Number: return "double";
-                case PrimitiveType.Text: return "Text";
-                case PrimitiveType.Boolean: return "Boolean";
-                default: throw new ArgumentException($"{input} is not a valid type.");
-            }
-        }
-
         private string ConvertBinaryOperator(BinaryOperatorType input)
         {
             switch (input)
@@ -510,7 +514,7 @@ namespace dumbo.Compiler.CodeGenerator
             if (multiReturn)
                 _currentStmt.Append("void");
             else
-                _currentStmt.Append(ConvertType(funcNode.ReturnTypes[0]));
+                funcNode.ReturnTypes[0].Accept(this, arg);
 
             //Name
             _currentStmt.Append(" _" + funcNode.Name.ToLower());
@@ -524,11 +528,11 @@ namespace dumbo.Compiler.CodeGenerator
                 _currentStmt.Append(", ");
                 for (int i = 0; i < funcNode.ReturnTypes.Count; i++)
                 {
-                    string type = ConvertType(funcNode.ReturnTypes[i]);
+                    funcNode.ReturnTypes[i].Accept(this, arg);
                     if (i < funcNode.ReturnTypes.Count - 1)
-                        _currentStmt.Append(type + " _ret" + (i + 1) + ", ");
+                        _currentStmt.Append(" _ret" + (i + 1) + ", ");
                     else
-                        _currentStmt.Append(type + " _ret" + (i + 1));
+                        _currentStmt.Append(" _ret" + (i + 1));
                 }
             }
             _currentStmt.Append(")");

@@ -419,12 +419,14 @@ namespace dumbo.Compiler.CodeGenerator
             }
             else
             {
+                _currentModule.Append(new Stmt("//Return"));
                 _currentModule.Append(new Stmt("{"));
 
                 foreach (var ret in node.Expressions)
                 {
                     _currentStmt = new Stmt("*ret" + i);
-                    node.Expressions.Accept(this, arg);
+                    _currentStmt.Append(" ");
+                    ret.Accept(this, arg);
                     _currentModule.Append(_currentStmt);
                     i++;
                 }
@@ -505,7 +507,7 @@ namespace dumbo.Compiler.CodeGenerator
                 default: throw new ArgumentException($"{input} is not a valid binary operator.");
             }
         }
-        
+
         private void WriteFunctionHeader(FuncDeclNode funcNode, VisitorArgs arg)
         {
             bool multiReturn = funcNode.ReturnTypes.Count > 1;
@@ -525,14 +527,16 @@ namespace dumbo.Compiler.CodeGenerator
 
             if (multiReturn)
             {
-                _currentStmt.Append(", ");
+                if (funcNode.Parameters.Count > 0)
+                    _currentStmt.Append(", ");
+
                 for (int i = 0; i < funcNode.ReturnTypes.Count; i++)
                 {
                     funcNode.ReturnTypes[i].Accept(this, arg);
                     if (i < funcNode.ReturnTypes.Count - 1)
-                        _currentStmt.Append(" _ret" + (i + 1) + ", ");
+                        _currentStmt.Append(" *_ret" + (i + 1) + ", ");
                     else
-                        _currentStmt.Append(" _ret" + (i + 1));
+                        _currentStmt.Append(" *_ret" + (i + 1));
                 }
             }
             _currentStmt.Append(")");

@@ -446,7 +446,40 @@ namespace dumbo.WpfApp
         {
             Environment.Exit(0);
         }
-        
+
+        private void CopyCCodeToClipboard(object sender, ExecutedRoutedEventArgs e)
+        {
+            if (!File.Exists(currentSourcePath))
+            {
+                ResultTextBox.Text = $"File {currentSourcePath} does not exist!";
+                return;
+            }
+
+            SaveFile(sender, e);
+
+            var parserResult = Parse(textEditor.Text);
+
+            if (parserResult.IsSuccess)
+            {
+                var root = parserResult.Root;
+                EventReporter reporter = new EventReporter();
+                ScopeAndTypeCheck(parserResult.Root, reporter);
+                if (!reporter.HasErrors)
+                {
+                    var codeGen = new CodeGeneratorVisitor();
+                    root.Accept(codeGen, new VisitorArgs());
+                    string compiledText = codeGen.CProgram.Print(true, true);
+                    ResultTextBox.Text = compiledText;
+                    Clipboard.SetText(compiledText);
+                }
+
+                MarkErrors(reporter);
+            }
+
+            latestCompiledAt = DateTime.Now;
+            UpdateInformationBox();
+        }
+
         private void ProcessorOnFailure(object sender, IEnumerable<Exception> exceptions)
         {
             ErrorList.ItemsSource = exceptions.Select(e => new Event(EventKind.Error, e.Message, null));

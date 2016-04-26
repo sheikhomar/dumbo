@@ -1,0 +1,247 @@
+﻿"Name"    = 'The Z programming language'
+"Version" = '2.5'
+"Author"  = 'Group sw401f16'
+"About"   = 'Happy Z is created by group SW401F16 from Aalborg University.'
+          | 'The langauge is designed to be a stepping stone from visual'
+          | 'to textual programming.'
+"Case Sensitive" = 'False'
+"Start Symbol" = <Start>
+              
+!===================================================================
+! Ignore Tokens
+!===================================================================
+Comment Line    = '//' 
+Comment2 @= { Type = Noise }
+Comment2 Line = 'Comment'          
+         
+LineContinuation @= {Type = Noise}                  
+LineContinuation = '_' {WS}* ({CR}{LF} | {CR})
+
+!===================================================================
+! Set Specification
+!===================================================================
+{WS} = {WhiteSpace} - {CR} - {LF}
+{CharacterSet} = {All Valid} - {&22} - {&5C}
+               
+!===================================================================
+! Terminal Specification
+!===================================================================
+Id = {Letter}{AlphaNumeric}*
+WhiteSpace = {WS}
+NewLine = ({CR}{LF}|{CR})+
+Assign = ':='
+Return = 'Return' | 'Returns'
+
+NumberLiteral = ({Number}+ '.' {Number}+ | '.' {Number}+ | {Number}+) | 'NaN' | 'Inf'    !('-' | '+')? sæt en minus integer eller en plus integer
+TextLiteral = '"' ({CharacterSet} | ('\'('n'|'r'|'\'|'"'))?)* '"'
+BooleanLiteral = 'TRUE' | 'FALSE'
+
+!===================================================================
+! Start and End Line Characters
+!===================================================================
+<Start> ::= <Opt-nl> <ConstantDecls> <Program> <Opt-nl> <FuncDecls>
+     
+<Program> ::='Program' <nl> <Stmts> 'End' 'Program'
+
+<nl>     ::= NewLine <nl>
+           | NewLine
+           
+<Opt-nl> ::= <nl>
+          | <>
+                     
+!===================================================================
+! Types
+!===================================================================
+<Literal> ::= NumberLiteral
+           | TextLiteral
+           | BooleanLiteral
+           
+<PrimitiveTypes> ::= 'Number'
+                  | 'Text' 
+                  | 'Boolean'
+                  
+<ArrayType> ::= 'Array' '[' <ArraySize> ']' 'of' '(' <PrimitiveTypes> ')'
+             | 'Array' '[' <ArraySize> ']' 'of' <PrimitiveTypes>
+             | 'Array' '[' <ArraySize> ']' 'of' '(' <ArrayType> ')'
+             | 'Array' '[' <ArraySize> ']' 'of' <ArrayType>
+             
+<ArraySize> ::= NumberLiteral <SizeList>
+             |  Id <SizeList>
+        
+<SizeList> ::= ',' NumberLiteral <SizeList>
+            | ',' Id <SizeList>
+            | <>
+           
+<LiteralInput> ::= Id <Literals>
+               | <Literal> <Literals>
+               
+<Literals> ::= ',' Id <Literals>
+            | ',' <Literal> <Literals>
+  
+!===================================================================
+! Identifiers and Constants
+!===================================================================
+<Id> ::= Id <IdList>
+                   
+<IdList> ::= ',' Id <IdList>
+           | <>
+
+<ConstantDecls> ::= <Constant> <nl> <ConstantDecls>
+                 | <>
+                 
+<Constant> ::= 'Constant' <PrimitiveTypes> Id Assign <Literal>
+            | 'Constant' <ArrayType> Id Assign <ArrayAssign>
+
+!===================================================================
+! Function Declaration
+!===================================================================
+<FuncDecls> ::= <FuncDecl> <nl> <FuncDecls>
+             | <FuncDecl>
+             | <>
+
+<FuncDecl> ::= 'Function' Id '(' <FormalParams> ')' Return <ReturnTypes> <nl> <Stmts> 'End' 'Function'
+            
+<FormalParams> ::= <FormalParam> <FormalParamsList>
+                | <>
+
+<FormalParamsList> ::= ',' <FormalParam> <FormalParamsList>
+                     | <>
+
+<FormalParam> ::= 'Number' Id
+               | 'Text' Id
+               | 'Boolean' Id
+               | <ArrayType> Id
+         
+<ReturnTypes> ::= 'Nothing'
+               | <ReturnType> <ReturnTypesList>
+
+<ReturnTypesList> ::= ',' <ReturnType> <ReturnTypesList>
+                    | <>
+              
+<ReturnType> ::= 'Number'
+              | 'Text' 
+              | 'Boolean'
+              | <ArrayType>
+
+!===================================================================
+! Statements
+!===================================================================
+<Stmts> ::= <Stmt> <nl> <Stmts>
+         | <>
+
+<Stmt> ::= <Decl>
+        | <AssignStmt> 
+        | <IfStmt> 
+        | <RepeatStmt>
+        | <ArrayDecl>
+        | <ReturnStmt>
+        | <FuncCall>
+        | <BreakStmt>
+        | <ContinueStmt>
+        
+!===================================================================
+! Declarations
+!===================================================================
+<Decl> ::= <PrimitiveTypes> <Id>
+        
+<ArrayDecl> ::= <ArrayType> <Id>
+                          
+<ArrayId> ::= Id <Entry>
+           
+<Entry> ::= '[' <ArraySize> ']' <Entries>
+         
+<Entries> ::= '[' <ArraySize> ']' <Entries>
+           | <>
+        
+!===================================================================
+! Assignment
+!===================================================================
+<AssignStmt> ::= <Id> Assign <Expr>
+              | <Decl> Assign <Expr>
+              | <ArrayDecl> Assign <ArrayAssign>
+              | <ArrayId> Assign <Expr>
+                             
+<ArrayAssign> ::= '(' <ArrayAssign> ')' <AssignValueList>
+               | '(' <LiteralInput> ')' <AssignValueList>
+
+<AssignValueList> ::= ',' <ArrayAssign>
+                   | <>
+                  
+!===================================================================
+! If Statement
+!===================================================================
+<IfStmt> ::= 'if' <Expr> 'then' <nl> <Stmts> <ElseIfStmt> 'end' 'if'
+                        
+<ElseIfStmt> ::= 'else' 'if' <Expr> 'then' <nl> <Stmts> <ElseIfStmt>
+              | <ElseStmt>     
+               
+<ElseStmt> ::= 'else' <nl> <Stmts>
+            | <>
+
+!===================================================================
+! Repeat Statement
+!===================================================================
+<RepeatStmt> ::= 'Repeat' <Expr> <nl> <Stmts> 'End' 'Repeat'
+              | 'Repeat' 'While' <Expr> <nl> <Stmts> 'End' 'Repeat'
+
+<BreakStmt> ::= 'Break'
+             
+<ContinueStmt> ::= 'Continue'
+             
+!===================================================================
+! Function Call
+!===================================================================
+<FuncCall> ::= Id '(' <ActualParams> ')'
+            
+<ActualParams> ::= <Expr> <ActualParamsList>
+                | <>
+                
+<ActualParamsList> ::= ',' <Expr> <ActualParamsList>
+                     | <>
+                     
+<ReturnStmt> ::= Return <ExprList>
+              | Return 'Nothing'
+                                             
+!===================================================================
+! Expressions and Precedence
+!===================================================================
+
+<ExprList> ::= <Expr> <MultiExpr>
+            
+<MultiExpr> ::= ',' <Expr> <MultiExpr>
+             | <>
+
+<Expr> ::= <Expr> 'OR' <Logical-AND>
+         | <Logical-AND>
+
+<Logical-AND> ::= <Logical-AND> 'AND' <Equality>
+          | <Equality>
+
+<Equality> ::= <Equality> '=' <Relational>
+             | <Relational>
+
+<Relational> ::= <Relational> '<' <Additive>
+               | <Relational> '>' <Additive>
+               | <Relational> '<=' <Additive>
+               | <Relational> '>=' <Additive>
+               | <Additive>
+
+<Additive> ::= <Additive> '+' <Multiplicative>
+             | <Additive> '-' <Multiplicative>
+             | <Multiplicative>
+             
+<Multiplicative> ::= <Multiplicative> '*' <Unary>
+                   | <Multiplicative> '/' <Unary>
+                   | <Multiplicative> '%' <Unary>
+                   | <Unary>
+
+<Unary> ::= 'NOT' <Unary>
+         | '-' <Unary>
+         | '+' <Unary>
+         | <Value>
+
+<Value> ::= <Literal>
+          | <FuncCall>
+          | Id
+          | <ArrayId>
+          | '(' <Expr> ')'

@@ -65,13 +65,16 @@ namespace dumbo.Compiler.CodeGenerator
 
             foreach (var line in lines)
             {
-                if (Regex.IsMatch(line, outdentation))
+                bool hasIndent = Regex.IsMatch(line, indentation);
+                bool hasOutdent = Regex.IsMatch(line, outdentation);
+
+                if (hasOutdent && !hasIndent)
                     currentIndentation -= tabSize;
 
                 builder.Append(new string(' ', currentIndentation * tabSize));
                 builder.AppendLine(line);
 
-                if (Regex.IsMatch(line, indentation))
+                if (hasIndent && !hasOutdent)
                     currentIndentation+=tabSize;
             }
 

@@ -16,6 +16,7 @@
         <RoutedUICommand x:Key="PrintCommand" Text="Print" />
         <RoutedUICommand x:Key="CodeGenCommand" Text="Generate code" />
         <RoutedUICommand x:Key="BreakExecution" Text="Compile C-code" />
+        <RoutedUICommand x:Key="CopyCCodeToClipboard" Text="Copy C-code" />
     </Window.Resources>
     <Window.CommandBindings>
         <CommandBinding Command="{StaticResource CompileCommand}" Executed="Compile" />
@@ -25,6 +26,7 @@
         <CommandBinding Command="{StaticResource PrintCommand}" Executed="Print" />
         <CommandBinding Command="{StaticResource CodeGenCommand}" Executed="GenerateCode" />
         <CommandBinding Command="{StaticResource BreakExecution}" Executed="BreakExecution" />
+        <CommandBinding Command="{StaticResource CopyCCodeToClipboard}" Executed="CopyCCodeToClipboard" />
     </Window.CommandBindings>
     <Window.InputBindings>
         <KeyBinding Modifiers="Control" Key="S" Command="{StaticResource SaveCommand}" />
@@ -33,6 +35,7 @@
         <KeyBinding Modifiers="Control" Key="P" Command="{StaticResource PrintCommand}" />
         <KeyBinding Modifiers="Control" Key="O" Command="{StaticResource CodeGenCommand}" />
         <KeyBinding Modifiers="Control" Key="B" Command="{StaticResource BreakExecution}" />
+        <KeyBinding Modifiers="Control" Key="U" Command="{StaticResource CopyCCodeToClipboard}" />
     </Window.InputBindings>
 
     <DockPanel>

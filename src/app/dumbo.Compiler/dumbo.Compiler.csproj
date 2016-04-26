@@ -88,7 +88,6 @@
     <Compile Include="AST\ValueNode.cs" />
     <Compile Include="CILVisitor.cs" />
     <Compile Include="CodeGenerator\LHCLib\LHCLibReader.cs" />
-    <Compile Include="CodeGenerator\BodyVisitorArgs.cs" />
     <Compile Include="CodeGenerator\StmtBlockNodeArgs.cs" />
     <Compile Include="Interpreter\BlockFrame.cs" />
     <Compile Include="Interpreter\BreakException.cs" />
@@ -117,6 +116,7 @@
     <Compile Include="IVisitable.cs" />
     <Compile Include="IVisitor.cs" />
     <Compile Include="Interpreter\NumberValue.cs" />
+    <Compile Include="JumpCheckVisitor.cs" />
     <Compile Include="PrettyPrintVisitor.cs" />
     <Compile Include="ReachabilityArgument.cs" />
     <Compile Include="ReachabilityResult.cs" />

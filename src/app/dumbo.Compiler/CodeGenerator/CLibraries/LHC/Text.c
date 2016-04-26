@@ -11,8 +11,9 @@ typedef struct Text{
 
 //LHC HelperFunctions
 void TextPrint(Text *input);
-void UpdateText(char *inputText, int Length, Text *text);
-void ConcatText(Text *inputText1, Text *inputText2, Text *resText);
+Text CreateText(char *inputText);
+void UpdateText(Text *inputText, Text *text);
+Text ConcatText(Text *inputText1, Text *inputText2);
 void RemoveText(Text *input);
 
 int main()
@@ -69,7 +70,8 @@ void UpdateText(Text *inputText, Text *text){//Fix this
 	(*text).Text = textContent;
 }
 
-void ConcatText(Text *inputText1, Text *inputText2, Text *resText){
+Text ConcatText(Text *inputText1, Text *inputText2){
+	Text resText;
 	int i, j;
 	int	size1 = (*inputText1).Length;
 	int size2 = (*inputText2).Length;
@@ -82,7 +84,7 @@ void ConcatText(Text *inputText1, Text *inputText2, Text *resText){
 	strcpy((combinedText+size1), text2);
 	
 	//Disassemble the old Text
-	RemoveText(resText);
+	//RemoveText(resText);
 	
 	//Create the new Text
 	(*resText).Length = size1 + size2;;

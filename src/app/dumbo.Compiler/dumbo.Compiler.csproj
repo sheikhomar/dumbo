@@ -85,6 +85,7 @@
     <Compile Include="AST\ValueNode.cs" />
     <Compile Include="CILVisitor.cs" />
     <Compile Include="CodeGenerator\LHCLib\LHCLibReader.cs" />
+    <Compile Include="CodeGenerator\RuntimeEntity.cs" />
     <Compile Include="CodeGenerator\StmtBlockNodeArgs.cs" />
     <Compile Include="Interpreter\BlockFrame.cs" />
     <Compile Include="Interpreter\BreakException.cs" />

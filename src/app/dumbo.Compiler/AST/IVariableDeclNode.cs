@@ -1,7 +1,7 @@
 namespace dumbo.Compiler.AST
 {
     /// <summary>
-    /// Abstraction over a node that declare one or more variables.
+    /// Abstraction over a node that declare one variable.
     /// </summary>
     public interface IVariableDeclNode
     {

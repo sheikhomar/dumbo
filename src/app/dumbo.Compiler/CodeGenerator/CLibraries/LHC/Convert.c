@@ -8,6 +8,10 @@ typedef struct Text{
     char *Text;
 } Text;
 
+//LHC Type
+typedef enum { false, true } Boolean;
+
+
 Text *CreateText(char *inputText)
 {
     Text *retVal = (Text*)malloc(sizeof(Text));
@@ -30,13 +34,24 @@ Text* ConcatTextAndNumber(Text *text, double number)
     return CreateText(tempBuffer);
 }
 
+
+Text* ConcatTextAndBoolean(Text *text, Boolean boolean)
+{
+    char *tempBuffer = (char*)malloc(text->Length + 6);
+    strcpy(tempBuffer, text->Text);
+    strcat(tempBuffer, boolean == true ? "true" : "false");
+    
+    return CreateText(tempBuffer);
+}
+
 int main()
 {
-    Text *t0 = CreateText("My number = ");
+    Text *t0 = CreateText("My text: ");
 
-    Text *t1 = ConcatTextAndNumber(t0, 1.0/7.0);
+    printf("ConcatTextAndNumber:             '%s'\n", ConcatTextAndNumber(t0, 1.0 / 7.0)->Text);
+    printf("ConcatTextAndBoolean Test true:  '%s'\n", ConcatTextAndBoolean(t0, true)->Text);
+    printf("ConcatTextAndBoolean Test false: '%s'\n", ConcatTextAndBoolean(t0, false)->Text);
+    
 
-    printf("'%s' (Length=%d)\n", t1->Text, t1->Length);
-
-	return 1;
+	return 0;
 }

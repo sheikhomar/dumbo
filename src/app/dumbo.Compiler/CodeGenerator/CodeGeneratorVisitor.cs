@@ -48,7 +48,7 @@ namespace dumbo.Compiler.CodeGenerator
                 
                 //MyFunction(formalParameters, &ret1, &ret2 ...) | How it looks in C for a function
                 _currentStmt = new Stmt("");
-                _currentStmt.Append(funcExp.FuncName + "(");
+                _currentStmt.Append("_" + funcExp.FuncName + "(");
                 funcExp.Parameters.Accept(this, arg);
 
                 if (node.Identifiers.Count > 0 && funcExp.Parameters.Count > 0)
@@ -282,7 +282,7 @@ namespace dumbo.Compiler.CodeGenerator
 
         public RuntimeEntity Visit(FuncCallExprNode node, VisitorArgs arg)
         {
-            //a := ... MyFunction(myInt)+5
+            //a := ... _MyFunction(myInt)+5
             _currentStmt.Append("_" + node.FuncName.ToLower() + "(");
             node.Parameters.Accept(this, arg);
             _currentStmt.Append(")");
@@ -295,7 +295,7 @@ namespace dumbo.Compiler.CodeGenerator
             //void MyFunction2(myInt)
             var actualNode = node.CallNode;
 
-            _currentStmt = new Stmt("");
+            _currentStmt = new Stmt("_");
             _currentStmt.Append(actualNode.FuncName.ToLower() + "(");
             actualNode.Parameters.Accept(this, arg);
             _currentStmt.Append(");");

@@ -114,7 +114,11 @@ namespace dumbo.Compiler.TypeChecking
                 Reporter.Error($"The types {leftType} and {rightType} are not compatible.", node.SourcePosition);
             }
 
-            return new TypeCheckVisitResult(new PrimitiveTypeNode(resultType.Item2));
+            var exprType = new PrimitiveTypeNode(resultType.Item2);
+
+            node.InferredType = new TypeDescriptor(exprType);
+
+            return new TypeCheckVisitResult(exprType);
         }
 
         public TypeCheckVisitResult Visit(BreakStmtNode node, VisitorArgs arg)
@@ -243,6 +247,8 @@ namespace dumbo.Compiler.TypeChecking
                 }
             }
 
+            node.InferredType = new TypeDescriptor(node.DeclarationNode.ReturnTypes);
+
             return new TypeCheckVisitResult(node.DeclarationNode.ReturnTypes);
         }
 
@@ -312,6 +318,8 @@ namespace dumbo.Compiler.TypeChecking
                 list.AddRange(result.Types);
             }
 
+            
+
             return new TypeCheckVisitResult(list);
         }
 
@@ -319,6 +327,8 @@ namespace dumbo.Compiler.TypeChecking
         {
             if (node.DeclarationNode == null)
                 return ErrorType();
+
+            node.InferredType = new TypeDescriptor(node.DeclarationNode.Type);
 
             return new TypeCheckVisitResult(node.DeclarationNode.Type);
         }
@@ -346,6 +356,7 @@ namespace dumbo.Compiler.TypeChecking
 
         public TypeCheckVisitResult Visit(LiteralValueNode node, VisitorArgs arg)
         {
+            node.InferredType = new TypeDescriptor(node.Type);
             return new TypeCheckVisitResult(node.Type);
         }
 
@@ -454,6 +465,8 @@ namespace dumbo.Compiler.TypeChecking
                 default:
                     throw new InvalidOperationException($"The unary operator '{node.Operator}' is unknown.");
             }
+
+            node.InferredType = new TypeDescriptor(exprType);
 
             return new TypeCheckVisitResult(exprType);
         }

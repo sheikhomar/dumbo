@@ -79,6 +79,7 @@
     <Compile Include="AST\ReturnStmtNode.cs" />
     <Compile Include="AST\SourcePosition.cs" />
     <Compile Include="AST\StmtBlockNode.cs" />
+    <Compile Include="AST\TypeDescriptor.cs" />
     <Compile Include="AST\TypeNode.cs" />
     <Compile Include="AST\UnaryOperationNode.cs" />
     <Compile Include="AST\UnaryOperatorType.cs" />

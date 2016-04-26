@@ -84,7 +84,6 @@
     <Compile Include="AST\UnaryOperationNode.cs" />
     <Compile Include="AST\UnaryOperatorType.cs" />
     <Compile Include="AST\ValueNode.cs" />
-    <Compile Include="CILVisitor.cs" />
     <Compile Include="CodeGenerator\LHCLib\LHCLibReader.cs" />
     <Compile Include="CodeGenerator\RuntimeEntity.cs" />
     <Compile Include="CodeGenerator\StmtBlockNodeArgs.cs" />

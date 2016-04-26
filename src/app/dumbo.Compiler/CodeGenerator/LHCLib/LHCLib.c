@@ -96,3 +96,46 @@ void BooleanPrint(Boolean *input) {
 	else
 		printf("false");
 }
+
+// From: http://stackoverflow.com/questions/314401/how-to-read-a-line-from-the-console-in-c
+char * getline(void) {
+    char * line = malloc(100), *linep = line;
+    size_t lenmax = 100, len = lenmax;
+    int c;
+
+    if (line == NULL)
+        return NULL;
+
+    for (;;) {
+        c = fgetc(stdin);
+        if (c == EOF || c == '\n')
+            break;
+
+        if (--len == 0) {
+            len = lenmax;
+            char * linen = realloc(linep, lenmax *= 2);
+
+            if (linen == NULL) {
+                free(linep);
+                return NULL;
+            }
+            line = linen + (line - linep);
+            linep = linen;
+        }
+
+        *line++ = c;
+    }
+    *line = '\0';
+    return linep;
+}
+
+Text* ReadText() {
+    char* text = getline();
+    int length = strlen(text);
+
+    Text *retVal = (Text*)malloc(sizeof(Text));
+    retVal->Text = text;
+    retVal->Length = length;
+
+    return retVal;
+}

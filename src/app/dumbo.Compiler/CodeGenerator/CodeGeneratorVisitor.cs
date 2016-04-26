@@ -96,15 +96,22 @@ namespace dumbo.Compiler.CodeGenerator
 
         public RuntimeEntity Visit(BinaryOperationNode node, VisitorArgs arg)
         {
-            
-            node.LeftOperand.Accept(this, arg);
+            PrimitiveTypeNode binType = node.InferredType.GetFirstAs<PrimitiveTypeNode>();
             string binOperator = ConvertBinaryOperator(node.Operator);
-            _currentStmt.Append($" {binOperator} ");
-            node.RightOperand.Accept(this, arg);
 
-            if (binOperator == "+")
+            if (binType.Type == PrimitiveType.Text && binOperator == "+")
             {
-
+                _currentStmt.Append("ConcatText(");
+                node.LeftOperand.Accept(this, arg);
+                _currentStmt.Append(", ");
+                node.RightOperand.Accept(this, arg);
+                _currentStmt.Append(")");
+            }
+            else
+            {
+                node.LeftOperand.Accept(this, arg);
+                _currentStmt.Append($" {binOperator} ");
+                node.RightOperand.Accept(this, arg);
             }
             
             return null;

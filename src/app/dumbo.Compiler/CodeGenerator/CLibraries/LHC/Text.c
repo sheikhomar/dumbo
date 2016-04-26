@@ -18,9 +18,10 @@ void RemoveText(Text *input);
 int main()
 {
 	struct Text myText, anotherText;
+	Text myText2 = CreateText("Test text");
 	
-	UpdateText("Hello",5,&myText);
-	UpdateText(" world",6,&anotherText);
+	UpdateText("Hello",&myText);
+	UpdateText(" world",&anotherText);
 	
 	ConcatText(&myText,&anotherText,&myText);
 	
@@ -45,7 +46,16 @@ void TextPrint(Text *input){
 	printf("\n");
 }
 
-void UpdateText(char *inputText, int length, Text *text){
+Text CreateText(char *inputText)
+{
+	Text output;
+	output.Text = *inputText;
+	output.Length = strlen(*inputText);
+	
+	return output;
+}
+
+void UpdateText(Text *inputText, Text *text){//Fix this
 	char *textContent = (char*) malloc(length);
 	int i;
 	

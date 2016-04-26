@@ -46,13 +46,12 @@ void TextPrint(Text *input){
 	printf("\n");
 }
 
-Text CreateText(char *inputText)
+Text *CreateText(char *inputText)
 {
-	Text output;
-	output.Text = *inputText;
-	output.Length = strlen(*inputText);
-	
-	return output;
+    Text *retVal = (Text*)malloc(sizeof(Text));
+    retVal->Text = inputText;
+    retVal->Length = strlen(inputText);
+	return retVal;
 }
 
 void UpdateText(Text *inputText, Text *text){//Fix this

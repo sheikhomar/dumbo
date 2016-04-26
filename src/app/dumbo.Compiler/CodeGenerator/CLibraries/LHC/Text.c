@@ -61,15 +61,16 @@ void UpdateText(char *inputText, int length, Text *text){
 }
 
 void ConcatText(Text *inputText1, Text *inputText2, Text *resText){
-	int i, j, size1 = (*inputText1).Length, size2 = (*inputText2).Length;
-	char *text1 = (*inputText1).Text, *text2 = (*inputText2).Text;
+	int i, j;
+	int	size1 = (*inputText1).Length;
+	int size2 = (*inputText2).Length;
+	char *text1 = (*inputText1).Text;
+	char *text2 = (*inputText2).Text;
 	char *combinedText = (char*) malloc(size1+size2);
 	
 	//Combine the two Texts
-	for(i=0;i<size1;i++)
-		*(combinedText+i) = *(text1+i);
-	for(j=0;j<size2;j++)
-		*(combinedText+(i+j)) = *(text2+j);
+	strcpy(combinedText, text1);
+	strcpy((combinedText+size1), text2);
 	
 	//Disassemble the old Text
 	RemoveText(resText);

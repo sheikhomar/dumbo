@@ -1,29 +1,29 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int ReadNumber();
+double ReadNumber();
 
 int main()
 {
     printf("Please enter a number:\n");
 
-	printf("Entered Number: %d\n", ReadNumber());
+	printf("Entered Number: %lf\n", ReadNumber());
     
     printf("Please enter a number:\n");
-    printf("Entered Number: %d\n", ReadNumber());
+    printf("Entered Number: %lf\n", ReadNumber());
 
     printf("Please enter a number:\n");
-    printf("Entered Number: %d\n", ReadNumber());
+    printf("Entered Number: %lf\n", ReadNumber());
 
     printf("Please enter a number:\n");
-    printf("Entered Number: %d\n", ReadNumber());
+    printf("Entered Number: %lf\n", ReadNumber());
 	
 	return 0;
 }
 
-int ReadNumber(){
-    int retValue = 0;
-    int result = scanf("%d", &retValue);
+double ReadNumber(){
+    double retValue = 0;
+    int result = scanf("%lf", &retValue);
     if (result == 0)
         while (fgetc(stdin) != '\n');
     return retValue;

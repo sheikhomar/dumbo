@@ -104,6 +104,9 @@ namespace dumbo.Compiler
 
         public ReturnCheckResult Visit(FuncDeclNode node, VisitorArgs arg)
         {
+            if (node.ReturnTypes.Count == 0)
+                return null;
+
             foreach (var stmt in node.Body)
             {
                 if (stmt is ReturnStmtNode)

@@ -3,6 +3,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <math.h>
+#include <time.h>
 
 //LHC Type
 typedef struct Text {
@@ -30,7 +31,7 @@ void Write(Text *input);
 double Ceiling(double input);
 double Floor(double input);
 Boolean IsEqual(Text *t1, Text *t2);
-
+double random(double range_lower, double range_upper);
 
 // Text functions //
 // Print a Text value given a pointer to a Text
@@ -208,3 +209,44 @@ Text* ConcatTextAndBoolean(Text *text, Boolean boolean)
 
     return CreateText(tempBuffer);
 }
+
+/********************************************************
+Function:	Random									
+Version: 	v1.0 							
+/********************************************************/
+double random(double range1, double range2)
+{
+	double number,range_lower,range_upper;
+	double range;
+
+	//Find upper and lower
+	if(range1 > range2)
+	{
+		range_lower = range2;
+		range_upper = range1;
+	}
+	else 
+	{
+		range_lower = range1;
+		range_upper = range2;
+	}
+	
+	range = range_upper - range_lower;
+	
+	//Error handle
+	if(range < 1)
+		throw("Random's range must use two DIFFERNT Numbers.");
+
+	if(range > 32767)
+		throw("Random's actual range must be less than 32768. The actual range is argument2 - argument1");
+
+	
+	//Calculate the random number and fit to range
+	number = modulo(((double)rand()),(range+1)); // 1 % 2 =0,1 in a range 0..1
+	
+	//Return the random number, adding range offset from 0
+	return number + range_lower;
+}
+
+
+

@@ -62,8 +62,6 @@ BooleanLiteral = 'TRUE' | 'FALSE'
                   
 <ArrayType> ::= 'Array' '[' <ArraySize> ']' 'of' '(' <PrimitiveTypes> ')'
              | 'Array' '[' <ArraySize> ']' 'of' <PrimitiveTypes>
-             | 'Array' '[' <ArraySize> ']' 'of' '(' <ArrayType> ')'
-             | 'Array' '[' <ArraySize> ']' 'of' <ArrayType>
              
 <ArraySize> ::= NumberLiteral <SizeList>
              |  Id <SizeList>
@@ -148,11 +146,8 @@ BooleanLiteral = 'TRUE' | 'FALSE'
                           
 <ArrayId> ::= Id <Entry>
            
-<Entry> ::= '[' <ArraySize> ']' <Entries>
-         
-<Entries> ::= '[' <ArraySize> ']' <Entries>
-           | <>
-        
+<Entry> ::= '[' <ArraySize> ']' 
+                 
 !===================================================================
 ! Assignment
 !===================================================================

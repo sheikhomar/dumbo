@@ -82,12 +82,13 @@
     <Compile Include="AST\ReturnStmtNode.cs" />
     <Compile Include="AST\SourcePosition.cs" />
     <Compile Include="AST\StmtBlockNode.cs" />
+    <Compile Include="AST\TypeDescriptor.cs" />
     <Compile Include="AST\TypeNode.cs" />
     <Compile Include="AST\UnaryOperationNode.cs" />
     <Compile Include="AST\UnaryOperatorType.cs" />
     <Compile Include="AST\ValueNode.cs" />
-    <Compile Include="CILVisitor.cs" />
     <Compile Include="CodeGenerator\LHCLib\LHCLibReader.cs" />
+    <Compile Include="CodeGenerator\RuntimeEntity.cs" />
     <Compile Include="CodeGenerator\StmtBlockNodeArgs.cs" />
     <Compile Include="Interpreter\BlockFrame.cs" />
     <Compile Include="Interpreter\BreakException.cs" />

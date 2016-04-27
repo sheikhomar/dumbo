@@ -11,16 +11,18 @@ typedef struct Text{
 
 //LHC HelperFunctions
 void TextPrint(Text *input);
-void UpdateText(char *inputText, int Length, Text *text);
-void ConcatText(Text *inputText1, Text *inputText2, Text *resText);
+Text CreateText(char *inputText);
+void UpdateText(Text *inputText, Text *text);
+Text ConcatText(Text *inputText1, Text *inputText2);
 void RemoveText(Text *input);
 
 int main()
 {
 	struct Text myText, anotherText;
+	Text myText2 = CreateText("Test text");
 	
-	UpdateText("Hello",5,&myText);
-	UpdateText(" world",6,&anotherText);
+	UpdateText("Hello",&myText);
+	UpdateText(" world",&anotherText);
 	
 	ConcatText(&myText,&anotherText,&myText);
 	
@@ -45,7 +47,15 @@ void TextPrint(Text *input){
 	printf("\n");
 }
 
-void UpdateText(char *inputText, int length, Text *text){
+Text *CreateText(char *inputText)
+{
+    Text *retVal = (Text*)malloc(sizeof(Text));
+    retVal->Text = inputText;
+    retVal->Length = strlen(inputText);
+	return retVal;
+}
+
+void UpdateText(Text *inputText, Text *text){//Fix this
 	char *textContent = (char*) malloc(length);
 	int i;
 	
@@ -60,19 +70,21 @@ void UpdateText(char *inputText, int length, Text *text){
 	(*text).Text = textContent;
 }
 
-void ConcatText(Text *inputText1, Text *inputText2, Text *resText){
-	int i, j, size1 = (*inputText1).Length, size2 = (*inputText2).Length;
-	char *text1 = (*inputText1).Text, *text2 = (*inputText2).Text;
+Text ConcatText(Text *inputText1, Text *inputText2){
+	Text resText;
+	int i, j;
+	int	size1 = (*inputText1).Length;
+	int size2 = (*inputText2).Length;
+	char *text1 = (*inputText1).Text;
+	char *text2 = (*inputText2).Text;
 	char *combinedText = (char*) malloc(size1+size2);
 	
 	//Combine the two Texts
-	for(i=0;i<size1;i++)
-		*(combinedText+i) = *(text1+i);
-	for(j=0;j<size2;j++)
-		*(combinedText+(i+j)) = *(text2+j);
+	strcpy(combinedText, text1);
+	strcpy((combinedText+size1), text2);
 	
 	//Disassemble the old Text
-	RemoveText(resText);
+	//RemoveText(resText);
 	
 	//Create the new Text
 	(*resText).Length = size1 + size2;;

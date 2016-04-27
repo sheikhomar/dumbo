@@ -1,6 +1,8 @@
 ﻿#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
+#include <math.h>
 
 //LHC Type
 typedef struct Text {
@@ -17,6 +19,14 @@ void UpdateText(char *inputText, int Length, Text *text);
 void ConcatText(Text *inputText1, Text *inputText2, Text *resText);
 void RemoveText(Text *input);
 void BooleanPrint(Boolean *input);
+
+// Built-in functions
+Text* ReadText();
+double ReadNumber();
+void Write(Text *input);
+double Ceiling(double input);
+double Floor(double input);
+Boolean IsEqual(Text *t1, Text *t2);
 
 
 // Text functions //
@@ -95,4 +105,78 @@ void BooleanPrint(Boolean *input) {
 		printf("true");
 	else
 		printf("false");
+}
+
+// From: http://stackoverflow.com/questions/314401/how-to-read-a-line-from-the-console-in-c
+char * getline(void) {
+    char * line = malloc(100), *linep = line;
+    size_t lenmax = 100, len = lenmax;
+    int c;
+
+    if (line == NULL)
+        return NULL;
+
+    for (;;) {
+        c = fgetc(stdin);
+        if (c == EOF || c == '\n')
+            break;
+
+        if (--len == 0) {
+            len = lenmax;
+            char * linen = realloc(linep, lenmax *= 2);
+
+            if (linen == NULL) {
+                free(linep);
+                return NULL;
+            }
+            line = linen + (line - linep);
+            linep = linen;
+        }
+
+        *line++ = c;
+    }
+    *line = '\0';
+    return linep;
+}
+
+Text* ReadText() {
+    char* text = getline();
+    int length = strlen(text);
+
+    Text *retVal = (Text*)malloc(sizeof(Text));
+    retVal->Text = text;
+    retVal->Length = length;
+
+    return retVal;
+}
+
+double ReadNumber() {
+    double retValue = 0;
+    int result = scanf("%lf", &retValue);
+    if (result == 0)
+        while (fgetc(stdin) != '\n');
+    return retValue;
+}
+
+double Floor(double input)
+{
+    return floor(input);
+}
+
+double Ceiling(double input)
+{
+    return ceil(input);
+}
+
+void Write(Text *input)
+{
+    printf("%s\n", input->Text);
+}
+
+Boolean IsEqual(Text *t1, Text *t2)
+{
+    if (t1->Length != t2->Length)
+        return false;
+
+    return strcmp(t1->Text, t2->Text) == 0;
 }

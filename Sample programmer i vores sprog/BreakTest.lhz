@@ -1,0 +1,11 @@
+Program
+  number i := 100
+  write("" + i)
+  
+  repeat 10
+    i := i - 10
+  	write("" + i)
+  	break
+  end repeat
+  
+End program

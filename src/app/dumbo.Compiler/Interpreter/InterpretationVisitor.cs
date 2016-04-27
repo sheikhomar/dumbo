@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics.Eventing;
 using System.Globalization;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Runtime.InteropServices;
 using dumbo.Compiler.AST;
 

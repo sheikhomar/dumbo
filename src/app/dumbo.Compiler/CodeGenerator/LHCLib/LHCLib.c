@@ -20,6 +20,9 @@ void ConcatText(Text *inputText1, Text *inputText2, Text *resText);
 void RemoveText(Text *input);
 void BooleanPrint(Boolean *input);
 
+Text* ConcatTextAndBoolean(Text *text, Boolean boolean);
+Text* ConcatTextAndNumber(Text *text, double number);
+
 // Built-in functions
 Text* ReadText();
 double ReadNumber();
@@ -179,4 +182,29 @@ Boolean IsEqual(Text *t1, Text *t2)
         return false;
 
     return strcmp(t1->Text, t2->Text) == 0;
+}
+
+
+Text* ConcatTextAndNumber(Text *text, double number)
+{
+    int MAX_SIZE = 50;
+    char *output = (char*)malloc(MAX_SIZE + 1);
+    sprintf(output, "%lf", number);
+
+    Text *numberAsText = CreateText(output);
+
+    char *tempBuffer = (char*)malloc(text->Length + numberAsText->Length);
+    strcpy(tempBuffer, text->Text);
+    strcat(tempBuffer, numberAsText->Text);
+    return CreateText(tempBuffer);
+}
+
+
+Text* ConcatTextAndBoolean(Text *text, Boolean boolean)
+{
+    char *tempBuffer = (char*)malloc(text->Length + 6);
+    strcpy(tempBuffer, text->Text);
+    strcat(tempBuffer, boolean == true ? "true" : "false");
+
+    return CreateText(tempBuffer);
 }

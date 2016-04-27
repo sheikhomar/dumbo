@@ -1,11 +1,16 @@
-﻿#include <stdio.h>
+﻿/********************************************************
+External Libraries																
+/********************************************************/
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
 #include <math.h>
 #include <time.h>
 
-//LHC Type
+/********************************************************
+Type Declarations																
+/********************************************************/
 typedef struct Text {
 	int Length;
 	char *Text;
@@ -13,7 +18,9 @@ typedef struct Text {
 
 typedef enum { false, true } Boolean;
 
-
+/********************************************************
+Function Declarations																
+/********************************************************/
 //LHC HelperFunctions
 void throw(char* message);
 void TextPrint(Text *input);
@@ -35,7 +42,10 @@ Boolean IsEqual(Text *t1, Text *t2);
 double random(double range_lower, double range_upper);
 double modulo(double n, double d);
 
-// Text functions //
+/********************************************************
+Function:	Text									
+Version: 	v1.0 							
+/********************************************************/
 // Print a Text value given a pointer to a Text
 void TextPrint(Text *input) {
 	int i = 0;
@@ -103,8 +113,33 @@ void RemoveText(Text *input) {
 	}
 }
 
+Text* ConcatTextAndNumber(Text *text, double number)
+{
+    int MAX_SIZE = 50;
+    char *output = (char*)malloc(MAX_SIZE + 1);
+    sprintf(output, "%lf", number);
 
-// Boolean functions //
+    Text *numberAsText = CreateText(output);
+
+    char *tempBuffer = (char*)malloc(text->Length + numberAsText->Length);
+    strcpy(tempBuffer, text->Text);
+    strcat(tempBuffer, numberAsText->Text);
+    return CreateText(tempBuffer);
+}
+
+
+Text* ConcatTextAndBoolean(Text *text, Boolean boolean)
+{
+    char *tempBuffer = (char*)malloc(text->Length + 6);
+    strcpy(tempBuffer, text->Text);
+    strcat(tempBuffer, boolean == true ? "true" : "false");
+
+    return CreateText(tempBuffer);
+}
+/********************************************************
+Function:	Boolean									
+Version: 	v1.0 							
+/********************************************************/
 // Printing the value of a Boolean given with a pointer
 void BooleanPrint(Boolean *input) {
 	if ((*input) == true)
@@ -113,6 +148,10 @@ void BooleanPrint(Boolean *input) {
 		printf("false");
 }
 
+/********************************************************
+Function:	ReadText									
+Version: 	v1.0 							
+/********************************************************/
 // From: http://stackoverflow.com/questions/314401/how-to-read-a-line-from-the-console-in-c
 char * getline(void) {
     char * line = malloc(100), *linep = line;
@@ -156,6 +195,10 @@ Text* ReadText() {
     return retVal;
 }
 
+/********************************************************
+Function:	ReadNumber									
+Version: 	v1.0 							
+/********************************************************/
 double ReadNumber() {
     double retValue = 0;
     int result = scanf("%lf", &retValue);
@@ -164,21 +207,37 @@ double ReadNumber() {
     return retValue;
 }
 
+/********************************************************
+Function:	Floor									
+Version: 	v1.0 							
+/********************************************************/
 double Floor(double input)
 {
     return floor(input);
 }
 
+/********************************************************
+Function:	Ceiling									
+Version: 	v1.0 							
+/********************************************************/
 double Ceiling(double input)
 {
     return ceil(input);
 }
 
+/********************************************************
+Function:	Write									
+Version: 	v1.0 							
+/********************************************************/
 void Write(Text *input)
 {
     printf("%s\n", input->Text);
 }
 
+/********************************************************
+Function:	IsEqual									
+Version: 	v1.0 							
+/********************************************************/
 Boolean IsEqual(Text *t1, Text *t2)
 {
     if (t1->Length != t2->Length)
@@ -187,30 +246,6 @@ Boolean IsEqual(Text *t1, Text *t2)
     return strcmp(t1->Text, t2->Text) == 0;
 }
 
-
-Text* ConcatTextAndNumber(Text *text, double number)
-{
-    int MAX_SIZE = 50;
-    char *output = (char*)malloc(MAX_SIZE + 1);
-    sprintf(output, "%lf", number);
-
-    Text *numberAsText = CreateText(output);
-
-    char *tempBuffer = (char*)malloc(text->Length + numberAsText->Length);
-    strcpy(tempBuffer, text->Text);
-    strcat(tempBuffer, numberAsText->Text);
-    return CreateText(tempBuffer);
-}
-
-
-Text* ConcatTextAndBoolean(Text *text, Boolean boolean)
-{
-    char *tempBuffer = (char*)malloc(text->Length + 6);
-    strcpy(tempBuffer, text->Text);
-    strcat(tempBuffer, boolean == true ? "true" : "false");
-
-    return CreateText(tempBuffer);
-}
 
 /********************************************************
 Function:	Random									

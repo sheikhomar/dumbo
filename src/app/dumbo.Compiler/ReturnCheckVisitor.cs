@@ -2,151 +2,202 @@ using dumbo.Compiler.AST;
 
 namespace dumbo.Compiler
 {
-    public class ReturnCheckVisitor : IVisitor<VisitResult, VisitorArgs>
+    public class ReturnCheckVisitor : IVisitor<ReturnCheckResult, VisitorArgs>
     {
-        public VisitResult Visit(ActualParamListNode node, VisitorArgs arg)
+        public ReturnCheckVisitor(EventReporter reporter)
         {
-            throw new System.NotImplementedException();
+            Reporter = reporter;
         }
 
-        public VisitResult Visit(AssignmentStmtNode node, VisitorArgs arg)
+        public EventReporter Reporter { get; }
+
+        public ReturnCheckResult Visit(ActualParamListNode node, VisitorArgs arg)
         {
-            throw new System.NotImplementedException();
+            return null;
         }
 
-        public VisitResult Visit(BinaryOperationNode node, VisitorArgs arg)
+        public ReturnCheckResult Visit(AssignmentStmtNode node, VisitorArgs arg)
         {
-            throw new System.NotImplementedException();
+            return null;
         }
 
-        public VisitResult Visit(BreakStmtNode node, VisitorArgs arg)
+        public ReturnCheckResult Visit(BinaryOperationNode node, VisitorArgs arg)
         {
-            throw new System.NotImplementedException();
+            return null;
         }
 
-        public VisitResult Visit(BuiltInFuncDeclNode node, VisitorArgs arg)
+        public ReturnCheckResult Visit(BreakStmtNode node, VisitorArgs arg)
         {
-            throw new System.NotImplementedException();
+            return null;
         }
 
-        public VisitResult Visit(DeclAndAssignmentStmtNode node, VisitorArgs arg)
+        public ReturnCheckResult Visit(BuiltInFuncDeclNode node, VisitorArgs arg)
         {
-            throw new System.NotImplementedException();
+            return null;
         }
 
-        public VisitResult Visit(DeclStmtNode node, VisitorArgs arg)
+        public ReturnCheckResult Visit(DeclAndAssignmentStmtNode node, VisitorArgs arg)
         {
-            throw new System.NotImplementedException();
+            return null;
         }
 
-        public VisitResult Visit(ElseIfStmtListNode node, VisitorArgs arg)
+        public ReturnCheckResult Visit(DeclStmtNode node, VisitorArgs arg)
         {
-            throw new System.NotImplementedException();
+            return null;
         }
 
-        public VisitResult Visit(ElseIfStmtNode node, VisitorArgs arg)
+        public ReturnCheckResult Visit(ElseIfStmtListNode node, VisitorArgs arg)
         {
-            throw new System.NotImplementedException();
+            int counter = node.Count;
+
+            foreach (var item in node)
+            {
+                if (item.Accept(this, arg) == null)
+                    counter--;
+                else if (item.Accept(this, arg).ContainsReturn)
+                    counter--;
+            }
+
+            return new ReturnCheckResult(counter == 0);
         }
 
-        public VisitResult Visit(ExpressionListNode node, VisitorArgs arg)
+        public ReturnCheckResult Visit(ElseIfStmtNode node, VisitorArgs arg)
         {
-            throw new System.NotImplementedException();
+            return node.Body.Accept(this, arg);
         }
 
-        public VisitResult Visit(FormalParamListNode node, VisitorArgs arg)
+        public ReturnCheckResult Visit(ExpressionListNode node, VisitorArgs arg)
         {
-            throw new System.NotImplementedException();
+            return null;
         }
 
-        public VisitResult Visit(FormalParamNode node, VisitorArgs arg)
+        public ReturnCheckResult Visit(FormalParamListNode node, VisitorArgs arg)
         {
-            throw new System.NotImplementedException();
+            return null;
         }
 
-        public VisitResult Visit(FuncCallExprNode node, VisitorArgs arg)
+        public ReturnCheckResult Visit(FormalParamNode node, VisitorArgs arg)
         {
-            throw new System.NotImplementedException();
+            return null;
         }
 
-        public VisitResult Visit(FuncCallStmtNode node, VisitorArgs arg)
+        public ReturnCheckResult Visit(FuncCallExprNode node, VisitorArgs arg)
         {
-            throw new System.NotImplementedException();
+            node.DeclarationNode.Accept(this, arg);
+            return null;
         }
 
-        public VisitResult Visit(FuncDeclListNode node, VisitorArgs arg)
+        public ReturnCheckResult Visit(FuncCallStmtNode node, VisitorArgs arg)
         {
-            throw new System.NotImplementedException();
+            node.CallNode.Accept(this, arg);
+            return null;
         }
 
-        public VisitResult Visit(FuncDeclNode node, VisitorArgs arg)
+        public ReturnCheckResult Visit(FuncDeclListNode node, VisitorArgs arg)
         {
-            throw new System.NotImplementedException();
+            foreach (var item in node)
+            {
+                item.Accept(this, arg);
+            }
+            return null;
         }
 
-        public VisitResult Visit(IdentifierListNode node, VisitorArgs arg)
+        public ReturnCheckResult Visit(FuncDeclNode node, VisitorArgs arg)
         {
-            throw new System.NotImplementedException();
+            foreach (var stmt in node.Body)
+            {
+                if (stmt is ReturnStmtNode)
+                    return null;
+            }
+
+            var containsReturn = node.Body.Accept(this, arg).ContainsReturn;
+            if (!containsReturn)
+                Reporter.Error($"Not all code paths in function {node.Name} contain a return.", node.SourcePosition);
+            return null;
         }
 
-        public VisitResult Visit(IdentifierNode node, VisitorArgs arg)
+        public ReturnCheckResult Visit(IdentifierListNode node, VisitorArgs arg)
         {
-            throw new System.NotImplementedException();
+            return null;
         }
 
-        public VisitResult Visit(IfElseStmtNode node, VisitorArgs arg)
+        public ReturnCheckResult Visit(IdentifierNode node, VisitorArgs arg)
         {
-            throw new System.NotImplementedException();
+            return null;
         }
 
-        public VisitResult Visit(IfStmtNode node, VisitorArgs arg)
+        public ReturnCheckResult Visit(IfElseStmtNode node, VisitorArgs arg)
         {
-            throw new System.NotImplementedException();
+            var ifResult = node.Body.Accept(this, arg).ContainsReturn;
+            var elseIfResult = node.ElseIfStatements.Accept(this, arg).ContainsReturn;
+            var elseResult = node.Else.Accept(this, arg).ContainsReturn;
+
+            return new ReturnCheckResult(ifResult && elseIfResult && elseResult);
         }
 
-        public VisitResult Visit(LiteralValueNode node, VisitorArgs arg)
+        public ReturnCheckResult Visit(IfStmtNode node, VisitorArgs arg)
         {
-            throw new System.NotImplementedException();
+            return new ReturnCheckResult(false);
         }
 
-        public VisitResult Visit(PrimitiveTypeNode node, VisitorArgs arg)
+        public ReturnCheckResult Visit(LiteralValueNode node, VisitorArgs arg)
         {
-            throw new System.NotImplementedException();
+            return null;
         }
 
-        public VisitResult Visit(ProgramNode node, VisitorArgs arg)
+        public ReturnCheckResult Visit(PrimitiveTypeNode node, VisitorArgs arg)
         {
-            throw new System.NotImplementedException();
+            return null;
         }
 
-        public VisitResult Visit(RepeatStmtNode node, VisitorArgs arg)
+        public ReturnCheckResult Visit(ProgramNode node, VisitorArgs arg)
         {
-            throw new System.NotImplementedException();
+            return null;
         }
 
-        public VisitResult Visit(RepeatWhileStmtNode node, VisitorArgs arg)
+        public ReturnCheckResult Visit(RepeatStmtNode node, VisitorArgs arg)
         {
-            throw new System.NotImplementedException();
+            node.Body.Accept(this, arg);
+            return null;
         }
 
-        public VisitResult Visit(ReturnStmtNode node, VisitorArgs arg)
+        public ReturnCheckResult Visit(RepeatWhileStmtNode node, VisitorArgs arg)
         {
-            throw new System.NotImplementedException();
+            node.Body.Accept(this, arg);
+            return null;
         }
 
-        public VisitResult Visit(RootNode node, VisitorArgs arg)
+        public ReturnCheckResult Visit(ReturnStmtNode node, VisitorArgs arg)
         {
-            throw new System.NotImplementedException();
+            return null;
         }
 
-        public VisitResult Visit(StmtBlockNode node, VisitorArgs arg)
+        public ReturnCheckResult Visit(RootNode node, VisitorArgs arg)
         {
-            throw new System.NotImplementedException();
+            node.FuncDecls.Accept(this, arg);
+            return null;
         }
 
-        public VisitResult Visit(UnaryOperationNode node, VisitorArgs arg)
+        public ReturnCheckResult Visit(StmtBlockNode node, VisitorArgs arg)
         {
-            throw new System.NotImplementedException();
+            int counter = node.Count;
+            if (counter == 0)
+                return new ReturnCheckResult(false);
+            foreach (var item in node)
+            {
+                var result = item.Accept(this, arg);
+                if (result == null)
+                    counter--;
+                else if (result.ContainsReturn)
+                    counter--;
+            }
+
+            return new ReturnCheckResult(counter == 0);
+        }
+
+        public ReturnCheckResult Visit(UnaryOperationNode node, VisitorArgs arg)
+        {
+            return null;
         }
     }
 }

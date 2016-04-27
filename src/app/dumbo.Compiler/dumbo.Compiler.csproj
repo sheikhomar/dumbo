@@ -103,6 +103,7 @@
     <Compile Include="Interpreter\ReturnFromFunctionException.cs" />
     <Compile Include="Interpreter\UndefinedValue.cs" />
     <Compile Include="Interpreter\Value.cs" />
+    <Compile Include="ReturnCheckResult.cs" />
     <Compile Include="ReturnCheckVisitor.cs" />
     <Compile Include="TypeChecking\BinaryOperationTypeChecker.cs" />
     <Compile Include="CodeGenerator\CodeGeneratorVisitor.cs" />

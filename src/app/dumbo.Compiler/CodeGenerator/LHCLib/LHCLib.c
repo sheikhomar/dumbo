@@ -26,6 +26,7 @@ double ReadNumber();
 void Write(Text *input);
 double Ceiling(double input);
 double Floor(double input);
+Boolean IsEqual(Text *t1, Text *t2);
 
 
 // Text functions //
@@ -170,4 +171,12 @@ double Ceiling(double input)
 void Write(Text *input)
 {
     printf("%s\n", input->Text);
+}
+
+Boolean IsEqual(Text *t1, Text *t2)
+{
+    if (t1->Length != t2->Length)
+        return false;
+
+    return strcmp(t1->Text, t2->Text) == 0;
 }

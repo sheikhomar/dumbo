@@ -119,7 +119,7 @@ namespace dumbo.Compiler.CodeGenerator
 
         public RuntimeEntity Visit(BreakStmtNode node, VisitorArgs arg)
         {
-            _currentModule.Append(new Stmt("Break;"));
+            _currentModule.Append(new Stmt("break;"));
 
             return null;
         }
@@ -290,7 +290,11 @@ namespace dumbo.Compiler.CodeGenerator
         public RuntimeEntity Visit(FuncCallExprNode node, VisitorArgs arg)
         {
             //a := ... _MyFunction(myInt)+5
-            _currentStmt.Append("_" + node.FuncName.ToLower() + "(");
+            string prefix = "";
+            if (!node.DeclarationNode.IsBuiltIn)
+                prefix = "_";
+
+            _currentStmt.Append(prefix + node.FuncName.ToLower() + "(");
             node.Parameters.Accept(this, arg);
             _currentStmt.Append(")");
 

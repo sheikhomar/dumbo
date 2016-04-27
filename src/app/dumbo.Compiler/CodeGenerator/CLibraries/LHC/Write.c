@@ -7,7 +7,7 @@ typedef struct Text{
     char *Text;
 } Text;
 
-void write(Text *input)
+void Write(Text *input)
 {
 	printf("%s\n", input->Text);
 }

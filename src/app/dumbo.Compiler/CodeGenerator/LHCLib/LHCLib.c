@@ -32,6 +32,7 @@ double Ceiling(double input);
 double Floor(double input);
 Boolean IsEqual(Text *t1, Text *t2);
 double random(double range_lower, double range_upper);
+double modulo(double n, double d);
 
 // Text functions //
 // Print a Text value given a pointer to a Text
@@ -247,6 +248,14 @@ double random(double range1, double range2)
 	//Return the random number, adding range offset from 0
 	return number + range_lower;
 }
-
-
-
+/********************************************************
+Function:	Modulo									
+Version: 	v1.0 							
+/********************************************************/
+double modulo(double n, double d)
+{	
+	if(d == 0)
+		throw("Cannot do modulo when 2nd argument is zero.");
+	
+	return n - d*(floor((n/d)));
+}

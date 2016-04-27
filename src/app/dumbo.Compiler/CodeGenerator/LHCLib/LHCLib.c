@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
+#include <math.h>
 
 //LHC Type
 typedef struct Text {
@@ -18,6 +19,13 @@ void UpdateText(char *inputText, int Length, Text *text);
 void ConcatText(Text *inputText1, Text *inputText2, Text *resText);
 void RemoveText(Text *input);
 void BooleanPrint(Boolean *input);
+
+// Built-in functions
+Text* ReadText();
+double ReadNumber();
+void Write(Text *input);
+double Ceiling(double input);
+double Floor(double input);
 
 
 // Text functions //
@@ -139,4 +147,27 @@ Text* ReadText() {
     retVal->Length = length;
 
     return retVal;
+}
+
+double ReadNumber() {
+    double retValue = 0;
+    int result = scanf("%lf", &retValue);
+    if (result == 0)
+        while (fgetc(stdin) != '\n');
+    return retValue;
+}
+
+double Floor(double input)
+{
+    return floor(input);
+}
+
+double Ceiling(double input)
+{
+    return ceil(input);
+}
+
+void Write(Text *input)
+{
+    printf("%s\n", input->Text);
 }

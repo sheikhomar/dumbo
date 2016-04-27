@@ -15,6 +15,7 @@ typedef enum { false, true } Boolean;
 
 
 //LHC HelperFunctions
+void throw(char* message);
 void TextPrint(Text *input);
 void UpdateText(char *inputText, int Length, Text *text);
 void ConcatText(Text *inputText1, Text *inputText2, Text *resText);
@@ -258,4 +259,13 @@ double modulo(double n, double d)
 		throw("Cannot do modulo when 2nd argument is zero.");
 	
 	return n - d*(floor((n/d)));
+}
+
+/********************************************************
+Function:	Throw									
+Version: 	v1.0 							
+/********************************************************/
+void throw(char* message){
+	printf("Program ended unexpectedly:\r\n%s\r\n",message);
+	exit(1);
 }

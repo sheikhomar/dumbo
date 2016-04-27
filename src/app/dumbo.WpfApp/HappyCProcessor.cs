@@ -46,14 +46,16 @@ namespace dumbo.WpfApp
             RunnerArgument arguments = args as RunnerArgument;
             var scopeChecker = new ScopeCheckVisitor(arguments.Reporter);
             var typeChecker = new TypeCheckVisitor(arguments.Reporter);
-            var jumpChecker = new BreakCheckVisitor(arguments.Reporter);
+            var breakChecker = new BreakCheckVisitor(arguments.Reporter);
+            var returnChecker = new ReturnCheckVisitor(arguments.Reporter);
             var interpreter = new InterpretationVisitor(arguments.Reporter, arguments.Shell);
             arguments.Root.Accept(scopeChecker, new VisitorArgs());
             arguments.Root.Accept(typeChecker, new VisitorArgs());
-            arguments.Root.Accept(jumpChecker, new VisitorArgs());
+            arguments.Root.Accept(breakChecker, new VisitorArgs());
+            arguments.Root.Accept(returnChecker, new VisitorArgs());
             if (!arguments.Reporter.HasErrors)
             {
-                //arguments.Root.Accept(interpreter, new VisitorArgs());
+                arguments.Root.Accept(interpreter, new VisitorArgs());
             }
 
             return new ProcessorResult(arguments.Reporter);

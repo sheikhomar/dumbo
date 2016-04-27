@@ -112,7 +112,9 @@ namespace dumbo.Compiler.SyntaxAnalysis
                 case StmtProduction.FuncCall:
                     return BuildFuncCallStmt(lhs[0]);
                 case StmtProduction.BreakStmt:
-                    return new BreakStmtNode();
+                    Reduction lhs2 = (Reduction)lhs[0].Data;
+                    var srcPos = BuildSourcePosition(lhs2[0], lhs2[0]);
+                    return new BreakStmtNode(srcPos);
                 default:
                     throw new ArgumentOutOfRangeException();
             }

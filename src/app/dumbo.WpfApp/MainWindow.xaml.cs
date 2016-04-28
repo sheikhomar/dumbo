@@ -344,6 +344,13 @@ namespace dumbo.WpfApp
 
         private void PrettyPrint(RootNode root)
         {
+            var reporter = new EventReporter();
+            ScopeAndTypeCheck(root, reporter);
+            if (reporter.HasErrors)
+            {
+                MarkErrors(reporter);
+                return;
+            }
             var ppv = new PrettyPrintVisitor();
             root.Accept(ppv, new VisitorArgs());
             ResultTextBox.Text = ppv.GetResult();

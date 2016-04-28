@@ -39,6 +39,21 @@ namespace dumbo.Compiler.CodeGenerator
             throw new NotImplementedException();
         }
 
+        public RuntimeEntity Visit(ArrayIdentifierNode node, VisitorArgs arg)
+        {
+            throw new NotImplementedException();
+        }
+
+        public RuntimeEntity Visit(ArrayTypeNode node, VisitorArgs arg)
+        {
+            throw new NotImplementedException();
+        }
+
+        public RuntimeEntity Visit(ArrayValueNode node, VisitorArgs arg)
+        {
+            throw new NotImplementedException();
+        }
+
         public RuntimeEntity Visit(AssignmentStmtNode node, VisitorArgs arg)
         {
             bool isFunction = node.Identifiers.Count > node.Expressions.Count;
@@ -127,6 +142,21 @@ namespace dumbo.Compiler.CodeGenerator
             _currentModule.Append(new Stmt("break;"));
 
             return null;
+        }
+
+        public RuntimeEntity Visit(ContinueStmtNode node, VisitorArgs arg)
+        {
+            throw new NotImplementedException();
+        }
+
+        public RuntimeEntity Visit(ConstDeclListNode node, VisitorArgs arg)
+        {
+            throw new NotImplementedException();
+        }
+
+        public RuntimeEntity Visit(ConstDeclNode node, VisitorArgs arg)
+        {
+            throw new NotImplementedException();
         }
 
         public RuntimeEntity Visit(BuiltInFuncDeclNode node, VisitorArgs arg)

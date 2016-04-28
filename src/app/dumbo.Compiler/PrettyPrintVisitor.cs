@@ -36,14 +36,34 @@ namespace dumbo.Compiler
 
         public VisitResult Visit(ArrayDeclStmtNode node, VisitorArgs arg)
         {
-            Write("Array[");
-            VisitChildren(node.Type.Sizes, ",", arg);
-            Write("] of ");
-            node.Type.Type.Accept(this,arg);
+            node.Type.Accept(this, arg);
             Write(" ");
             node.Identifiers.Accept(this, arg);
             WriteLine();
             return null;
+        }
+
+        public VisitResult Visit(ArrayIdentifierNode node, VisitorArgs arg)
+        {
+            Write(node.Name);
+            Write("[");
+            VisitChildren(node.Sizes, ",", arg);
+            Write("]");
+            return null;
+        }
+
+        public VisitResult Visit(ArrayTypeNode node, VisitorArgs arg)
+        {
+            Write("Array[");
+            VisitChildren(node.Sizes, ",", arg);
+            Write("] of ");
+            node.Type.Accept(this, arg);
+            return null;
+        }
+
+        public VisitResult Visit(ArrayValueNode node, VisitorArgs arg)
+        {
+            throw new NotImplementedException();
         }
 
         public VisitResult Visit(AssignmentStmtNode node, VisitorArgs arg)
@@ -72,6 +92,21 @@ namespace dumbo.Compiler
             WriteLine("Break");
 
             return EmptyResult;
+        }
+
+        public VisitResult Visit(ContinueStmtNode node, VisitorArgs arg)
+        {
+            throw new NotImplementedException();
+        }
+
+        public VisitResult Visit(ConstDeclListNode node, VisitorArgs arg)
+        {
+            throw new NotImplementedException();
+        }
+
+        public VisitResult Visit(ConstDeclNode node, VisitorArgs arg)
+        {
+            throw new NotImplementedException();
         }
 
         public VisitResult Visit(BuiltInFuncDeclNode node, VisitorArgs arg)

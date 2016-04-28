@@ -6,12 +6,17 @@ namespace dumbo.Compiler
     {
         T Visit(ActualParamListNode node, K arg);
         T Visit(ArrayDeclStmtNode node, K arg);
+        T Visit(ArrayIdentifierNode node, K arg);
+        T Visit(ArrayTypeNode node, K arg);
+        T Visit(ArrayValueNode node, K arg);
         T Visit(AssignmentStmtNode node, K arg);
         T Visit(BinaryOperationNode node, K arg);
         T Visit(BreakStmtNode node, K arg);
+        T Visit(ContinueStmtNode node, K arg);
+        T Visit(ConstDeclListNode node, K arg);
+        T Visit(ConstDeclNode node, K arg);
         T Visit(BuiltInFuncDeclNode node, K arg);
         T Visit(DeclAndAssignmentStmtNode node, K arg);
-        T Visit(PrimitiveDeclStmtNode node, K arg);
         T Visit(ElseIfStmtListNode node, K arg);
         T Visit(ElseIfStmtNode node, K arg);
         T Visit(ExpressionListNode node, K arg);
@@ -26,6 +31,7 @@ namespace dumbo.Compiler
         T Visit(IfElseStmtNode node, K arg);
         T Visit(IfStmtNode node, K arg);
         T Visit(LiteralValueNode node, K arg);
+        T Visit(PrimitiveDeclStmtNode node, K arg);
         T Visit(PrimitiveTypeNode node, K arg);
         T Visit(ProgramNode node, K arg);
         T Visit(RepeatStmtNode node, K arg);
@@ -34,5 +40,6 @@ namespace dumbo.Compiler
         T Visit(RootNode node, K arg);
         T Visit(StmtBlockNode node, K arg);
         T Visit(UnaryOperationNode node, K arg);
+
     }
 }

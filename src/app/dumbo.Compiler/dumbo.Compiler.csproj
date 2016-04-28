@@ -59,6 +59,7 @@
     <Compile Include="AST\ConstDeclNode.cs" />
     <Compile Include="AST\ContinueStmtNode.cs" />
     <Compile Include="AST\DeclAndAssignmentStmtNode.cs" />
+    <Compile Include="AST\NestedExpressionListNode.cs" />
     <Compile Include="AST\PrimitiveDeclStmtNode.cs" />
     <Compile Include="AST\ElseIfStmtListNode.cs" />
     <Compile Include="AST\ElseIfStmtNode.cs" />
@@ -125,9 +126,6 @@
     <Compile Include="Interpreter\NumberValue.cs" />
     <Compile Include="BreakCheckVisitor.cs" />
     <Compile Include="PrettyPrintVisitor.cs" />
-    <Compile Include="ReachabilityArgument.cs" />
-    <Compile Include="ReachabilityResult.cs" />
-    <Compile Include="ReachabilityVisitor.cs" />
     <Compile Include="ScopeCheckVisitor.cs" />
     <Compile Include="SymbolTable\IllegalHideException.cs" />
     <Compile Include="SymbolTable\OutermostScopeException.cs" />

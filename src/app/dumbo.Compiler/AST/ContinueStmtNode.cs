@@ -9,7 +9,7 @@
 
         public override T Accept<T, K>(IVisitor<T, K> visitor, K arg)
         {
-            throw new System.NotImplementedException();
+            return visitor.Visit(this, arg);
         }
     }
 }

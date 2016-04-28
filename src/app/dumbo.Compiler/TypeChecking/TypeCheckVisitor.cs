@@ -29,6 +29,21 @@ namespace dumbo.Compiler.TypeChecking
             return null;
         }
 
+        public TypeCheckVisitResult Visit(ArrayIdentifierNode node, VisitorArgs arg)
+        {
+            throw new NotImplementedException();
+        }
+
+        public TypeCheckVisitResult Visit(ArrayTypeNode node, VisitorArgs arg)
+        {
+            throw new NotImplementedException();
+        }
+
+        public TypeCheckVisitResult Visit(ArrayValueNode node, VisitorArgs arg)
+        {
+            throw new NotImplementedException();
+        }
+
         public TypeCheckVisitResult Visit(AssignmentStmtNode node, VisitorArgs arg)
         {
             if (node.Identifiers.Count == 1)
@@ -115,6 +130,21 @@ namespace dumbo.Compiler.TypeChecking
         public TypeCheckVisitResult Visit(BreakStmtNode node, VisitorArgs arg)
         {
             return null;
+        }
+
+        public TypeCheckVisitResult Visit(ContinueStmtNode node, VisitorArgs arg)
+        {
+            throw new NotImplementedException();
+        }
+
+        public TypeCheckVisitResult Visit(ConstDeclListNode node, VisitorArgs arg)
+        {
+            throw new NotImplementedException();
+        }
+
+        public TypeCheckVisitResult Visit(ConstDeclNode node, VisitorArgs arg)
+        {
+            throw new NotImplementedException();
         }
 
         public TypeCheckVisitResult Visit(BuiltInFuncDeclNode node, VisitorArgs arg)

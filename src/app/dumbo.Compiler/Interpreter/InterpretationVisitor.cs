@@ -38,6 +38,21 @@ namespace dumbo.Compiler.Interpreter
             return null;
         }
 
+        public Value Visit(ArrayIdentifierNode node, VisitorArgs arg)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Value Visit(ArrayTypeNode node, VisitorArgs arg)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Value Visit(ArrayValueNode node, VisitorArgs arg)
+        {
+            throw new NotImplementedException();
+        }
+
         public Value Visit(AssignmentStmtNode node, VisitorArgs arg)
         {
             PerformAssignment(node.Identifiers, node.Value, arg);
@@ -176,6 +191,21 @@ namespace dumbo.Compiler.Interpreter
         public Value Visit(BreakStmtNode node, VisitorArgs arg)
         {
             throw new BreakException();
+        }
+
+        public Value Visit(ContinueStmtNode node, VisitorArgs arg)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Value Visit(ConstDeclListNode node, VisitorArgs arg)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Value Visit(ConstDeclNode node, VisitorArgs arg)
+        {
+            throw new NotImplementedException();
         }
 
         public Value Visit(BuiltInFuncDeclNode node, VisitorArgs arg)

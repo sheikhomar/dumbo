@@ -18,7 +18,7 @@ namespace dumbo.Compiler.AST
 
         public override T Accept<T, K>(IVisitor<T, K> visitor, K arg)
         {
-            throw new NotImplementedException();
+            return visitor.Visit(this, arg);
         }
     }
 }

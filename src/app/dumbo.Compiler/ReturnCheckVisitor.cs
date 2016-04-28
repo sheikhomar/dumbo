@@ -21,6 +21,21 @@ namespace dumbo.Compiler
             return null;
         }
 
+        public ReturnCheckResult Visit(ArrayIdentifierNode node, VisitorArgs arg)
+        {
+            return null;
+        }
+
+        public ReturnCheckResult Visit(ArrayTypeNode node, VisitorArgs arg)
+        {
+            return null;
+        }
+
+        public ReturnCheckResult Visit(ArrayValueNode node, VisitorArgs arg)
+        {
+            return null;
+        }
+
         public ReturnCheckResult Visit(AssignmentStmtNode node, VisitorArgs arg)
         {
             return null;
@@ -32,6 +47,21 @@ namespace dumbo.Compiler
         }
 
         public ReturnCheckResult Visit(BreakStmtNode node, VisitorArgs arg)
+        {
+            return null;
+        }
+
+        public ReturnCheckResult Visit(ContinueStmtNode node, VisitorArgs arg)
+        {
+            return null;
+        }
+
+        public ReturnCheckResult Visit(ConstDeclListNode node, VisitorArgs arg)
+        {
+            return null;
+        }
+
+        public ReturnCheckResult Visit(ConstDeclNode node, VisitorArgs arg)
         {
             return null;
         }

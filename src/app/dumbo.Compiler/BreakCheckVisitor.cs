@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using dumbo.Compiler.AST;
+﻿using dumbo.Compiler.AST;
 
 namespace dumbo.Compiler
 {
@@ -28,6 +23,21 @@ namespace dumbo.Compiler
             return null;
         }
 
+        public VisitResult Visit(ArrayIdentifierNode node, VisitorArgs arg)
+        {
+            return null;
+        }
+
+        public VisitResult Visit(ArrayTypeNode node, VisitorArgs arg)
+        {
+            return null;
+        }
+
+        public VisitResult Visit(ArrayValueNode node, VisitorArgs arg)
+        {
+            return null;
+        }
+
         public VisitResult Visit(AssignmentStmtNode node, VisitorArgs arg)
         {
             return null;
@@ -41,7 +51,24 @@ namespace dumbo.Compiler
         public VisitResult Visit(BreakStmtNode node, VisitorArgs arg)
         {
             if(InLoops == 0)
-                Reporter.Error("Break stmt is not placed in a loop.", node.SourcePosition);
+                Reporter.Error("Break statement is not placed in a loop.", node.SourcePosition);
+            return null;
+        }
+
+        public VisitResult Visit(ContinueStmtNode node, VisitorArgs arg)
+        {
+            if (InLoops == 0)
+                Reporter.Error("Continue statement is not placed in a loop.", node.SourcePosition);
+            return null;
+        }
+
+        public VisitResult Visit(ConstDeclListNode node, VisitorArgs arg)
+        {
+            return null;
+        }
+
+        public VisitResult Visit(ConstDeclNode node, VisitorArgs arg)
+        {
             return null;
         }
 

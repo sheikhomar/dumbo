@@ -32,6 +32,21 @@ namespace dumbo.Compiler
             return null;
         }
 
+        public object Visit(ArrayIdentifierNode node, VisitorArgs arg)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public object Visit(ArrayTypeNode node, VisitorArgs arg)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public object Visit(ArrayValueNode node, VisitorArgs arg)
+        {
+            throw new System.NotImplementedException();
+        }
+
         public object Visit(AssignmentStmtNode node, VisitorArgs arg)
         {
             node.Identifiers.Accept(this, arg);
@@ -51,6 +66,21 @@ namespace dumbo.Compiler
         public object Visit(BreakStmtNode node, VisitorArgs arg)
         {
             return null;
+        }
+
+        public object Visit(ContinueStmtNode node, VisitorArgs arg)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public object Visit(ConstDeclListNode node, VisitorArgs arg)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public object Visit(ConstDeclNode node, VisitorArgs arg)
+        {
+            throw new System.NotImplementedException();
         }
 
         public object Visit(BuiltInFuncDeclNode node, VisitorArgs arg)

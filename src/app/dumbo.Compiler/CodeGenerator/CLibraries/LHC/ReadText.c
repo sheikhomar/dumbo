@@ -1,3 +1,8 @@
+/********************************************************
+Function:	ReadText									
+Version: 	v1.0 	
+Uses:		Text						
+/********************************************************/
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

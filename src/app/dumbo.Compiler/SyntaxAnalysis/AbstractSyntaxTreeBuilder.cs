@@ -74,7 +74,6 @@ namespace dumbo.Compiler.SyntaxAnalysis
             Reduction lhs = (Reduction)stmtToken.Data;
 
             string nameOfProduction = lhs[0].Parent.Name();
-            
             switch (nameOfProduction)
             {
                 case "AssignStmt": return BuildAssignStmt(lhs[0]);
@@ -83,7 +82,10 @@ namespace dumbo.Compiler.SyntaxAnalysis
                 case "Decl": return BuildDeclStmt(lhs[0]);
                 case "ReturnStmt": return BuildReturnStmtNode(lhs[0]);
                 case "FuncCall": return BuildFuncCallStmt(lhs[0]);
-                case "BreakStmt": return new BreakStmtNode();
+                case "BreakStmt":
+                    Reduction lhs2 = (Reduction)lhs[0].Data;
+                    var srcPos = BuildSourcePosition(lhs2[0], lhs2[0]);
+                    return new BreakStmtNode(srcPos);
                 default:
                     throw new ArgumentOutOfRangeException();
             }

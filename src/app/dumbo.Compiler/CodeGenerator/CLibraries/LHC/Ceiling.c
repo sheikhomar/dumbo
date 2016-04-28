@@ -1,3 +1,8 @@
+/********************************************************
+Function:	Ceiling									
+Version: 	v1.0 			
+Uses:							
+/********************************************************/
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>

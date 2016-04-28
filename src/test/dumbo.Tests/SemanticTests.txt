@@ -2138,3 +2138,33 @@ Program
 			a := false
 		end repeat
 End Program
+
+
+//New Program
+
+Program
+  Text a,b,c := MyFunc()
+  Write(a)
+  Write(b)
+  Write(c)
+End Program
+
+Function MyFunc() Returns Text, Text, Text 
+  Text t := "Fuld"
+  return "Flid", "Fisk", t
+End Function
+
+
+
+//New Program Failing
+
+Program
+  
+End Program
+
+Function MyFunc() Returns Text
+  // Should fail because function never returns anything
+End Function
+
+
+

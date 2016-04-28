@@ -7,13 +7,13 @@ using dumbo.Compiler.AST;
 
 namespace dumbo.Compiler
 {
-    class JumpCheckVisitor : IVisitor<VisitResult, VisitorArgs>
+    public class BreakCheckVisitor : IVisitor<VisitResult, VisitorArgs>
     {
         public EventReporter Reporter { get; }
 
-        private Stack<bool> InLoops { get; set; }
+        private int InLoops { get; set; }
 
-        public JumpCheckVisitor(EventReporter reporter)
+        public BreakCheckVisitor(EventReporter reporter)
         {
             Reporter = reporter;
         }
@@ -35,7 +35,7 @@ namespace dumbo.Compiler
 
         public VisitResult Visit(BreakStmtNode node, VisitorArgs arg)
         {
-            if(InLoops.Count == 0)
+            if(InLoops == 0)
                 Reporter.Error("Break stmt is not placed in a loop.", node.SourcePosition);
             return null;
         }
@@ -57,12 +57,17 @@ namespace dumbo.Compiler
 
         public VisitResult Visit(ElseIfStmtListNode node, VisitorArgs arg)
         {
-            throw new NotImplementedException();
+            foreach (var item in node)
+            {
+                item.Accept(this, arg);
+            }
+            return null;
         }
 
         public VisitResult Visit(ElseIfStmtNode node, VisitorArgs arg)
         {
-            throw new NotImplementedException();
+            node.Body.Accept(this, arg);
+            return null;
         }
 
         public VisitResult Visit(ExpressionListNode node, VisitorArgs arg)
@@ -82,22 +87,30 @@ namespace dumbo.Compiler
 
         public VisitResult Visit(FuncCallExprNode node, VisitorArgs arg)
         {
-            throw new NotImplementedException();
+            node.DeclarationNode.Accept(this, arg);
+            return null;
         }
 
         public VisitResult Visit(FuncCallStmtNode node, VisitorArgs arg)
         {
-            throw new NotImplementedException();
+            node.CallNode.DeclarationNode.Accept(this, arg);
+            return null;
         }
 
         public VisitResult Visit(FuncDeclListNode node, VisitorArgs arg)
         {
-            throw new NotImplementedException();
+            foreach (var funcDecl in node)
+            {
+                funcDecl.Accept(this, arg);
+            }
+
+            return null;
         }
 
         public VisitResult Visit(FuncDeclNode node, VisitorArgs arg)
         {
-            throw new NotImplementedException();
+            node.Body.Accept(this, arg);
+            return null;
         }
 
         public VisitResult Visit(IdentifierListNode node, VisitorArgs arg)
@@ -112,12 +125,17 @@ namespace dumbo.Compiler
 
         public VisitResult Visit(IfElseStmtNode node, VisitorArgs arg)
         {
-            throw new NotImplementedException();
+            node.Body.Accept(this, arg);
+            node.ElseIfStatements.Accept(this, arg);
+            node.Else.Accept(this, arg);
+            return null;
         }
 
         public VisitResult Visit(IfStmtNode node, VisitorArgs arg)
         {
-            throw new NotImplementedException();
+            node.Body.Accept(this, arg);
+            node.ElseIfStatements.Accept(this, arg);
+            return null;
         }
 
         public VisitResult Visit(LiteralValueNode node, VisitorArgs arg)
@@ -127,34 +145,29 @@ namespace dumbo.Compiler
 
         public VisitResult Visit(ProgramNode node, VisitorArgs arg)
         {
-            foreach (var stmt in node.Body)
-            {
-                if(stmt is BreakStmtNode)
-                    Reporter.Error("There cannot be a Break statement in the program body.", node.SourcePosition);
-                stmt.Accept(this, arg);
-            }
+            node.Body.Accept(this, arg);
             return null;
         }
 
         public VisitResult Visit(RepeatStmtNode node, VisitorArgs arg)
         {
-            InLoops.Push(true);
+            InLoops++;
             node.Body.Accept(this, arg);
-            InLoops.Pop();
+            InLoops--;
             return null;
         }
 
         public VisitResult Visit(RepeatWhileStmtNode node, VisitorArgs arg)
         {
-            InLoops.Push(true);
+            InLoops++;
             node.Body.Accept(this, arg);
-            InLoops.Pop();
+            InLoops--;
             return null;
         }
 
         public VisitResult Visit(ReturnStmtNode node, VisitorArgs arg)
         {
-            throw new NotImplementedException();
+            return null;
         }
 
         public VisitResult Visit(RootNode node, VisitorArgs arg)
@@ -180,7 +193,7 @@ namespace dumbo.Compiler
 
         public VisitResult Visit(PrimitiveTypeNode node, VisitorArgs arg)
         {
-            throw new NotImplementedException();
+            return null;
         }
     }
 }

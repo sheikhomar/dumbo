@@ -278,11 +278,6 @@ namespace dumbo.Compiler.TypeChecking
 
             var returnStmtNodes = node.Body.FindDescendants<ReturnStmtNode>();
 
-            if (!returnStmtNodes.Any() && node.ReturnTypes.Count > 0)
-            {
-                Reporter.Error($"There are no 'Return' statements in the function '{node.Name}'.", node.SourcePosition);
-            }
-
             foreach (var retStmt in returnStmtNodes)
             {
                 var retStmtTypes = GetVisitResult(retStmt.Expressions, arg).Types.ToList();

@@ -1,3 +1,8 @@
+/********************************************************
+Function:	IsEqual									
+Version: 	v1.0 		
+Uses:		Text, Boolean					
+/********************************************************/
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

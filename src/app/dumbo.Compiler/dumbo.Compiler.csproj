@@ -106,6 +106,8 @@
     <Compile Include="Interpreter\ReturnFromFunctionException.cs" />
     <Compile Include="Interpreter\UndefinedValue.cs" />
     <Compile Include="Interpreter\Value.cs" />
+    <Compile Include="ReturnCheckResult.cs" />
+    <Compile Include="ReturnCheckVisitor.cs" />
     <Compile Include="TypeChecking\BinaryOperationTypeChecker.cs" />
     <Compile Include="CodeGenerator\CodeGeneratorVisitor.cs" />
     <Compile Include="Event.cs" />
@@ -117,7 +119,7 @@
     <Compile Include="IVisitable.cs" />
     <Compile Include="IVisitor.cs" />
     <Compile Include="Interpreter\NumberValue.cs" />
-    <Compile Include="JumpCheckVisitor.cs" />
+    <Compile Include="BreakCheckVisitor.cs" />
     <Compile Include="PrettyPrintVisitor.cs" />
     <Compile Include="ReachabilityArgument.cs" />
     <Compile Include="ReachabilityResult.cs" />

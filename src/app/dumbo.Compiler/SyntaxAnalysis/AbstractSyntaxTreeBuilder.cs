@@ -212,7 +212,7 @@ namespace dumbo.Compiler.SyntaxAnalysis
 
         private void AppendFuncCallParameters(Token token, FuncCallExprNode funcCallNode)
         {
-            Debug.Assert(token.Parent.Name() == "ActualParams" || token.Parent.Name() == "MultiActualParams");
+            Debug.Assert(token.Parent.Name() == "ActualParams" || token.Parent.Name() == "ActualParamsList");
             Reduction rhs = (Reduction)token.Data;
             
             if (rhs.Count() > 0)
@@ -316,65 +316,50 @@ namespace dumbo.Compiler.SyntaxAnalysis
         private IfStmtNode BuildIfStmt(Token ifStmToken)
         {
             Debug.Assert(ifStmToken.Parent.Name() == "IfStmt");
-            Reduction rhs = (Reduction)ifStmToken.Data;
-            Debug.Assert(rhs.Count() == 9);
+            Reduction rhs = (Reduction) ifStmToken.Data;
 
-            Token exprToken = rhs[1];
-            Token stmtsToken = rhs[4];
-            Token elseIfToken = rhs[5];
-            Token elseToken = rhs[6];
+            var srcPos = BuildSourcePosition(rhs[0], rhs[7]);
 
-            var srcPos = BuildSourcePosition(rhs[0], rhs[8]);
+            var predicate = BuildExprNode(rhs[1]);
+            var stmtsNode = BuildStmtsBlock(rhs[4]);
 
-            ExpressionNode predicate = BuildExprNode(exprToken);
-            StmtBlockNode stmtsNode = BuildStmtsBlock(stmtsToken);
+            StmtBlockNode elseStmtsNode = null;
 
-            IfStmtNode ifStmt;
-
-            Reduction elseReduction = (Reduction) elseToken.Data;
-            bool hasElseBody = elseReduction.Count() > 0;
-
-            if (hasElseBody)
+            ElseIfStmtListNode list = new ElseIfStmtListNode();
+            var elseIf = AppendElseIfStmts(rhs[5], list);
+            var rhs3 = (Reduction) elseIf.Data;
+            if (rhs3.Count() > 0)
             {
-                StmtBlockNode  elseStmtsNode = BuildStmtsBlock(elseReduction[2]);
-                ifStmt = new IfElseStmtNode(predicate, stmtsNode, elseStmtsNode, srcPos);
+                elseStmtsNode = BuildStmtsBlock(rhs3[2]);
             }
+
+            IfStmtNode ifNode = null;
+            if (elseStmtsNode == null)
+                ifNode = new IfStmtNode(predicate, stmtsNode, list, srcPos);
             else
-            {
-                ifStmt = new IfStmtNode(predicate, stmtsNode, srcPos);
-            }
+                ifNode = new IfElseStmtNode(predicate, stmtsNode, elseStmtsNode, list, srcPos);
 
-            Reduction elseIfReduction = (Reduction)elseIfToken.Data;
-            bool hasElseIfStmts = elseIfReduction.Count() > 0;
-            if (hasElseIfStmts)
-            {
-                AppendElseIfStmts(elseIfToken, ifStmt);
-            }
-            
-            return ifStmt;
+
+            return ifNode;
         }
 
-        private void AppendElseIfStmts(Token token, IfStmtNode ifStmtNode)
+        private Token AppendElseIfStmts(Token token, ElseIfStmtListNode list)
         {
-            Debug.Assert(token.Parent.Name() == "ElseIfStmts");
+            Debug.Assert(token.Parent.Name() == "ElseIfStmt");
             Reduction rhs = (Reduction)token.Data;
-            if (rhs.Count() > 0)
+            if (rhs.Count() > 1)
             {
-                Reduction elseIfReduction = (Reduction) rhs[0].Data;
+                var predicate = BuildExprNode(rhs[2]);
+                var stmtsNode = BuildStmtsBlock(rhs[5]);
+                var srcPos = BuildSourcePosition(rhs[0], stmtsNode);
 
-                Token exprToken = elseIfReduction[1];
-                Token stmtsToken = elseIfReduction[4];
-                
-                ExpressionNode predicate = BuildExprNode(exprToken);
-                StmtBlockNode stmtsNode = BuildStmtsBlock(stmtsToken);
+                var elseIfStmt = new ElseIfStmtNode(predicate, stmtsNode, srcPos);
+                list.Add(elseIfStmt);
 
-                SourcePosition srcPos = BuildSourcePosition(elseIfReduction[0], stmtsNode);
-
-                ElseIfStmtNode elseIfStmt = new ElseIfStmtNode(predicate, stmtsNode, srcPos);
-                ifStmtNode.ElseIfStatements.Add(elseIfStmt);
-
-                AppendElseIfStmts(rhs[1], ifStmtNode);
+                return AppendElseIfStmts(rhs[6], list);
             }
+
+            return rhs[0];
         }
 
         private ExpressionNode BuildExprNode(Token exprToken)
@@ -666,7 +651,6 @@ namespace dumbo.Compiler.SyntaxAnalysis
             Reduction rhs = (Reduction)token.Data;
 
             AppendVariableInitializer(rhs[1], node);
-
         }
 
         private void AppendVariableInitializer(Token token, ArrayValueNode node)
@@ -818,7 +802,7 @@ namespace dumbo.Compiler.SyntaxAnalysis
         
         private void AppendFormalParameters(Token token, FuncDeclNode funcCallNode)
         {
-            Debug.Assert(token.Parent.Name() == "FormalParams" || token.Parent.Name() == "MultiFormalParams");
+            Debug.Assert(token.Parent.Name() == "FormalParams" || token.Parent.Name() == "FormalParamsList");
             Reduction rhs = (Reduction)token.Data;
 
             if (rhs.Count() > 0)

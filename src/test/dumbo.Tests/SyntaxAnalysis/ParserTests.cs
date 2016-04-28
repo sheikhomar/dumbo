@@ -57,7 +57,7 @@ End Program";
   Number age
 End Program";
             var rootNode = ParseAndGetRootNode(programText);
-            var node = rootNode.Program.Body.GetAs<DeclStmtNode>(0);
+            var node = rootNode.Program.Body.GetAs<PrimitiveDeclStmtNode>(0);
             Assert.IsNotNull(node);
             Assert.AreEqual(NumberType, node.Type);
             Assert.AreEqual(1, node.Identifiers.Count);
@@ -72,7 +72,7 @@ End Program";
   Text name
 End Program";
             var rootNode = ParseAndGetRootNode(programText);
-            var node = rootNode.Program.Body.GetAs<DeclStmtNode>(0);
+            var node = rootNode.Program.Body.GetAs<PrimitiveDeclStmtNode>(0);
             Assert.IsNotNull(node);
             Assert.AreEqual(TextType, node.Type);
             Assert.AreEqual(1, node.Identifiers.Count);
@@ -87,7 +87,7 @@ End Program";
   Boolean isStudent
 End Program";
             var rootNode = ParseAndGetRootNode(programText);
-            var node = rootNode.Program.Body.GetAs<DeclStmtNode>(0);
+            var node = rootNode.Program.Body.GetAs<PrimitiveDeclStmtNode>(0);
             Assert.IsNotNull(node);
             Assert.AreEqual(BooleanType, node.Type);
             Assert.AreEqual(1, node.Identifiers.Count);
@@ -108,8 +108,7 @@ End Program";
             Assert.AreEqual(1, node.Identifiers.Count);
             Assert.AreEqual("name", node.Identifiers[0].Name);
 
-            Assert.AreEqual(1, node.Expressions.Count);
-            var expr = node.Expressions.GetAs<LiteralValueNode>(0);
+            var expr = node.Value as LiteralValueNode;
             Assert.AreEqual(TextType, expr.Type);
             Assert.AreEqual("Karen Blixen", expr.Value);
         }

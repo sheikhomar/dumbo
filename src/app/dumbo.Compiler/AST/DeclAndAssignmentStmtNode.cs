@@ -4,8 +4,8 @@
     {
         public DeclAndAssignmentStmtNode(TypeNode type, 
             IdentifierListNode identifiers, 
-            ExpressionListNode expressions,
-            SourcePosition sourcePosition) : base(identifiers, expressions, sourcePosition)
+            ExpressionNode value,
+            SourcePosition sourcePosition) : base(identifiers, value, sourcePosition)
         {
             Type = type;
         }

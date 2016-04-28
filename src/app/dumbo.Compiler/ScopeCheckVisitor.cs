@@ -25,7 +25,7 @@ namespace dumbo.Compiler
         public object Visit(AssignmentStmtNode node, VisitorArgs arg)
         {
             node.Identifiers.Accept(this, arg);
-            node.Expressions.Accept(this, arg);
+            node.Value.Accept(this, arg);
 
             return null;
         }
@@ -53,12 +53,12 @@ namespace dumbo.Compiler
             foreach (var id in node.Identifiers)
                 AddVariableToSymbolTable(id, node);
 
-            node.Expressions.Accept(this, arg);
+            node.Value.Accept(this, arg);
 
             return null;
         }
 
-        public object Visit(DeclStmtNode node, VisitorArgs arg)
+        public object Visit(PrimitiveDeclStmtNode node, VisitorArgs arg)
         {
             foreach (var id in node.Identifiers)
                 AddVariableToSymbolTable(id, node);

@@ -26,10 +26,10 @@ namespace dumbo.Compiler.TypeChecking
 
         public TypeCheckVisitResult Visit(AssignmentStmtNode node, VisitorArgs arg)
         {
-            if (node.Identifiers.Count == 1 && node.Expressions.Count == 1)
+            if (node.Identifiers.Count == 1)
             {
                 var id = node.Identifiers.First();
-                var expr = node.Expressions.First();
+                var expr = node.Value;
 
                 var idRes = GetVisitResult(id, arg);
                 var exprRes = GetVisitResult(expr, arg);
@@ -47,9 +47,9 @@ namespace dumbo.Compiler.TypeChecking
                     }
                 }
             }
-            else if (node.Expressions.Count == 1)
+            else
             {
-                var expr = node.Expressions.First();
+                var expr = node.Value;
                 var exprResult = GetVisitResult(expr, arg);
                 var exprTypes = exprResult.Types.ToList();
                 var idList = node.Identifiers.ToList();
@@ -69,20 +69,6 @@ namespace dumbo.Compiler.TypeChecking
                         }
                     }
                 }
-                else
-                {
-
-                    Reporter.Error($"The expression returns {exprTypes.Count} values, but assignment requires {idList.Count} values.",
-                        node.Expressions.SourcePosition);
-                }
-            }
-            else if (node.Expressions.Count > 1)
-            {
-                Reporter.Error("Multi variable assignment is not allowed.", node.Expressions.SourcePosition);
-            }
-            else if (node.Identifiers.Count > 1)
-            {
-                Reporter.Error("Multi variable assignment is not allowed.", node.Identifiers.SourcePosition);
             }
 
             return null;
@@ -133,44 +119,38 @@ namespace dumbo.Compiler.TypeChecking
 
         public TypeCheckVisitResult Visit(DeclAndAssignmentStmtNode node, VisitorArgs arg)
         {
-            if (node.Expressions.Count > 1)
+            var expr = node.Value;
+            var exprResult = GetVisitResult(expr, arg);
+
+            var exprTypes = exprResult.Types.ToList();
+            var idList = node.Identifiers.ToList();
+            if (exprTypes.Count == idList.Count)
             {
-                Reporter.Error($"Multi assignment is not allowed.", node.Expressions.SourcePosition);
-            }
-            else if (node.Expressions.Count == 1)
-            {
-                var expr = node.Expressions.First();
-                var exprResult = GetVisitResult(expr, arg);
-                
-                var exprTypes = exprResult.Types.ToList();
-                var idList = node.Identifiers.ToList();
-                if (exprTypes.Count == idList.Count)
+                for (int i = 0; i < exprTypes.Count; i++)
                 {
-                    for (int i = 0; i < exprTypes.Count; i++)
+                    var id = idList[i];
+                    if (!exprTypes[i].Equals(node.Type))
                     {
-                        var id = idList[i];
-                        if (!exprTypes[i].Equals(node.Type))
-                        {
-                            Reporter.Error($"Variable '{id.Name}' has a different type than the expression on the left hand side.",
-                                id.SourcePosition);
-                        }
+                        Reporter.Error(
+                            $"Variable '{id.Name}' has a different type than the expression on the left hand side.",
+                            id.SourcePosition);
                     }
                 }
-                else if (exprTypes.Count == 0)
-                {
-                    Reporter.Error($"Expression does not return any value.", expr.SourcePosition);
-                }
-                else
-                {
-                    Reporter.Error($"The expression returns {exprTypes.Count} values, but assignment requires {idList.Count} values.",
-                        node.Expressions.SourcePosition);
-                }
-
+            }
+            else if (exprTypes.Count == 0)
+            {
+                Reporter.Error($"Expression does not return any value.", expr.SourcePosition);
+            }
+            else
+            {
+                Reporter.Error(
+                    $"The expression returns {exprTypes.Count} values, but assignment requires {idList.Count} values.",
+                    node.Value.SourcePosition);
             }
             return null;
         }
 
-        public TypeCheckVisitResult Visit(DeclStmtNode node, VisitorArgs arg)
+        public TypeCheckVisitResult Visit(PrimitiveDeclStmtNode node, VisitorArgs arg)
         {
             return null;
         }

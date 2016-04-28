@@ -18,7 +18,7 @@ namespace dumbo.Tests.SyntaxAnalysis
         public void ShouldParseDeclerationStatements(PrimitiveType expectedType, string expectedName, string programText)
         {
             var rootNode = ParseAndGetRootNode(programText);
-            var node = rootNode.Program.Body.GetAs<DeclStmtNode>(0);
+            var node = rootNode.Program.Body.GetAs<PrimitiveDeclStmtNode>(0);
             Assert.IsNotNull(node);
             Assert.AreEqual(1, node.Identifiers.Count);
             Assert.AreEqual(expectedType, (node.Type as PrimitiveTypeNode).Type);
@@ -34,7 +34,7 @@ namespace dumbo.Tests.SyntaxAnalysis
         public void ShouldParseDeclStmtWithMultiIdentifiers(PrimitiveType expectedType, string var1, string var2, string programText)
         {
             var rootNode = ParseAndGetRootNode(programText);
-            var node = rootNode.Program.Body.GetAs<DeclStmtNode>(0);
+            var node = rootNode.Program.Body.GetAs<PrimitiveDeclStmtNode>(0);
             Assert.IsNotNull(node);
             Assert.AreEqual(2, node.Identifiers.Count);
             Assert.AreEqual(expectedType, (node.Type as PrimitiveTypeNode).Type);

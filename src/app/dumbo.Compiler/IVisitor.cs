@@ -10,7 +10,7 @@ namespace dumbo.Compiler
         T Visit(BreakStmtNode node, K arg);
         T Visit(BuiltInFuncDeclNode node, K arg);
         T Visit(DeclAndAssignmentStmtNode node, K arg);
-        T Visit(DeclStmtNode node, K arg);
+        T Visit(PrimitiveDeclStmtNode node, K arg);
         T Visit(ElseIfStmtListNode node, K arg);
         T Visit(ElseIfStmtNode node, K arg);
         T Visit(ExpressionListNode node, K arg);

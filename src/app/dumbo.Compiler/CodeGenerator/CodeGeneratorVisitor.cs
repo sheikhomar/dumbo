@@ -216,7 +216,7 @@ namespace dumbo.Compiler.CodeGenerator
             return null;
         }
 
-        public RuntimeEntity Visit(DeclStmtNode node, VisitorArgs arg)
+        public RuntimeEntity Visit(PrimitiveDeclStmtNode node, VisitorArgs arg)
         {
             _currentStmt = new Stmt("");
             node.Type.Accept(this, arg);

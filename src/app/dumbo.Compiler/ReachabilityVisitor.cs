@@ -46,7 +46,7 @@ namespace dumbo.Compiler
             throw new NotImplementedException();
         }
 
-        public ReachabilityResult Visit(DeclStmtNode node, ReachabilityArgument arg)
+        public ReachabilityResult Visit(PrimitiveDeclStmtNode node, ReachabilityArgument arg)
         {
             throw new NotImplementedException();
         }

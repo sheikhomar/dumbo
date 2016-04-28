@@ -38,7 +38,7 @@ namespace dumbo.Compiler
         {
             node.Identifiers.Accept(this, arg);
             Write(" := ");
-            node.Expressions.Accept(this, arg);
+            node.Value.Accept(this, arg);
             WriteLine();
 
             return EmptyResult;
@@ -72,13 +72,13 @@ namespace dumbo.Compiler
             Write($"{node.Type} ");
             node.Identifiers.Accept(this, arg);
             Write(" := ");
-            node.Expressions.Accept(this, arg);
+            node.Value.Accept(this, arg);
             WriteLine();
 
             return EmptyResult;
         }
 
-        public VisitResult Visit(DeclStmtNode node, VisitorArgs arg)
+        public VisitResult Visit(PrimitiveDeclStmtNode node, VisitorArgs arg)
         {
             Write($"{node.Type} ");
             node.Identifiers.Accept(this, arg);

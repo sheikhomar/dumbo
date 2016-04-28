@@ -32,7 +32,7 @@ namespace dumbo.Compiler.Interpreter
 
         public Value Visit(AssignmentStmtNode node, VisitorArgs arg)
         {
-            PerformAssignment(node.Identifiers, node.Expressions.First(), arg);
+            PerformAssignment(node.Identifiers, node.Value, arg);
             return null;
         }
 
@@ -180,11 +180,11 @@ namespace dumbo.Compiler.Interpreter
             foreach (var identifier in node.Identifiers)
                 CurrentCallFrame.Allocate(identifier.Name);
 
-            PerformAssignment(node.Identifiers, node.Expressions.First(), arg);
+            PerformAssignment(node.Identifiers, node.Value, arg);
             return null;
         }
 
-        public Value Visit(DeclStmtNode node, VisitorArgs arg)
+        public Value Visit(PrimitiveDeclStmtNode node, VisitorArgs arg)
         {
             foreach (var identifier in node.Identifiers)
             {

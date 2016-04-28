@@ -42,7 +42,6 @@ namespace dumbo.Compiler.SyntaxAnalysis
         private StmtBlockNode BuildStmtsBlock(Token stmtsToken)
         {
             Debug.Assert(stmtsToken.Parent.Name() == "Stmts");
-            Reduction rhs = (Reduction)stmtsToken.Data;
             
             StmtBlockNode stmtsBlockNode = new StmtBlockNode();
             
@@ -76,19 +75,58 @@ namespace dumbo.Compiler.SyntaxAnalysis
             string nameOfProduction = rhs[0].Parent.Name();
             switch (nameOfProduction)
             {
-                case "AssignStmt": return BuildAssignStmt(rhs[0]);
-                case "IfStmt": return BuildIfStmt(rhs[0]);
-                case "RepeatStmt": return BuildRepeatStmtNode(rhs[0]);
-                case "Decl": return BuildDeclStmt(rhs[0]);
-                case "ReturnStmt": return BuildReturnStmtNode(rhs[0]);
-                case "FuncCall": return BuildFuncCallStmt(rhs[0]);
+                case "AssignStmt":
+                    return BuildAssignStmt(rhs[0]);
+                case "IfStmt":
+                    return BuildIfStmt(rhs[0]);
+                case "RepeatStmt":
+                    return BuildRepeatStmtNode(rhs[0]);
+                case "PrimitiveDecl":
+                    return BuildPrimitiveDeclStmt(rhs[0]);
+                case "ReturnStmt":
+                    return BuildReturnStmtNode(rhs[0]);
+                case "FuncCall":
+                    return BuildFuncCallStmt(rhs[0]);
                 case "BreakStmt":
-                    Reduction rhs2 = (Reduction)rhs[0].Data;
-                    var srcPos = BuildSourcePosition(rhs2[0], rhs2[0]);
-                    return new BreakStmtNode(srcPos);
+                    return BuildBreakStmtNode(rhs[0]);
+                case "ArrayDecl":
+                    return BuildArrayDeclStmt(rhs[0]);
+                case "ContinueStmt":
+                    return BuildContinueStmt(rhs[0]);
                 default:
                     throw new ArgumentOutOfRangeException();
             }
+        }
+
+        private StmtNode BuildContinueStmt(Token token)
+        {
+            Debug.Assert(token.Parent.Name() == "ContinueStmt");
+            Reduction rhs = (Reduction)token.Data;
+
+            Reduction rhs2 = (Reduction)rhs[0].Data;
+            var srcPos = BuildSourcePosition(rhs2[0], rhs2[0]);
+            return new ContinueStmtNode(srcPos);
+        }
+
+        private ArrayDeclStmtNode BuildArrayDeclStmt(Token token)
+        {
+            Debug.Assert(token.Parent.Name() == "ArrayDecl");
+            Reduction rhs = (Reduction)token.Data;
+
+            var typeNode = BuildArrayTypeNode(rhs[0]);
+            var ids = BuildIdentifierList(rhs[1]);
+
+            return new ArrayDeclStmtNode(typeNode, ids);
+        }
+
+        private StmtNode BuildBreakStmtNode(Token token)
+        {
+            Debug.Assert(token.Parent.Name() == "BreakStmt");
+            Reduction rhs = (Reduction)token.Data;
+
+            Reduction rhs2 = (Reduction)rhs[0].Data;
+            var srcPos = BuildSourcePosition(rhs2[0], rhs2[0]);
+            return new BreakStmtNode(srcPos);
         }
 
         private StmtNode BuildRepeatStmtNode(Token token)
@@ -193,26 +231,75 @@ namespace dumbo.Compiler.SyntaxAnalysis
             Debug.Assert(token.Parent.Name() == "AssignStmt");
             Reduction rhs = (Reduction)token.Data;
 
-            string firstLhfName = rhs[0].Parent.Name();
+            var first = rhs[0].Parent.Name();
 
-            var assignToken = rhs[1].Data as TokenData;
-
-            ExpressionListNode exprListNode = BuildExprList(rhs[2]);
-            
-            if ("Id".Equals(firstLhfName, StringComparison.InvariantCultureIgnoreCase))
+            switch (first)
             {
-                var idListNode = BuildIdentifierList(rhs[0]);
-                var srcPos = new SourcePosition(idListNode, exprListNode);
-                return new AssignmentStmtNode(idListNode, exprListNode, srcPos);
+                case "Id":
+                {
+                    var id = BuildIdentifierList(rhs[0]);
+                    var expr = BuildExprNode(rhs[2]);
+                    var sp = BuildSourcePosition(rhs[0], expr);
+                    return new AssignmentStmtNode(id, expr, sp);
+                }
+                case "PrimitiveDecl":
+                {
+                    var primDecl = BuildPrimitiveDeclStmt(rhs[0]);
+                    var expr = BuildExprNode(rhs[2]);
+                    var sp = new SourcePosition(primDecl, expr);
+                    return new DeclAndAssignmentStmtNode(primDecl.Type, primDecl.Identifiers, expr, sp);
+                }
+                case "ArrayDecl":
+                {
+                    var declStmt = BuildArrayDeclStmt(rhs[0]);
+                    var arrayVal = BuildArrayValueNode(rhs[2], declStmt.Type);
+                    var sp = new SourcePosition(declStmt, arrayVal);
+                    return new DeclAndAssignmentStmtNode(declStmt.Type, declStmt.Identifiers, arrayVal, sp);
+                }
+                case "ArrayId":
+                {
+                    var arrayIdentifierNode = BuildArrayIdentifierNode(rhs[0]);
+                    var ids = new IdentifierListNode();
+                    ids.Add(arrayIdentifierNode);
+                    var expr = BuildExprNode(rhs[2]);
+                    var sp = new SourcePosition(arrayIdentifierNode, expr);
+                    return new AssignmentStmtNode(ids, expr, sp);
+                }
+                default:
+                    throw new NotImplementedException();
             }
 
-            var declNode = BuildDeclStmt(rhs[0]);
-            var srcPos2 = new SourcePosition(declNode, exprListNode);
-            return new DeclAndAssignmentStmtNode(
-                declNode.Type, declNode.Identifiers, exprListNode,
-                srcPos2);
+
+            //string firstLhfName = rhs[0].Parent.Name();
+
+            //ExpressionListNode exprListNode = BuildExprList(rhs[2]);
+
+            //if ("Id".Equals(firstLhfName, StringComparison.InvariantCultureIgnoreCase))
+            //{
+            //    var idListNode = BuildIdentifierList(rhs[0]);
+            //    var srcPos = new SourcePosition(idListNode, exprListNode);
+            //    return new AssignmentStmtNode(idListNode, exprListNode, srcPos);
+            //}
+
+            //var declNode = BuildDeclStmt(rhs[0]);
+            //var srcPos2 = new SourcePosition(declNode, exprListNode);
+            //return new DeclAndAssignmentStmtNode(
+            //    declNode.Type, declNode.Identifiers, exprListNode,
+            //    srcPos2);
         }
-        
+
+        private ArrayIdentifierNode BuildArrayIdentifierNode(Token token)
+        {
+            Debug.Assert(token.Parent.Name() == "ArrayId");
+            Reduction rhs = (Reduction)token.Data;
+
+            var id = BuildIdentifierNode(rhs[0]);
+            var rhs2 = (Reduction)rhs[1].Data;
+            var sizes = BuildArraySizes(rhs2[1]);
+            var sp = BuildSourcePosition(rhs[0], rhs2[2]);
+            return new ArrayIdentifierNode(id.Name, sizes, sp);
+        }
+
         private ExpressionListNode BuildExprList(Token token)
         {
             Debug.Assert(token.Parent.Name() == "ExprList");
@@ -459,17 +546,17 @@ namespace dumbo.Compiler.SyntaxAnalysis
             }
         }
 
-        private DeclStmtNode BuildDeclStmt(Token declStmtToken)
+        private PrimitiveDeclStmtNode BuildPrimitiveDeclStmt(Token declStmtToken)
         {
-            Debug.Assert(declStmtToken.Parent.Name() == "Decl");
+            Debug.Assert(declStmtToken.Parent.Name() == "PrimitiveDecl");
             Reduction rhs = (Reduction)declStmtToken.Data;
 
-            TypeNode type = BuildTypeNode(rhs[0]);
-            IdentifierListNode idList = BuildIdentifierList(rhs[1]);
+            var type = BuildPrimitiveTypeNode(rhs[0]);
+            var idList = BuildIdentifierList(rhs[1]);
             
-            SourcePosition srcPos = BuildSourcePosition(rhs[0], idList);
+            var srcPos = BuildSourcePosition(rhs[0], idList);
 
-            return new DeclStmtNode(idList, type, srcPos);
+            return new PrimitiveDeclStmtNode(idList, type, srcPos);
         }
 
         private TypeNode BuildTypeNode(Token token)
@@ -494,8 +581,8 @@ namespace dumbo.Compiler.SyntaxAnalysis
 
             listNode.Add(BuildIdentifierNode(rhs[0]));
             
-            Token multiIdentToken = rhs[1];
-            AppendIdentifier(multiIdentToken, listNode);
+            Token idListToken = rhs[1];
+            AppendIdentifier(idListToken, listNode);
             
             listNode.UpdateSourcePosition();
 
@@ -505,28 +592,22 @@ namespace dumbo.Compiler.SyntaxAnalysis
         private IdentifierNode BuildIdentifierNode(Token token)
         {
             Debug.Assert(token.Parent.Name() == "Id");
-            Reduction rhs = (Reduction)token.Data;
 
-            var name = GetSpelling(rhs[0]);
-            var srcPos = BuildSourcePosition(rhs[0], rhs[0]);
+            var name = GetSpelling(token);
+            var srcPos = BuildSourcePosition(token, token);
 
             return new IdentifierNode(name, srcPos);
         }
 
-        private void AppendIdentifier(Token multiIdToken, IdentifierListNode list)
+        private void AppendIdentifier(Token token, IdentifierListNode list)
         {
-            Debug.Assert(multiIdToken.Parent.Name() == "MultiId");
-            Reduction rhs = (Reduction)multiIdToken.Data;
+            Debug.Assert(token.Parent.Name() == "IdList");
+            Reduction rhs = (Reduction)token.Data;
 
             if (rhs.Count() > 0)
             {
-                var srcPos = BuildSourcePosition(rhs[1], rhs[1]);
-
-                string name = GetSpelling(rhs[1]);
-                list.Add(new IdentifierNode(name, srcPos));
-
-                Token multiIdToken2 = rhs[2];
-                AppendIdentifier(multiIdToken2, list);
+                list.Add(BuildIdentifierNode(rhs[1]));
+                AppendIdentifier(rhs[2], list);
             }
         }
         
@@ -616,9 +697,7 @@ namespace dumbo.Compiler.SyntaxAnalysis
 
                 if (rhs3[0].Parent.Name() == "Id")
                 {
-                    var identifier = GetSpelling(rhs3[0]);
-                    var sp = BuildSourcePosition(rhs3[0], rhs3[0]);
-                    node.Values.Add(new IdentifierNode(identifier, sp));
+                    node.Values.Add(BuildIdentifierNode(rhs3[0]));
                 }
                 else
                 {

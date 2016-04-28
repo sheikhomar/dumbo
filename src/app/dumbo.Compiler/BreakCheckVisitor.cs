@@ -50,7 +50,7 @@ namespace dumbo.Compiler
             return null;
         }
 
-        public VisitResult Visit(DeclStmtNode node, VisitorArgs arg)
+        public VisitResult Visit(PrimitiveDeclStmtNode node, VisitorArgs arg)
         {
             return null;
         }

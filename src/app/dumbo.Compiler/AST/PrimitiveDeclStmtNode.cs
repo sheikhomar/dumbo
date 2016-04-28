@@ -1,8 +1,8 @@
 ﻿namespace dumbo.Compiler.AST
 {
-    public class DeclStmtNode : StmtNode, IVariableDeclNode
+    public class PrimitiveDeclStmtNode : StmtNode, IVariableDeclNode
     {
-        public DeclStmtNode(IdentifierListNode identifiers, TypeNode type, SourcePosition sourcePosition)
+        public PrimitiveDeclStmtNode(IdentifierListNode identifiers, TypeNode type, SourcePosition sourcePosition)
         {
             Identifiers = identifiers;
             Type = type;

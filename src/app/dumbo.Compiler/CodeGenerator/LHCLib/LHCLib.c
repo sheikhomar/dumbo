@@ -41,6 +41,7 @@ double Floor(double input);
 Boolean IsEqual(Text *t1, Text *t2);
 double random(double range_lower, double range_upper);
 double modulo(double n, double d);
+double div(double n, double d);
 
 /********************************************************
 Function:	Text									
@@ -294,6 +295,18 @@ double modulo(double n, double d)
 		throw("Cannot do modulo when 2nd argument is zero.");
 	
 	return n - d*(floor((n/d)));
+}
+
+/********************************************************
+Function:	Modulo
+Version: 	v1.0
+/********************************************************/
+double div(double n, double d)
+{
+	if (d == 0)
+		throw("Cannot divide by zero.");
+
+	return n / d;
 }
 
 /********************************************************

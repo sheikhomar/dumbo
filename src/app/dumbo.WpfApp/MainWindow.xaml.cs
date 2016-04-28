@@ -432,7 +432,7 @@ namespace dumbo.WpfApp
                 {
                     var codeGen = new CodeGeneratorVisitor();
                     root.Accept(codeGen, new VisitorArgs());
-                    ResultTextBox.Text = codeGen.CProgram.Print(true, false, false);
+                    ResultTextBox.Text = codeGen.CProgram.Print(true, false, true);
                 }
 
                 MarkErrors(reporter);

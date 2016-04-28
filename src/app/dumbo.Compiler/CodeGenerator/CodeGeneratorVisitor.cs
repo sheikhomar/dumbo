@@ -97,21 +97,62 @@ namespace dumbo.Compiler.CodeGenerator
         public RuntimeEntity Visit(BinaryOperationNode node, VisitorArgs arg)
         {
             PrimitiveTypeNode binType = node.InferredType.GetFirstAs<PrimitiveTypeNode>();
+            PrimitiveTypeNode leftType = node.LeftOperand.InferredType.GetFirstAs<PrimitiveTypeNode>();
+            PrimitiveTypeNode rightType = node.RightOperand.InferredType.GetFirstAs<PrimitiveTypeNode>();
             string binOperator = ConvertBinaryOperator(node.Operator);
 
-            if (binType.Type == PrimitiveType.Text && binOperator == "+")
+            if (binOperator == "+" && (leftType.Type == PrimitiveType.Text || rightType.Type == PrimitiveType.Text))
             {
-                _currentStmt.Append("ConcatText(");
-                node.LeftOperand.Accept(this, arg);
-                _currentStmt.Append(", ");
-                node.RightOperand.Accept(this, arg);
-                _currentStmt.Append(")");
+                if (leftType.Type == PrimitiveType.Text)
+                {
+                    if (rightType.Type == PrimitiveType.Text)
+                    {
+                        WriteBinOpNodeFunc("ConcatText", node.LeftOperand, node.RightOperand, arg);
+                    }
+                    else if (rightType.Type == PrimitiveType.Number)
+                    {
+                        WriteBinOpNodeFunc("ConcatTextAndNumber", node.LeftOperand, node.RightOperand, arg);
+                    }
+                    else
+                    {
+                        WriteBinOpNodeFunc("ConcatTextAndBoolean", node.LeftOperand, node.RightOperand, arg);
+                    }
+                }
+                else if (rightType.Type == PrimitiveType.Text)
+                {
+                    if (leftType.Type == PrimitiveType.Boolean)
+                    {
+                        _currentStmt.Append($"ConcatText(ConcatTextAndBoolean(CreateText(\"\"), ");
+                        node.LeftOperand.Accept(this, arg);
+                        _currentStmt.Append("), ");
+                        node.RightOperand.Accept(this, arg);
+                        _currentStmt.Append(")");
+                    }
+                    else
+                    {
+                        _currentStmt.Append($"ConcatText(ConcatTextAndNumber(CreateText(\"\"), ");
+                        node.LeftOperand.Accept(this, arg);
+                        _currentStmt.Append("), ");
+                        node.RightOperand.Accept(this, arg);
+                        _currentStmt.Append(")");
+                    }
+                }
+            }
+            else if (binOperator == "%" && binType.Type == PrimitiveType.Number)
+            {
+                WriteBinOpNodeFunc("modulo", node.LeftOperand, node.RightOperand, arg);
+            }
+            else if (binOperator == "/" && binType.Type == PrimitiveType.Number)
+            {
+                WriteBinOpNodeFunc("div", node.LeftOperand, node.RightOperand, arg); 
             }
             else
             {
+                _currentStmt.Append("(");
                 node.LeftOperand.Accept(this, arg);
                 _currentStmt.Append($" {binOperator} ");
                 node.RightOperand.Accept(this, arg);
+                _currentStmt.Append(")");
             }
             
             return null;
@@ -338,7 +379,6 @@ namespace dumbo.Compiler.CodeGenerator
             
             if (!funcArg.VisitBody)
             {
-                _currentModule = new Module();
                 WriteFunctionHeader(node, arg);
                 _currentStmt.Append(";");
                 _currentModule.Append(_currentStmt);
@@ -514,6 +554,7 @@ namespace dumbo.Compiler.CodeGenerator
 
         public RuntimeEntity Visit(RootNode node, VisitorArgs arg)
         {
+            _currentModule = new Module();
             node.FuncDecls.Accept(this, new FuncVisitorArgs(false));
             CProgram.AddUserFuncDeclModule(_currentModule);
             node.Program.Accept(this, arg);
@@ -633,6 +674,15 @@ namespace dumbo.Compiler.CodeGenerator
             {
                 _currentModule.Append(stmt);
             }
+        }
+
+        private void WriteBinOpNodeFunc(string funcName, ExpressionNode left, ExpressionNode right, VisitorArgs arg)
+        {
+            _currentStmt.Append(funcName + "(");
+            left.Accept(this, arg);
+            _currentStmt.Append(", ");
+            right.Accept(this, arg);
+            _currentStmt.Append(")");
         }
     }
 }

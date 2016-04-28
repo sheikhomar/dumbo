@@ -239,7 +239,7 @@ namespace dumbo.Compiler.SyntaxAnalysis
                 {
                     var id = BuildIdentifierList(rhs[0]);
                     var expr = BuildExprNode(rhs[2]);
-                    var sp = BuildSourcePosition(rhs[0], expr);
+                    var sp = new SourcePosition(id, expr);
                     return new AssignmentStmtNode(id, expr, sp);
                 }
                 case "PrimitiveDecl":
@@ -266,26 +266,8 @@ namespace dumbo.Compiler.SyntaxAnalysis
                     return new AssignmentStmtNode(ids, expr, sp);
                 }
                 default:
-                    throw new NotImplementedException();
+                    throw new ArgumentOutOfRangeException();
             }
-
-
-            //string firstLhfName = rhs[0].Parent.Name();
-
-            //ExpressionListNode exprListNode = BuildExprList(rhs[2]);
-
-            //if ("Id".Equals(firstLhfName, StringComparison.InvariantCultureIgnoreCase))
-            //{
-            //    var idListNode = BuildIdentifierList(rhs[0]);
-            //    var srcPos = new SourcePosition(idListNode, exprListNode);
-            //    return new AssignmentStmtNode(idListNode, exprListNode, srcPos);
-            //}
-
-            //var declNode = BuildDeclStmt(rhs[0]);
-            //var srcPos2 = new SourcePosition(declNode, exprListNode);
-            //return new DeclAndAssignmentStmtNode(
-            //    declNode.Type, declNode.Identifiers, exprListNode,
-            //    srcPos2);
         }
 
         private ArrayIdentifierNode BuildArrayIdentifierNode(Token token)
@@ -554,22 +536,24 @@ namespace dumbo.Compiler.SyntaxAnalysis
             var type = BuildPrimitiveTypeNode(rhs[0]);
             var idList = BuildIdentifierList(rhs[1]);
             
-            var srcPos = BuildSourcePosition(rhs[0], idList);
+            var srcPos = new SourcePosition(type, idList);
 
             return new PrimitiveDeclStmtNode(idList, type, srcPos);
         }
 
         private TypeNode BuildTypeNode(Token token)
         {
-            string typeSpec = GetSpelling(token).ToLower();
-            if ("number".Equals(typeSpec))
-                return new PrimitiveTypeNode(PrimitiveType.Number);
-            if ("boolean".Equals(typeSpec))
-                return new PrimitiveTypeNode(PrimitiveType.Boolean);
-            if ("text".Equals(typeSpec))
-                return new PrimitiveTypeNode(PrimitiveType.Text);
+            Debug.Assert(token.Parent.Name() == "Type");
+            Reduction rhs = (Reduction)token.Data;
 
-            throw new InvalidOperationException("Invalid type found: " + typeSpec);
+            if (rhs[0].Parent.Name() == "PrimitiveTypes")
+            {
+                return BuildPrimitiveTypeNode(rhs[0]);
+            }
+            else
+            {
+                return BuildArrayTypeNode(rhs[0]);
+            }
         }
 
         private IdentifierListNode BuildIdentifierList(Token idToken)
@@ -815,19 +799,20 @@ namespace dumbo.Compiler.SyntaxAnalysis
 
         private void AppendReturnTypes(Token token, FuncDeclNode funcDeclNode)
         {
-            Debug.Assert(token.Parent.Name() == "ReturnTypes" || token.Parent.Name() == "MultiReturnTypes");
+            Debug.Assert(token.Parent.Name() == "ReturnTypes" || token.Parent.Name() == "ReturnTypesList");
             Reduction rhs = (Reduction)token.Data;
 
-            if (rhs.Count() > 1)
+            if (rhs.Count() == 2)
             {
-                Token singleToken = rhs.Count() == 2 ? rhs[0] : rhs[1];
-                Token multiToken = rhs.Count() == 2 ? rhs[1] : rhs[2];
-
-                Reduction retReduction = (Reduction) singleToken.Data;
-                TypeNode retType = BuildTypeNode(retReduction[0]);
-                funcDeclNode.ReturnTypes.Add(retType);
-
-                AppendReturnTypes(multiToken, funcDeclNode);
+                var type = BuildTypeNode(rhs[0]);
+                funcDeclNode.ReturnTypes.Add(type);
+                AppendReturnTypes(rhs[1], funcDeclNode);
+            }
+            else if (rhs.Count() == 3)
+            {
+                var type = BuildTypeNode(rhs[1]);
+                funcDeclNode.ReturnTypes.Add(type);
+                AppendReturnTypes(rhs[2], funcDeclNode);
             }
         }
         

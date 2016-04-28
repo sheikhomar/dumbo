@@ -24,6 +24,11 @@ namespace dumbo.Compiler.TypeChecking
             return null;
         }
 
+        public TypeCheckVisitResult Visit(ArrayDeclStmtNode node, VisitorArgs arg)
+        {
+            return null;
+        }
+
         public TypeCheckVisitResult Visit(AssignmentStmtNode node, VisitorArgs arg)
         {
             if (node.Identifiers.Count == 1)

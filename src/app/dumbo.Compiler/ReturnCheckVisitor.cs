@@ -16,6 +16,11 @@ namespace dumbo.Compiler
             return null;
         }
 
+        public ReturnCheckResult Visit(ArrayDeclStmtNode node, VisitorArgs arg)
+        {
+            return null;
+        }
+
         public ReturnCheckResult Visit(AssignmentStmtNode node, VisitorArgs arg)
         {
             return null;

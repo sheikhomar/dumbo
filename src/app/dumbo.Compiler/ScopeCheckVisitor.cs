@@ -22,6 +22,16 @@ namespace dumbo.Compiler
             return null;
         }
 
+        public object Visit(ArrayDeclStmtNode node, VisitorArgs arg)
+        {
+            foreach (var identifier in node.Identifiers)
+            {
+                AddVariableToSymbolTable(identifier, node);
+            }
+
+            return null;
+        }
+
         public object Visit(AssignmentStmtNode node, VisitorArgs arg)
         {
             node.Identifiers.Accept(this, arg);

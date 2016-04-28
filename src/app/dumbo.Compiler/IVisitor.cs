@@ -5,6 +5,7 @@ namespace dumbo.Compiler
     public interface IVisitor<T, K>
     {
         T Visit(ActualParamListNode node, K arg);
+        T Visit(ArrayDeclStmtNode node, K arg);
         T Visit(AssignmentStmtNode node, K arg);
         T Visit(BinaryOperationNode node, K arg);
         T Visit(BreakStmtNode node, K arg);

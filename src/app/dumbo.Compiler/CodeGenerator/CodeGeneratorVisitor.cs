@@ -34,6 +34,11 @@ namespace dumbo.Compiler.CodeGenerator
             return null;
         }
 
+        public RuntimeEntity Visit(ArrayDeclStmtNode node, VisitorArgs arg)
+        {
+            throw new NotImplementedException();
+        }
+
         public RuntimeEntity Visit(AssignmentStmtNode node, VisitorArgs arg)
         {
             bool isFunction = node.Identifiers.Count > node.Expressions.Count;

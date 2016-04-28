@@ -34,6 +34,18 @@ namespace dumbo.Compiler
             return EmptyResult;
         }
 
+        public VisitResult Visit(ArrayDeclStmtNode node, VisitorArgs arg)
+        {
+            Write("Array[");
+            VisitChildren(node.Type.Sizes, ",", arg);
+            Write("] of ");
+            node.Type.Type.Accept(this,arg);
+            Write(" ");
+            node.Identifiers.Accept(this, arg);
+            WriteLine();
+            return null;
+        }
+
         public VisitResult Visit(AssignmentStmtNode node, VisitorArgs arg)
         {
             node.Identifiers.Accept(this, arg);

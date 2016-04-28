@@ -21,6 +21,11 @@ namespace dumbo.Compiler
             throw new NotImplementedException();
         }
 
+        public ReachabilityResult Visit(ArrayDeclStmtNode node, ReachabilityArgument arg)
+        {
+            throw new NotImplementedException();
+        }
+
         public ReachabilityResult Visit(AssignmentStmtNode node, ReachabilityArgument arg)
         {
             throw new NotImplementedException();

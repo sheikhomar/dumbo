@@ -30,6 +30,14 @@ namespace dumbo.Compiler.Interpreter
             return null;
         }
 
+        public Value Visit(ArrayDeclStmtNode node, VisitorArgs arg)
+        {
+            foreach (var identifier in node.Identifiers)
+                CurrentCallFrame.Allocate(identifier.Name);
+
+            return null;
+        }
+
         public Value Visit(AssignmentStmtNode node, VisitorArgs arg)
         {
             PerformAssignment(node.Identifiers, node.Value, arg);

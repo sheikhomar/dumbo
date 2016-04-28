@@ -108,6 +108,7 @@
     <Compile Include="Interpreter\Value.cs" />
     <Compile Include="ReturnCheckResult.cs" />
     <Compile Include="ReturnCheckVisitor.cs" />
+    <Compile Include="AST\ArrayValueNode.cs" />
     <Compile Include="TypeChecking\BinaryOperationTypeChecker.cs" />
     <Compile Include="CodeGenerator\CodeGeneratorVisitor.cs" />
     <Compile Include="Event.cs" />

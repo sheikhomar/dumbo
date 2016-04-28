@@ -1,6 +1,6 @@
 /********************************************************
 Function:	Text									
-Version: 	v1.1 (with mem leaks)							
+Version: 	v1.2 (with more mem leaks)							
 Uses:			
 /********************************************************/
 #include <stdio.h>
@@ -16,10 +16,12 @@ typedef struct Text{
 
 //LHC HelperFunctions
 void TextPrint(Text *input);
-void UpdateText(char *inputText, int Length, Text *text);
-void ConcatText(Text *inputText1, Text *inputText2, Text *resText);
+void UpdateText(Text *sourceText, Text *destText);
+Text *ConcatText(Text *inputText1, Text *inputText2);
 void RemoveText(Text *input);
+void RemoveTextValue(Text *input);
 Text *CreateText(char *input);
+void CopyToText(char *inputText, int length, Text *destText);
 
 int main()
 {
@@ -29,52 +31,58 @@ int main()
 
 	for (i = 0; i < 5; i++)
 	{
-		myText = CreateText("Hans");
-		hey = CreateText("Valueer");
-		UpdateText("Hello", 5, myText);
-		TextPrint(myText);
-		RemoveText(myText);
-		UpdateText("Hello", 5, hey);
+		myText = CreateText("ho ");
+		hey = CreateText("hi ");
 		TextPrint(hey);
+		UpdateText(ConcatText(hey, myText), myText);
+		TextPrint(myText);
+		UpdateText(ConcatText(myText, hey), hey);
+		TextPrint(hey);
+		RemoveText(myText);
 		RemoveText(hey);
 	}
 	
     return 0;
 }
 
+//Prints a Text's content
+void TextPrint(Text *input) {
+	printf("%s\r\n",input->Value);
+}
+
+//Creates a new Text Structure and 
 Text *CreateText(char *input){
 	Text *newText = (Text*)calloc(1,sizeof(Text));
 	
 	(*newText).Length = 0;
 	(*newText).Value = "";
 	
-	UpdateText(input, strlen(input),newText);
+	CopyToText(input, strlen(input),newText);
 	
 	return newText;
 }
 
-void TextPrint(Text *input) {
-	int i = 0;
-
-	for (i = 0; i<(*input).Length; i++)
-		printf("%c", *((*input).Value + i));
-	printf("\n");
+//Updates a Text with the content of another Text
+void UpdateText(Text *sourceText, Text *destText){
+	CopyToText(sourceText->Value, sourceText->Length, destText);
 }
 
-void UpdateText(char *inputText, int length, Text *text) {
+//Copies a char * content to a given Text
+void CopyToText(char *inputText, int length, Text *destText) {
 	char *textContent = (char*)calloc(length, sizeof(char));
 	int i = 0;
 
-	strcpy(textContent, inputText); //handle unsucessfull copy
-									//Disassemble the old Text
-	RemoveText(text);
+	strcpy(textContent, inputText);
+									
+	RemoveTextValue(destText);
 
 	//Create the new Text
-	text->Length = length;
-	text->Value = textContent;
+	destText->Length = length;
+	destText->Value = textContent;
 }
 
-void ConcatText(Text *inputText1, Text *inputText2, Text *resText) {
+//Concatenates  the two texts and return a new Text with the result
+Text *ConcatText(Text *inputText1, Text *inputText2) {
 	int	size1 = (*inputText1).Length;
 	int size2 = (*inputText2).Length;
 	char *text1 = (*inputText1).Value;
@@ -85,20 +93,28 @@ void ConcatText(Text *inputText1, Text *inputText2, Text *resText) {
 	strcpy(combinedText, text1);
 	strcpy((combinedText + size1), text2);
 
-	//Disassemble the old Text
-	RemoveText(resText);
-
+	
 	//Create the new Text
-	(*resText).Length = size1 + size2;;
-	(*resText).Value = combinedText;
+	return CreateText(combinedText);
 }
 
+//Removes a given Text and it's value
 void RemoveText(Text *input) {
+	return ;
+	
+	if (input != NULL) {
+		RemoveTextValue(input);
+		(*input).Value = NULL;
+		free(input);
+	}
+}
+
+//Removes a given Text's value
+void RemoveTextValue(Text *input) {
 	return ;
 	
 	if (input != NULL) {
 		free((*input).Value);
 		(*input).Value = NULL;
-		free(input);
 	}
 }

@@ -55,8 +55,15 @@ namespace dumbo.Compiler.CodeGenerator
                     _currentStmt.Append(", ");
 
                 foreach (var ret in node.Identifiers)
-                {                    
-                    _currentStmt.Append("&" + ret.Name);
+                {
+                    if (ret.InferredType.GetFirstAs<PrimitiveTypeNode>().Type == PrimitiveType.Text)
+                    {
+                        _currentStmt.Append(ret.Name);
+                    }
+                    else
+                    {
+                        _currentStmt.Append("&" + ret.Name);
+                    }
                     if (i < node.Identifiers.Count - 1)
                         _currentStmt.Append(", ");
                     i++;
@@ -75,7 +82,7 @@ namespace dumbo.Compiler.CodeGenerator
                     {
                         _currentStmt.Append("UpdateText(");
                         node.Expressions[index].Accept(this, arg);
-                        _currentStmt.Append($", &");
+                        _currentStmt.Append($", ");
                         node.Identifiers[index].Accept(this, arg);
                         _currentStmt.Append(")");
                     }
@@ -196,7 +203,7 @@ namespace dumbo.Compiler.CodeGenerator
 
                 //MyFunction(formalParameters, &ret1, &ret2 ...) | How it looks in C for a function
                 _currentStmt = new Stmt("");
-                _currentStmt.Append(funcExp.FuncName + "(");
+                _currentStmt.Append("_" + funcExp.FuncName + "(");
                 funcExp.Parameters.Accept(this, arg);
 
                 if (node.Identifiers.Count > 0 && funcExp.Parameters.Count > 0)
@@ -204,7 +211,14 @@ namespace dumbo.Compiler.CodeGenerator
 
                 foreach (var ret in node.Identifiers)
                 {
-                    _currentStmt.Append("&" + ret.Name);
+                    if (ret.InferredType.GetFirstAs<PrimitiveTypeNode>().Type == PrimitiveType.Text)
+                    {
+                        _currentStmt.Append(ret.Name);
+                    }
+                    else
+                    {
+                        _currentStmt.Append("&" + ret.Name);
+                    }
                     if (i < node.Identifiers.Count - 1)
                         _currentStmt.Append(", ");
                     i++;
@@ -231,7 +245,7 @@ namespace dumbo.Compiler.CodeGenerator
                         _currentStmt = new Stmt("");
                         _currentStmt.Append("UpdateText(");
                         node.Expressions[i].Accept(this, arg);
-                        _currentStmt.Append($", &");
+                        _currentStmt.Append($", ");
                         node.Identifiers[i].Accept(this, arg);
                         _currentStmt.Append(")");
                         if (i != assCount - 1)
@@ -478,7 +492,7 @@ namespace dumbo.Compiler.CodeGenerator
                 case PrimitiveType.Number:
                     _currentStmt.Append("double"); break;
                 case PrimitiveType.Text:
-                    _currentStmt.Append("Text"); break;
+                    _currentStmt.Append("Text*"); break;
                 case PrimitiveType.Boolean:
                     _currentStmt.Append("Boolean"); break;
                 default: throw new ArgumentException($"{node.Type} is not a valid type.");
@@ -551,6 +565,7 @@ namespace dumbo.Compiler.CodeGenerator
                     _currentStmt = new Stmt("*_ret" + i);
                     _currentStmt.Append(" = ");
                     ret.Accept(this, arg);
+                    _currentStmt.Append(";");
                     _currentModule.Append(_currentStmt);
                     i++;
                 }
@@ -659,11 +674,12 @@ namespace dumbo.Compiler.CodeGenerator
 
                 for (int i = 0; i < funcNode.ReturnTypes.Count; i++)
                 {
+                    PrimitiveTypeNode retType = funcNode.ReturnTypes[i] as PrimitiveTypeNode;
                     funcNode.ReturnTypes[i].Accept(this, arg);
+                    _currentStmt.Append(" " + (retType.Type == PrimitiveType.Text ? "" : "*"));
+                    _currentStmt.Append("_ret" + (i + 1));
                     if (i < funcNode.ReturnTypes.Count - 1)
-                        _currentStmt.Append(" *_ret" + (i + 1) + ", ");
-                    else
-                        _currentStmt.Append(" *_ret" + (i + 1));
+                        _currentStmt.Append(", ");
                 }
             }
             _currentStmt.Append(")");

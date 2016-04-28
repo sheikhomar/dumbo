@@ -338,8 +338,10 @@ namespace dumbo.Compiler.CodeGenerator
             
             if (!funcArg.VisitBody)
             {
+                _currentModule = new Module();
                 WriteFunctionHeader(node, arg);
                 _currentStmt.Append(";");
+                _currentModule.Append(_currentStmt);
                 return null;
             }
 
@@ -417,7 +419,7 @@ namespace dumbo.Compiler.CodeGenerator
                 {
                     case PrimitiveType.Number: _currentStmt.Append(node.Value); break;
                     case PrimitiveType.Text: _currentStmt.Append($"CreateText(\"{node.Value}\")"); break;
-                    case PrimitiveType.Boolean: _currentStmt.Append(node.Value); break;
+                    case PrimitiveType.Boolean: _currentStmt.Append(node.Value.ToLower()); break;
                     default: throw new ArgumentException($"{nodeType.Type} is not a valid type");
                 }
             }
@@ -513,6 +515,7 @@ namespace dumbo.Compiler.CodeGenerator
         public RuntimeEntity Visit(RootNode node, VisitorArgs arg)
         {
             node.FuncDecls.Accept(this, new FuncVisitorArgs(false));
+            CProgram.AddUserFuncDeclModule(_currentModule);
             node.Program.Accept(this, arg);
             node.FuncDecls.Accept(this, new FuncVisitorArgs(true));
             return null;

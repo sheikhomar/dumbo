@@ -304,3 +304,7 @@ void throw(char* message){
 	printf("Program ended unexpectedly:\r\n%s\r\n",message);
 	exit(1);
 }
+
+/********************************************************
+User area:
+/********************************************************/

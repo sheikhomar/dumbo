@@ -576,7 +576,7 @@ namespace dumbo.Compiler.SyntaxAnalysis
             else
             {
                 typeNode = BuildArrayTypeNode(rhs[1]);
-                valueNode = null; // TODO: Work in progress.
+                valueNode = BuildArrayValueNode(rhs[4], (ArrayTypeNode)typeNode);
             }
             
             var srcPos = BuildSourcePosition(rhs[0], rhs[0]);
@@ -584,9 +584,56 @@ namespace dumbo.Compiler.SyntaxAnalysis
             return new ConstDeclNode(name, typeNode, valueNode, srcPos);
         }
 
-        private ArrayValueNode BuildArrayValueNode(Token token)
+        private ArrayValueNode BuildArrayValueNode(Token token, ArrayTypeNode node)
         {
-            
+            Debug.Assert(token.Parent.Name() == "ArrayAssign");
+            Reduction rhs = (Reduction)token.Data;
+
+            var arrayValueNode = new ArrayValueNode(node);
+            AppendVariableInitializer(rhs[1], arrayValueNode);
+
+            return arrayValueNode;
+        }
+
+        private void AppendArrayValueNode(Token token, ArrayValueNode node)
+        {
+            Debug.Assert(token.Parent.Name() == "ArrayAssign");
+            Reduction rhs = (Reduction)token.Data;
+
+            AppendVariableInitializer(rhs[1], node);
+
+        }
+
+        private void AppendVariableInitializer(Token token, ArrayValueNode node)
+        {
+            Debug.Assert(token.Parent.Name() == "VarInitList");
+            Reduction rhs = (Reduction) token.Data;
+            var rhs2 = (Reduction) rhs[0].Data;
+
+            if (rhs2[0].Parent.Name() == "LiteralInput")
+            {
+                var rhs3 = (Reduction) rhs2[0].Data;
+
+                if (rhs3[0].Parent.Name() == "Id")
+                {
+                    var identifier = GetSpelling(rhs3[0]);
+                    var sp = BuildSourcePosition(rhs3[0], rhs3[0]);
+                    node.Values.Add(new IdentifierNode(identifier, sp));
+                }
+                else
+                {
+                    var val = BuildLiteralValueNode(rhs3[0]);
+                    node.Values.Add(val);
+                }
+            }
+            else
+            {
+                AppendArrayValueNode(rhs2[0], node);
+            }
+            if (rhs.Count() > 1)
+            {
+                AppendVariableInitializer(rhs[2], node);
+            }
         }
 
         private FuncDeclNode BuildFuncDeclNode(Token token)

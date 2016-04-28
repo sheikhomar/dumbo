@@ -60,6 +60,9 @@ BooleanLiteral = 'TRUE' | 'FALSE'
                   | 'Text' 
                   | 'Boolean'
                   
+<Type> ::= <PrimitiveTypes>
+        | <ArrayType>
+                  
 <ArrayType> ::= 'Array' '[' <ArraySize> ']' 'of' '(' <PrimitiveTypes> ')'
              | 'Array' '[' <ArraySize> ']' 'of' <PrimitiveTypes>
              
@@ -100,22 +103,14 @@ BooleanLiteral = 'TRUE' | 'FALSE'
 <FormalParamsList> ::= ',' <FormalParam> <FormalParamsList>
                      | <>
 
-<FormalParam> ::= 'Number' Id
-               | 'Text' Id
-               | 'Boolean' Id
-               | <ArrayType> Id
+<FormalParam> ::= <Type> Id
          
 <ReturnTypes> ::= 'Nothing'
-               | <ReturnType> <ReturnTypesList>
+               | <Type> <ReturnTypesList>
 
-<ReturnTypesList> ::= ',' <ReturnType> <ReturnTypesList>
+<ReturnTypesList> ::= ',' <Type>  <ReturnTypesList>
                     | <>
-              
-<ReturnType> ::= 'Number'
-              | 'Text' 
-              | 'Boolean'
-              | <ArrayType>
-
+             
 !===================================================================
 ! Statements
 !===================================================================

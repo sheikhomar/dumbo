@@ -146,6 +146,10 @@ namespace dumbo.Compiler.CodeGenerator
             {
                 WriteBinOpNodeFunc("div", node.LeftOperand, node.RightOperand, arg); 
             }
+            else if (binOperator == "==" && leftType.Type == PrimitiveType.Text && rightType.Type == PrimitiveType.Text)
+            {
+                WriteBinOpNodeFunc("IsEqual", node.LeftOperand, node.RightOperand, arg);
+            }
             else
             {
                 _currentStmt.Append("(");
@@ -499,7 +503,9 @@ namespace dumbo.Compiler.CodeGenerator
 
         public RuntimeEntity Visit(RepeatStmtNode node, VisitorArgs arg)
         {
-            _currentStmt = new Stmt("for (int i=0; i<");
+            _currentStmt = new Stmt("int i = 0;");
+            _currentModule.Append(_currentStmt);
+            _currentStmt = new Stmt("for (i=0; i<");
             node.Number.Accept(this, arg);
             _currentStmt.Append("; i++)");
             _currentModule.Append(_currentStmt);
@@ -526,10 +532,14 @@ namespace dumbo.Compiler.CodeGenerator
             
             if (!isMultipleReturn)
             {
-                _currentStmt = new Stmt("return ");
-                node.Expressions[0].Accept(this, arg);
+                if (node.Expressions.Count != 0)
+                {
+                    _currentStmt = new Stmt("return ");
+
+                    node.Expressions[0].Accept(this, arg);
                 _currentStmt.Append(";");
                 _currentModule.Append(_currentStmt);
+                }
             }
             else
             {
@@ -584,8 +594,9 @@ namespace dumbo.Compiler.CodeGenerator
 
         public RuntimeEntity Visit(UnaryOperationNode node, VisitorArgs arg)
         {
-            _currentStmt.Append(ConvertUnaryOperator(node.Operator));
+            _currentStmt.Append(ConvertUnaryOperator(node.Operator) + "(");
             node.Expression.Accept(this, arg);
+            _currentStmt.Append(")");
 
             return null;
         }

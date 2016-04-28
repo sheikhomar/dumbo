@@ -44,8 +44,8 @@ void Write(Text *input);
 double Ceiling(double input);
 double Floor(double input);
 Boolean IsEqual(Text *t1, Text *t2);
-double random(double range_lower, double range_upper);
-double modulo(double n, double d);
+double Random(double range_lower, double range_upper);
+double Modulo(double n, double d);
 double Div(double n, double d);
 
 /********************************************************
@@ -142,7 +142,7 @@ Function:	ReadText
 Version: 	v1.0 							
 /********************************************************/
 // From: http://stackoverflow.com/questions/314401/how-to-read-a-line-from-the-console-in-c
-char * getline(void) {
+char * Getline(void) {
     char * line = malloc(100), *linep = line;
     size_t lenmax = 100, len = lenmax;
     int c;
@@ -174,7 +174,7 @@ char * getline(void) {
 }
 
 Text* ReadText() {
-    char* text = getline();
+    char* text = Getline();
     int length = strlen(text);
 
     Text *retVal = (Text*)malloc(sizeof(Text));
@@ -240,7 +240,7 @@ Boolean IsEqual(Text *t1, Text *t2)
 Function:	Random									
 Version: 	v1.0 							
 /********************************************************/
-double random(double range1, double range2)
+double Random(double range1, double range2)
 {
 	double number,range_lower,range_upper;
 	double range;
@@ -268,7 +268,7 @@ double random(double range1, double range2)
 
 	
 	//Calculate the random number and fit to range
-	number = modulo(((double)rand()),(range+1)); // 1 % 2 =0,1 in a range 0..1
+	number = Modulo(((double)rand()),(range+1)); // 1 % 2 =0,1 in a range 0..1
 	
 	//Return the random number, adding range offset from 0
 	return number + range_lower;
@@ -277,7 +277,7 @@ double random(double range1, double range2)
 Function:	Modulo									
 Version: 	v1.0 							
 /********************************************************/
-double modulo(double n, double d)
+double Modulo(double n, double d)
 {	
 	if(d == 0)
 		throw("Cannot do modulo when 2nd argument is zero.");

@@ -13,7 +13,7 @@ Type Declarations
 /********************************************************/
 typedef struct Text {
 	int Length;
-	char *Text;
+	char *Value;
 } Text;
 
 typedef enum { false, true } Boolean;
@@ -27,6 +27,7 @@ void TextPrint(Text *input);
 void UpdateText(char *inputText, int Length, Text *text);
 void ConcatText(Text *inputText1, Text *inputText2, Text *resText);
 void RemoveText(Text *input);
+Text *CreateText(char *input);
 void BooleanPrint(Boolean *input);
 
 Text* ConcatTextAndBoolean(Text *text, Boolean boolean);
@@ -41,101 +42,71 @@ double Floor(double input);
 Boolean IsEqual(Text *t1, Text *t2);
 double random(double range_lower, double range_upper);
 double modulo(double n, double d);
-double div(double n, double d);
+double Div(double n, double d);
 
 /********************************************************
 Function:	Text									
-Version: 	v1.0 							
+Version: 	v1.1 (with mem leaks) 							
 /********************************************************/
-// Print a Text value given a pointer to a Text
+Text *CreateText(char *input){
+	Text *newText = (Text*)calloc(1,sizeof(Text));
+	
+	(*newText).Length = 0;
+	(*newText).Value = "";
+	
+	UpdateText(input, strlen(input),newText);
+	
+	return newText;
+}
+
 void TextPrint(Text *input) {
 	int i = 0;
 
-	// Printing character by character
 	for (i = 0; i<(*input).Length; i++)
-		printf("%c", *((*input).Text + i));
+		printf("%c", *((*input).Value + i));
 	printf("\n");
 }
 
-// Updating a value of a Text given a char pointer of the new value, the length of the new value and the Text to be updated
 void UpdateText(char *inputText, int length, Text *text) {
-	char *textContent = (char*)malloc(length);
-	int i;
+	char *textContent = (char*)calloc(length, sizeof(char));
+	int i = 0;
 
-	for (i = 0; i<length; i++)
-		*(textContent + i) = *(inputText + i);
-
-	//Disassemble the old Text
+	strcpy(textContent, inputText); //handle unsucessfull copy
+									//Disassemble the old Text
 	RemoveText(text);
 
 	//Create the new Text
-	(*text).Length = length;
-	(*text).Text = textContent;
+	text->Length = length;
+	text->Value = textContent;
 }
 
-// Copy a value of a Text given a char pointer to the old value, the length of the old value and the Text to be copied to (it's null - empty)
-void CopyText(char *inputText, int length, Text *text) {
-	char *textContent = (char*)malloc(length);
-	int i;
-
-	for (i = 0; i<length; i++)
-		*(textContent + i) = *(inputText + i);
-	
-	//Copy the Text
-	(*text).Length = length;
-	(*text).Text = textContent;
-}
-
-// Concatenating to Texts' values
 void ConcatText(Text *inputText1, Text *inputText2, Text *resText) {
-	int i, j, size1 = (*inputText1).Length, size2 = (*inputText2).Length;
-	char *text1 = (*inputText1).Text, *text2 = (*inputText2).Text;
+	int	size1 = (*inputText1).Length;
+	int size2 = (*inputText2).Length;
+	char *text1 = (*inputText1).Value;
+	char *text2 = (*inputText2).Value;
 	char *combinedText = (char*)malloc(size1 + size2);
 
 	//Combine the two Texts
-	for (i = 0; i<size1; i++)
-		*(combinedText + i) = *(text1 + i);
-	for (j = 0; j<size2; j++)
-		*(combinedText + (i + j)) = *(text2 + j);
+	strcpy(combinedText, text1);
+	strcpy((combinedText + size1), text2);
 
 	//Disassemble the old Text
 	RemoveText(resText);
 
 	//Create the new Text
 	(*resText).Length = size1 + size2;;
-	(*resText).Text = combinedText;
+	(*resText).Value = combinedText;
 }
 
-// Free the old memory occupied
 void RemoveText(Text *input) {
+	return ;
+	
 	if (input != NULL) {
-		free((*input).Text);
-		(*input).Text = NULL;
+		free((*input).Value);
+		(*input).Value = NULL;
+		free(input);
 	}
-}
-
-Text* ConcatTextAndNumber(Text *text, double number)
-{
-    int MAX_SIZE = 50;
-    char *output = (char*)malloc(MAX_SIZE + 1);
-    sprintf(output, "%lf", number);
-
-    Text *numberAsText = CreateText(output);
-
-    char *tempBuffer = (char*)malloc(text->Length + numberAsText->Length);
-    strcpy(tempBuffer, text->Text);
-    strcat(tempBuffer, numberAsText->Text);
-    return CreateText(tempBuffer);
-}
-
-
-Text* ConcatTextAndBoolean(Text *text, Boolean boolean)
-{
-    char *tempBuffer = (char*)malloc(text->Length + 6);
-    strcpy(tempBuffer, text->Text);
-    strcat(tempBuffer, boolean == true ? "true" : "false");
-
-    return CreateText(tempBuffer);
 }
 /********************************************************
 Function:	Boolean									
@@ -190,7 +161,7 @@ Text* ReadText() {
     int length = strlen(text);
 
     Text *retVal = (Text*)malloc(sizeof(Text));
-    retVal->Text = text;
+    retVal->Value = text;
     retVal->Length = length;
 
     return retVal;
@@ -232,7 +203,7 @@ Version: 	v1.0
 /********************************************************/
 void Write(Text *input)
 {
-    printf("%s\n", input->Text);
+    printf("%s\n", input->Value);
 }
 
 /********************************************************
@@ -244,7 +215,7 @@ Boolean IsEqual(Text *t1, Text *t2)
     if (t1->Length != t2->Length)
         return false;
 
-    return strcmp(t1->Text, t2->Text) == 0;
+    return strcmp(t1->Value, t2->Value) == 0;
 }
 
 
@@ -301,7 +272,7 @@ double modulo(double n, double d)
 Function:	Modulo
 Version: 	v1.0
 /********************************************************/
-double div(double n, double d)
+double Div(double n, double d)
 {
 	if (d == 0)
 		throw("Cannot divide by zero.");

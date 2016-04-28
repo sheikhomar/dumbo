@@ -69,12 +69,7 @@ BooleanLiteral = 'TRUE' | 'FALSE'
 <SizeList> ::= ',' NumberLiteral <SizeList>
             | ',' Id <SizeList>
             | <>
-           
-<LiteralInput> ::= Id <Literals>
-               | <Literal> <Literals>
-               
-<Literals> ::= ',' Id <Literals>
-            | ',' <Literal> <Literals>
+          
   
 !===================================================================
 ! Identifiers and Constants
@@ -156,12 +151,17 @@ BooleanLiteral = 'TRUE' | 'FALSE'
               | <ArrayDecl> Assign <ArrayAssign>
               | <ArrayId> Assign <Expr>
                              
-<ArrayAssign> ::= '(' <ArrayAssign> ')' <AssignValueList>
-               | '(' <LiteralInput> ')' <AssignValueList>
-
-<AssignValueList> ::= ',' <ArrayAssign>
-                   | <>
+<ArrayAssign> ::= '(' <VarInitList> ')'
+               
+<VarInitList> ::= <VarInit>
+               | <VarInit> ',' <VarInitList>
+               
+<VarInit> ::= <LiteralInput>
+           | <ArrayAssign>
                   
+<LiteralInput> ::= Id 
+               | <Literal> 
+
 !===================================================================
 ! If Statement
 !===================================================================

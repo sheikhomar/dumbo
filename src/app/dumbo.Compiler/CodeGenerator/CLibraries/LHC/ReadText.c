@@ -16,7 +16,7 @@ typedef struct Text {
 
 
 // From: http://stackoverflow.com/questions/314401/how-to-read-a-line-from-the-console-in-c
-char * getline(void) {
+char * Getline(void) {
     char * line = malloc(100), *linep = line;
     size_t lenmax = 100, len = lenmax;
     int c;
@@ -48,7 +48,7 @@ char * getline(void) {
 }
 
 Text* ReadText() {
-    char* text = getline();
+    char* text = Getline();
     int length = strlen(text);
 
     Text *retVal = (Text*)malloc(sizeof(Text));

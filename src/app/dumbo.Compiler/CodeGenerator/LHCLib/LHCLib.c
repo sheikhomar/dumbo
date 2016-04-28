@@ -22,7 +22,7 @@ typedef enum { false, true } Boolean;
 Function Declarations																
 /********************************************************/
 //LHC HelperFunctions
-void throw(char* message);
+void Throw(char* message);
 
 void TextPrint(Text *input);
 void UpdateText(Text *sourceText, Text *destText);
@@ -261,10 +261,10 @@ double Random(double range1, double range2)
 	
 	//Error handle
 	if(range < 1)
-		throw("Random's range must use two DIFFERNT Numbers.");
+		Throw("Random's range must use two DIFFERNT Numbers.");
 
 	if(range > 32767)
-		throw("Random's actual range must be less than 32768. The actual range is argument2 - argument1");
+		Throw("Random's actual range must be less than 32768. The actual range is argument2 - argument1");
 
 	
 	//Calculate the random number and fit to range
@@ -280,7 +280,7 @@ Version: 	v1.0
 double Modulo(double n, double d)
 {	
 	if(d == 0)
-		throw("Cannot do modulo when 2nd argument is zero.");
+		Throw("Cannot do modulo when 2nd argument is zero.");
 	
 	return n - d*(floor((n/d)));
 }
@@ -292,7 +292,7 @@ Version: 	v1.0
 double Div(double n, double d)
 {
 	if (d == 0)
-		throw("Cannot divide by zero.");
+		Throw("Cannot divide by zero.");
 
 	return n / d;
 }
@@ -301,7 +301,7 @@ double Div(double n, double d)
 Function:	Throw									
 Version: 	v1.0 							
 /********************************************************/
-void throw(char* message){
+void Throw(char* message){
 	printf("Program ended unexpectedly:\r\n%s\r\n",message);
 	exit(1);
 }

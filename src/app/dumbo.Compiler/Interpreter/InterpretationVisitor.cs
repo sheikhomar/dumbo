@@ -32,34 +32,7 @@ namespace dumbo.Compiler.Interpreter
 
         public Value Visit(AssignmentStmtNode node, VisitorArgs arg)
         {
-            var expressionNode = node.Expressions.First();
-            var value = expressionNode.Accept(this, arg);
-            if (node.Identifiers.Count() == 1)
-            {
-                var identifierNode = node.Identifiers.First();
-
-                if (value is ReturnValue)
-                {
-                    var returnValue = value as ReturnValue;
-                    var firstReturnValue = returnValue.ReturnValues.First();
-                    CurrentCallFrame.Set(identifierNode.Name, firstReturnValue);
-                }
-                else
-                {
-                    CurrentCallFrame.Set(identifierNode.Name, value);
-                }
-            }
-            else
-            {
-                var returnValues = value as ReturnValue;
-
-                for (int i = 0; i < node.Identifiers.Count; i++)
-                {
-                    var returnValue = returnValues.ReturnValues[i];
-                    var identifier = node.Identifiers[i];
-                    CurrentCallFrame.Set(identifier.Name, returnValue);
-                }
-            }
+            PerformAssignment(node.Identifiers, node.Expressions.First(), arg);
             return null;
         }
 
@@ -205,11 +178,9 @@ namespace dumbo.Compiler.Interpreter
         public Value Visit(DeclAndAssignmentStmtNode node, VisitorArgs arg)
         {
             foreach (var identifier in node.Identifiers)
-            {
                 CurrentCallFrame.Allocate(identifier.Name);
-                Value value = node.Expressions.First().Accept(this, arg);
-                CurrentCallFrame.Set(identifier.Name, value);
-            }
+
+            PerformAssignment(node.Identifiers, node.Expressions.First(), arg);
             return null;
         }
 
@@ -587,5 +558,26 @@ namespace dumbo.Compiler.Interpreter
                     throw new ArgumentOutOfRangeException();
             }
         }
+        
+        private void PerformAssignment(IdentifierListNode identifiers, ExpressionNode expression, VisitorArgs arg)
+        {
+            var value = expression.Accept(this, arg);
+            if (identifiers.Count == 1)
+            {
+                CurrentCallFrame.Set(identifiers[0].Name, value);
+            }
+            else
+            {
+                var multiVal = value as ReturnValue;
+                for (int i = 0; i < identifiers.Count; i++)
+                {
+                    var identifier = identifiers[i];
+                    var val = multiVal.ReturnValues[i];
+
+                    CurrentCallFrame.Set(identifier.Name, val);
+                }
+            }
+        }
+
     }
 }

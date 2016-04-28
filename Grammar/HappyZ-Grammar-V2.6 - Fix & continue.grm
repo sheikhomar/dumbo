@@ -122,7 +122,7 @@ BooleanLiteral = 'TRUE' | 'FALSE'
 <Stmts> ::= <Stmt> <nl> <Stmts>
          | <>
 
-<Stmt> ::= <Decl>
+<Stmt> ::= <PrimitiveDecl>
         | <AssignStmt> 
         | <IfStmt> 
         | <RepeatStmt>
@@ -135,7 +135,7 @@ BooleanLiteral = 'TRUE' | 'FALSE'
 !===================================================================
 ! Declarations
 !===================================================================
-<Decl> ::= <PrimitiveTypes> <Id>
+<PrimitiveDecl> ::= <PrimitiveTypes> <Id>
         
 <ArrayDecl> ::= <ArrayType> <Id>
                           
@@ -147,7 +147,7 @@ BooleanLiteral = 'TRUE' | 'FALSE'
 ! Assignment
 !===================================================================
 <AssignStmt> ::= <Id> Assign <Expr>
-              | <Decl> Assign <Expr>
+              | <PrimitiveDecl> Assign <Expr>
               | <ArrayDecl> Assign <ArrayAssign>
               | <ArrayId> Assign <Expr>
                              

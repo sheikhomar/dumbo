@@ -196,7 +196,9 @@ namespace dumbo.Compiler.CodeGenerator
                 {
                     _currentStmt = new Stmt("");
                     node.Type.Accept(this, arg);
-                    _currentStmt.Append(" " + node.Identifiers[j].Name + ";");
+                    _currentStmt.Append($" { node.Identifiers[j].Name} = ");
+                    WriteInitialValue(node.Identifiers[j].InferredType.GetFirstAs<PrimitiveTypeNode>());
+                    _currentStmt.Append(";");
                     _currentModule.Append(_currentStmt);
                 }
 
@@ -239,6 +241,8 @@ namespace dumbo.Compiler.CodeGenerator
                     for (int i = 0; i < assCount; i++)
                     {
                         node.Identifiers[i].Accept(this, arg);
+                        _currentStmt.Append(" = ");
+                        WriteInitialValue(declType);
                         _currentStmt.Append(";");
                         _currentModule.Append(_currentStmt);
                         _currentStmt = new Stmt("");
@@ -422,6 +426,8 @@ namespace dumbo.Compiler.CodeGenerator
             for (int i = 0; i < length; i++)
             {
                 node[i].Accept(this, arg);
+                _currentStmt.Append(" = ");
+                WriteInitialValue(node[i].InferredType.GetFirstAs<PrimitiveTypeNode>());
                 if (i < length - 1)
                     _currentStmt.Append(", " + (node[i].InferredType.GetFirstAs<PrimitiveTypeNode>().Type == PrimitiveType.Text ? "*" : ""));
             }
@@ -708,6 +714,17 @@ namespace dumbo.Compiler.CodeGenerator
             _currentStmt.Append(", ");
             right.Accept(this, arg);
             _currentStmt.Append(")");
+        }
+
+        private void WriteInitialValue(PrimitiveTypeNode type)
+        {
+            switch (type.Type)
+            {
+                case PrimitiveType.Number: _currentStmt.Append("0.0"); break;
+                case PrimitiveType.Text: _currentStmt.Append("CreateText(\"\")"); break;
+                case PrimitiveType.Boolean: _currentStmt.Append("false"); break;
+                default: throw new ArgumentException($"{type.Type} is not a valid tpye");
+            }
         }
     }
 }

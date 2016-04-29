@@ -1,7 +1,7 @@
 /********************************************************
 Function:	Text									
-Version: 	v1.2 (with more mem leaks)							
-Uses:			
+Version: 	v1.3 (with more mem leaks and NULL check)							
+Uses:		Throw	
 /********************************************************/
 #include <stdio.h>
 #include <stdlib.h>
@@ -13,6 +13,7 @@ typedef struct Text{
     char *Value;
 } Text;
 
+void Throw(char* message);
 
 //LHC HelperFunctions
 void TextPrint(Text *input);
@@ -64,11 +65,15 @@ Text *CreateText(char *input){
 
 //Updates a Text with the content of another Text
 void UpdateText(Text *sourceText, Text *destText){
+	if (sourceText == NULL || destText == NULL)
+		Throw("Cannot update a NULL text");
 	CopyToText(sourceText->Value, sourceText->Length, destText);
 }
 
 //Copies a char * content to a given Text
 void CopyToText(char *inputText, int length, Text *destText) {
+	if (inputText == NULL || destText == NULL)
+		Throw("Cannot Copy to/from a NULL Text");
 	char *textContent = (char*)calloc(length, sizeof(char));
 	int i = 0;
 
@@ -83,6 +88,8 @@ void CopyToText(char *inputText, int length, Text *destText) {
 
 //Concatenates  the two texts and return a new Text with the result
 Text *ConcatText(Text *inputText1, Text *inputText2) {
+	if (inputText1 == NULL || inputText2 == NULL)
+		Throw("Cannot concat to/from a NULL Text");
 	int	size1 = (*inputText1).Length;
 	int size2 = (*inputText2).Length;
 	char *text1 = (*inputText1).Value;
@@ -117,4 +124,10 @@ void RemoveTextValue(Text *input) {
 		free((*input).Value);
 		(*input).Value = NULL;
 	}
+}
+
+//OTHER HELPER FUNCTIONS
+void Throw(char* message){
+	printf("Program ended unexpectedly:\r\n%s\r\n",message);
+	exit(1);
 }

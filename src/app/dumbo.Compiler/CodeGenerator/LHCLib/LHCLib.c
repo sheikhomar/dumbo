@@ -31,6 +31,7 @@ void RemoveText(Text *input);
 void RemoveTextValue(Text *input);
 Text *CreateText(char *input);
 void CopyToText(char *inputText, int length, Text *destText);
+Text * TextDup(Text *input);
 
 void BooleanPrint(Boolean *input);
 
@@ -50,7 +51,7 @@ double Div(double n, double d);
 
 /********************************************************
 Function:	Text									
-Version: 	v1.3 (with more mem leaks and NULL check) ) 							
+Version: 	v1.4 (with more mem leaks and NULL check) ) 							
 /********************************************************/
 //Prints a Text's content
 void TextPrint(Text *input) {
@@ -131,6 +132,11 @@ void RemoveTextValue(Text *input) {
 		free((*input).Value);
 		(*input).Value = NULL;
 	}
+}
+
+//Duplicates the input Text and returs the copy as a Text *
+Text * TextDup(Text *input){
+	return CreateText(input->Value);
 }
 /********************************************************
 Function:	Boolean

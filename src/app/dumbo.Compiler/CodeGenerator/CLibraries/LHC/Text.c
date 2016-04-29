@@ -1,6 +1,6 @@
 /********************************************************
 Function:	Text									
-Version: 	v1.3 (with more mem leaks and NULL check)							
+Version: 	v1.4 (with more mem leaks and NULL check)							
 Uses:		Throw	
 /********************************************************/
 #include <stdio.h>
@@ -13,7 +13,9 @@ typedef struct Text{
     char *Value;
 } Text;
 
+//Extra HelperFunctions
 void Throw(char* message);
+void ChangeText(Text *input);
 
 //LHC HelperFunctions
 void TextPrint(Text *input);
@@ -23,6 +25,7 @@ void RemoveText(Text *input);
 void RemoveTextValue(Text *input);
 Text *CreateText(char *input);
 void CopyToText(char *inputText, int length, Text *destText);
+Text * TextDup(Text *input);
 
 int main()
 {
@@ -42,6 +45,11 @@ int main()
 		RemoveText(myText);
 		RemoveText(hey);
 	}
+	
+	myText = CreateText("ho ");
+	printf("DupTest \r\nBefore func: "); TextPrint(myText);
+	ChangeText(myText);
+	printf("After func (same): "); TextPrint(myText); 
 	
     return 0;
 }
@@ -126,8 +134,18 @@ void RemoveTextValue(Text *input) {
 	}
 }
 
+//Duplicates the input Text and returs the copy as a Text *
+Text * TextDup(Text *input){
+	return CreateText(input->Value);
+}
+
 //OTHER HELPER FUNCTIONS
 void Throw(char* message){
 	printf("Program ended unexpectedly:\r\n%s\r\n",message);
 	exit(1);
+}
+
+void ChangeText(Text *input){
+	input = TextDup(input);
+	input = CreateText("ERROR!!");
 }

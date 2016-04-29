@@ -508,10 +508,18 @@ namespace dumbo.Compiler.CodeGenerator
             _currentModule = new Module();
             _currentModule.Append(new Stmt($"int main()"));
 
+            var prefix = new List<Stmt>();
+            prefix.Add(new Stmt("//LHZ Program Prefix"));
+            prefix.Add(new Stmt("srand(time(NULL));"));
+            prefix.Add(new Stmt("//End of LHZ Program Prefix"));
+            prefix.Add(new Stmt(""));
             var suffix = new List<Stmt>();
+            suffix.Add(new Stmt(""));
+            suffix.Add(new Stmt("//LHZ Program Suffix"));
             suffix.Add(new Stmt("return 0;"));
+            suffix.Add(new Stmt("//End of LHZ Program Suffix"));
 
-            node.Body.Accept(this, new StmtBlockNodeArgs(null, suffix, arg));
+            node.Body.Accept(this, new StmtBlockNodeArgs(prefix, suffix, arg));
             CProgram.AddMainModule(_currentModule);
 
             return null;

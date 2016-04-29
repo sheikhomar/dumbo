@@ -147,11 +147,11 @@ namespace dumbo.Compiler.CodeGenerator
             }
             else if (binOperator == "%" && binType.Type == PrimitiveType.Number)
             {
-                WriteBinOpNodeFunc("modulo", node.LeftOperand, node.RightOperand, arg);
+                WriteBinOpNodeFunc("Modulo", node.LeftOperand, node.RightOperand, arg);
             }
             else if (binOperator == "/" && binType.Type == PrimitiveType.Number)
             {
-                WriteBinOpNodeFunc("div", node.LeftOperand, node.RightOperand, arg); 
+                WriteBinOpNodeFunc("Div", node.LeftOperand, node.RightOperand, arg); 
             }
             else if (binOperator == "==" && leftType.Type == PrimitiveType.Text && rightType.Type == PrimitiveType.Text)
             {
@@ -250,7 +250,7 @@ namespace dumbo.Compiler.CodeGenerator
                         _currentStmt.Append(")");
                         if (i != assCount - 1)
                         {
-                            _currentStmt.Append(", ");
+                            _currentStmt.Append(", *");
                         }
                     }
                 }
@@ -427,7 +427,7 @@ namespace dumbo.Compiler.CodeGenerator
             {
                 node[i].Accept(this, arg);
                 if (i < length - 1)
-                    _currentStmt.Append(", ");
+                    _currentStmt.Append(", " + (node[i].InferredType.GetFirstAs<PrimitiveTypeNode>().Type == PrimitiveType.Text? "*" : ""));
             }
             _currentStmt.Append(";");
 
@@ -562,7 +562,9 @@ namespace dumbo.Compiler.CodeGenerator
 
                 foreach (var ret in node.Expressions)
                 {
-                    _currentStmt = new Stmt("*_ret" + i);
+                    PrimitiveTypeNode retType = ret.InferredType.GetFirstAs<PrimitiveTypeNode>();
+                    
+                    _currentStmt = new Stmt((retType.Type == PrimitiveType.Text ? "" : "*") + "_ret" + i);
                     _currentStmt.Append(" = ");
                     ret.Accept(this, arg);
                     _currentStmt.Append(";");

@@ -350,12 +350,10 @@ namespace dumbo.Compiler.CodeGenerator
             //MyFunction(myInt) in some stmt | can have a ret value or not
             if (node.DeclarationNode.IsBuiltIn)
             {
-                string name = node.FuncName.ToLower();
-                name = char.ToUpper(name[0]) + name.Substring(1);
-                _currentStmt.Append(name + "(");
+                _currentStmt.Append(node.DeclarationNode.Name + "(");
             }
             else
-                _currentStmt.Append("_" + node.FuncName.ToLower() + "(");
+                _currentStmt.Append("_" + node.DeclarationNode.Name + "(");
 
             node.Parameters.Accept(this, arg);
             _currentStmt.Append(")");
@@ -661,7 +659,7 @@ namespace dumbo.Compiler.CodeGenerator
                 funcNode.ReturnTypes[0].Accept(this, arg);
 
             //Name
-            _currentStmt.Append(" _" + funcNode.Name.ToLower());
+            _currentStmt.Append(" _" + funcNode.Name);
 
             //Parameters
             _currentStmt.Append("(");

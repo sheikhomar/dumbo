@@ -1,6 +1,6 @@
 /********************************************************
 Function:	ReadText									
-Version: 	v1.0 	
+Version: 	v1.1 	
 Uses:		Text						
 /********************************************************/
 #include <stdio.h>
@@ -17,34 +17,34 @@ typedef struct Text {
 
 // From: http://stackoverflow.com/questions/314401/how-to-read-a-line-from-the-console-in-c
 char * Getline(void) {
-    char * line = malloc(100), *linep = line;
-    size_t lenmax = 100, len = lenmax;
-    int c;
+	char * line = (char *)malloc(100), *linep = line;
+	size_t lenmax = 100, len = lenmax;
+	int c;
 
-    if (line == NULL)
-        return NULL;
+	if (line == NULL)
+		return NULL;
 
-    for (;;) {
-        c = fgetc(stdin);
-        if (c == EOF || c == '\n')
-            break;
+	for (;;) {
+		c = fgetc(stdin);
+		if (c == EOF || c == '\n')
+			break;
 
-        if (--len == 0) {
-            len = lenmax;
-            char * linen = realloc(linep, lenmax *= 2);
+		if (--len == 0) {
+			len = lenmax;
+			char * linen = (char *)realloc(linep, lenmax *= 2);
 
-            if (linen == NULL) {
-                free(linep);
-                return NULL;
-            }
-            line = linen + (line - linep);
-            linep = linen;
-        }
+			if (linen == NULL) {
+				free(linep);
+				return NULL;
+			}
+			line = linen + (line - linep);
+			linep = linen;
+		}
 
-        *line++ = c;
-    }
-    *line = '\0';
-    return linep;
+		*line++ = c;
+	}
+	*line = '\0';
+	return linep;
 }
 
 Text* ReadText() {

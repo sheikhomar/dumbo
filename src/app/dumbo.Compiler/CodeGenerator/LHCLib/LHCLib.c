@@ -146,11 +146,11 @@ void BooleanPrint(Boolean *input) {
 
 /********************************************************
 Function:	ReadText
-Version: 	v1.0
+Version: 	v1.1
 /********************************************************/
 // From: http://stackoverflow.com/questions/314401/how-to-read-a-line-from-the-console-in-c
 char * Getline(void) {
-	char * line = malloc(100), *linep = line;
+	char * line = (char *)malloc(100), *linep = line;
 	size_t lenmax = 100, len = lenmax;
 	int c;
 
@@ -164,7 +164,7 @@ char * Getline(void) {
 
 		if (--len == 0) {
 			len = lenmax;
-			char * linen = realloc(linep, lenmax *= 2);
+			char * linen = (char *)realloc(linep, lenmax *= 2);
 
 			if (linen == NULL) {
 				free(linep);

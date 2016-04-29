@@ -34,17 +34,37 @@ namespace dumbo.Compiler
 
         public object Visit(ArrayIdentifierNode node, VisitorArgs arg)
         {
-            throw new System.NotImplementedException();
+            var symbolEntry = SymbolTable.RetrieveSymbol(node.Name);
+            if (symbolEntry == null)
+            {
+                Reporter.Error($"Array '{node.Name}' is not declared.", node.SourcePosition);
+            }
+            else
+            {
+                var primitiveType = symbolEntry.Type as SymbolTablePrimitiveType;
+                if (primitiveType == null)
+                {
+                    Reporter.Error($"The function '{node.Name}' cannot be used as a variable.", node.SourcePosition);
+                }
+                else
+                {
+                    node.DeclarationNode = primitiveType.DeclarationNode;
+                }
+            }
+
+            return null;
         }
 
         public object Visit(ArrayTypeNode node, VisitorArgs arg)
         {
-            throw new System.NotImplementedException();
+            return null;
         }
 
         public object Visit(ArrayValueNode node, VisitorArgs arg)
         {
-            throw new System.NotImplementedException();
+            node.Values.Accept(this, arg);
+
+            return null;
         }
 
         public object Visit(AssignmentStmtNode node, VisitorArgs arg)
@@ -70,17 +90,30 @@ namespace dumbo.Compiler
 
         public object Visit(ContinueStmtNode node, VisitorArgs arg)
         {
-            throw new System.NotImplementedException();
+            return null;
         }
 
         public object Visit(ConstDeclListNode node, VisitorArgs arg)
         {
-            throw new System.NotImplementedException();
+            foreach (var item in node)
+                item.Accept(this, arg);
+
+            return null;
         }
 
         public object Visit(ConstDeclNode node, VisitorArgs arg)
         {
-            throw new System.NotImplementedException();
+            var entry = SymbolTable.RetrieveSymbol(node.Name);
+            if (entry != null)
+            {
+                Reporter.Error($"Constant '{node.Name}' is already declared.", node.SourcePosition);
+            }
+            else
+            {
+                SymbolTable.EnterSymbol(node.Name, new SymbolTablePrimitiveType(node), true);
+            }
+
+            return null;
         }
 
         public object Visit(BuiltInFuncDeclNode node, VisitorArgs arg)
@@ -335,6 +368,7 @@ namespace dumbo.Compiler
 
         public object Visit(RootNode node, VisitorArgs arg)
         {
+            node.ConstDecls.Accept(this, arg);
             node.FuncDecls.Accept(this, arg);
             node.Program.Accept(this, arg);
 

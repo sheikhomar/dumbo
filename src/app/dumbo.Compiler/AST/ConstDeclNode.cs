@@ -2,16 +2,16 @@ using System;
 
 namespace dumbo.Compiler.AST
 {
-    public class ConstDeclNode : BaseNode
+    public class ConstDeclNode : BaseNode , IVariableDeclNode
     {
         public string Name { get; }
-        public TypeNode Node { get; }
+        public TypeNode Type { get; }
         public ValueNode Value { get; }
 
         public ConstDeclNode(string name, TypeNode typeNode, ValueNode valueNode, SourcePosition srcPos)
         {
             Name = name;
-            Node = typeNode;
+            Type = typeNode;
             Value = valueNode;
             SourcePosition = srcPos;
         }

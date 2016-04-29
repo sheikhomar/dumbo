@@ -148,14 +148,19 @@ BooleanLiteral = 'TRUE' | 'FALSE'
                              
 <ArrayAssign> ::= '(' <VarInitList> ')'
                
-<VarInitList> ::= <VarInit>
-               | <VarInit> ',' <VarInitList>
+<VarInitList> ::= <ArrayAssign> <ArrayAssignList>
+               | <VarInit> 
+               
+<ArrayAssignList> ::= ',' <ArrayAssign> <ArrayAssignList>
+                   | <>
                
 <VarInit> ::= <LiteralInput>
-           | <ArrayAssign>
                   
-<LiteralInput> ::= Id 
-               | <Literal> 
+<LiteralInput> ::= Id <LiteralInputList>
+               | <Literal> <LiteralInputList>
+               
+<LiteralInputList> ::= ',' <LiteralInput>
+                    | <>
 
 !===================================================================
 ! If Statement

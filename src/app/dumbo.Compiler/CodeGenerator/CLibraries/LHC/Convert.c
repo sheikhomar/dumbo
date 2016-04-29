@@ -1,6 +1,6 @@
 /********************************************************
 Function:	Convert									
-Version: 	v1.0 			
+Version: 	v1.1 			
 Uses:		Text, Boolean				
 /********************************************************/
 #include <stdio.h>
@@ -10,7 +10,7 @@ Uses:		Text, Boolean
 //LHC Type
 typedef struct Text{
     int Length;
-    char *Text;
+    char *Value;
 } Text;
 
 //LHC Type
@@ -20,7 +20,7 @@ typedef enum { false, true } Boolean;
 Text *CreateText(char *inputText)
 {
     Text *retVal = (Text*)malloc(sizeof(Text));
-    retVal->Text = inputText;
+    retVal->Value = inputText;
     retVal->Length = strlen(inputText);
     return retVal;
 }
@@ -34,8 +34,8 @@ Text* ConcatTextAndNumber(Text *text, double number)
     Text *numberAsText = CreateText(output);
 
     char *tempBuffer = (char*)malloc(text->Length + numberAsText->Length);
-    strcpy(tempBuffer, text->Text);
-    strcat(tempBuffer, numberAsText->Text);
+    strcpy(tempBuffer, text->Value);
+    strcat(tempBuffer, numberAsText->Value);
     return CreateText(tempBuffer);
 }
 
@@ -43,7 +43,7 @@ Text* ConcatTextAndNumber(Text *text, double number)
 Text* ConcatTextAndBoolean(Text *text, Boolean boolean)
 {
     char *tempBuffer = (char*)malloc(text->Length + 6);
-    strcpy(tempBuffer, text->Text);
+    strcpy(tempBuffer, text->Value);
     strcat(tempBuffer, boolean == true ? "true" : "false");
     
     return CreateText(tempBuffer);
@@ -53,9 +53,9 @@ int main()
 {
     Text *t0 = CreateText("My text: ");
 
-    printf("ConcatTextAndNumber:             '%s'\n", ConcatTextAndNumber(t0, 1.0 / 7.0)->Text);
-    printf("ConcatTextAndBoolean Test true:  '%s'\n", ConcatTextAndBoolean(t0, true)->Text);
-    printf("ConcatTextAndBoolean Test false: '%s'\n", ConcatTextAndBoolean(t0, false)->Text);
+    printf("ConcatTextAndNumber  Test %f     '%s'\n",1.0 / 7.0, ConcatTextAndNumber(t0, 1.0 / 7.0)->Value);
+    printf("ConcatTextAndBoolean Test true:  '%s'\n", ConcatTextAndBoolean(t0, true)->Value);
+    printf("ConcatTextAndBoolean Test false: '%s'\n", ConcatTextAndBoolean(t0, false)->Value);
     
 
 	return 0;

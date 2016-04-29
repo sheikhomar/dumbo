@@ -293,7 +293,7 @@ double Modulo(double n, double d)
 }
 
 /********************************************************
-Function:	Division
+Function:	Div
 Version: 	v1.0
 /********************************************************/
 double Div(double n, double d)
@@ -311,6 +311,34 @@ Version: 	v1.0
 void Throw(char* message) {
 	printf("Program ended unexpectedly:\r\n%s\r\n", message);
 	exit(1);
+}
+
+/********************************************************
+Function:	Convert									
+Version: 	v1.1 						
+/********************************************************/
+Text* ConcatTextAndNumber(Text *text, double number)
+{
+    int MAX_SIZE = 50;
+    char *output = (char*)malloc(MAX_SIZE+1);
+    sprintf(output, "%lf", number);
+    
+    Text *numberAsText = CreateText(output);
+
+    char *tempBuffer = (char*)malloc(text->Length + numberAsText->Length);
+    strcpy(tempBuffer, text->Value);
+    strcat(tempBuffer, numberAsText->Value);
+    return CreateText(tempBuffer);
+}
+
+
+Text* ConcatTextAndBoolean(Text *text, Boolean boolean)
+{
+    char *tempBuffer = (char*)malloc(text->Length + 6);
+    strcpy(tempBuffer, text->Value);
+    strcat(tempBuffer, boolean == true ? "true" : "false");
+    
+    return CreateText(tempBuffer);
 }
 
 /********************************************************

@@ -62,7 +62,7 @@ namespace dumbo.Compiler
 
         public object Visit(ArrayValueNode node, VisitorArgs arg)
         {
-            node.Values.Accept(this, arg);
+            //node.Values.Accept(this, arg);
 
             return null;
         }

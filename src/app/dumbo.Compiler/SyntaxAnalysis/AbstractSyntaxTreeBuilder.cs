@@ -637,51 +637,84 @@ namespace dumbo.Compiler.SyntaxAnalysis
         private ArrayValueNode BuildArrayValueNode(Token token, ArrayTypeNode node)
         {
             Debug.Assert(token.Parent.Name() == "ArrayAssign");
-            Reduction rhs = (Reduction)token.Data;
 
             var arrayValueNode = new ArrayValueNode(node);
-            AppendVariableInitializer(rhs[1], arrayValueNode);
+
+            AppendArrayAssign(token, arrayValueNode);
 
             return arrayValueNode;
         }
 
-        private void AppendArrayValueNode(Token token, ArrayValueNode node)
+        private void AppendArrayAssign(Token token, ArrayValueNode node)
         {
             Debug.Assert(token.Parent.Name() == "ArrayAssign");
             Reduction rhs = (Reduction)token.Data;
 
-            AppendVariableInitializer(rhs[1], node);
+            node.CreateLevel();
+
+            AppendVarInitList(rhs[1], node);
+
+            node.CloseLevel();
         }
 
-        private void AppendVariableInitializer(Token token, ArrayValueNode node)
+        private void AppendVarInitList(Token token, ArrayValueNode node)
         {
             Debug.Assert(token.Parent.Name() == "VarInitList");
-            Reduction rhs = (Reduction) token.Data;
-            var rhs2 = (Reduction) rhs[0].Data;
+            Reduction rhs = (Reduction)token.Data;
 
-            if (rhs2[0].Parent.Name() == "LiteralInput")
+            if (rhs.Count() == 1)
             {
-                var rhs3 = (Reduction) rhs2[0].Data;
-
-                if (rhs3[0].Parent.Name() == "Id")
-                {
-                    node.Values.Add(BuildIdentifierNode(rhs3[0]));
-                }
-                else
-                {
-                    var val = BuildLiteralValueNode(rhs3[0]);
-                    node.Values.Add(val);
-                }
+                AppendLiteralInput(rhs[0], node);
             }
             else
             {
-                AppendArrayValueNode(rhs2[0], node);
-            }
-            if (rhs.Count() > 1)
-            {
-                AppendVariableInitializer(rhs[2], node);
+                AppendArrayAssign(rhs[0], node);
+                AppendArrayAssignList(rhs[1], node);
             }
         }
+
+        private void AppendArrayAssignList(Token token, ArrayValueNode node)
+        {
+            Debug.Assert(token.Parent.Name() == "ArrayAssignList");
+            Reduction rhs = (Reduction)token.Data;
+
+            if (rhs.Count() != 0)
+            {
+                AppendArrayAssign(rhs[1], node);
+                AppendArrayAssignList(rhs[2], node);
+            }
+        }
+
+        private void AppendLiteralInput(Token token, ArrayValueNode node)
+        {
+            Debug.Assert(token.Parent.Name() == "LiteralInput");
+            Reduction rhs = (Reduction)token.Data;
+
+            if (rhs[0].Parent.Name() == "Literal")
+            {
+                node.AddExpression(BuildLiteralValueNode(rhs[0]));
+
+                AppendLiteralInputList(rhs[1], node);
+            }
+            else
+            {
+                node.AddExpression(BuildIdentifierNode(rhs[0]));
+
+                AppendLiteralInputList(rhs[1], node);
+            }
+        }
+
+        private void AppendLiteralInputList(Token token, ArrayValueNode node)
+        {
+            Debug.Assert(token.Parent.Name() == "LiteralInputList");
+            Reduction rhs = (Reduction)token.Data;
+
+            if (rhs.Count() != 0)
+            {
+                AppendLiteralInput(rhs[1], node);
+            }
+        }
+
 
         private FuncDeclNode BuildFuncDeclNode(Token token)
         {

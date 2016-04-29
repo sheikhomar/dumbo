@@ -149,13 +149,11 @@ BooleanLiteral = 'TRUE' | 'FALSE'
 <ArrayAssign> ::= '(' <VarInitList> ')'
                
 <VarInitList> ::= <ArrayAssign> <ArrayAssignList>
-               | <VarInit> 
+               | <LiteralInput> 
                
 <ArrayAssignList> ::= ',' <ArrayAssign> <ArrayAssignList>
                    | <>
-               
-<VarInit> ::= <LiteralInput>
-                  
+                                
 <LiteralInput> ::= Id <LiteralInputList>
                | <Literal> <LiteralInputList>
                

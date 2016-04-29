@@ -172,6 +172,8 @@ namespace dumbo.Compiler.TypeChecking
 
         public TypeCheckVisitResult Visit(DeclStmtNode node, VisitorArgs arg)
         {
+            node.Identifiers.Accept(this, arg);
+
             return null;
         }
 
@@ -312,8 +314,6 @@ namespace dumbo.Compiler.TypeChecking
                 var result = GetVisitResult(item, arg);
                 list.AddRange(result.Types);
             }
-
-
 
             return new TypeCheckVisitResult(list);
         }

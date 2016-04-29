@@ -389,6 +389,8 @@ namespace dumbo.Compiler.CodeGenerator
         public RuntimeEntity Visit(FuncDeclNode node, VisitorArgs arg)
         {
             FuncVisitorArgs funcArg = arg as FuncVisitorArgs;
+            var prefix = new List<Stmt>();
+            var suffix = new List<Stmt>();
 
             if (funcArg == null)
                 throw new Exception("FuncDeclNode must have FuncVisitorArgs as arg");
@@ -408,14 +410,22 @@ namespace dumbo.Compiler.CodeGenerator
             WriteFunctionHeader(node, arg);
             _currentModule.Append(_currentStmt);
 
+            for (int i = 0; i < node.Parameters.Count; i++)
+            {
+                PrimitiveTypeNode parType = node.Parameters[i].Type as PrimitiveTypeNode;
+
+                if (parType.Type == PrimitiveType.Text)
+                {
+                    prefix.Add(new Stmt($"{node.Parameters[i].Name} = TextDup({node.Parameters[i].Name});"));
+                }
+            }
+
             if (node.ReturnTypes.Count == 0)
             {
-                var suffix = new List<Stmt>();
                 suffix.Add(new Stmt("return ;"));
-                node.Body.Accept(this, new StmtBlockNodeArgs(null, suffix, arg));
             }
-            else
-                node.Body.Accept(this, arg);
+            
+            node.Body.Accept(this, new StmtBlockNodeArgs(prefix, suffix, arg));
             return null;
         }
 

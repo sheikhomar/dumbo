@@ -293,7 +293,7 @@ double Modulo(double n, double d)
 }
 
 /********************************************************
-Function:	Modulo
+Function:	Division
 Version: 	v1.0
 /********************************************************/
 double Div(double n, double d)

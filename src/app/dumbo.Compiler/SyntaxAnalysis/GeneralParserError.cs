@@ -1,6 +1,6 @@
 ﻿namespace dumbo.Compiler.SyntaxAnalysis
 {
-    public class GeneralParserError: ParserError
+    public class GeneralParserError : ParserError
     {
         private readonly string _message;
 
@@ -17,6 +17,6 @@
             return _message;
         }
 
-        
+
     }
 }

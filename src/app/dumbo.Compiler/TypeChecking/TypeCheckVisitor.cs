@@ -141,7 +141,7 @@ namespace dumbo.Compiler.TypeChecking
             {
                 var expr = node.Expressions.First();
                 var exprResult = GetVisitResult(expr, arg);
-                
+
                 var exprTypes = exprResult.Types.ToList();
                 var idList = node.Identifiers.ToList();
                 if (exprTypes.Count == idList.Count)
@@ -219,7 +219,7 @@ namespace dumbo.Compiler.TypeChecking
         {
             if (node.DeclarationNode == null)
                 return ErrorType();
-            
+
             node.Parameters.Accept(this, arg);
 
             if (node.DeclarationNode.Parameters.Count != node.Parameters.Count)
@@ -313,7 +313,7 @@ namespace dumbo.Compiler.TypeChecking
                 list.AddRange(result.Types);
             }
 
-            
+
 
             return new TypeCheckVisitResult(list);
         }
@@ -429,7 +429,7 @@ namespace dumbo.Compiler.TypeChecking
                 Reporter.Error("Unary operators can only be used with primitive types.", node.Expression.SourcePosition);
                 return ErrorType();
             }
-            
+
             switch (node.Operator)
             {
                 case UnaryOperatorType.Not:

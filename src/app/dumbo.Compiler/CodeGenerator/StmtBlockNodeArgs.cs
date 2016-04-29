@@ -20,7 +20,8 @@ namespace dumbo.Compiler.CodeGenerator
         public IList<Stmt> Prefix { get; }
         public IList<Stmt> Suffix { get; }
         public VisitorArgs Arg { get; }
-        public bool Handled {
+        public bool Handled
+        {
             get
             {
                 return _handled;

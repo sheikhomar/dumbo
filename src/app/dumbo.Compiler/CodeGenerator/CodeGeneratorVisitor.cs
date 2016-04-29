@@ -45,7 +45,7 @@ namespace dumbo.Compiler.CodeGenerator
 
                 if (funcExp == null)
                     throw new Exception("Programming error, should be a function");
-                
+
                 //MyFunction(formalParameters, &ret1, &ret2 ...) | How it looks in C for a function
                 _currentStmt = new Stmt("");
                 _currentStmt.Append("_" + funcExp.FuncName + "(");
@@ -151,7 +151,7 @@ namespace dumbo.Compiler.CodeGenerator
             }
             else if (binOperator == "/" && binType.Type == PrimitiveType.Number)
             {
-                WriteBinOpNodeFunc("div", node.LeftOperand, node.RightOperand, arg); 
+                WriteBinOpNodeFunc("div", node.LeftOperand, node.RightOperand, arg);
             }
             else if (binOperator == "==" && leftType.Type == PrimitiveType.Text && rightType.Type == PrimitiveType.Text)
             {
@@ -165,7 +165,7 @@ namespace dumbo.Compiler.CodeGenerator
                 node.RightOperand.Accept(this, arg);
                 _currentStmt.Append(")");
             }
-            
+
             return null;
         }
 
@@ -394,7 +394,7 @@ namespace dumbo.Compiler.CodeGenerator
                 throw new Exception("FuncDeclNode must have FuncVisitorArgs as arg");
 
             _currentStmt = new Stmt("");
-            
+
             if (!funcArg.VisitBody)
             {
                 WriteFunctionHeader(node, arg);
@@ -543,7 +543,7 @@ namespace dumbo.Compiler.CodeGenerator
         {
             bool isMultipleReturn = node.Expressions.Count > 1;
             int i = 1;
-            
+
             if (!isMultipleReturn)
             {
                 if (node.Expressions.Count != 0)
@@ -551,8 +551,8 @@ namespace dumbo.Compiler.CodeGenerator
                     _currentStmt = new Stmt("return ");
 
                     node.Expressions[0].Accept(this, arg);
-                _currentStmt.Append(";");
-                _currentModule.Append(_currentStmt);
+                    _currentStmt.Append(";");
+                    _currentModule.Append(_currentStmt);
                 }
             }
             else
@@ -594,7 +594,7 @@ namespace dumbo.Compiler.CodeGenerator
                 customArgs.Handled = true;
             else
                 customArgs = null;
-            
+
             _currentModule.Append(new Stmt("{"));
             AddItemsToCurrentModule(customArgs?.Prefix);
             foreach (var statement in node)

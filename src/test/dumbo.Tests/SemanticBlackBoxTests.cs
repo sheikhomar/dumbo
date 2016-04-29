@@ -26,7 +26,7 @@ namespace dumbo.Tests
                 string line = fs.ReadLine();
                 int counter = 0;
                 int nextProgramLine = 0;
-                
+
                 while (line != null)
                 {
                     if (" //New Program ".Equals(line))
@@ -49,7 +49,7 @@ namespace dumbo.Tests
                                 Assert.Fail($"CCAnalyser error for program at line {nextProgramLine}: \n\r \n\r{string.Join(", ", errorMessages)} \n\r{programText}");
                             }
                         }
-                        
+
                         nextProgramLine = counter + 2;
                     }
                     else if (" //New Program Failing".Equals(line))
@@ -66,7 +66,7 @@ namespace dumbo.Tests
                                 Assert.Fail($"Error! No error found. The code is supposed to fail at line {nextProgramLine}:\n\r{programText}");
                             }
                         }
-                        
+
                         nextProgramLine = counter + 2;
                     }
                     else

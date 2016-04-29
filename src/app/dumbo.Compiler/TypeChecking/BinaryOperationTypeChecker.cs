@@ -53,7 +53,7 @@ namespace dumbo.Compiler.TypeChecking
             Add(BinaryOperatorType.And, PrimitiveType.Boolean, PrimitiveType.Boolean, PrimitiveType.Boolean);
         }
 
-        private void Add(BinaryOperatorType operationType, PrimitiveType operandType1, 
+        private void Add(BinaryOperatorType operationType, PrimitiveType operandType1,
             PrimitiveType operandType2, PrimitiveType resultType)
         {
             if (!_container.ContainsKey(operationType))
@@ -64,7 +64,7 @@ namespace dumbo.Compiler.TypeChecking
             _container[operationType].Add(new Rule(operandType1, operandType2, resultType));
         }
 
-        public Tuple<bool,PrimitiveType> GetInferredType(BinaryOperatorType operationType, 
+        public Tuple<bool, PrimitiveType> GetInferredType(BinaryOperatorType operationType,
             TypeNode leftNode,
             TypeNode rightNode)
         {

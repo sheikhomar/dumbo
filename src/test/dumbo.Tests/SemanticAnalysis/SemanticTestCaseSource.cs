@@ -13,7 +13,7 @@ namespace dumbo.Tests.SemanticAnalysis
     [TestFixture]
     public class SemanticTests
     {
-        [Test, TestCaseSource(typeof(SemanticSuccessfullTestCaseFactory), 
+        [Test, TestCaseSource(typeof(SemanticSuccessfullTestCaseFactory),
             nameof(SemanticSuccessfullTestCaseFactory.TestCases))]
         public void TestProgram(int startLine, string programText)
         {
@@ -49,7 +49,7 @@ namespace dumbo.Tests.SemanticAnalysis
             buffer.Append(programLine);
             buffer.AppendLine(":");
             buffer.AppendLine(programText);
-            
+
             return buffer.ToString();
         }
 

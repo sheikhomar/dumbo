@@ -28,7 +28,7 @@ namespace dumbo.Tests.SemanticAnalysis
                         yield return new TestCaseData(p.Line, p.Text);
                     }
                 }
-                
+
                 //yield return new TestCaseData(1, "Program \n End Program");
             }
         }

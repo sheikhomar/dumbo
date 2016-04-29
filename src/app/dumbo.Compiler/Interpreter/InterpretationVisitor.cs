@@ -558,7 +558,7 @@ namespace dumbo.Compiler.Interpreter
                     throw new ArgumentOutOfRangeException();
             }
         }
-        
+
         private void PerformAssignment(IdentifierListNode identifiers, ExpressionNode expression, VisitorArgs arg)
         {
             var value = expression.Accept(this, arg);

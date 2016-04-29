@@ -1,6 +1,5 @@
 namespace dumbo.Compiler.Interpreter
 {
-
     public class TextValue : Value
     {
         public TextValue(string text)

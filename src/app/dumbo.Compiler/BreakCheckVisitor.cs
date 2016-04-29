@@ -35,7 +35,7 @@ namespace dumbo.Compiler
 
         public VisitResult Visit(BreakStmtNode node, VisitorArgs arg)
         {
-            if(InLoops == 0)
+            if (InLoops == 0)
                 Reporter.Error("Break stmt is not placed in a loop.", node.SourcePosition);
             return null;
         }

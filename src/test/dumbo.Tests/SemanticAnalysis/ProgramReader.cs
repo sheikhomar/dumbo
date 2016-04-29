@@ -43,7 +43,7 @@ namespace dumbo.Tests.SemanticAnalysis
 
                 _currentProgram.Buffer.AppendLine(line);
             }
-            
+
             return false;
         }
 

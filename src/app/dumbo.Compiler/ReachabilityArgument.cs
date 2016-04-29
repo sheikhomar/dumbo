@@ -2,6 +2,6 @@
 {
     public class ReachabilityArgument
     {
-        public bool IsReachable { get; set;  }
+        public bool IsReachable { get; set; }
     }
 }

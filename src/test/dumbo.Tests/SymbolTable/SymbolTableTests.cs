@@ -124,11 +124,11 @@ namespace dumbo.Tests.SymbolTable
         [Test]
         public void EnsureFunctionParametersAreStored()
         {
-        
+
             // Arrange
-            var funcDecl = new FuncDeclNode("MyFunc", new StmtBlockNode(), new SourcePosition(0,0,0,0));
+            var funcDecl = new FuncDeclNode("MyFunc", new StmtBlockNode(), new SourcePosition(0, 0, 0, 0));
             var entry = new SymbolTableFunctionType(funcDecl);
-        
+
             // Act
             table.EnterSymbol("test", entry);
 

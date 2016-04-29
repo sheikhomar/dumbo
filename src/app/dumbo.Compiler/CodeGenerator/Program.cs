@@ -43,7 +43,7 @@ namespace dumbo.Compiler.CodeGenerator
         /// Prints the C version of the program with the specified options
         /// </summary>
         /// <returns></returns>
-        public string Print(bool prettyPrint, bool includeLibary, bool includeUserFuncDecl, int tabSize=2, string indentation = "{", string outdentation = "}", string separator = "\r\n")
+        public string Print(bool prettyPrint, bool includeLibary, bool includeUserFuncDecl, int tabSize = 2, string indentation = "{", string outdentation = "}", string separator = "\r\n")
         {
             var builder = new StringBuilder();
 
@@ -85,7 +85,7 @@ namespace dumbo.Compiler.CodeGenerator
                 builder.AppendLine(line);
 
                 if (hasIndent && !hasOutdent)
-                    currentIndentation+=tabSize;
+                    currentIndentation += tabSize;
             }
 
             return builder.ToString();

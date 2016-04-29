@@ -34,6 +34,7 @@ namespace dumbo.Compiler.TypeChecking
             Add(BinaryOperatorType.Plus, PrimitiveType.Number, PrimitiveType.Number, PrimitiveType.Number);
             Add(BinaryOperatorType.Plus, PrimitiveType.Text, PrimitiveType.Text, PrimitiveType.Text);
             Add(BinaryOperatorType.Plus, PrimitiveType.Text, PrimitiveType.Number, PrimitiveType.Text);
+            Add(BinaryOperatorType.Plus, PrimitiveType.Text, PrimitiveType.Boolean, PrimitiveType.Text);
             Add(BinaryOperatorType.Minus, PrimitiveType.Number, PrimitiveType.Number, PrimitiveType.Number);
             Add(BinaryOperatorType.Times, PrimitiveType.Number, PrimitiveType.Number, PrimitiveType.Number);
             Add(BinaryOperatorType.Division, PrimitiveType.Number, PrimitiveType.Number, PrimitiveType.Number);

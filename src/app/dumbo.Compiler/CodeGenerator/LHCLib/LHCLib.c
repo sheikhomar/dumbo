@@ -242,7 +242,6 @@ Boolean IsEqual(Text *t1, Text *t2)
 	return strcmp(t1->Value, t2->Value) == 0;
 }
 
-
 /********************************************************
 Function:	Random
 Version: 	v1.0
@@ -280,6 +279,7 @@ double Random(double range1, double range2)
 	//Return the random number, adding range offset from 0
 	return number + range_lower;
 }
+
 /********************************************************
 Function:	Modulo
 Version: 	v1.0

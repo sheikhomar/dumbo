@@ -2,7 +2,6 @@ using dumbo.Compiler.AST;
 using dumbo.Compiler.CodeGenerator.LHCLib;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace dumbo.Compiler.CodeGenerator
 {
@@ -348,12 +347,16 @@ namespace dumbo.Compiler.CodeGenerator
 
         public RuntimeEntity Visit(FuncCallExprNode node, VisitorArgs arg)
         {
-            //a := ... _MyFunction(myInt)+5
-            string prefix = "";
-            if (!node.DeclarationNode.IsBuiltIn)
-                prefix = "_";
+            //MyFunction(myInt) in some stmt | can have a ret value or not
+            if (node.DeclarationNode.IsBuiltIn)
+            {
+                string name = node.FuncName.ToLower();
+                name = char.ToUpper(name[0]) + name.Substring(1);
+                _currentStmt.Append(name + "(");
+            }
+            else
+                _currentStmt.Append("_" + node.FuncName.ToLower() + "(");
 
-            _currentStmt.Append(prefix + node.FuncName.ToLower() + "(");
             node.Parameters.Accept(this, arg);
             _currentStmt.Append(")");
 
@@ -362,15 +365,10 @@ namespace dumbo.Compiler.CodeGenerator
 
         public RuntimeEntity Visit(FuncCallStmtNode node, VisitorArgs arg)
         {
-            //void MyFunction2(myInt)
-            var actualNode = node.CallNode;
-
-            _currentStmt = new Stmt("_");
-            _currentStmt.Append(actualNode.FuncName.ToLower() + "(");
-            actualNode.Parameters.Accept(this, arg);
-            _currentStmt.Append(");");
+            _currentStmt = new Stmt("");
+            node.CallNode.Accept(this, arg);
+            _currentStmt.Append(";");
             _currentModule.Append(_currentStmt);
-
             return null;
         }
 

@@ -1,45 +1,55 @@
+using System;
 using System.Collections.Generic;
 
 namespace dumbo.Compiler.AST
 {
     public class ArrayValueNode : ValueNode
     {
-        int level = 0;
         public ArrayValueNode(ArrayTypeNode type) : base(type)
         {
             ArrayType = type;
             Values = new NestedExpressionListNode();
-            
+            _currentNestListNode = Values;
         }
 
         public ArrayTypeNode ArrayType { get; }
 
-        ///public ExpressionListNode Values { get; }
+        Stack<NestedExpressionListNode> ListHistory = new Stack<NestedExpressionListNode>();
+
         public NestedExpressionListNode Values { get; }
 
-        Stack<ExpressionListNode> _stack = new Stack<ExpressionListNode>();
-        Stack<NestedExpressionListNode> _stack2 = new Stack<NestedExpressionListNode>();
-        ExpressionListNode currentExpressionListNode = null;
+        private ExpressionListNode _currentExpressionListNode;
+        private NestedExpressionListNode _currentNestListNode;
          
-        
         public void AddExpression(ExpressionNode expr)
         {
-            _stack.Peek().Add(expr);
+            if (_currentExpressionListNode == null)
+            {
+                _currentExpressionListNode = new ExpressionListNode();
+            }
+            _currentExpressionListNode.Add(expr);
         }
 
         public void CreateLevel()
         {
-            _stack.Push(new ExpressionListNode());
+            var tempList = new NestedExpressionListNode();
+            _currentNestListNode.Add(tempList);
+            ListHistory.Push(_currentNestListNode);
+            _currentNestListNode = tempList;
         }
 
         public void CloseLevel()
         {
-            
-
-            var listNode = _stack.Pop();
-            var nestedListNode = new NestedExpressionListNode();
-            nestedListNode.Add(listNode);
-            Values.Add(nestedListNode);
+            if (_currentExpressionListNode == null)
+            {
+                _currentNestListNode = ListHistory.Pop();
+            }
+            else
+            {
+                _currentNestListNode.Add(_currentExpressionListNode);
+                _currentNestListNode = ListHistory.Pop();
+            }
+            _currentExpressionListNode = null;
         }
 
         public override T Accept<T, K>(IVisitor<T, K> visitor, K arg)

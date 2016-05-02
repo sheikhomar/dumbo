@@ -98,7 +98,9 @@ namespace dumbo.Compiler
 
         public VisitResult Visit(ContinueStmtNode node, VisitorArgs arg)
         {
-            throw new NotImplementedException();
+            WriteLine("Continue");
+
+            return EmptyResult;
         }
 
         public VisitResult Visit(ConstDeclListNode node, VisitorArgs arg)

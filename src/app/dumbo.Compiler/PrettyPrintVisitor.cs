@@ -135,12 +135,22 @@ namespace dumbo.Compiler
 
         public VisitResult Visit(ConstDeclListNode node, VisitorArgs arg)
         {
-            throw new NotImplementedException();
+            foreach (var item in node)
+            {
+                item.Accept(this, arg);
+            }
+
+            return null;
         }
 
         public VisitResult Visit(ConstDeclNode node, VisitorArgs arg)
         {
-            throw new NotImplementedException();
+            Write($"Constant {node.Type} {node.Name} ");
+            Write(" := ");
+            node.Value.Accept(this, arg);
+            WriteLine();
+
+            return EmptyResult;
         }
 
         public VisitResult Visit(BuiltInFuncDeclNode node, VisitorArgs arg)
@@ -302,7 +312,24 @@ namespace dumbo.Compiler
 
         public VisitResult Visit(LiteralValueNode node, VisitorArgs arg)
         {
-            Write(node.Value);
+            if (node.Type is PrimitiveTypeNode)
+            {
+                var primType = node.Type as PrimitiveTypeNode;
+                switch (primType.Type)
+                {
+                    case PrimitiveType.Number:
+                        Write(node.Value);
+                        break;
+                    case PrimitiveType.Text:
+                        Write($"\"{node.Value}\"");
+                        break;
+                    case PrimitiveType.Boolean:
+                        Write(node.Value);
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+            }
 
             return EmptyResult;
         }
@@ -359,6 +386,7 @@ namespace dumbo.Compiler
 
         public VisitResult Visit(RootNode node, VisitorArgs arg)
         {
+            node.ConstDecls.Accept(this, arg);
             node.Program.Accept(this, arg);
             node.FuncDecls.Accept(this, arg);
 

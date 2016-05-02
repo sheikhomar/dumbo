@@ -93,7 +93,16 @@ namespace dumbo.Compiler.TypeChecking
                 var idRes = GetVisitResult(id, arg);
                 var exprRes = GetVisitResult(expr, arg);
 
-                if (!idRes.Equals(exprRes))
+                if (idRes.Types.First() is ArrayTypeNode)
+                {
+                    var arrayType = idRes.Types.First() as ArrayTypeNode;
+                    var arrayIdentifier = id as ArrayIdentifierNode;
+                    var size = arrayIdentifier.Sizes.First() as LiteralValueNode;
+
+                    if (!arrayType.Type.Equals(exprRes.Types.First()))
+                        Reporter.Error($"The variable '{arrayIdentifier.Name}[{size.Value}]' cannot be assigned to the type {exprRes.Types.First()}", node.SourcePosition);   //TODO: Implement this so 
+                }
+                else if (!idRes.Equals(exprRes))
                 {
                     if (exprRes.Types.Any())
                     {

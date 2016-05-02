@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
@@ -5,7 +6,7 @@ using System.Text;
 
 namespace dumbo.Compiler.AST
 {
-    public class NestedExpressionListNode
+    public class NestedExpressionListNode : IEnumerable<object>
     {
         private readonly List<object> _internalList;
 
@@ -24,6 +25,11 @@ namespace dumbo.Compiler.AST
         public void Add(ExpressionListNode listNode)
         {
             _internalList.Add(listNode);
+        }
+
+        public IEnumerator<object> GetEnumerator()
+        {
+            return _internalList.GetEnumerator();
         }
 
         public override string ToString()
@@ -53,6 +59,11 @@ namespace dumbo.Compiler.AST
             }
 
             return buffer.ToString();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
 
         public void CleanUp()

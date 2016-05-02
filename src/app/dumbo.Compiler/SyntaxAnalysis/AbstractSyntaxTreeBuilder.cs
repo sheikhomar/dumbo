@@ -22,12 +22,6 @@ namespace dumbo.Compiler.SyntaxAnalysis
 
             AppendFuncDecls(funcDeclsToken, rootNode.FuncDecls);
             AppendConstDecls(constDeclsToken, rootNode.ConstDecls);
-       
-
-            if (funcDeclsToken != null)
-            {
-                AppendFuncDecls(funcDeclsToken, rootNode.FuncDecls);
-            }
 
             return rootNode;
         }

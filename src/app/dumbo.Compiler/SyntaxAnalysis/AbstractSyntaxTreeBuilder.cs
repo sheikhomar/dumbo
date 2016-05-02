@@ -856,7 +856,7 @@ namespace dumbo.Compiler.SyntaxAnalysis
                 TypeNode paramType = BuildTypeNode(formalParmReduction[0]);
                 string paramName = GetSpelling(formalParmReduction[1]);
 
-                SourcePosition srcPos = BuildSourcePosition(formalParmReduction[0], formalParmReduction[1]);
+                SourcePosition srcPos = BuildSourcePosition(paramType, formalParmReduction[1]);
 
                 FormalParamNode paramNode = new FormalParamNode(paramName, paramType, srcPos);
                 funcCallNode.Parameters.Add(paramNode);
@@ -890,6 +890,18 @@ namespace dumbo.Compiler.SyntaxAnalysis
             int startColumn = startSrcPos.StartColumn;
             int endLine = endNode.SourcePosition.EndLine;
             int endColumn = endNode.SourcePosition.EndColumn;
+            return new SourcePosition(startLine, startColumn, endLine, endColumn);
+        }
+
+        private SourcePosition BuildSourcePosition(BaseNode startNode, Token endToken)
+        {
+            var startSrcPos = new SourcePosition(startNode, startNode);
+            var endSrcPos = BuildSourcePosition(endToken, endToken);
+
+            int startLine = startSrcPos.StartLine;
+            int startColumn = startSrcPos.StartColumn;
+            int endLine = endSrcPos.EndLine;
+            int endColumn = endSrcPos.EndColumn;
             return new SourcePosition(startLine, startColumn, endLine, endColumn);
         }
     }

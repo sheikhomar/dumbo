@@ -55,36 +55,40 @@ namespace dumbo.Compiler.CodeGenerator
 
         public RuntimeEntity Visit(AssignmentStmtNode node, VisitorArgs arg)
         {
-            bool isFunction = node.Identifiers.Count > node.Expressions.Count;
+            bool isFunction = node.Identifiers.Count > 1;
 
             if (isFunction)
             {
+                //Function | MyFunction(formalParameters, &ret1, &ret2 ...);
                 int i = 0;
-                var funcExp = node.Expressions[0] as FuncCallExprNode;
+                var funcExp = node.Value as FuncCallExprNode;
+                _currentStmt = new Stmt("");
 
                 if (funcExp == null)
                     throw new Exception("Programming error, should be a function");
 
-                //MyFunction(formalParameters, &ret1, &ret2 ...) | How it looks in C for a function
-                _currentStmt = new Stmt("");
-                _currentStmt.Append("_" + funcExp.FuncName + "(");
+
+                if (!funcExp.DeclarationNode.IsBuiltIn)
+                    _currentStmt.Append("_");
+
+                _currentStmt.Append(funcExp.FuncName + "(");
                 funcExp.Parameters.Accept(this, arg);
 
                 if (node.Identifiers.Count > 0 && funcExp.Parameters.Count > 0)
                     _currentStmt.Append(", ");
 
-                foreach (var ret in node.Identifiers)
+                foreach (var retIdentifier in node.Identifiers)
                 {
-                    if (ret.InferredType.GetFirstAs<PrimitiveTypeNode>().Type == PrimitiveType.Text)
-                    {
-                        _currentStmt.Append(ret.Name);
-                    }
+                    var idType = retIdentifier.DeclarationNode.Type as PrimitiveTypeNode;
+
+                    if (idType?.Type == PrimitiveType.Text)
+                        _currentStmt.Append(retIdentifier.Name);
                     else
-                    {
-                        _currentStmt.Append("&" + ret.Name);
-                    }
+                        _currentStmt.Append("&" + retIdentifier.Name);
+
                     if (i < node.Identifiers.Count - 1)
                         _currentStmt.Append(", ");
+
                     i++;
                 }
                 _currentStmt.Append(");");
@@ -92,29 +96,26 @@ namespace dumbo.Compiler.CodeGenerator
             }
             else
             {
-                for (int index = 0; index < node.Identifiers.Count; index++)
-                {
-                    PrimitiveTypeNode tempType = node.Identifiers[index].DeclarationNode.Type as PrimitiveTypeNode;
-                    _currentStmt = new Stmt("");
+                //A normal assignment | Type Id := expression
+                PrimitiveTypeNode idType = node.Identifiers[0].DeclarationNode.Type as PrimitiveTypeNode;
+                _currentStmt = new Stmt("");
 
-                    if (tempType != null && tempType.Type == PrimitiveType.Text)
-                    {
-                        _currentStmt.Append("UpdateText(");
-                        node.Expressions[index].Accept(this, arg);
-                        _currentStmt.Append($", ");
-                        node.Identifiers[index].Accept(this, arg);
-                        _currentStmt.Append(")");
-                    }
-                    else
-                    {
-                        //id = expression;    -- How it looks in C for id
-                        node.Identifiers[index].Accept(this, arg);
-                        _currentStmt.Append(" = ");
-                        node.Expressions[index].Accept(this, arg);
-                    }
-                    _currentStmt.Append(";");
-                    _currentModule.Append(_currentStmt);
+                if (idType?.Type == PrimitiveType.Text)
+                {
+                    _currentStmt.Append("UpdateText(");
+                    node.Value.Accept(this, arg);
+                    _currentStmt.Append($", ");
+                    node.Identifiers.Accept(this, arg);
+                    _currentStmt.Append(")");
                 }
+                else
+                {
+                    node.Identifiers.Accept(this, arg);
+                    _currentStmt.Append(" = ");
+                    node.Value.Accept(this, arg);
+                }
+                _currentStmt.Append(";");
+                _currentModule.Append(_currentStmt);
             }
 
             return null;
@@ -222,7 +223,7 @@ namespace dumbo.Compiler.CodeGenerator
             if (isFunction)
             {
                 int i = 0, idenCount = node.Identifiers.Count;
-                var funcExp = node.Expressions[0] as FuncCallExprNode;
+                var funcExp = node.Value as FuncCallExprNode;
 
                 if (funcExp == null)
                     throw new Exception("Programming error, should be a function");
@@ -459,7 +460,7 @@ namespace dumbo.Compiler.CodeGenerator
             {
                 suffix.Add(new Stmt("return ;"));
             }
-            
+
             node.Body.Accept(this, new StmtBlockNodeArgs(prefix, suffix, arg));
             return null;
         }

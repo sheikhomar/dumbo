@@ -68,38 +68,6 @@ namespace dumbo.Compiler
             return null;
         }
 
-        private void WriteNestedListNode(NestedExpressionListNode node, VisitorArgs arg)
-        {
-            bool first = true;
-            foreach (var item in node)
-            {
-                if (!first)
-                {
-                    Write(", ");
-                }
-                first = false;
-
-                var nestedList = item as NestedExpressionListNode;
-                if (nestedList != null && nestedList.Count > 0)
-                {
-                    Write("(");
-                    WriteNestedListNode(nestedList, arg);
-                    Write(")");
-                }
-                else
-                {
-                    WriteExpressionListNode(item as ExpressionListNode, arg);
-                }
-            }
-        }
-
-        private void WriteExpressionListNode(ExpressionListNode exprList, VisitorArgs arg)
-        {
-            Write("(");
-            VisitChildren(exprList, ", ", arg);
-            Write(")");
-        }
-
         public VisitResult Visit(AssignmentStmtNode node, VisitorArgs arg)
         {
             node.Identifiers.Accept(this, arg);
@@ -458,6 +426,38 @@ namespace dumbo.Compiler
                 throw new InvalidOperationException("Cannot unindent beyond zero.");
 
             _currentIndentation--;
+        }
+
+        private void WriteNestedListNode(NestedExpressionListNode node, VisitorArgs arg)
+        {
+            bool first = true;
+            foreach (var item in node)
+            {
+                if (!first)
+                {
+                    Write(", ");
+                }
+                first = false;
+
+                var nestedList = item as NestedExpressionListNode;
+                if (nestedList != null && nestedList.Count > 0)
+                {
+                    Write("(");
+                    WriteNestedListNode(nestedList, arg);
+                    Write(")");
+                }
+                else
+                {
+                    WriteExpressionListNode(item as ExpressionListNode, arg);
+                }
+            }
+        }
+
+        private void WriteExpressionListNode(ExpressionListNode exprList, VisitorArgs arg)
+        {
+            Write("(");
+            VisitChildren(exprList, ", ", arg);
+            Write(")");
         }
     }
 }

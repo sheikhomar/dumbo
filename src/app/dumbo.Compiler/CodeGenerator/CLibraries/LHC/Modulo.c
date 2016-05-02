@@ -8,8 +8,8 @@ Uses:		Throw
 #include <time.h>
 #include <math.h>
 
-double modulo(double n, double d);
-void throw(char* message);
+double Modulo(double n, double d);
+void Throw(char* message);
 void modTestHelper(double para1, double para2, double res);
 
 int main()
@@ -37,23 +37,23 @@ int main()
 }
 
 void modTestHelper(double para1, double para2, double res){
-	int diff = modulo(para1,para2) - res;
+	int diff = Modulo(para1,para2) - res;
 	
 	if(diff < 0.00001 && diff > -0.00001)
 		return ;
 	
-	printf("ERROR: %f mod %f = %f should have been %f\r\n",para1,para2,modulo(para1,para2),res);
+	printf("ERROR: %f mod %f = %f should have been %f\r\n",para1,para2,Modulo(para1,para2),res);
 }
 
-double modulo(double n, double d)
+double Modulo(double n, double d)
 {	
 	if(d == 0)
-		throw("Cannot do modulo when 2nd argument is zero.");
+		Throw("Cannot do modulo when 2nd argument is zero.");
 	
 	return n - d*(floor((n/d)));
 }
 
-void throw(char* message){
+void Throw(char* message){
 	printf("Program ended unexpectedly:\r\n%s\r\n",message);
 	exit(1);
 }

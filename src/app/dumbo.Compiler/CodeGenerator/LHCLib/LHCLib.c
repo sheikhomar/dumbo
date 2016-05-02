@@ -1,5 +1,5 @@
 ﻿/********************************************************
-External Libraries																
+External Libraries
 /********************************************************/
 #include <stdio.h>
 #include <stdlib.h>
@@ -9,24 +9,30 @@ External Libraries
 #include <time.h>
 
 /********************************************************
-Type Declarations																
+Type Declarations
 /********************************************************/
 typedef struct Text {
 	int Length;
-	char *Text;
+	char *Value;
 } Text;
 
 typedef enum { false, true } Boolean;
 
 /********************************************************
-Function Declarations																
+Function Declarations
 /********************************************************/
 //LHC HelperFunctions
-void throw(char* message);
+void Throw(char* message);
+
 void TextPrint(Text *input);
-void UpdateText(char *inputText, int Length, Text *text);
-void ConcatText(Text *inputText1, Text *inputText2, Text *resText);
+void UpdateText(Text *sourceText, Text *destText);
+Text *ConcatText(Text *inputText1, Text *inputText2);
 void RemoveText(Text *input);
+void RemoveTextValue(Text *input);
+Text *CreateText(char *input);
+void CopyToText(char *inputText, int length, Text *destText);
+Text * TextDup(Text *input);
+
 void BooleanPrint(Boolean *input);
 
 Text* ConcatTextAndBoolean(Text *text, Boolean boolean);
@@ -39,106 +45,102 @@ void Write(Text *input);
 double Ceiling(double input);
 double Floor(double input);
 Boolean IsEqual(Text *t1, Text *t2);
-double random(double range_lower, double range_upper);
-double modulo(double n, double d);
+double Random(double range_lower, double range_upper);
+double Modulo(double n, double d);
+double Div(double n, double d);
 
 /********************************************************
 Function:	Text									
-Version: 	v1.0 							
+Version: 	v1.4 (with more mem leaks and NULL check) ) 							
 /********************************************************/
-// Print a Text value given a pointer to a Text
+//Prints a Text's content
 void TextPrint(Text *input) {
+	printf("%s\r\n", input->Value);
+}
+
+//Creates a new Text Structure and 
+Text *CreateText(char *input) {
+	Text *newText = (Text*)calloc(1, sizeof(Text));
+
+	(*newText).Length = 0;
+	(*newText).Value = "";
+
+	CopyToText(input, strlen(input), newText);
+
+	return newText;
+}
+
+//Updates a Text with the content of another Text
+void UpdateText(Text *sourceText, Text *destText){
+	if (sourceText == NULL || destText == NULL)
+		Throw("Cannot update a NULL text");
+
+	CopyToText(sourceText->Value, sourceText->Length, destText);
+}
+
+//Copies a char * content to a given Text
+void CopyToText(char *inputText, int length, Text *destText) {
+	if (inputText == NULL || destText == NULL)
+		Throw("Cannot Copy to/from a NULL Text");
+	char *textContent = (char*)calloc(length, sizeof(char));
 	int i = 0;
 
-	// Printing character by character
-	for (i = 0; i<(*input).Length; i++)
-		printf("%c", *((*input).Text + i));
-	printf("\n");
-}
+	strcpy(textContent, inputText);
 
-// Updating a value of a Text given a char pointer of the new value, the length of the new value and the Text to be updated
-void UpdateText(char *inputText, int length, Text *text) {
-	char *textContent = (char*)malloc(length);
-	int i;
-
-	for (i = 0; i<length; i++)
-		*(textContent + i) = *(inputText + i);
-
-	//Disassemble the old Text
-	RemoveText(text);
+	RemoveTextValue(destText);
 
 	//Create the new Text
-	(*text).Length = length;
-	(*text).Text = textContent;
+	destText->Length = length;
+	destText->Value = textContent;
 }
 
-// Copy a value of a Text given a char pointer to the old value, the length of the old value and the Text to be copied to (it's null - empty)
-void CopyText(char *inputText, int length, Text *text) {
-	char *textContent = (char*)malloc(length);
-	int i;
-
-	for (i = 0; i<length; i++)
-		*(textContent + i) = *(inputText + i);
-	
-	//Copy the Text
-	(*text).Length = length;
-	(*text).Text = textContent;
-}
-
-// Concatenating to Texts' values
-void ConcatText(Text *inputText1, Text *inputText2, Text *resText) {
-	int i, j, size1 = (*inputText1).Length, size2 = (*inputText2).Length;
-	char *text1 = (*inputText1).Text, *text2 = (*inputText2).Text;
+//Concatenates  the two texts and return a new Text with the result
+Text *ConcatText(Text *inputText1, Text *inputText2) {
+	if (inputText1 == NULL || inputText2 == NULL)
+		Throw("Cannot concat to/from a NULL Text");
+	int	size1 = (*inputText1).Length;
+	int size2 = (*inputText2).Length;
+	char *text1 = (*inputText1).Value;
+	char *text2 = (*inputText2).Value;
 	char *combinedText = (char*)malloc(size1 + size2);
 
 	//Combine the two Texts
-	for (i = 0; i<size1; i++)
-		*(combinedText + i) = *(text1 + i);
-	for (j = 0; j<size2; j++)
-		*(combinedText + (i + j)) = *(text2 + j);
+	strcpy(combinedText, text1);
+	strcpy((combinedText + size1), text2);
 
-	//Disassemble the old Text
-	RemoveText(resText);
 
 	//Create the new Text
-	(*resText).Length = size1 + size2;;
-	(*resText).Text = combinedText;
+	return CreateText(combinedText);
 }
 
-// Free the old memory occupied
+//Removes a given Text and it's value
 void RemoveText(Text *input) {
+	return;
+
 	if (input != NULL) {
-		free((*input).Text);
-		(*input).Text = NULL;
+		RemoveTextValue(input);
+		(*input).Value = NULL;
+		free(input);
 	}
 }
 
-Text* ConcatTextAndNumber(Text *text, double number)
-{
-    int MAX_SIZE = 50;
-    char *output = (char*)malloc(MAX_SIZE + 1);
-    sprintf(output, "%lf", number);
+//Removes a given Text's value
+void RemoveTextValue(Text *input) {
+	return;
 
-    Text *numberAsText = CreateText(output);
-
-    char *tempBuffer = (char*)malloc(text->Length + numberAsText->Length);
-    strcpy(tempBuffer, text->Text);
-    strcat(tempBuffer, numberAsText->Text);
-    return CreateText(tempBuffer);
+	if (input != NULL) {
+		free((*input).Value);
+		(*input).Value = NULL;
+	}
 }
 
-
-Text* ConcatTextAndBoolean(Text *text, Boolean boolean)
-{
-    char *tempBuffer = (char*)malloc(text->Length + 6);
-    strcpy(tempBuffer, text->Text);
-    strcat(tempBuffer, boolean == true ? "true" : "false");
-
-    return CreateText(tempBuffer);
+//Duplicates the input Text and returs the copy as a Text *
+Text * TextDup(Text *input){
+	return CreateText(input->Value);
 }
 /********************************************************
-Function:	Boolean									
-Version: 	v1.0 							
+Function:	Boolean
+Version: 	v1.0
 /********************************************************/
 // Printing the value of a Boolean given with a pointer
 void BooleanPrint(Boolean *input) {
@@ -149,158 +151,202 @@ void BooleanPrint(Boolean *input) {
 }
 
 /********************************************************
-Function:	ReadText									
-Version: 	v1.0 							
+Function:	ReadText
+Version: 	v1.1
 /********************************************************/
 // From: http://stackoverflow.com/questions/314401/how-to-read-a-line-from-the-console-in-c
-char * getline(void) {
-    char * line = malloc(100), *linep = line;
-    size_t lenmax = 100, len = lenmax;
-    int c;
+char * Getline(void) {
+	char * line = (char *)malloc(100), *linep = line;
+	size_t lenmax = 100, len = lenmax;
+	int c;
 
-    if (line == NULL)
-        return NULL;
+	if (line == NULL)
+		return NULL;
 
-    for (;;) {
-        c = fgetc(stdin);
-        if (c == EOF || c == '\n')
-            break;
+	for (;;) {
+		c = fgetc(stdin);
+		if (c == EOF || c == '\n')
+			break;
 
-        if (--len == 0) {
-            len = lenmax;
-            char * linen = realloc(linep, lenmax *= 2);
+		if (--len == 0) {
+			len = lenmax;
+			char * linen = (char *)realloc(linep, lenmax *= 2);
 
-            if (linen == NULL) {
-                free(linep);
-                return NULL;
-            }
-            line = linen + (line - linep);
-            linep = linen;
-        }
+			if (linen == NULL) {
+				free(linep);
+				return NULL;
+			}
+			line = linen + (line - linep);
+			linep = linen;
+		}
 
-        *line++ = c;
-    }
-    *line = '\0';
-    return linep;
+		*line++ = c;
+	}
+	*line = '\0';
+	return linep;
 }
 
 Text* ReadText() {
-    char* text = getline();
-    int length = strlen(text);
+	char* text = Getline();
+	int length = strlen(text);
 
-    Text *retVal = (Text*)malloc(sizeof(Text));
-    retVal->Text = text;
-    retVal->Length = length;
+	Text *retVal = (Text*)malloc(sizeof(Text));
+	retVal->Value = text;
+	retVal->Length = length;
 
-    return retVal;
+	return retVal;
 }
 
 /********************************************************
-Function:	ReadNumber									
-Version: 	v1.0 							
+Function:	ReadNumber
+Version: 	v1.0
 /********************************************************/
 double ReadNumber() {
-    double retValue = 0;
-    int result = scanf("%lf", &retValue);
-    if (result == 0)
-        while (fgetc(stdin) != '\n');
-    return retValue;
+	double retValue = 0;
+	int result = scanf("%lf", &retValue);
+	if (result == 0)
+		while (fgetc(stdin) != '\n');
+	return retValue;
 }
 
 /********************************************************
-Function:	Floor									
-Version: 	v1.0 							
+Function:	Floor
+Version: 	v1.0
 /********************************************************/
 double Floor(double input)
 {
-    return floor(input);
+	return floor(input);
 }
 
 /********************************************************
-Function:	Ceiling									
-Version: 	v1.0 							
+Function:	Ceiling
+Version: 	v1.0
 /********************************************************/
 double Ceiling(double input)
 {
-    return ceil(input);
+	return ceil(input);
 }
 
 /********************************************************
-Function:	Write									
-Version: 	v1.0 							
+Function:	Write
+Version: 	v1.0
 /********************************************************/
 void Write(Text *input)
 {
-    printf("%s\n", input->Text);
+	printf("%s\n", input->Value);
 }
 
 /********************************************************
-Function:	IsEqual									
-Version: 	v1.0 							
+Function:	IsEqual
+Version: 	v1.0
 /********************************************************/
 Boolean IsEqual(Text *t1, Text *t2)
 {
-    if (t1->Length != t2->Length)
-        return false;
+	if (t1->Length != t2->Length)
+		return false;
 
-    return strcmp(t1->Text, t2->Text) == 0;
+	return strcmp(t1->Value, t2->Value) == 0;
 }
 
-
 /********************************************************
-Function:	Random									
-Version: 	v1.0 							
+Function:	Random
+Version: 	v1.0
 /********************************************************/
-double random(double range1, double range2)
+double Random(double range1, double range2)
 {
-	double number,range_lower,range_upper;
+	double number, range_lower, range_upper;
 	double range;
 
 	//Find upper and lower
-	if(range1 > range2)
+	if (range1 > range2)
 	{
 		range_lower = range2;
 		range_upper = range1;
 	}
-	else 
+	else
 	{
 		range_lower = range1;
 		range_upper = range2;
 	}
-	
+
 	range = range_upper - range_lower;
-	
+
 	//Error handle
-	if(range < 1)
-		throw("Random's range must use two DIFFERNT Numbers.");
+	if (range < 1)
+		Throw("Random's range must use two DIFFERNT Numbers.");
 
-	if(range > 32767)
-		throw("Random's actual range must be less than 32768. The actual range is argument2 - argument1");
+	if (range > 32767)
+		Throw("Random's actual range must be less than 32768. The actual range is argument2 - argument1");
 
-	
+
 	//Calculate the random number and fit to range
-	number = modulo(((double)rand()),(range+1)); // 1 % 2 =0,1 in a range 0..1
-	
+	number = Modulo(((double)rand()), (range + 1)); // 1 % 2 =0,1 in a range 0..1
+
 	//Return the random number, adding range offset from 0
 	return number + range_lower;
 }
+
 /********************************************************
-Function:	Modulo									
-Version: 	v1.0 							
+Function:	Modulo
+Version: 	v1.0
 /********************************************************/
-double modulo(double n, double d)
-{	
-	if(d == 0)
-		throw("Cannot do modulo when 2nd argument is zero.");
-	
-	return n - d*(floor((n/d)));
+double Modulo(double n, double d)
+{
+	if (d == 0)
+		Throw("Cannot do modulo when 2nd argument is zero.");
+
+	return n - d*(floor((n / d)));
 }
 
 /********************************************************
-Function:	Throw									
-Version: 	v1.0 							
+Function:	Div
+Version: 	v1.0
 /********************************************************/
-void throw(char* message){
-	printf("Program ended unexpectedly:\r\n%s\r\n",message);
+double Div(double n, double d)
+{
+	if (d == 0)
+		Throw("Cannot divide by zero.");
+
+	return n / d;
+}
+
+/********************************************************
+Function:	Throw
+Version: 	v1.0
+/********************************************************/
+void Throw(char* message) {
+	printf("Program ended unexpectedly:\r\n%s\r\n", message);
 	exit(1);
 }
+
+/********************************************************
+Function:	Convert									
+Version: 	v1.1 						
+/********************************************************/
+Text* ConcatTextAndNumber(Text *text, double number)
+{
+    int MAX_SIZE = 50;
+    char *output = (char*)malloc(MAX_SIZE+1);
+    sprintf(output, "%lf", number);
+    
+    Text *numberAsText = CreateText(output);
+
+    char *tempBuffer = (char*)malloc(text->Length + numberAsText->Length);
+    strcpy(tempBuffer, text->Value);
+    strcat(tempBuffer, numberAsText->Value);
+    return CreateText(tempBuffer);
+}
+
+
+Text* ConcatTextAndBoolean(Text *text, Boolean boolean)
+{
+    char *tempBuffer = (char*)malloc(text->Length + 6);
+    strcpy(tempBuffer, text->Value);
+    strcat(tempBuffer, boolean == true ? "true" : "false");
+    
+    return CreateText(tempBuffer);
+}
+
+/********************************************************
+User area:
+/********************************************************/

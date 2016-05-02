@@ -1,7 +1,7 @@
 /********************************************************
 Function:	Text									
-Version: 	v1.0 							
-Uses:			
+Version: 	v1.4 (with more mem leaks and NULL check)							
+Uses:		Throw	
 /********************************************************/
 #include <stdio.h>
 #include <stdlib.h>
@@ -10,95 +10,142 @@ Uses:
 //LHC Type
 typedef struct Text{
     int Length;
-    char *Text;
+    char *Value;
 } Text;
 
+//Extra HelperFunctions
+void Throw(char* message);
+void ChangeText(Text *input);
 
 //LHC HelperFunctions
 void TextPrint(Text *input);
-Text CreateText(char *inputText);
-void UpdateText(Text *inputText, Text *text);
-Text ConcatText(Text *inputText1, Text *inputText2);
+void UpdateText(Text *sourceText, Text *destText);
+Text *ConcatText(Text *inputText1, Text *inputText2);
 void RemoveText(Text *input);
+void RemoveTextValue(Text *input);
+Text *CreateText(char *input);
+void CopyToText(char *inputText, int length, Text *destText);
+Text * TextDup(Text *input);
 
 int main()
 {
-	struct Text myText, anotherText;
-	Text myText2 = CreateText("Test text");
+	int i = 0;
+	Text *myText = NULL;
+	Text *hey = NULL;
+
+	for (i = 0; i < 5; i++)
+	{
+		myText = CreateText("ho ");
+		hey = CreateText("hi ");
+		TextPrint(hey);
+		UpdateText(ConcatText(hey, myText), myText);
+		TextPrint(myText);
+		UpdateText(ConcatText(myText, hey), hey);
+		TextPrint(hey);
+		RemoveText(myText);
+		RemoveText(hey);
+	}
 	
-	UpdateText("Hello",&myText);
-	UpdateText(" world",&anotherText);
-	
-	ConcatText(&myText,&anotherText,&myText);
-	
-	TextPrint(&myText);
-	
-	RemoveText(&myText);
-	
-	if(myText.Text == NULL)
-		printf("Successfully removed Text\n");
-	else
-		printf("Error - RemoveText failed (it's %c\n",*(myText.Text));
-	
+	myText = CreateText("ho ");
+	printf("DupTest \r\nBefore func: "); TextPrint(myText);
+	ChangeText(myText);
+	printf("After func (same): "); TextPrint(myText); 
 	
     return 0;
 }
 
-void TextPrint(Text *input){
-	int i=0;
-	
-	for(i=0;i<(*input).Length;i++)
-		printf("%c",*((*input).Text+i));
-	printf("\n");
+//Prints a Text's content
+void TextPrint(Text *input) {
+	printf("%s\r\n",input->Value);
 }
 
-Text *CreateText(char *inputText)
-{
-    Text *retVal = (Text*)malloc(sizeof(Text));
-    retVal->Text = inputText;
-    retVal->Length = strlen(inputText);
-	return retVal;
+//Creates a new Text Structure and 
+Text *CreateText(char *input){
+	Text *newText = (Text*)calloc(1,sizeof(Text));
+	
+	(*newText).Length = 0;
+	(*newText).Value = "";
+	
+	CopyToText(input, strlen(input),newText);
+	
+	return newText;
 }
 
-void UpdateText(Text *inputText, Text *text){//Fix this
-	char *textContent = (char*) malloc(length);
-	int i;
-	
-	for(i=0;i<length;i++)
-		*(textContent+i) = *(inputText+i);
-	
-	//Disassemble the old Text
-	RemoveText(text);
-	
+//Updates a Text with the content of another Text
+void UpdateText(Text *sourceText, Text *destText){
+	if (sourceText == NULL || destText == NULL)
+		Throw("Cannot update a NULL text");
+	CopyToText(sourceText->Value, sourceText->Length, destText);
+}
+
+//Copies a char * content to a given Text
+void CopyToText(char *inputText, int length, Text *destText) {
+	if (inputText == NULL || destText == NULL)
+		Throw("Cannot Copy to/from a NULL Text");
+	char *textContent = (char*)calloc(length, sizeof(char));
+	int i = 0;
+
+	strcpy(textContent, inputText);
+									
+	RemoveTextValue(destText);
+
 	//Create the new Text
-	(*text).Length = length;
-	(*text).Text = textContent;
+	destText->Length = length;
+	destText->Value = textContent;
 }
 
-Text ConcatText(Text *inputText1, Text *inputText2){
-	Text resText;
-	int i, j;
+//Concatenates  the two texts and return a new Text with the result
+Text *ConcatText(Text *inputText1, Text *inputText2) {
+	if (inputText1 == NULL || inputText2 == NULL)
+		Throw("Cannot concat to/from a NULL Text");
 	int	size1 = (*inputText1).Length;
 	int size2 = (*inputText2).Length;
-	char *text1 = (*inputText1).Text;
-	char *text2 = (*inputText2).Text;
-	char *combinedText = (char*) malloc(size1+size2);
-	
+	char *text1 = (*inputText1).Value;
+	char *text2 = (*inputText2).Value;
+	char *combinedText = (char*)malloc(size1 + size2);
+
 	//Combine the two Texts
 	strcpy(combinedText, text1);
-	strcpy((combinedText+size1), text2);
-	
-	//Disassemble the old Text
-	//RemoveText(resText);
+	strcpy((combinedText + size1), text2);
+
 	
 	//Create the new Text
-	(*resText).Length = size1 + size2;;
-	(*resText).Text = combinedText;
+	return CreateText(combinedText);
 }
 
-void RemoveText(Text *input){
-	if(input != NULL){
-		free((*input).Text);
-		(*input).Text = NULL;
+//Removes a given Text and it's value
+void RemoveText(Text *input) {
+	return ;
+	
+	if (input != NULL) {
+		RemoveTextValue(input);
+		(*input).Value = NULL;
+		free(input);
 	}
+}
+
+//Removes a given Text's value
+void RemoveTextValue(Text *input) {
+	return ;
+	
+	if (input != NULL) {
+		free((*input).Value);
+		(*input).Value = NULL;
+	}
+}
+
+//Duplicates the input Text and returs the copy as a Text *
+Text * TextDup(Text *input){
+	return CreateText(input->Value);
+}
+
+//OTHER HELPER FUNCTIONS
+void Throw(char* message){
+	printf("Program ended unexpectedly:\r\n%s\r\n",message);
+	exit(1);
+}
+
+void ChangeText(Text *input){
+	input = TextDup(input);
+	input = CreateText("ERROR!!");
 }

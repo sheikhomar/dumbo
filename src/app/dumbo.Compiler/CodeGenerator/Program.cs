@@ -12,6 +12,7 @@ namespace dumbo.Compiler.CodeGenerator
         private IList<Module> _moduleList;
         private Module _mainModule;
         private Module _LibModule;
+        private Module _userFuncDeclModule;
 
         public Program(Module libary)
         {
@@ -31,16 +32,25 @@ namespace dumbo.Compiler.CodeGenerator
             _mainModule = module;
         }
 
+        public void AddUserFuncDeclModule(Module module)
+        {
+            if (_userFuncDeclModule != null)
+                throw new Exception("A program can only have one UserFuncDecl Module");
+            _userFuncDeclModule = module;
+        }
+
         /// <summary>
         /// Prints the C version of the program with the specified options
         /// </summary>
         /// <returns></returns>
-        public string Print(bool prettyPrint, bool includeLibary, int tabSize=2, string indentation = "{", string outdentation = "}", string separator = "\r\n")
+        public string Print(bool prettyPrint, bool includeLibary, bool includeUserFuncDecl, int tabSize = 2, string indentation = "{", string outdentation = "}", string separator = "\r\n")
         {
             var builder = new StringBuilder();
 
             if (includeLibary)
                 builder.Append(_LibModule.Print());
+            if (includeUserFuncDecl)
+                builder.Append(_userFuncDeclModule.Print());
             if (_mainModule != null)
                 builder.Append(_mainModule.Print());
             else
@@ -75,7 +85,7 @@ namespace dumbo.Compiler.CodeGenerator
                 builder.AppendLine(line);
 
                 if (hasIndent && !hasOutdent)
-                    currentIndentation+=tabSize;
+                    currentIndentation += tabSize;
             }
 
             return builder.ToString();

@@ -79,7 +79,7 @@ namespace dumbo.Compiler
         {
             node.LeftOperand.Accept(this, arg);
             node.RightOperand.Accept(this, arg);
-            
+
             return null;
         }
 
@@ -127,7 +127,7 @@ namespace dumbo.Compiler
                 AddVariableToSymbolTable(id, node);
 
             node.Value.Accept(this, arg);
-
+            node.Identifiers.Accept(this, arg);
             return null;
         }
 
@@ -135,6 +135,8 @@ namespace dumbo.Compiler
         {
             foreach (var id in node.Identifiers)
                 AddVariableToSymbolTable(id, node);
+
+            node.Identifiers.Accept(this, arg);
 
             return null;
         }
@@ -165,7 +167,7 @@ namespace dumbo.Compiler
 
             return null;
         }
-        
+
         public object Visit(FormalParamListNode node, VisitorArgs arg)
         {
             foreach (var item in node)
@@ -253,7 +255,7 @@ namespace dumbo.Compiler
             node.Body.Accept(this, arg);
 
             SymbolTable.CloseScope();
-            
+
             return null;
         }
 
@@ -389,7 +391,7 @@ namespace dumbo.Compiler
 
             return null;
         }
-        
+
         private void AddVariableToSymbolTable(IdentifierNode idNode, IVariableDeclNode declNode)
         {
             var name = idNode.Name;

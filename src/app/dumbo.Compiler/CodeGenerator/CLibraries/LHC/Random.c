@@ -9,8 +9,8 @@ Uses:		Modulo, Throw
 #include <math.h>
 
 //Extra helper functions
-double modulo(double n, double d);
-void throw(char* message);
+double Modulo(double n, double d);
+void Throw(char* message);
 void randomTestHelper(double r1, double r2);
 void multipleRanTest(int repeat);
 
@@ -100,14 +100,14 @@ double random(double range1, double range2)
 	
 	//Error handle
 	if(range < 1)
-		throw("Random's range must use two DIFFERNT Numbers.");
+		Throw("Random's range must use two DIFFERNT Numbers.");
 
 	if(range > 32767)
-		throw("Random's actual range must be less than 32768. The actual range is argument2 - argument1");
+		Throw("Random's actual range must be less than 32768. The actual range is argument2 - argument1");
 
 	
 	//Calculate the random number and fit to range
-	number = modulo(((double)rand()),(range+1)); // 1 % 2 =0,1 in a range 0..1
+	number = Modulo(((double)rand()),(range+1)); // 1 % 2 =0,1 in a range 0..1
 	
 	//Return the random number, adding range offset from 0
 	return number + range_lower;
@@ -115,15 +115,15 @@ double random(double range1, double range2)
 
 
 //Modulo code copy
-double modulo(double n, double d)
+double Modulo(double n, double d)
 {	
 	if(d == 0)
-		throw("Cannot do modulo when 2nd argument is zero.");
+		Throw("Cannot do modulo when 2nd argument is zero.");
 	
 	return n - d*(floor((n/d)));
 }
 
-void throw(char* message){
+void Throw(char* message){
 	printf("Program ended unexpectedly:\r\n%s\r\n",message);
 	exit(1);
 }

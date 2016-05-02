@@ -6,7 +6,6 @@ using dumbo.Compiler.AST;
 
 namespace dumbo.Compiler
 {
-
     public class PrettyPrintVisitor : IVisitor<VisitResult, VisitorArgs>
     {
         private const int TabSize = 2;
@@ -341,7 +340,7 @@ namespace dumbo.Compiler
 
                 Unindent();
             }
-            
+
             return EmptyResult;
         }
 
@@ -352,7 +351,7 @@ namespace dumbo.Compiler
 
             return EmptyResult;
         }
-        
+
         private void VisitChildren<T>(IEnumerable<T> children, string separator, VisitorArgs arg) where T : IVisitable
         {
             bool isFirst = true;
@@ -373,7 +372,7 @@ namespace dumbo.Compiler
                 _buffer.Append(new string(' ', _currentIndentation * TabSize));
                 _isNewLine = false;
             }
-            
+
             _buffer.Append(input);
         }
 
@@ -394,7 +393,7 @@ namespace dumbo.Compiler
             if (_currentIndentation == 0)
                 throw new InvalidOperationException("Cannot unindent beyond zero.");
 
-            _currentIndentation--;    
+            _currentIndentation--;
         }
     }
 }

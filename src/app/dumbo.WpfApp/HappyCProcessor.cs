@@ -13,7 +13,8 @@ namespace dumbo.WpfApp
 {
     class HappyCProcessor
     {
-        private class RunnerArgument {
+        private class RunnerArgument
+        {
             public EventReporter Reporter { get; }
             public IInteractiveShell Shell { get; }
             public RootNode Root { get; }
@@ -29,7 +30,7 @@ namespace dumbo.WpfApp
         public event EventHandler<ProcessorResult> Success;
 
         public event EventHandler<IEnumerable<Exception>> Failure;
-        
+
         public void Start(EventReporter reporter, IInteractiveShell shell, RootNode root)
         {
             var args = new RunnerArgument(reporter, shell, root);

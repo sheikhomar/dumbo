@@ -1,0 +1,38 @@
+Program
+	text t := t1(t2(t3()))
+	t4(t)
+	number n
+	n := n1(n)
+	write(t)
+	n3(n)
+	write("" + n)
+End Program
+
+function t1(text t) return text
+	return "Bob"
+end function
+
+function t2(text t) return text
+	return "Hans"
+end function
+
+function t3() return text
+	return "Sigurd"
+end function
+
+function t4(text t) return nothing
+	t := "Inger"
+end function
+
+function n1(number n) return number
+	return n2(n)
+end function
+
+function n2(number n) return number
+	n := 5
+	return 11 
+end function
+
+function n3(number n) return nothing
+	n := 5
+end function

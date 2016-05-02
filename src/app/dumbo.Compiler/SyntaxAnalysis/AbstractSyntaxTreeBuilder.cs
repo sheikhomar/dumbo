@@ -19,9 +19,16 @@ namespace dumbo.Compiler.SyntaxAnalysis
             
             ProgramNode programNode = BuildProgram(programToken);
             RootNode rootNode = new RootNode(programNode);
+
             AppendFuncDecls(funcDeclsToken, rootNode.FuncDecls);
             AppendConstDecls(constDeclsToken, rootNode.ConstDecls);
-            
+       
+
+            if (funcDeclsToken != null)
+            {
+                AppendFuncDecls(funcDeclsToken, rootNode.FuncDecls);
+            }
+
             return rootNode;
         }
 
@@ -42,9 +49,10 @@ namespace dumbo.Compiler.SyntaxAnalysis
         private StmtBlockNode BuildStmtsBlock(Token stmtsToken)
         {
             Debug.Assert(stmtsToken.Parent.Name() == "Stmts");
-            
+            Reduction lhs = (Reduction)stmtsToken.Data;
+
             StmtBlockNode stmtsBlockNode = new StmtBlockNode();
-            
+
             AppendStatements(stmtsToken, stmtsBlockNode);
 
             return stmtsBlockNode;
@@ -58,7 +66,7 @@ namespace dumbo.Compiler.SyntaxAnalysis
             if (rhs.Count() > 0)
             {
                 Token stmtToken = rhs[0];
-                
+
                 StmtNode stmtNode = BuildStmt(stmtToken);
                 statements.Add(stmtNode);
 
@@ -66,10 +74,11 @@ namespace dumbo.Compiler.SyntaxAnalysis
                 AppendStatements(stmtsToken2, statements);
             }
         }
-        
+
         private StmtNode BuildStmt(Token stmtToken)
         {
             Debug.Assert(stmtToken.Parent.Name() == "Stmt");
+
             Reduction rhs = (Reduction)stmtToken.Data;
 
             string nameOfProduction = rhs[0].Parent.Name();
@@ -142,7 +151,7 @@ namespace dumbo.Compiler.SyntaxAnalysis
                 SourcePosition srcPos = BuildSourcePosition(rhs[0], rhs[5]);
                 ExpressionNode exprNode = BuildExprNode(exprToken);
                 StmtBlockNode stmtsNode = BuildStmtsBlock(stmtsToken);
-                
+
                 return new RepeatStmtNode(exprNode, stmtsNode, srcPos);
             }
 
@@ -179,7 +188,7 @@ namespace dumbo.Compiler.SyntaxAnalysis
             {
                 srcPos = BuildSourcePosition(rhs[0], rhs[1]);
             }
-            
+
             return new ReturnStmtNode(expressions, srcPos);
         }
 
@@ -207,7 +216,7 @@ namespace dumbo.Compiler.SyntaxAnalysis
 
         private string GetSpelling(Token token)
         {
-            return ((TokenData) token.Data).Spelling;
+            return ((TokenData)token.Data).Spelling;
         }
 
         private void AppendFuncCallParameters(Token token, FuncCallExprNode funcCallNode)
@@ -219,7 +228,7 @@ namespace dumbo.Compiler.SyntaxAnalysis
             {
                 Token exprToken = rhs.Count() == 2 ? rhs[0] : rhs[1];
                 Token multiExprToken = rhs.Count() == 2 ? rhs[1] : rhs[2];
-                
+              
                 ExpressionNode exprNode = BuildExprNode(exprToken);
                 funcCallNode.Parameters.Add(exprNode);
                 AppendFuncCallParameters(multiExprToken, funcCallNode);
@@ -232,7 +241,7 @@ namespace dumbo.Compiler.SyntaxAnalysis
             Reduction rhs = (Reduction)token.Data;
 
             var first = rhs[0].Parent.Name();
-
+            
             switch (first)
             {
                 case "Id":
@@ -287,7 +296,7 @@ namespace dumbo.Compiler.SyntaxAnalysis
             Debug.Assert(token.Parent.Name() == "ExprList");
             Reduction rhs = (Reduction)token.Data;
 
-            var  list = new ExpressionListNode();
+            var list = new ExpressionListNode();
 
             list.Add(BuildExprNode(rhs[0]));
 
@@ -338,7 +347,6 @@ namespace dumbo.Compiler.SyntaxAnalysis
                 ifNode = new IfStmtNode(predicate, stmtsNode, list, srcPos);
             else
                 ifNode = new IfElseStmtNode(predicate, stmtsNode, elseStmtsNode, list, srcPos);
-
 
             return ifNode;
         }
@@ -523,6 +531,7 @@ namespace dumbo.Compiler.SyntaxAnalysis
             
             var srcPos = new SourcePosition(type, idList);
 
+
             return new PrimitiveDeclStmtNode(idList, type, srcPos);
         }
 
@@ -579,7 +588,7 @@ namespace dumbo.Compiler.SyntaxAnalysis
                 AppendIdentifier(rhs[2], list);
             }
         }
-        
+
         private void AppendFuncDecls(Token token, FuncDeclListNode list)
         {
             Debug.Assert(token.Parent.Name() == "FuncDecls");
@@ -727,7 +736,7 @@ namespace dumbo.Compiler.SyntaxAnalysis
 
             StmtBlockNode funcBodyNode = BuildStmtsBlock(rhs[8]);
             FuncDeclNode funcDelc = new FuncDeclNode(funcName, funcBodyNode, srcPos);
-            
+
             AppendFormalParameters(rhs[3], funcDelc);
 
             AppendReturnTypes(rhs[6], funcDelc);
@@ -793,7 +802,7 @@ namespace dumbo.Compiler.SyntaxAnalysis
                 var name = GetSpelling(single);
                 list.Add(new IdentifierNode(name, srcPos));
             }
-
+            
             AppendArraySize(multi, list);
         }
 
@@ -832,7 +841,7 @@ namespace dumbo.Compiler.SyntaxAnalysis
                 AppendReturnTypes(rhs[2], funcDeclNode);
             }
         }
-        
+
         private void AppendFormalParameters(Token token, FuncDeclNode funcCallNode)
         {
             Debug.Assert(token.Parent.Name() == "FormalParams" || token.Parent.Name() == "FormalParamsList");
@@ -843,7 +852,7 @@ namespace dumbo.Compiler.SyntaxAnalysis
                 Token singleToken = rhs.Count() == 2 ? rhs[0] : rhs[1];
                 Token multiToken = rhs.Count() == 2 ? rhs[1] : rhs[2];
 
-                Reduction formalParmReduction = (Reduction) singleToken.Data;
+                Reduction formalParmReduction = (Reduction)singleToken.Data;
                 TypeNode paramType = BuildTypeNode(formalParmReduction[0]);
                 string paramName = GetSpelling(formalParmReduction[1]);
 
@@ -855,7 +864,7 @@ namespace dumbo.Compiler.SyntaxAnalysis
                 AppendFormalParameters(multiToken, funcCallNode);
             }
         }
-        
+
         private SourcePosition BuildSourcePosition(Token startToken, Token endToken)
         {
             var startTokenData = startToken.Data as TokenData;
@@ -872,7 +881,7 @@ namespace dumbo.Compiler.SyntaxAnalysis
             int endColumn = endTokenData.Column + endTokenData.Spelling.Length + 2;
             return new SourcePosition(startLine, startColumn, endLine, endColumn);
         }
-        
+
         private SourcePosition BuildSourcePosition(Token startToken, BaseNode endNode)
         {
             var startSrcPos = BuildSourcePosition(startToken, startToken);

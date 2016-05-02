@@ -439,7 +439,7 @@ namespace dumbo.WpfApp
                 {
                     var codeGen = new CodeGeneratorVisitor();
                     root.Accept(codeGen, new VisitorArgs());
-                    ResultTextBox.Text = codeGen.CProgram.Print(true, false);
+                    ResultTextBox.Text = codeGen.CProgram.Print(true, false, true);
                 }
 
                 MarkErrors(reporter);
@@ -475,7 +475,7 @@ namespace dumbo.WpfApp
                 {
                     var codeGen = new CodeGeneratorVisitor();
                     root.Accept(codeGen, new VisitorArgs());
-                    string compiledText = codeGen.CProgram.Print(true, true);
+                    string compiledText = codeGen.CProgram.Print(true, true, true);
                     ResultTextBox.Text = compiledText;
                     Clipboard.SetText(compiledText);
                 }

@@ -2,7 +2,6 @@ using dumbo.Compiler.AST;
 using dumbo.Compiler.CodeGenerator.LHCLib;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace dumbo.Compiler.CodeGenerator
 {
@@ -65,7 +64,7 @@ namespace dumbo.Compiler.CodeGenerator
 
                 if (funcExp == null)
                     throw new Exception("Programming error, should be a function");
-                
+
                 //MyFunction(formalParameters, &ret1, &ret2 ...) | How it looks in C for a function
                 _currentStmt = new Stmt("");
                 _currentStmt.Append("_" + funcExp.FuncName + "(");
@@ -75,8 +74,15 @@ namespace dumbo.Compiler.CodeGenerator
                     _currentStmt.Append(", ");
 
                 foreach (var ret in node.Identifiers)
-                {                    
-                    _currentStmt.Append("&" + ret.Name);
+                {
+                    if (ret.InferredType.GetFirstAs<PrimitiveTypeNode>().Type == PrimitiveType.Text)
+                    {
+                        _currentStmt.Append(ret.Name);
+                    }
+                    else
+                    {
+                        _currentStmt.Append("&" + ret.Name);
+                    }
                     if (i < node.Identifiers.Count - 1)
                         _currentStmt.Append(", ");
                     i++;
@@ -95,7 +101,7 @@ namespace dumbo.Compiler.CodeGenerator
                     {
                         _currentStmt.Append("UpdateText(");
                         node.Expressions[index].Accept(this, arg);
-                        _currentStmt.Append($", &");
+                        _currentStmt.Append($", ");
                         node.Identifiers[index].Accept(this, arg);
                         _currentStmt.Append(")");
                     }
@@ -117,23 +123,68 @@ namespace dumbo.Compiler.CodeGenerator
         public RuntimeEntity Visit(BinaryOperationNode node, VisitorArgs arg)
         {
             PrimitiveTypeNode binType = node.InferredType.GetFirstAs<PrimitiveTypeNode>();
+            PrimitiveTypeNode leftType = node.LeftOperand.InferredType.GetFirstAs<PrimitiveTypeNode>();
+            PrimitiveTypeNode rightType = node.RightOperand.InferredType.GetFirstAs<PrimitiveTypeNode>();
             string binOperator = ConvertBinaryOperator(node.Operator);
 
-            if (binType.Type == PrimitiveType.Text && binOperator == "+")
+            if (binOperator == "+" && (leftType.Type == PrimitiveType.Text || rightType.Type == PrimitiveType.Text))
             {
-                _currentStmt.Append("ConcatText(");
-                node.LeftOperand.Accept(this, arg);
-                _currentStmt.Append(", ");
-                node.RightOperand.Accept(this, arg);
-                _currentStmt.Append(")");
+                if (leftType.Type == PrimitiveType.Text)
+                {
+                    if (rightType.Type == PrimitiveType.Text)
+                    {
+                        WriteBinOpNodeFunc("ConcatText", node.LeftOperand, node.RightOperand, arg);
+                    }
+                    else if (rightType.Type == PrimitiveType.Number)
+                    {
+                        WriteBinOpNodeFunc("ConcatTextAndNumber", node.LeftOperand, node.RightOperand, arg);
+                    }
+                    else
+                    {
+                        WriteBinOpNodeFunc("ConcatTextAndBoolean", node.LeftOperand, node.RightOperand, arg);
+                    }
+                }
+                else if (rightType.Type == PrimitiveType.Text)
+                {
+                    if (leftType.Type == PrimitiveType.Boolean)
+                    {
+                        _currentStmt.Append($"ConcatText(ConcatTextAndBoolean(CreateText(\"\"), ");
+                        node.LeftOperand.Accept(this, arg);
+                        _currentStmt.Append("), ");
+                        node.RightOperand.Accept(this, arg);
+                        _currentStmt.Append(")");
+                    }
+                    else
+                    {
+                        _currentStmt.Append($"ConcatText(ConcatTextAndNumber(CreateText(\"\"), ");
+                        node.LeftOperand.Accept(this, arg);
+                        _currentStmt.Append("), ");
+                        node.RightOperand.Accept(this, arg);
+                        _currentStmt.Append(")");
+                    }
+                }
+            }
+            else if (binOperator == "%" && binType.Type == PrimitiveType.Number)
+            {
+                WriteBinOpNodeFunc("Modulo", node.LeftOperand, node.RightOperand, arg);
+            }
+            else if (binOperator == "/" && binType.Type == PrimitiveType.Number)
+            {
+                WriteBinOpNodeFunc("Div", node.LeftOperand, node.RightOperand, arg);
+            }
+            else if (binOperator == "==" && leftType.Type == PrimitiveType.Text && rightType.Type == PrimitiveType.Text)
+            {
+                WriteBinOpNodeFunc("IsEqual", node.LeftOperand, node.RightOperand, arg);
             }
             else
             {
+                _currentStmt.Append("(");
                 node.LeftOperand.Accept(this, arg);
                 _currentStmt.Append($" {binOperator} ");
                 node.RightOperand.Accept(this, arg);
+                _currentStmt.Append(")");
             }
-            
+
             return null;
         }
 
@@ -180,13 +231,15 @@ namespace dumbo.Compiler.CodeGenerator
                 {
                     _currentStmt = new Stmt("");
                     node.Type.Accept(this, arg);
-                    _currentStmt.Append(" " + node.Identifiers[j].Name + ";");
+                    _currentStmt.Append($" { node.Identifiers[j].Name} = ");
+                    WriteInitialValue(node.Identifiers[j].InferredType.GetFirstAs<PrimitiveTypeNode>());
+                    _currentStmt.Append(";");
                     _currentModule.Append(_currentStmt);
                 }
 
                 //MyFunction(formalParameters, &ret1, &ret2 ...) | How it looks in C for a function
                 _currentStmt = new Stmt("");
-                _currentStmt.Append(funcExp.FuncName + "(");
+                _currentStmt.Append("_" + funcExp.FuncName + "(");
                 funcExp.Parameters.Accept(this, arg);
 
                 if (node.Identifiers.Count > 0 && funcExp.Parameters.Count > 0)
@@ -194,7 +247,14 @@ namespace dumbo.Compiler.CodeGenerator
 
                 foreach (var ret in node.Identifiers)
                 {
-                    _currentStmt.Append("&" + ret.Name);
+                    if (ret.InferredType.GetFirstAs<PrimitiveTypeNode>().Type == PrimitiveType.Text)
+                    {
+                        _currentStmt.Append(ret.Name);
+                    }
+                    else
+                    {
+                        _currentStmt.Append("&" + ret.Name);
+                    }
                     if (i < node.Identifiers.Count - 1)
                         _currentStmt.Append(", ");
                     i++;
@@ -216,17 +276,19 @@ namespace dumbo.Compiler.CodeGenerator
                     for (int i = 0; i < assCount; i++)
                     {
                         node.Identifiers[i].Accept(this, arg);
+                        _currentStmt.Append(" = ");
+                        WriteInitialValue(declType);
                         _currentStmt.Append(";");
                         _currentModule.Append(_currentStmt);
                         _currentStmt = new Stmt("");
                         _currentStmt.Append("UpdateText(");
                         node.Expressions[i].Accept(this, arg);
-                        _currentStmt.Append($", &");
+                        _currentStmt.Append($", ");
                         node.Identifiers[i].Accept(this, arg);
                         _currentStmt.Append(")");
                         if (i != assCount - 1)
                         {
-                            _currentStmt.Append(", ");
+                            _currentStmt.Append(", *");
                         }
                     }
                 }
@@ -324,12 +386,14 @@ namespace dumbo.Compiler.CodeGenerator
 
         public RuntimeEntity Visit(FuncCallExprNode node, VisitorArgs arg)
         {
-            //a := ... _MyFunction(myInt)+5
-            string prefix = "";
-            if (!node.DeclarationNode.IsBuiltIn)
-                prefix = "_";
+            //MyFunction(myInt) in some stmt | can have a ret value or not
+            if (node.DeclarationNode.IsBuiltIn)
+            {
+                _currentStmt.Append(node.DeclarationNode.Name + "(");
+            }
+            else
+                _currentStmt.Append("_" + node.DeclarationNode.Name + "(");
 
-            _currentStmt.Append(prefix + node.FuncName.ToLower() + "(");
             node.Parameters.Accept(this, arg);
             _currentStmt.Append(")");
 
@@ -338,15 +402,10 @@ namespace dumbo.Compiler.CodeGenerator
 
         public RuntimeEntity Visit(FuncCallStmtNode node, VisitorArgs arg)
         {
-            //void MyFunction2(myInt)
-            var actualNode = node.CallNode;
-
-            _currentStmt = new Stmt("_");
-            _currentStmt.Append(actualNode.FuncName.ToLower() + "(");
-            actualNode.Parameters.Accept(this, arg);
-            _currentStmt.Append(");");
+            _currentStmt = new Stmt("");
+            node.CallNode.Accept(this, arg);
+            _currentStmt.Append(";");
             _currentModule.Append(_currentStmt);
-
             return null;
         }
 
@@ -365,16 +424,19 @@ namespace dumbo.Compiler.CodeGenerator
         public RuntimeEntity Visit(FuncDeclNode node, VisitorArgs arg)
         {
             FuncVisitorArgs funcArg = arg as FuncVisitorArgs;
+            var prefix = new List<Stmt>();
+            var suffix = new List<Stmt>();
 
             if (funcArg == null)
                 throw new Exception("FuncDeclNode must have FuncVisitorArgs as arg");
 
             _currentStmt = new Stmt("");
-            
+
             if (!funcArg.VisitBody)
             {
                 WriteFunctionHeader(node, arg);
                 _currentStmt.Append(";");
+                _currentModule.Append(_currentStmt);
                 return null;
             }
 
@@ -383,14 +445,22 @@ namespace dumbo.Compiler.CodeGenerator
             WriteFunctionHeader(node, arg);
             _currentModule.Append(_currentStmt);
 
+            for (int i = 0; i < node.Parameters.Count; i++)
+            {
+                PrimitiveTypeNode parType = node.Parameters[i].Type as PrimitiveTypeNode;
+
+                if (parType.Type == PrimitiveType.Text)
+                {
+                    prefix.Add(new Stmt($"{node.Parameters[i].Name} = TextDup({node.Parameters[i].Name});"));
+                }
+            }
+
             if (node.ReturnTypes.Count == 0)
             {
-                var suffix = new List<Stmt>();
                 suffix.Add(new Stmt("return ;"));
-                node.Body.Accept(this, new StmtBlockNodeArgs(null, suffix, arg));
             }
-            else
-                node.Body.Accept(this, arg);
+            
+            node.Body.Accept(this, new StmtBlockNodeArgs(prefix, suffix, arg));
             return null;
         }
 
@@ -401,8 +471,10 @@ namespace dumbo.Compiler.CodeGenerator
             for (int i = 0; i < length; i++)
             {
                 node[i].Accept(this, arg);
+                _currentStmt.Append(" = ");
+                WriteInitialValue(node[i].InferredType.GetFirstAs<PrimitiveTypeNode>());
                 if (i < length - 1)
-                    _currentStmt.Append(", ");
+                    _currentStmt.Append(", " + (node[i].InferredType.GetFirstAs<PrimitiveTypeNode>().Type == PrimitiveType.Text ? "*" : ""));
             }
             _currentStmt.Append(";");
 
@@ -452,7 +524,7 @@ namespace dumbo.Compiler.CodeGenerator
                 {
                     case PrimitiveType.Number: _currentStmt.Append(node.Value); break;
                     case PrimitiveType.Text: _currentStmt.Append($"CreateText(\"{node.Value}\")"); break;
-                    case PrimitiveType.Boolean: _currentStmt.Append(node.Value); break;
+                    case PrimitiveType.Boolean: _currentStmt.Append(node.Value.ToLower()); break;
                     default: throw new ArgumentException($"{nodeType.Type} is not a valid type");
                 }
             }
@@ -467,7 +539,7 @@ namespace dumbo.Compiler.CodeGenerator
                 case PrimitiveType.Number:
                     _currentStmt.Append("double"); break;
                 case PrimitiveType.Text:
-                    _currentStmt.Append("Text"); break;
+                    _currentStmt.Append("Text*"); break;
                 case PrimitiveType.Boolean:
                     _currentStmt.Append("Boolean"); break;
                 default: throw new ArgumentException($"{node.Type} is not a valid type.");
@@ -481,10 +553,18 @@ namespace dumbo.Compiler.CodeGenerator
             _currentModule = new Module();
             _currentModule.Append(new Stmt($"int main()"));
 
+            var prefix = new List<Stmt>();
+            prefix.Add(new Stmt("//LHZ Program Prefix"));
+            prefix.Add(new Stmt("srand(time(NULL));"));
+            prefix.Add(new Stmt("//End of LHZ Program Prefix"));
+            prefix.Add(new Stmt(""));
             var suffix = new List<Stmt>();
+            suffix.Add(new Stmt(""));
+            suffix.Add(new Stmt("//LHZ Program Suffix"));
             suffix.Add(new Stmt("return 0;"));
+            suffix.Add(new Stmt("//End of LHZ Program Suffix"));
 
-            node.Body.Accept(this, new StmtBlockNodeArgs(null, suffix, arg));
+            node.Body.Accept(this, new StmtBlockNodeArgs(prefix, suffix, arg));
             CProgram.AddMainModule(_currentModule);
 
             return null;
@@ -492,9 +572,11 @@ namespace dumbo.Compiler.CodeGenerator
 
         public RuntimeEntity Visit(RepeatStmtNode node, VisitorArgs arg)
         {
-            _currentStmt = new Stmt("for (int i=0; i<");
+            _currentStmt = new Stmt("int _i = 0;");
+            _currentModule.Append(_currentStmt);
+            _currentStmt = new Stmt("for (_i=0; _i<");
             node.Number.Accept(this, arg);
-            _currentStmt.Append("; i++)");
+            _currentStmt.Append("; _i++)");
             _currentModule.Append(_currentStmt);
             node.Body.Accept(this, arg);
 
@@ -516,13 +598,17 @@ namespace dumbo.Compiler.CodeGenerator
         {
             bool isMultipleReturn = node.Expressions.Count > 1;
             int i = 1;
-            
+
             if (!isMultipleReturn)
             {
-                _currentStmt = new Stmt("return ");
-                node.Expressions[0].Accept(this, arg);
-                _currentStmt.Append(";");
-                _currentModule.Append(_currentStmt);
+                if (node.Expressions.Count != 0)
+                {
+                    _currentStmt = new Stmt("return ");
+
+                    node.Expressions[0].Accept(this, arg);
+                    _currentStmt.Append(";");
+                    _currentModule.Append(_currentStmt);
+                }
             }
             else
             {
@@ -531,9 +617,12 @@ namespace dumbo.Compiler.CodeGenerator
 
                 foreach (var ret in node.Expressions)
                 {
-                    _currentStmt = new Stmt("*_ret" + i);
+                    PrimitiveTypeNode retType = ret.InferredType.GetFirstAs<PrimitiveTypeNode>();
+
+                    _currentStmt = new Stmt((retType.Type == PrimitiveType.Text ? "" : "*") + "_ret" + i);
                     _currentStmt.Append(" = ");
                     ret.Accept(this, arg);
+                    _currentStmt.Append(";");
                     _currentModule.Append(_currentStmt);
                     i++;
                 }
@@ -547,7 +636,9 @@ namespace dumbo.Compiler.CodeGenerator
 
         public RuntimeEntity Visit(RootNode node, VisitorArgs arg)
         {
+            _currentModule = new Module();
             node.FuncDecls.Accept(this, new FuncVisitorArgs(false));
+            CProgram.AddUserFuncDeclModule(_currentModule);
             node.Program.Accept(this, arg);
             node.FuncDecls.Accept(this, new FuncVisitorArgs(true));
             return null;
@@ -560,7 +651,7 @@ namespace dumbo.Compiler.CodeGenerator
                 customArgs.Handled = true;
             else
                 customArgs = null;
-            
+
             _currentModule.Append(new Stmt("{"));
             AddItemsToCurrentModule(customArgs?.Prefix);
             foreach (var statement in node)
@@ -575,8 +666,9 @@ namespace dumbo.Compiler.CodeGenerator
 
         public RuntimeEntity Visit(UnaryOperationNode node, VisitorArgs arg)
         {
-            _currentStmt.Append(ConvertUnaryOperator(node.Operator));
+            _currentStmt.Append(ConvertUnaryOperator(node.Operator) + "(");
             node.Expression.Accept(this, arg);
+            _currentStmt.Append(")");
 
             return null;
         }
@@ -626,7 +718,7 @@ namespace dumbo.Compiler.CodeGenerator
                 funcNode.ReturnTypes[0].Accept(this, arg);
 
             //Name
-            _currentStmt.Append(" _" + funcNode.Name.ToLower());
+            _currentStmt.Append(" _" + funcNode.Name);
 
             //Parameters
             _currentStmt.Append("(");
@@ -639,11 +731,12 @@ namespace dumbo.Compiler.CodeGenerator
 
                 for (int i = 0; i < funcNode.ReturnTypes.Count; i++)
                 {
+                    PrimitiveTypeNode retType = funcNode.ReturnTypes[i] as PrimitiveTypeNode;
                     funcNode.ReturnTypes[i].Accept(this, arg);
+                    _currentStmt.Append(" " + (retType.Type == PrimitiveType.Text ? "" : "*"));
+                    _currentStmt.Append("_ret" + (i + 1));
                     if (i < funcNode.ReturnTypes.Count - 1)
-                        _currentStmt.Append(" *_ret" + (i + 1) + ", ");
-                    else
-                        _currentStmt.Append(" *_ret" + (i + 1));
+                        _currentStmt.Append(", ");
                 }
             }
             _currentStmt.Append(")");
@@ -664,6 +757,26 @@ namespace dumbo.Compiler.CodeGenerator
             foreach (var stmt in statements)
             {
                 _currentModule.Append(stmt);
+            }
+        }
+
+        private void WriteBinOpNodeFunc(string funcName, ExpressionNode left, ExpressionNode right, VisitorArgs arg)
+        {
+            _currentStmt.Append(funcName + "(");
+            left.Accept(this, arg);
+            _currentStmt.Append(", ");
+            right.Accept(this, arg);
+            _currentStmt.Append(")");
+        }
+
+        private void WriteInitialValue(PrimitiveTypeNode type)
+        {
+            switch (type.Type)
+            {
+                case PrimitiveType.Number: _currentStmt.Append("0.0"); break;
+                case PrimitiveType.Text: _currentStmt.Append("CreateText(\"\")"); break;
+                case PrimitiveType.Boolean: _currentStmt.Append("false"); break;
+                default: throw new ArgumentException($"{type.Type} is not a valid tpye");
             }
         }
     }

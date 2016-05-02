@@ -35,7 +35,7 @@ namespace dumbo.WpfApp
             _regex = new Regex("[^0-9.-]+");
             Title = "Expecting " + (_isRequestedTypeNumber ? "Number" : "Text");
         }
-        
+
         protected override void OnActivated(EventArgs e)
         {
             InputTextBox.Focusable = true;

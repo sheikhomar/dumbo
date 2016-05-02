@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace dumbo.Compiler.SymbolTable
-{ 
+{
     [Serializable]
     public class IllegalHideException : Exception
     {

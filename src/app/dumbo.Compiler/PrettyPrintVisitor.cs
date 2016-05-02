@@ -39,6 +39,7 @@ namespace dumbo.Compiler
             Write(" ");
             node.Identifiers.Accept(this, arg);
             WriteLine();
+
             return null;
         }
 
@@ -54,7 +55,7 @@ namespace dumbo.Compiler
         public VisitResult Visit(ArrayTypeNode node, VisitorArgs arg)
         {
             Write("Array[");
-            VisitChildren(node.Sizes, ",", arg);
+            VisitChildren(node.Sizes, ", ", arg);
             Write("] of ");
             node.Type.Accept(this, arg);
             return null;
@@ -62,7 +63,41 @@ namespace dumbo.Compiler
 
         public VisitResult Visit(ArrayValueNode node, VisitorArgs arg)
         {
-            throw new NotImplementedException();
+            WriteNestedListNode(node.Values, arg);
+
+            return null;
+        }
+
+        private void WriteNestedListNode(NestedExpressionListNode node, VisitorArgs arg)
+        {
+            bool first = true;
+            foreach (var item in node)
+            {
+                if (!first)
+                {
+                    Write(", ");
+                }
+                first = false;
+
+                var nestedList = item as NestedExpressionListNode;
+                if (nestedList != null && nestedList.Count > 0)
+                {
+                    Write("(");
+                    WriteNestedListNode(nestedList, arg);
+                    Write(")");
+                }
+                else
+                {
+                    WriteExpressionListNode(item as ExpressionListNode, arg);
+                }
+            }
+        }
+
+        private void WriteExpressionListNode(ExpressionListNode exprList, VisitorArgs arg)
+        {
+            Write("(");
+            VisitChildren(exprList, ", ", arg);
+            Write(")");
         }
 
         public VisitResult Visit(AssignmentStmtNode node, VisitorArgs arg)
@@ -115,7 +150,8 @@ namespace dumbo.Compiler
 
         public VisitResult Visit(DeclAndAssignmentStmtNode node, VisitorArgs arg)
         {
-            Write($"{node.Type} ");
+            node.Type.Accept(this, arg);
+            Write(" ");
             node.Identifiers.Accept(this, arg);
             Write(" := ");
             node.Value.Accept(this, arg);

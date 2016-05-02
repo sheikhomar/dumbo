@@ -62,9 +62,26 @@ namespace dumbo.Compiler
 
         public object Visit(ArrayValueNode node, VisitorArgs arg)
         {
-            //node.Values.Accept(this, arg);
+            ArrayValueHelper(node.Values, arg);
 
             return null;
+        }
+
+        private void ArrayValueHelper(NestedExpressionListNode node, VisitorArgs arg)
+        {
+            if (node == null)
+                return;
+
+            foreach (var list in node)
+            {
+                if (list is ExpressionListNode)
+                {
+                    var exprList = list as ExpressionListNode;
+                    exprList.Accept(this, arg);
+                }
+                else
+                    ArrayValueHelper(list as NestedExpressionListNode, arg);
+            }
         }
 
         public object Visit(AssignmentStmtNode node, VisitorArgs arg)

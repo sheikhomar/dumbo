@@ -31,6 +31,7 @@ namespace dumbo.Compiler.AST
         {
             return _internalList.GetEnumerator();
         }
+        public object this[int i] => _internalList[i];
 
         public override string ToString()
         {

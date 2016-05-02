@@ -26,22 +26,61 @@ namespace dumbo.Compiler.TypeChecking
 
         public TypeCheckVisitResult Visit(ArrayDeclStmtNode node, VisitorArgs arg)
         {
+            node.Identifiers.Accept(this, arg);
             return null;
         }
 
         public TypeCheckVisitResult Visit(ArrayIdentifierNode node, VisitorArgs arg)
         {
-            throw new NotImplementedException();
+            if (node.DeclarationNode == null)
+                return ErrorType();
+
+            node.InferredType = new TypeDescriptor(node.DeclarationNode.Type);
+
+            return new TypeCheckVisitResult(node.DeclarationNode.Type);
         }
 
         public TypeCheckVisitResult Visit(ArrayTypeNode node, VisitorArgs arg)
         {
-            throw new NotImplementedException();
+            return null;
         }
 
         public TypeCheckVisitResult Visit(ArrayValueNode node, VisitorArgs arg)
         {
-            throw new NotImplementedException();
+            CheckArrayValues(node.Values, node.ArrayType.Type, arg);
+            return new TypeCheckVisitResult(node.ArrayType);
+        }
+
+        private void CheckArrayValues(NestedExpressionListNode values, PrimitiveTypeNode targetType, VisitorArgs arg)
+        {
+            for (int i = 0; i < values.Count; i++)
+            {
+                if (values[i] is ExpressionListNode)
+                {
+                    var list = values[i] as ExpressionListNode;
+                    foreach (var expr in list)
+                    {
+                        expr.Accept(this, arg);
+                        var exprType = expr.InferredType.GetFirstAs<PrimitiveTypeNode>();
+                        if (exprType == null)
+                        {
+                            Reporter.Error($"Assigned value must be of type {targetType.Type}", expr.SourcePosition);
+                        }
+                        else
+                        {
+                            if (exprType.Type != targetType.Type)
+                            {
+                                Reporter.Error($"Expression should be of type {targetType.Type}", expr.SourcePosition);
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    var list = values[i] as NestedExpressionListNode;
+                    CheckArrayValues(list, targetType, arg);
+                }
+            }
         }
 
         public TypeCheckVisitResult Visit(AssignmentStmtNode node, VisitorArgs arg)
@@ -134,17 +173,25 @@ namespace dumbo.Compiler.TypeChecking
 
         public TypeCheckVisitResult Visit(ContinueStmtNode node, VisitorArgs arg)
         {
-            throw new NotImplementedException();
+            return null;
         }
 
         public TypeCheckVisitResult Visit(ConstDeclListNode node, VisitorArgs arg)
         {
-            throw new NotImplementedException();
+            foreach (var constant in node)
+            {
+                constant.Accept(this, arg);
+            }
+            return null;
         }
 
         public TypeCheckVisitResult Visit(ConstDeclNode node, VisitorArgs arg)
         {
-            throw new NotImplementedException();
+            if (node.Type != node.Value.Type)
+            {
+                Reporter.Error("The constants type does not match the value it is assigned to.", node.SourcePosition);
+            }
+            return null;
         }
 
         public TypeCheckVisitResult Visit(BuiltInFuncDeclNode node, VisitorArgs arg)
@@ -415,6 +462,7 @@ namespace dumbo.Compiler.TypeChecking
 
         public TypeCheckVisitResult Visit(RootNode node, VisitorArgs arg)
         {
+            node.ConstDecls.Accept(this, arg);
             node.FuncDecls.Accept(this, arg);
             node.Program.Accept(this, arg);
 

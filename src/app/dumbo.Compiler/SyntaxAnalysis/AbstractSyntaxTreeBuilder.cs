@@ -127,8 +127,8 @@ namespace dumbo.Compiler.SyntaxAnalysis
             Debug.Assert(token.Parent.Name() == "BreakStmt");
             Reduction rhs = (Reduction)token.Data;
 
-            Reduction rhs2 = (Reduction)rhs[0].Data;
-            var srcPos = BuildSourcePosition(rhs2[0], rhs2[0]);
+            //Reduction rhs2 = (Reduction)rhs[0].Data;
+            var srcPos = BuildSourcePosition(rhs[0], rhs[0]);
             return new BreakStmtNode(srcPos);
         }
 

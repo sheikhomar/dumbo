@@ -46,13 +46,9 @@ namespace dumbo.Compiler.AST
             }
             else
             {
-                //var delete = Values.Delete(_currentNestListNode);
-                //if (delete)
-                //    _currentNestListNode = ListHistory.Pop();
-
-
-                _currentNestListNode.Add(_currentExpressionListNode);
                 _currentNestListNode = ListHistory.Pop();
+                _currentNestListNode.CleanUp();
+                _currentNestListNode.Add(_currentExpressionListNode);
             }
             _currentExpressionListNode = null;
         }

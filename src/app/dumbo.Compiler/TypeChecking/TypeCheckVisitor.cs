@@ -126,46 +126,37 @@ namespace dumbo.Compiler.TypeChecking
                 }
             }
 
+            //RHS can now be primitive types, function calls or arrays
             if (node.Identifiers.Count == 1)
             {
                 var id = node.Identifiers.First();
                 var expr = node.Value;
-
+                
                 var idRes = GetVisitResult(id, arg);
                 var exprRes = GetVisitResult(expr, arg);
+                var idType = idRes.Types.First();
 
-                if (idRes.Types.First() is ArrayTypeNode)
+                //LHS can be primitivetype or arraytype
+                if (idType is PrimitiveTypeNode)
                 {
-                    var arrayType = idRes.Types.First() as ArrayTypeNode;
-                    var arrayIdentifier = id as ArrayIdentifierNode;
-
-                    bool SameType = true;
-                    var firstType = exprRes.Types.First();
-                    foreach (var type in exprRes.Types)
-                    {
-                        // Equality operator can be used as arrays always contain primitive types, which have Equals() overridden
-                        if (firstType != type)
-                            SameType = false;
-                    }
-
-                    if (!SameType)
-                        Reporter.Error($"The array '{arrayIdentifier.Name}' cannot be assigned multiple types", node.SourcePosition);
-
-                    else if (!arrayType.Type.Equals(exprRes.Types.First()))
-                        Reporter.Error($"The variable '{arrayIdentifier.Name}' cannot be assigned the expression", node.SourcePosition);   //TODO: Implement this so 
-                }
-                else if (!idRes.Equals(exprRes))
-                {
-                    if (exprRes.Types.Any())
-                    {
-                        var exprType = exprRes.Types.First();
-                        Reporter.Error($"The variable '{id.Name}' cannot be assigned the type {exprType}.", expr.SourcePosition);
-                    }
+                    if (exprRes.Types.Count() != 1)
+                        Reporter.Error("ok", expr.SourcePosition);
                     else
                     {
-                        Reporter.Error($"Expression does not return any value.", expr.SourcePosition);
+                        var exprType = exprRes.Types.First();
+
+                        if (!idType.Equals(exprType))
+                            Reporter.Error("Ok", expr.SourcePosition);
                     }
                 }
+                else if (idType is ArrayTypeNode)
+                {
+
+                }
+                else
+                    Reporter.Error($"The identifier '{id.Name}' is not an assignable type", id.SourcePosition);
+
+
             }
 
             return null;

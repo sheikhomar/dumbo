@@ -26,7 +26,10 @@ namespace dumbo.Compiler.AST
             if (!Equals(Type, other.Type))
                 return false;
 
-            return true;
+            if (this.Sizes.Count == other.Sizes.Count)
+                return true;
+
+            return false;
         }
     }
 }

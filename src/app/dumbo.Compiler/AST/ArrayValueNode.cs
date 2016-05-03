@@ -13,11 +13,9 @@ namespace dumbo.Compiler.AST
         }
 
         public ArrayTypeNode ArrayType { get; }
-
-        Stack<NestedExpressionListNode> ListHistory = new Stack<NestedExpressionListNode>();
-
         public NestedExpressionListNode Values { get; }
 
+        private readonly Stack<NestedExpressionListNode> _listHistory = new Stack<NestedExpressionListNode>();
         private ExpressionListNode _currentExpressionListNode;
         private NestedExpressionListNode _currentNestListNode;
          
@@ -34,7 +32,7 @@ namespace dumbo.Compiler.AST
         {
             var tempList = new NestedExpressionListNode();
             _currentNestListNode.Add(tempList);
-            ListHistory.Push(_currentNestListNode);
+            _listHistory.Push(_currentNestListNode);
             _currentNestListNode = tempList;
         }
 
@@ -42,11 +40,11 @@ namespace dumbo.Compiler.AST
         {
             if (_currentExpressionListNode == null)
             {
-                _currentNestListNode = ListHistory.Pop();
+                _currentNestListNode = _listHistory.Pop();
             }
             else
             {
-                _currentNestListNode = ListHistory.Pop();
+                _currentNestListNode = _listHistory.Pop();
                 _currentNestListNode.CleanUp();
                 _currentNestListNode.Add(_currentExpressionListNode);
             }

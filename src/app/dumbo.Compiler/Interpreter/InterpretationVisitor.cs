@@ -80,6 +80,18 @@ namespace dumbo.Compiler.Interpreter
                             var rightNumb = right as NumberValue;
                             return new TextValue(leftText.Text + rightNumb.Number);
                         }
+                        else if (left is TextValue && right is BooleanValue)
+                        {
+                            var leftText = left as TextValue;
+                            var rightNumb = right as BooleanValue;
+                            return new TextValue(leftText.Text + rightNumb.Boolean);
+                        }
+                        else if (left is BooleanValue && right is TextValue)
+                        {
+                            var leftText = left as BooleanValue;
+                            var rightNumb = right as TextValue;
+                            return new TextValue(leftText.Boolean + rightNumb.Text);
+                        }
                         else if (left is TextValue)
                         {
                             var leftText = left as TextValue;

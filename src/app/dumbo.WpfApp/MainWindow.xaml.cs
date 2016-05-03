@@ -241,7 +241,7 @@ namespace dumbo.WpfApp
 
         private ParserResult Parse(string text)
         {
-            var data = new StringReader(text);
+            var data = new StringReader(text + "\r\n");
             var parserResult = _myParser.Parse(data);
 
             if (parserResult.IsSuccess)

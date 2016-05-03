@@ -110,7 +110,10 @@ namespace dumbo.Compiler.Interpreter
                     {
                         var left = node.LeftOperand.Accept(this, arg) as NumberValue;
                         var right = node.RightOperand.Accept(this, arg) as NumberValue;
-                        return new NumberValue(left.Number / right.Number);
+                        if (right.Number == 0)
+                            return new NumberValue(double.NaN);
+                        else
+                            return new NumberValue(left.Number / right.Number);
                     }
                 case BinaryOperatorType.Modulo:
                     {

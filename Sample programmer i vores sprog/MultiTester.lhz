@@ -45,5 +45,3 @@ Function OddNumber(Number inputNumb3) return nothing
 		Write("Error occured. Please close the program and try again")
 	end if
 end function
-
-

@@ -137,10 +137,21 @@ namespace dumbo.Compiler.TypeChecking
                 {
                     var arrayType = idRes.Types.First() as ArrayTypeNode;
                     var arrayIdentifier = id as ArrayIdentifierNode;
-                    var size = arrayIdentifier.Sizes.First() as LiteralValueNode;
 
-                    if (!arrayType.Type.Equals(exprRes.Types.First()))
-                        Reporter.Error($"The variable '{arrayIdentifier.Name}[{size.Value}]' cannot be assigned to the type {exprRes.Types.First()}", node.SourcePosition);   //TODO: Implement this so 
+                    bool SameType = true;
+                    var firstType = exprRes.Types.First();
+                    foreach (var type in exprRes.Types)
+                    {
+                        // Equality operator can be used as arrays always contain primitive types, which have Equals() overridden
+                        if (firstType != type)
+                            SameType = false;
+                    }
+
+                    if (!SameType)
+                        Reporter.Error($"The array '{arrayIdentifier.Name}' cannot be assigned multiple types", node.SourcePosition);
+
+                    else if (!arrayType.Type.Equals(exprRes.Types.First()))
+                        Reporter.Error($"The variable '{arrayIdentifier.Name}' cannot be assigned the expression", node.SourcePosition);   //TODO: Implement this so 
                 }
                 else if (!idRes.Equals(exprRes))
                 {

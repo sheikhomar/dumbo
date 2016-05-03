@@ -294,6 +294,35 @@ Program
     a( a,a(a,a,a()))
 End Program
 
+// *******************Return in program body***************
+	 //New Program Failing
+	Program
+		return nothing
+	End Program
+
+
+	 //New Program Failing
+	Program
+		return a
+	End Program
+
+	 //New Program Failing
+	Program
+		return a, b
+	End Program
+
+
+	 //New Program Failing
+	Program
+		return 1,1,1
+	End Program
+
+
+	 //New Program Failing
+	Program
+		return false, true or false
+	End Program
+
 // ************************FuncDecl************************
  //New Program 
 Program
@@ -736,6 +765,24 @@ End Program
 Program
 	break
 End Program
+
+	 //New Program Failing
+	Program
+		if(true) then
+			break
+		end if
+	End Program
+
+
+	 //New Program Failing
+	Program
+		number a := aa()
+	End Program
+
+	functIon aa() return number
+		break
+		retUrn 1
+	end function
 
 // ************************Mini Programs************************
  //New Program 

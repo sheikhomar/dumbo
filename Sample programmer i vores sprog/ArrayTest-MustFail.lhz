@@ -1,0 +1,6 @@
+Program
+	Array[3] of Number arr := ("test", 2, true)
+End Program
+
+// This program must fail and give 2 error reports, 
+// because neither text nor boolean must be assigned to the array.

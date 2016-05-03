@@ -158,6 +158,7 @@
                                 <DataGrid.Columns>
                                     <DataGridTextColumn Binding="{Binding Kind}" Header="Status" IsReadOnly="True" Width="50"/>
                                     <DataGridTextColumn Binding="{Binding SourcePosition.StartLine}" Header="Line" IsReadOnly="True" Width="40"/>
+                                    <DataGridTextColumn Binding="{Binding SourcePosition.StartColumn}" Header="Column" IsReadOnly="True" Width="60"/>
                                     <DataGridTextColumn Binding="{Binding Message}" Header="Description" IsReadOnly="True" Width="*" />
                                 </DataGrid.Columns>
                             </DataGrid>

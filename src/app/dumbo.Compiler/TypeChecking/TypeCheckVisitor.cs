@@ -85,6 +85,46 @@ namespace dumbo.Compiler.TypeChecking
 
         public TypeCheckVisitResult Visit(AssignmentStmtNode node, VisitorArgs arg)
         {
+            if (node.Identifiers.Count > 1)
+            {
+                // We expect the RHS to be a function call,
+                // when there are more than one identifers
+                var expr = node.Value as FuncCallExprNode;
+                if (expr == null)
+                {
+                    Reporter.Error("Only function call with multiple return types are allowed.",
+                        node.Value.SourcePosition);
+                }
+                else
+                {
+                    // RHS is a function call
+                    var exprResult = GetVisitResult(expr, arg);
+                    var exprTypes = exprResult.Types.ToList();
+                    var idList = node.Identifiers.ToList();
+
+                    if (idList.Count != exprTypes.Count)
+                    {
+                        Reporter.Error($"Number of return values of '{expr.FuncName}' does not match identifiers.",
+                            node.Value.SourcePosition);
+                    }
+                    else
+                    {
+                        for (int i = 0; i < exprTypes.Count; i++)
+                        {
+                            var exprType = exprTypes[i];
+                            var id = idList[i];
+                            var idResult = GetVisitResult(idList[i], arg);
+                            var idType = idResult.Types.First();
+                            if (!idType.Equals(exprType))
+                            {
+                                Reporter.Error($"The variable '{id.Name}' cannot be assigned the type {exprType}.",
+                                    expr.SourcePosition);
+                            }
+                        }
+                    }
+                }
+            }
+
             if (node.Identifiers.Count == 1)
             {
                 var id = node.Identifiers.First();
@@ -112,29 +152,6 @@ namespace dumbo.Compiler.TypeChecking
                     else
                     {
                         Reporter.Error($"Expression does not return any value.", expr.SourcePosition);
-                    }
-                }
-            }
-            else
-            {
-                var expr = node.Value;
-                var exprResult = GetVisitResult(expr, arg);
-                var exprTypes = exprResult.Types.ToList();
-                var idList = node.Identifiers.ToList();
-
-                if (idList.Count == exprTypes.Count)
-                {
-                    for (int i = 0; i < exprTypes.Count; i++)
-                    {
-                        var exprType = exprTypes[i];
-                        var id = idList[i];
-                        var idResult = GetVisitResult(idList[i], arg);
-                        var idType = idResult.Types.First();
-                        if (!idType.Equals(exprType))
-                        {
-                            Reporter.Error($"The variable '{id.Name}' cannot be assigned the type {exprType}.",
-                                expr.SourcePosition);
-                        }
                     }
                 }
             }

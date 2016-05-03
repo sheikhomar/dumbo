@@ -1,0 +1,11 @@
+constant number numb1 := 10
+constant text   text1 := "test"
+constant number numb2 := 120
+constant boolean truebool := true
+
+Program
+	write("" + numb1)
+	write("" + text1)
+	write("" + numb2)
+	write("" + truebool)
+End Program

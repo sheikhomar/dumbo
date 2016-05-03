@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Eventing.Reader;
 using System.Linq;
 using dumbo.Compiler.AST;
 
@@ -224,11 +225,91 @@ namespace dumbo.Compiler.TypeChecking
 
         public TypeCheckVisitResult Visit(ConstDeclNode node, VisitorArgs arg)
         {
-            if (node.Type != node.Value.Type)
+            if (node.Type is ArrayTypeNode)
+            {
+                var arrType = node.Type as ArrayTypeNode;
+                var valueNode = node.Value as ArrayValueNode;
+
+                ExpressionListNode desiredSize = CheckForDesiredSize(valueNode.Values);
+
+                for (int i = 0; i < arrType.Sizes.Count; i++)
+                {
+                    var arrTypeSize = arrType.Sizes[i] as LiteralValueNode;
+                    var desired = desiredSize[i] as LiteralValueNode;
+                    if (arrTypeSize.Value != desired.Value)
+                        Reporter.Error("The size of the array does not match the given values.", node.Value.SourcePosition);
+                }
+            }
+
+
+            if (!node.Type.Equals(node.Value.Type))
             {
                 Reporter.Error("The constants type does not match the value it is assigned to.", node.SourcePosition);
             }
             return null;
+        }
+
+        private ExpressionListNode CheckForDesiredSize(NestedExpressionListNode values)
+        {
+            List<int> CheckResult;
+            if (values[0] is ExpressionListNode)
+            {
+                CheckResult = CheckHelperForExprList(values, new List<int>());
+            }
+            else
+            {
+                CheckResult = CheckHelperForNestedExprList(values[0] as NestedExpressionListNode, new List<int>());
+            }
+
+            CheckResult.Reverse();
+            ExpressionListNode exprList = new ExpressionListNode();
+            foreach (var val in CheckResult)
+            {
+                exprList.Add(new LiteralValueNode(val.ToString(), new PrimitiveTypeNode(PrimitiveType.Number), new SourcePosition(0,0,0,0)));
+            }
+            return exprList;
+        }
+
+        private List<int> CheckHelperForNestedExprList(NestedExpressionListNode values, List<int> result)
+        {
+            if (values[0] is ExpressionListNode)
+            {
+                result = CheckHelperForExprList(values, result);
+                result.Add(values.Count);
+                return result;
+            }
+            else
+            {
+                List<int> childrenList = new List<int>();
+
+                foreach (NestedExpressionListNode list in values)
+                {
+                    CheckHelperForNestedExprList(list, result);
+                    childrenList.Add(list.Count);
+                }
+                if (childrenList.Any(o => o != childrenList[0]))
+                    Reporter.Error("1: The array's defined dimensions does not match the given value's.", new SourcePosition(0, 0, 0, 0));
+                else
+                    result.Add(childrenList[0]);
+            }
+
+            return result;
+        }
+
+        private List<int> CheckHelperForExprList(NestedExpressionListNode values, List<int> result)
+        {
+            List<int> childrenList = new List<int>();
+
+            foreach (ExpressionListNode list in values)
+            {
+                childrenList.Add(list.Count);
+            }
+
+            if (childrenList.Any(o => o != childrenList[0]))
+                Reporter.Error("2: The array's defined dimensions does not match the given value's.", new SourcePosition(0, 0, 0, 0));
+            else
+                result.Add(childrenList[0]);
+            return result;
         }
 
         public TypeCheckVisitResult Visit(BuiltInFuncDeclNode node, VisitorArgs arg)

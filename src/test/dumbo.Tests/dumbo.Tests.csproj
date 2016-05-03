@@ -49,7 +49,7 @@
     <Compile Include="SemanticAnalysis\ProgramFragment.cs" />
     <Compile Include="SemanticAnalysis\ProgramReader.cs" />
     <Compile Include="SemanticAnalysis\SemanticSuccessfullTestCaseFactory.cs" />
-    <Compile Include="SemanticAnalysis\SemanticTestCaseSource.cs" />
+    <Compile Include="SemanticAnalysis\SemanticTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SemanticBlackBoxTests.cs" />
     <Compile Include="SymbolTable\SymbolTableTests.cs" />

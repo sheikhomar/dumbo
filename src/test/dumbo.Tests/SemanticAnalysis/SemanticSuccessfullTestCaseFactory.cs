@@ -7,8 +7,7 @@ namespace dumbo.Tests.SemanticAnalysis
     public class SemanticSuccessfullTestCaseFactory
     {
         public const string FileName = "SemanticTests.txt";
-
-
+        
         private SemanticSuccessfullTestCaseFactory()
         {
         }
@@ -25,11 +24,12 @@ namespace dumbo.Tests.SemanticAnalysis
                     while (reader.ReadNext())
                     {
                         var p = reader.CurrentProgram;
-                        yield return new TestCaseData(p.Line, p.Text);
+                        if (p.ShouldPass)
+                        {
+                            yield return new TestCaseData(p.Line, p.Text);
+                        }
                     }
                 }
-
-                //yield return new TestCaseData(1, "Program \n End Program");
             }
         }
     }

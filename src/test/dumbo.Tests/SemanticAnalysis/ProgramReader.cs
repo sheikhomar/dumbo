@@ -3,52 +3,59 @@ using System.IO;
 
 namespace dumbo.Tests.SemanticAnalysis
 {
-    internal class ProgramReader : IDisposable
+    public class ProgramReader : IDisposable
     {
-        private readonly string _path;
-        private readonly string _fileName;
-        private ProgramFragment _currentProgram;
-        private bool _newProgramStart = true;
-        private int _currentLine = 0;
-        private StreamReader _stream;
         public const string CorrectProgramMarker = " //New Program ";
         public const string IncorrectProgramMarker = " //New Program Failing";
 
+        private ProgramFragment _currentProgram;
+        private bool _endOfFile;
+        private int _currentLine;
+        private readonly StreamReader _stream;
+
+        public ProgramFragment CurrentProgram => _currentProgram;
+
         public ProgramReader(string path)
         {
-            _path = path;
-
-            _currentProgram = new ProgramFragment();
             _currentLine = 0;
-            _stream = new StreamReader(_path);
+            _stream = new StreamReader(path);
+            _endOfFile = false;
         }
 
         public bool ReadNext()
         {
-            string line;
-            while ((line = _stream.ReadLine()) != null)
-            {
-                if (_newProgramStart)
-                {
-                    var isCorrectMarker = CorrectProgramMarker.Equals(line);
-                    var isIncorrectMarker = IncorrectProgramMarker.Equals(line);
-                    var isNewProgramMarker = isCorrectMarker || isIncorrectMarker;
+            if (_endOfFile)
+                return false;
 
-                    if (isNewProgramMarker)
-                    {
-                        _currentProgram = new ProgramFragment();
-                    }
-                    continue;
+            _currentProgram = new ProgramFragment(_currentLine + 1);
+            while (true)
+            {
+                string line = _stream.ReadLine();
+                _currentLine++;
+
+                if (line == null)
+                {
+                    _endOfFile = true;
+                    break;
                 }
+
+                var isCorrectMarker = CorrectProgramMarker.Equals(line);
+                var isIncorrectMarker = IncorrectProgramMarker.Equals(line);
+                var isNewProgramMarker = isCorrectMarker || isIncorrectMarker;
+
+                if (isNewProgramMarker)
+                {
+                    _currentProgram.ShouldFail = isIncorrectMarker;
+                    break;
+                }
+                    
 
                 _currentProgram.Buffer.AppendLine(line);
             }
 
-            return false;
+            return true;
         }
-
-        public ProgramFragment CurrentProgram => _currentProgram;
-
+        
         public void Dispose()
         {
             _stream?.Dispose();

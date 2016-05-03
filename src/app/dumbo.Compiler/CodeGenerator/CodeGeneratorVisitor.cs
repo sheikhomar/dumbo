@@ -198,17 +198,30 @@ namespace dumbo.Compiler.CodeGenerator
 
         public RuntimeEntity Visit(ContinueStmtNode node, VisitorArgs arg)
         {
-            throw new NotImplementedException();
+            _currentStmt = new Stmt("Continue;");
+            _currentModule.Append(_currentStmt);
+
+            return null;
         }
 
         public RuntimeEntity Visit(ConstDeclListNode node, VisitorArgs arg)
         {
-            throw new NotImplementedException();
+            foreach (var item in node)
+            {
+                node.Accept(this, arg);
+            }
+
+            return null;
         }
 
         public RuntimeEntity Visit(ConstDeclNode node, VisitorArgs arg)
         {
-            throw new NotImplementedException();
+            _currentStmt = new Stmt("#define ");
+            _currentStmt.Append(node.Name.ToLower() + " ");
+            node.Value.Accept(this, arg);
+            _currentModule.Append(_currentStmt);
+
+            return null;
         }
 
         public RuntimeEntity Visit(BuiltInFuncDeclNode node, VisitorArgs arg)
@@ -313,6 +326,7 @@ namespace dumbo.Compiler.CodeGenerator
             node.Type.Accept(this, arg);
             _currentStmt.Append(" ");
             node.Identifiers.Accept(this, arg);
+            _currentStmt.Append(";");
             _currentModule.Append(_currentStmt);
 
             return null;
@@ -445,7 +459,7 @@ namespace dumbo.Compiler.CodeGenerator
 
                 if (parType.Type == PrimitiveType.Text)
                 {
-                    prefix.Add(new Stmt($"{node.Parameters[i].Name} = TextDup({node.Parameters[i].Name});"));
+                    prefix.Add(new Stmt($"{node.Parameters[i].Name.ToLower()} = TextDup({node.Parameters[i].Name.ToLower()});"));
                 }
             }
 

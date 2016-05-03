@@ -59,7 +59,7 @@ namespace dumbo.Compiler.CodeGenerator
 
             if (isFunction)
             {
-                //Function | MyFunction(formalParameters, &ret1, &ret2 ...);
+                //Function | a,b := MyFunc() | MyFunction(formalParameters, &ret1, &ret2 ...);
                 int i = 0;
                 var funcExp = node.Value as FuncCallExprNode;
                 _currentStmt = new Stmt("");
@@ -96,7 +96,7 @@ namespace dumbo.Compiler.CodeGenerator
             }
             else
             {
-                //A normal assignment | Type Id := expression
+                //A normal assignment | Id := expression
                 PrimitiveTypeNode idType = node.Identifiers[0].DeclarationNode.Type as PrimitiveTypeNode;
                 _currentStmt = new Stmt("");
 
@@ -218,29 +218,35 @@ namespace dumbo.Compiler.CodeGenerator
 
         public RuntimeEntity Visit(DeclAndAssignmentStmtNode node, VisitorArgs arg)
         {
-            bool isFunction = node.Identifiers.Count > node.Expressions.Count;
+            bool isFunction = node.Identifiers.Count > 1;
 
             if (isFunction)
             {
-                int i = 0, idenCount = node.Identifiers.Count;
+                //Function | Number a,b:= MyFunc() | MyFunction(formalParameters, &ret1, &ret2 ...);
+                int i = 0;
                 var funcExp = node.Value as FuncCallExprNode;
 
                 if (funcExp == null)
                     throw new Exception("Programming error, should be a function");
 
-                for (int j = 0; j < idenCount; j++)
+                //Declare the new LHZ types
+                for (int j = 0; j < node.Identifiers.Count; j++)
                 {
                     _currentStmt = new Stmt("");
                     node.Type.Accept(this, arg);
                     _currentStmt.Append($" { node.Identifiers[j].Name} = ");
-                    WriteInitialValue(node.Identifiers[j].InferredType.GetFirstAs<PrimitiveTypeNode>());
+                    WriteInitialValue(node.Identifiers[j].DeclarationNode.Type as PrimitiveTypeNode);
                     _currentStmt.Append(";");
                     _currentModule.Append(_currentStmt);
                 }
-
-                //MyFunction(formalParameters, &ret1, &ret2 ...) | How it looks in C for a function
+                
+                //Call the function - this will assign to the declared LHZ types
                 _currentStmt = new Stmt("");
-                _currentStmt.Append("_" + funcExp.FuncName + "(");
+
+                if (!funcExp.DeclarationNode.IsBuiltIn)
+                    _currentStmt.Append("_");
+
+                _currentStmt.Append(funcExp.FuncName + "(");
                 funcExp.Parameters.Accept(this, arg);
 
                 if (node.Identifiers.Count > 0 && funcExp.Parameters.Count > 0)
@@ -248,7 +254,9 @@ namespace dumbo.Compiler.CodeGenerator
 
                 foreach (var ret in node.Identifiers)
                 {
-                    if (ret.InferredType.GetFirstAs<PrimitiveTypeNode>().Type == PrimitiveType.Text)
+                    var idType = ret.DeclarationNode.Type as PrimitiveTypeNode;
+
+                    if (idType?.Type == PrimitiveType.Text)
                     {
                         _currentStmt.Append(ret.Name);
                     }
@@ -265,46 +273,31 @@ namespace dumbo.Compiler.CodeGenerator
             }
             else
             {
-                //type 
-                int assCount = node.Identifiers.Count;
+                //Decl and Assignment | Type id := expression
+                PrimitiveTypeNode declType = node.Type as PrimitiveTypeNode;
                 _currentStmt = new Stmt("");
                 node.Type.Accept(this, arg);
                 _currentStmt.Append(" ");
-                PrimitiveTypeNode declType = node.Type as PrimitiveTypeNode;
 
-                if (declType != null && declType.Type == PrimitiveType.Text)
+                if (declType?.Type == PrimitiveType.Text)
                 {
-                    for (int i = 0; i < assCount; i++)
-                    {
-                        node.Identifiers[i].Accept(this, arg);
+                        node.Identifiers.Accept(this, arg);
                         _currentStmt.Append(" = ");
                         WriteInitialValue(declType);
                         _currentStmt.Append(";");
                         _currentModule.Append(_currentStmt);
                         _currentStmt = new Stmt("");
                         _currentStmt.Append("UpdateText(");
-                        node.Expressions[i].Accept(this, arg);
+                        node.Value.Accept(this, arg);
                         _currentStmt.Append($", ");
-                        node.Identifiers[i].Accept(this, arg);
+                        node.Identifiers.Accept(this, arg);
                         _currentStmt.Append(")");
-                        if (i != assCount - 1)
-                        {
-                            _currentStmt.Append(", *");
-                        }
-                    }
                 }
                 else
                 {
-                    for (int i = 0; i < assCount; i++)
-                    {
-                        node.Identifiers[i].Accept(this, arg);
+                        node.Identifiers.Accept(this, arg);
                         _currentStmt.Append(" = ");
-                        node.Expressions[i].Accept(this, arg);
-                        if (i != assCount - 1)
-                        {
-                            _currentStmt.Append(", ");
-                        }
-                    }
+                        node.Value.Accept(this, arg);
                 }
 
                 _currentStmt.Append(";");
@@ -471,13 +464,12 @@ namespace dumbo.Compiler.CodeGenerator
 
             for (int i = 0; i < length; i++)
             {
+                var idType = node[i].DeclarationNode.Type as PrimitiveTypeNode;
+
                 node[i].Accept(this, arg);
-                _currentStmt.Append(" = ");
-                WriteInitialValue(node[i].InferredType.GetFirstAs<PrimitiveTypeNode>());
                 if (i < length - 1)
-                    _currentStmt.Append(", " + (node[i].InferredType.GetFirstAs<PrimitiveTypeNode>().Type == PrimitiveType.Text ? "*" : ""));
+                    _currentStmt.Append(", " + (idType?.Type == PrimitiveType.Text ? "*" : ""));
             }
-            _currentStmt.Append(";");
 
             return null;
         }
@@ -770,8 +762,15 @@ namespace dumbo.Compiler.CodeGenerator
             _currentStmt.Append(")");
         }
 
+        /// <summary>
+        /// Writes the default value for LHZ types
+        /// </summary>
+        /// <param name="type"></param>
         private void WriteInitialValue(PrimitiveTypeNode type)
         {
+            if(type == null)
+                throw new ArgumentException($"{type.Type} is not a valid tpye");
+
             switch (type.Type)
             {
                 case PrimitiveType.Number: _currentStmt.Append("0.0"); break;

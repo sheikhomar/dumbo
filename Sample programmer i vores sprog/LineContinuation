@@ -1,0 +1,28 @@
+program
+	boolean boolValue1 := true
+	boolean boolValue2 := false
+	boolean boolValue3 := true
+	boolean boolValue4 := false
+	boolean boolValue5 := true
+	boolean boolValue6 := false
+	
+	if (boolValue1 = false AND boolValue2 = true AND boolValue3 = false AND _
+	   boolValue4 = true AND boolValue5 = false AND boolValue6 = true) then
+		write("Fisk")
+	else if (boolValue1 = true AND boolValue2 = true AND boolValue3 = true AND _
+	   boolValue4 = true AND boolValue5 = true AND boolValue6 = true) then
+		write("Tog")
+	else if (boolValue1 = false AND boolValue2 = false AND boolValue3 = false AND _
+	   boolValue4 = false AND boolValue5 = false AND boolValue6 = false) then
+		write("Bus")
+	else if (boolValue1 = true AND boolValue2 = true AND boolValue3 = true AND _
+	   boolValue4 = false AND boolValue5 = false AND boolValue6 = false) then
+		write("Bil")
+	else if (boolValue1 = true AND boolValue2 = false AND boolValue3 = true AND _
+	   boolValue4 = false AND boolValue5 = true AND boolValue6 = false) then
+		write("Teddy Edelmann - Himmelhunden")
+		write("'Må man ta hunden med sig ind i himlen?'")
+	else 
+		write("Jeg har fået en trailer")
+	end if
+end program

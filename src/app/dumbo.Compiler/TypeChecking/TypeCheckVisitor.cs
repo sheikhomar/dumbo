@@ -232,12 +232,18 @@ namespace dumbo.Compiler.TypeChecking
 
                 ExpressionListNode desiredSize = CheckForDesiredSize(valueNode.Values);
 
-                for (int i = 0; i < arrType.Sizes.Count; i++)
+                if (desiredSize.Count < arrType.Sizes.Count)
+                    Reporter.Error("The array dimensions does not fit with the given dimensions of the value.",
+                        node.Value.SourcePosition);
+                else
                 {
-                    var arrTypeSize = arrType.Sizes[i] as LiteralValueNode;
-                    var desired = desiredSize[i] as LiteralValueNode;
-                    if (arrTypeSize.Value != desired.Value)
-                        Reporter.Error("The size of the array does not match the given values.", node.Value.SourcePosition);
+                    for (int i = 0; i < arrType.Sizes.Count; i++)
+                    {
+                        var arrTypeSize = arrType.Sizes[i] as LiteralValueNode;
+                        var desired = desiredSize[i] as LiteralValueNode;
+                        if ((arrTypeSize.Value != desired.Value))
+                            Reporter.Error("The size of the array does not match the given values.", node.Value.SourcePosition);
+                    }
                 }
             }
 
@@ -288,7 +294,7 @@ namespace dumbo.Compiler.TypeChecking
                     childrenList.Add(list.Count);
                 }
                 if (childrenList.Any(o => o != childrenList[0]))
-                    Reporter.Error("1: The array's defined dimensions does not match the given value's.", new SourcePosition(0, 0, 0, 0));
+                    Reporter.Error("The array's defined dimensions does not match the given value's.", new SourcePosition(0, 0, 0, 0));
                 else
                     result.Add(childrenList[0]);
             }
@@ -306,7 +312,7 @@ namespace dumbo.Compiler.TypeChecking
             }
 
             if (childrenList.Any(o => o != childrenList[0]))
-                Reporter.Error("2: The array's defined dimensions does not match the given value's.", new SourcePosition(0, 0, 0, 0));
+                Reporter.Error("The array's defined dimensions does not match the given value's.", new SourcePosition(0, 0, 0, 0));
             else
                 result.Add(childrenList[0]);
             return result;

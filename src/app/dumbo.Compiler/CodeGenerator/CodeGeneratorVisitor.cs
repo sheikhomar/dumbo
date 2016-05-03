@@ -55,48 +55,13 @@ namespace dumbo.Compiler.CodeGenerator
 
         public RuntimeEntity Visit(AssignmentStmtNode node, VisitorArgs arg)
         {
-            bool isFunction = node.Identifiers.Count > 1;
+            bool isMultiAssign = node.Identifiers.Count > 1;
 
-            if (isFunction)
-            {
-                //Function | a,b := MyFunc() | MyFunction(formalParameters, &ret1, &ret2 ...);
-                int i = 0;
-                var funcExp = node.Value as FuncCallExprNode;
-                _currentStmt = new Stmt("");
-
-                if (funcExp == null)
-                    throw new Exception("Programming error, should be a function");
-
-
-                if (!funcExp.DeclarationNode.IsBuiltIn)
-                    _currentStmt.Append("_");
-
-                _currentStmt.Append(funcExp.FuncName + "(");
-                funcExp.Parameters.Accept(this, arg);
-
-                if (node.Identifiers.Count > 0 && funcExp.Parameters.Count > 0)
-                    _currentStmt.Append(", ");
-
-                foreach (var retIdentifier in node.Identifiers)
-                {
-                    var idType = retIdentifier.DeclarationNode.Type as PrimitiveTypeNode;
-
-                    if (idType?.Type == PrimitiveType.Text)
-                        _currentStmt.Append(retIdentifier.Name);
-                    else
-                        _currentStmt.Append("&" + retIdentifier.Name);
-
-                    if (i < node.Identifiers.Count - 1)
-                        _currentStmt.Append(", ");
-
-                    i++;
-                }
-                _currentStmt.Append(");");
-                _currentModule.Append(_currentStmt);
-            }
+            if (isMultiAssign)
+                GenerateMultiAssignment(node, arg);
             else
             {
-                //A normal assignment | Id := expression
+                //A normal assignment | Id := expression   (note: single return function is an expression)
                 PrimitiveTypeNode idType = node.Identifiers[0].DeclarationNode.Type as PrimitiveTypeNode;
                 _currentStmt = new Stmt("");
 
@@ -231,103 +196,34 @@ namespace dumbo.Compiler.CodeGenerator
 
         public RuntimeEntity Visit(DeclAndAssignmentStmtNode node, VisitorArgs arg)
         {
-            bool isFunction = node.Identifiers.Count > 1;
+            bool isMultiAssignmen = node.Identifiers.Count > 1;
 
-            if (isFunction)
+            if (isMultiAssignmen)
             {
-                //Function | Number a,b:= MyFunc() | MyFunction(formalParameters, &ret1, &ret2 ...);
-                int i = 0;
-                var funcExp = node.Value as FuncCallExprNode;
-
-                if (funcExp == null)
-                    throw new Exception("Programming error, should be a function");
-
-                //Declare the new LHZ types
-                for (int j = 0; j < node.Identifiers.Count; j++)
+                //Declare the new LHZ id's
+                foreach (var decl in node.Identifiers)
                 {
-                    _currentStmt = new Stmt("");
-                    node.Type.Accept(this, arg);
-                    _currentStmt.Append($" { node.Identifiers[j].Name} = ");
-                    WriteInitialValue(node.Identifiers[j].DeclarationNode.Type as PrimitiveTypeNode);
-                    _currentStmt.Append(";");
-                    _currentModule.Append(_currentStmt);
+                    WriteDeclWithDefaultValue(decl, arg);
                 }
-                
-                //Call the function - this will assign to the declared LHZ types
-                _currentStmt = new Stmt("");
 
-                if (!funcExp.DeclarationNode.IsBuiltIn)
-                    _currentStmt.Append("_");
-
-                _currentStmt.Append(funcExp.FuncName + "(");
-                funcExp.Parameters.Accept(this, arg);
-
-                if (node.Identifiers.Count > 0 && funcExp.Parameters.Count > 0)
-                    _currentStmt.Append(", ");
-
-                foreach (var ret in node.Identifiers)
-                {
-                    var idType = ret.DeclarationNode.Type as PrimitiveTypeNode;
-
-                    if (idType?.Type == PrimitiveType.Text)
-                    {
-                        _currentStmt.Append(ret.Name);
-                    }
-                    else
-                    {
-                        _currentStmt.Append("&" + ret.Name);
-                    }
-                    if (i < node.Identifiers.Count - 1)
-                        _currentStmt.Append(", ");
-                    i++;
-                }
-                _currentStmt.Append(");");
-                _currentModule.Append(_currentStmt);
+                //Assign to the newly created id's
+                GenerateMultiAssignment(node, arg);
             }
             else
             {
-                //Decl and Assignment | Type id := expression
-                PrimitiveTypeNode declType = node.Type as PrimitiveTypeNode;
-                _currentStmt = new Stmt("");
-                node.Type.Accept(this, arg);
-                _currentStmt.Append(" ");
-
-                if (declType?.Type == PrimitiveType.Text)
-                {
-                        node.Identifiers.Accept(this, arg);
-                        _currentStmt.Append(" = ");
-                        WriteInitialValue(declType);
-                        _currentStmt.Append(";");
-                        _currentModule.Append(_currentStmt);
-                        _currentStmt = new Stmt("");
-                        _currentStmt.Append("UpdateText(");
-                        node.Value.Accept(this, arg);
-                        _currentStmt.Append($", ");
-                        node.Identifiers.Accept(this, arg);
-                        _currentStmt.Append(")");
-                }
-                else
-                {
-                        node.Identifiers.Accept(this, arg);
-                        _currentStmt.Append(" = ");
-                        node.Value.Accept(this, arg);
-                }
-
-                _currentStmt.Append(";");
-                _currentModule.Append(_currentStmt);
+                //Declare and assign to a single id
+                WriteDeclWithExpression(node.Identifiers[0], node.Value, arg);
             }
-
+            
             return null;
         }
 
         public RuntimeEntity Visit(PrimitiveDeclStmtNode node, VisitorArgs arg)
         {
-            _currentStmt = new Stmt("");
-            node.Type.Accept(this, arg);
-            _currentStmt.Append(" ");
-            node.Identifiers.Accept(this, arg);
-            _currentStmt.Append(";");
-            _currentModule.Append(_currentStmt);
+            foreach (var id in node.Identifiers)
+            {
+                WriteDeclWithDefaultValue(id, arg);
+            }
 
             return null;
         }
@@ -474,15 +370,12 @@ namespace dumbo.Compiler.CodeGenerator
 
         public RuntimeEntity Visit(IdentifierListNode node, VisitorArgs arg)
         {
-            int length = node.Count;
-
-            for (int i = 0; i < length; i++)
+            for (int i = 0; i < node.Count; i++)
             {
-                var idType = node[i].DeclarationNode.Type as PrimitiveTypeNode;
-
                 node[i].Accept(this, arg);
-                if (i < length - 1)
-                    _currentStmt.Append(", " + (idType?.Type == PrimitiveType.Text ? "*" : ""));
+
+                if (i < node.Count - 1)
+                    _currentStmt.Append(", ");
             }
 
             return null;
@@ -490,7 +383,8 @@ namespace dumbo.Compiler.CodeGenerator
 
         public RuntimeEntity Visit(IdentifierNode node, VisitorArgs arg)
         {
-            _currentStmt.Append(node.Name.ToLower());
+            var idType = node.DeclarationNode.Type as PrimitiveTypeNode;
+            _currentStmt.Append(node.Name);
 
             return null;
         }
@@ -792,6 +686,95 @@ namespace dumbo.Compiler.CodeGenerator
                 case PrimitiveType.Boolean: _currentStmt.Append("false"); break;
                 default: throw new ArgumentException($"{type.Type} is not a valid tpye");
             }
+        }
+
+        private void GenerateMultiAssignment(AssignmentStmtNode node, VisitorArgs arg)
+        {
+            //Function | a,b := MyFunc() | MyFunction(formalParameters, &ret1, &ret2 ...);
+            int i = 0;
+            var funcExp = node.Value as FuncCallExprNode;
+            _currentStmt = new Stmt("");
+
+            if (funcExp == null)
+                throw new Exception("Programming error, should be a function");
+
+            if (!funcExp.DeclarationNode.IsBuiltIn)
+                _currentStmt.Append("_");
+
+            _currentStmt.Append(funcExp.FuncName + "(");
+            funcExp.Parameters.Accept(this, arg);
+
+            if (node.Identifiers.Count > 0 && funcExp.Parameters.Count > 0)
+                _currentStmt.Append(", ");
+
+            foreach (var retIdentifier in node.Identifiers)
+            {
+                var idType = retIdentifier.DeclarationNode.Type as PrimitiveTypeNode;
+
+                if (idType?.Type == PrimitiveType.Text)
+                    _currentStmt.Append(retIdentifier.Name);
+                else
+                    _currentStmt.Append("&" + retIdentifier.Name);
+
+                if (i < node.Identifiers.Count - 1)
+                    _currentStmt.Append(", ");
+
+                i++;
+            }
+            _currentStmt.Append(");");
+            _currentModule.Append(_currentStmt);
+        }
+
+        /// <summary>
+        /// Writes Type id = expression
+        /// </summary>
+        private void WriteDecl(IdentifierNode decl, VisitorArgs arg)
+        {
+            var idType = decl.DeclarationNode.Type;
+
+            _currentStmt = new Stmt("");
+            decl.DeclarationNode.Type.Accept(this, arg);
+            _currentStmt.Append(" ");
+            decl.Accept(this, arg);
+            _currentStmt.Append(" = ");
+        }
+
+
+        private void WriteDeclWithExpression(IdentifierNode decl, ExpressionNode expression, VisitorArgs arg)
+        {
+            var idType = decl.DeclarationNode.Type;
+            bool isText = (idType is PrimitiveTypeNode) && ((PrimitiveTypeNode)idType).Type == PrimitiveType.Text;
+
+            WriteDecl(decl, arg);
+
+            if (isText)
+            {
+                _currentStmt.Append("CreatText((");
+                expression.Accept(this, arg);
+                _currentStmt.Append(").Value)");
+            }
+            else
+                expression.Accept(this, arg);
+
+            _currentStmt.Append(";");
+            _currentModule.Append(_currentStmt);
+        }
+
+        private void WriteDeclWithDefaultValue(IdentifierNode decl, VisitorArgs arg)
+        {
+            var idType = decl.DeclarationNode.Type;
+
+            WriteDecl(decl, arg);
+
+            if (idType is PrimitiveTypeNode)
+                WriteInitialValue((PrimitiveTypeNode)idType);
+            else if (idType is ArrayTypeNode)
+                throw new NotImplementedException();
+            else
+                throw new Exception("Programming error - unknown type");
+
+            _currentStmt.Append(";");
+            _currentModule.Append(_currentStmt);
         }
     }
 }

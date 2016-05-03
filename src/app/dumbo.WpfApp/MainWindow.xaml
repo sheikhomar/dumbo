@@ -7,7 +7,7 @@
         xmlns:avalonedit="http://icsharpcode.net/sharpdevelop/avalonedit"
         xmlns:input="clr-namespace:System.Windows.Input;assembly=System"
         mc:Ignorable="d"
-        Title="Happy Z Development Enviroment" Height="450" Width="905" WindowState="Maximized">
+        Title="Little Happy Z Development Enviroment" Height="450" Width="905" WindowState="Maximized">
     <Window.Resources>
         <RoutedUICommand x:Key="CompileCommand" Text="Compile" />
         <RoutedUICommand x:Key="SaveCommand" Text="Save current file." />

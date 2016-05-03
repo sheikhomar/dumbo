@@ -1,0 +1,49 @@
+Program
+	Write("Enter three numbers seperated by enter")
+	Number inputNumb1
+	Number inputNumb2
+	Number inputNumb3
+	inputNumb1 := ReadNumber()
+	inputNumb2 := ReadNumber()
+	inputNumb3 := ReadNumber()
+	Write("The first entered number squared is: ")
+	write("" + Multiplier(inputNumb1))
+	circle(inputnumb1, inputnumb2, inputnumb3)
+	Write("The factorial of " + inputnumb2 + " is:")
+	write("" + factorial(inputnumb2))
+	OddNumber(inputnumb3)
+End Program
+
+Function Multiplier(number inputNumb1) return number
+	return inputNumb1 * inputNumb1
+End Function 
+
+Function Circle(number inputNumb1, number inputNumb2, number inputNumb3) returns nothing
+	if(inputNumb1*inputNumb1 + inputNumb2*inputNumb2 <= inputNumb3*inputNumb3) then
+		write("The point(" + inputNumb1 + "," + inputNumb2 + _
+		") is inside the circle centered in (0,0) and a radius " + inputNumb3)
+	else 
+		write("The point(" + inputNumb1 + "," + inputNumb2 + _
+		") is outside the circle centered in (0,0) and a radius " + inputNumb3)
+	end if
+	
+End Function 
+
+Function Factorial(Number inputNumb2) returns number
+  if(inputNumb2 <= 1) then
+	return 1
+  end if
+  return inputNumb2 * factorial(inputNumb2 - 1)
+end function
+
+Function OddNumber(Number inputNumb3) return nothing
+	if (inputNumb3 % 2 = 0) then
+		Write("The number " + inputNumb3 + " is even")
+	else if (NOT(inputNumb3 % 2 = 0)) then
+		Write("The number " + inputNumb3 + " is odd")
+	else
+		Write("Error occured. Please close the program and try again")
+	end if
+end function
+
+

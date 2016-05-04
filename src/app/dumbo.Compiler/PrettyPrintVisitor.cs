@@ -45,7 +45,7 @@ namespace dumbo.Compiler
         {
             Write(node.Name);
             Write("[");
-            VisitChildren(node.Sizes, ",", arg);
+            VisitChildren(node.Indices, ",", arg);
             Write("]");
             return null;
         }

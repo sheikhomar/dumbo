@@ -35,21 +35,40 @@ namespace dumbo.Compiler.CodeGenerator
 
         public RuntimeEntity Visit(ArrayDeclStmtNode node, VisitorArgs arg)
         {
-            throw new NotImplementedException();
+            WriteArrayDecl(node.Type, node.Identifiers, arg);
+
+            return null;
         }
 
         public RuntimeEntity Visit(ArrayIdentifierNode node, VisitorArgs arg)
         {
+            
+
             throw new NotImplementedException();
         }
 
         public RuntimeEntity Visit(ArrayTypeNode node, VisitorArgs arg)
         {
-            throw new NotImplementedException();
+            CreateStmtAndAddToCurrentModule("//Create Index struct");
+            CreateStmtAndAddToCurrentModule($"int _numberOfDims = {node.Sizes.Count};");
+            CreateStmtAndAddToCurrentModule("int *_indices = malloc(sizeof(int)*_numberOfDims);");
+            for (int i = 0; i < node.Sizes.Count; i++)
+            {
+                _currentStmt.Append($"_indices[{i}] = ");
+                node.Sizes[i].Accept(this, arg);
+                _currentStmt.Append(";");
+                AppendCurrentStmtToCurrentModule();
+            }
+            CreateStmtAndAddToCurrentModule("Index *_index = CreateIndex(_indices, _numberOfDims);");
+            CreateStmtAndAddToCurrentModule("//End of creating Index struct");
+            
+            return null;
         }
 
         public RuntimeEntity Visit(ArrayValueNode node, VisitorArgs arg)
         {
+            
+
             throw new NotImplementedException();
         }
 
@@ -163,8 +182,7 @@ namespace dumbo.Compiler.CodeGenerator
 
         public RuntimeEntity Visit(ContinueStmtNode node, VisitorArgs arg)
         {
-            _currentStmt = new Stmt("Continue;");
-            _currentModule.Append(_currentStmt);
+            CreateStmtAndAddToCurrentModule("continue;");
 
             return null;
         }
@@ -197,6 +215,7 @@ namespace dumbo.Compiler.CodeGenerator
         public RuntimeEntity Visit(DeclAndAssignmentStmtNode node, VisitorArgs arg)
         {
             bool isMultiAssignmen = node.Identifiers.Count > 1;
+            bool isArrayDecl = (node.Type as ArrayTypeNode) != null;
 
             if (isMultiAssignmen)
             {
@@ -208,6 +227,12 @@ namespace dumbo.Compiler.CodeGenerator
 
                 //Assign to the newly created id's
                 GenerateMultiAssignment(node, arg);
+            }
+            else if (isArrayDecl)
+            {
+                ArrayTypeNode type = node.Type as ArrayTypeNode;
+                WriteArrayDecl(type, node.Identifiers, arg);
+                /// Todo -- assignment
             }
             else
             {
@@ -383,7 +408,7 @@ namespace dumbo.Compiler.CodeGenerator
 
         public RuntimeEntity Visit(IdentifierNode node, VisitorArgs arg)
         {
-            var idType = node.DeclarationNode.Type as PrimitiveTypeNode;
+            ///var idType = node.DeclarationNode.Type as PrimitiveTypeNode;
             _currentStmt.Append(node.Name);
 
             return null;
@@ -538,6 +563,7 @@ namespace dumbo.Compiler.CodeGenerator
         public RuntimeEntity Visit(RootNode node, VisitorArgs arg)
         {
             _currentModule = new Module();
+            //node.ConstDecls.Accept(this, arg);
             node.FuncDecls.Accept(this, new FuncVisitorArgs(false));
             CProgram.AddUserFuncDeclModule(_currentModule);
             node.Program.Accept(this, arg);
@@ -739,7 +765,6 @@ namespace dumbo.Compiler.CodeGenerator
             _currentStmt.Append(" = ");
         }
 
-
         private void WriteDeclWithExpression(IdentifierNode decl, ExpressionNode expression, VisitorArgs arg)
         {
             var idType = decl.DeclarationNode.Type;
@@ -775,6 +800,41 @@ namespace dumbo.Compiler.CodeGenerator
 
             _currentStmt.Append(";");
             _currentModule.Append(_currentStmt);
+        }
+
+        private void WriteArrayDecl(ArrayTypeNode type, IdentifierListNode identifiers, VisitorArgs arg)
+        {
+            _currentStmt = new Stmt("");
+            CreateStmtAndAddToCurrentModule("//Declaring an Array");
+            type.Accept(this, arg);
+            _currentStmt.Append("Array *");
+            identifiers.Accept(this, arg);
+            _currentStmt.Append($"= CreateArray(_index, sizeof({DetermineCType(type.Type.Type)}));");
+            AppendCurrentStmtToCurrentModule();
+            CreateStmtAndAddToCurrentModule("//End of declaring an Array");
+        }
+
+        private void CreateStmtAndAddToCurrentModule(string input)
+        {
+            Stmt stmt = new Stmt(input);
+            _currentModule.Append(stmt);
+        }
+
+        private void AppendCurrentStmtToCurrentModule()
+        {
+            _currentModule.Append(_currentStmt);
+            _currentStmt = new Stmt("");
+        }
+
+        private string DetermineCType(PrimitiveType type)
+        {
+            switch (type)
+            {
+                case PrimitiveType.Number: return "double";
+                case PrimitiveType.Text: return "Text";
+                case PrimitiveType.Boolean: return "Boolean";
+                default: throw new ArgumentException($"{type} is not a valid primitive type");
+            }
         }
     }
 }

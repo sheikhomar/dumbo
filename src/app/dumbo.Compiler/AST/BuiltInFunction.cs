@@ -8,6 +8,8 @@ namespace dumbo.Compiler.AST
         Random,
         Floor, 
         Ceiling,
-        IsEqual
+        IsEqual,
+        ConvertNumberToText,
+        ConvertBooleanToText,
     }
 }

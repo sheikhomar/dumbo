@@ -57,6 +57,16 @@ namespace dumbo.Compiler.AST
             isEqual.Parameters.Add(new FormalParamNode("t2", new PrimitiveTypeNode(PrimitiveType.Text), srcPos));
             isEqual.ReturnTypes.Add(new PrimitiveTypeNode(PrimitiveType.Boolean));
 
+            // Define ConvertNumberToText function
+            var convertNumberToText = new BuiltInFuncDeclNode(BuiltInFunction.ConvertNumberToText);
+            convertNumberToText.Parameters.Add(new FormalParamNode("n", new PrimitiveTypeNode(PrimitiveType.Number), srcPos));
+            convertNumberToText.ReturnTypes.Add(new PrimitiveTypeNode(PrimitiveType.Text));
+
+            // Define ConvertBooleanToText function
+            var convertBooleanToText = new BuiltInFuncDeclNode(BuiltInFunction.ConvertBooleanToText);
+            convertBooleanToText.Parameters.Add(new FormalParamNode("n", new PrimitiveTypeNode(PrimitiveType.Boolean), srcPos));
+            convertBooleanToText.ReturnTypes.Add(new PrimitiveTypeNode(PrimitiveType.Text));
+
             yield return ceiling;
             yield return floor;
             yield return isEqual;
@@ -64,6 +74,8 @@ namespace dumbo.Compiler.AST
             yield return readNumber;
             yield return readText;
             yield return write;
+            yield return convertNumberToText;
+            yield return convertBooleanToText;
         } 
     }
 }

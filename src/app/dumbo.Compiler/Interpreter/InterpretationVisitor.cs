@@ -33,14 +33,21 @@ namespace dumbo.Compiler.Interpreter
         public Value Visit(ArrayDeclStmtNode node, VisitorArgs arg)
         {
             foreach (var identifier in node.Identifiers)
+            {
                 CurrentCallFrame.Allocate(identifier.Name);
+                var arrayValue = new ArrayValue(node.Type.Type.Type, GetArraySizes(node.Type.Sizes, arg));
+                CurrentCallFrame.Set(identifier.Name, arrayValue);
+            }
 
             return null;
         }
 
         public Value Visit(ArrayIdentifierNode node, VisitorArgs arg)
         {
-            throw new NotImplementedException();
+            var array = CurrentCallFrame.Get<ArrayValue>(node.Name);
+            var sizes = GetArraySizes(node.Indices, arg);
+            var value = array.GetValue(sizes);
+            return value;
         }
 
         public Value Visit(ArrayTypeNode node, VisitorArgs arg)
@@ -618,9 +625,19 @@ namespace dumbo.Compiler.Interpreter
         private void PerformAssignment(IdentifierListNode identifiers, ExpressionNode expression, VisitorArgs arg)
         {
             var value = expression.Accept(this, arg);
+
             if (identifiers.Count == 1)
             {
-                CurrentCallFrame.Set(identifiers[0].Name, value);
+                if (identifiers[0] is ArrayIdentifierNode)
+                {
+                    var id = identifiers[0] as ArrayIdentifierNode;
+                    var arrayValue = CurrentCallFrame.Get<ArrayValue>(id.Name);
+                    arrayValue.SetValue(GetArraySizes(id.Indices, arg), value);
+                }
+                else
+                {
+                    CurrentCallFrame.Set(identifiers[0].Name, value);
+                }
             }
             else
             {
@@ -635,5 +652,17 @@ namespace dumbo.Compiler.Interpreter
             }
         }
 
+        private List<int> GetArraySizes(ExpressionListNode list, VisitorArgs arg)
+        {
+            List<int> sizeList = new List<int>();
+            foreach (var size in list)
+            {
+                var sizeVal = size.Accept(this, arg) as NumberValue;
+                sizeList.Add((int)Math.Floor(sizeVal.Number));
+            }
+
+
+            return sizeList;
+        }
     }
 }

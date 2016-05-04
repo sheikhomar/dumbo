@@ -210,7 +210,7 @@ namespace dumbo.Compiler.Interpreter
 
         public Value Visit(ContinueStmtNode node, VisitorArgs arg)
         {
-            throw new NotImplementedException();
+            throw new ContinueException();
         }
 
         public Value Visit(ConstDeclListNode node, VisitorArgs arg)
@@ -468,7 +468,10 @@ namespace dumbo.Compiler.Interpreter
                 {
                     break;
                 }
+                catch (ContinueException)
+                {
 
+                }
             }
 
             return null;

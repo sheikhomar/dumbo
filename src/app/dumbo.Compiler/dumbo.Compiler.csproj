@@ -102,6 +102,7 @@
     <Compile Include="CodeGenerator\Stmt.cs" />
     <Compile Include="CodeGenerator\Module.cs" />
     <Compile Include="Interpreter\CallFrame.cs" />
+    <Compile Include="Interpreter\ContinueException.cs" />
     <Compile Include="Interpreter\IInteractiveShell.cs" />
     <Compile Include="Interpreter\InterpretationErrorException.cs" />
     <Compile Include="Interpreter\InterpreterState.cs" />

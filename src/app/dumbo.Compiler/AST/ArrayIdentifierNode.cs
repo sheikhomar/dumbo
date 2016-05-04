@@ -2,11 +2,11 @@ namespace dumbo.Compiler.AST
 {
     public class ArrayIdentifierNode : IdentifierNode
     {
-        public ExpressionListNode Sizes { get; }
+        public ExpressionListNode Indices { get; }
 
-        public ArrayIdentifierNode(string name, ExpressionListNode sizes, SourcePosition sourcePosition) : base(name, sourcePosition)
+        public ArrayIdentifierNode(string name, ExpressionListNode indices, SourcePosition sourcePosition) : base(name, sourcePosition)
         {
-            Sizes = sizes;
+            Indices = indices;
         }
 
         public override T Accept<T, K>(IVisitor<T, K> visitor, K arg)

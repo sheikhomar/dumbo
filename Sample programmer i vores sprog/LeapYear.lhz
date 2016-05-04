@@ -1,19 +1,22 @@
 Program
-
 	Number input
-	
 	Write("Is it leap year?")
 	Write("Enter the year you want to know if its leap year")
 	
 	input := ReadNumber()
-	
+	ComputeYear(input)
+
+end program
+
+Function ComputeYear(number input) return nothing 
 	repeat while input > 0	
 		if (input % 4 = 0) then
 			wRiTe("It is a leap year.")
+			break
 		else if (NOT(input % 4 = 0)) then
 			Write("It is not a leap year.")
+			break
 		end if
 		input := input - 4
 	end repeat
-
-end program
+End Function 

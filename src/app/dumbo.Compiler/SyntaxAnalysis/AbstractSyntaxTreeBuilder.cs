@@ -440,6 +440,8 @@ namespace dumbo.Compiler.SyntaxAnalysis
                     return BuildFuncCallExprNode(rhs[0]);
                 case "(":
                     return BuildExprNode(rhs[1]);
+                case "ArrayId":
+                    return BuildArrayIdentifierNode(rhs[0]);
                 default:
                     throw new ArgumentException("Unexpected value node.");
             }

@@ -876,9 +876,9 @@ Program
 	if true  then
 		number test := 0
 	else if false then
-		number _test
+		number test2
 	else
-		number _test
+		number test2
 	end if
 End Program
 
@@ -897,13 +897,13 @@ Program
 	if true  then
 		number test := 0
 	else if false then
-		number _test
+		number test3
 	else if false then
-		number _test1
+		number test1
 	else if false then
-		number test_
+		number test4
 	else
-		number _test
+		number test3
 	end if
 End Program
 
@@ -913,9 +913,9 @@ Program
 	if(true )then
 		number test := 0
 	else if    (false )      then
-		number _test
+		number test2
 	else if(false)then
-		number test_
+		number test3
 	else
 		number test := 0
 	end if
@@ -1004,11 +1004,11 @@ Program
 	if true  then
 		number test := 0
 	else if test = 0 then
-		number test_
+		number test1
 	else if false then
-		number test__
+		number test2
 	else if false then
-		number test___
+		number test3
 	else
 		number test
 	end if
@@ -1421,7 +1421,7 @@ End Program
 
 
 // ********************************Id********************************
- //New Program 
+ //New Program Failing
 Program
 	number _abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 := 1
 End Program
@@ -1433,25 +1433,25 @@ Program
 End Program
 
 
- //New Program 
+ //New Program Failing
 Program
 	number _a := 1
 End Program
 
 
- //New Program 
+ //New Program Failing
 Program
 	number _a_______________ := 1
 End Program
 
 
- //New Program 
+ //New Program Failing
 Program
 	number _a_a_a___A_a______ := 1
 End Program
 
 
- //New Program 
+ //New Program Failing
 Program
 	number _abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789____ := 1
 End Program
@@ -1633,16 +1633,16 @@ Program
 
 	number result
 	
-	result := fahrenheit_temperature(0.0)
+	result := fahrenheitTemperature(0.0)
 	write("Freezing point: " + result + " F.")
 	
-	result := fahrenheit_temperature(100.0)
+	result := fahrenheitTemperature(100.0)
 	write("Boiling point: " + result + " F.")
 	
 End program
 
-Function Fahrenheit_temperature(number celcius_temp) return number
-	return (9.0 / 5.0) * celcius_temp + 32.0
+Function FahrenheitTemperature(number celciusTemp) return number
+	return (9.0 / 5.0) * celciusTemp + 32.0
 end function
 
 
@@ -2165,6 +2165,13 @@ End Program
 Function MyFunc() Returns Text
   // Should fail because function never returns anything
 End Function
+
+
+
+
+
+
+
 
 
 

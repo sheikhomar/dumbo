@@ -13,16 +13,68 @@ namespace dumbo.Tests.SemanticAnalysis
     [TestFixture]
     public class SemanticTests
     {
-        [Test, TestCaseSource(typeof(SemanticSuccessfullTestCaseFactory),
-            nameof(SemanticSuccessfullTestCaseFactory.TestCases))]
-        public void TestProgram(int startLine, string programText)
+        [Test, TestCaseSource(typeof(TestProgramFactory),
+            nameof(TestProgramFactory.Declarations))]
+        public void TestProgram(string fileName, int startLine, string programText, bool shouldFail)
         {
             var rootNode = Parse(startLine, programText);
             var errors = RunSemanticAnalysis(rootNode);
-            if (errors.Any())
+
+            if (shouldFail)
             {
-                var failMessage = FormatSemanticErrors(startLine, programText, errors.ToList());
-                Assert.Fail(failMessage);
+                if (errors.Count != 1)
+                {
+                    var failMessage = FormatExpectedErrors(startLine, programText, errors);
+                    Assert.Fail(failMessage);
+                }
+            }
+            else
+            {
+                if (errors.Any())
+                {
+                    var failMessage = FormatSemanticErrors(startLine, programText, errors.ToList());
+                    Assert.Fail(failMessage);
+                }
+            }
+        }
+
+        private string FormatExpectedErrors(int programLine, string programText, IList<Event> errorMessages)
+        {
+            StringBuilder buffer = new StringBuilder();
+
+            buffer.AppendLine("Program was expected to fail the test, but didn't fail.");
+            AppendErrors(errorMessages, buffer);
+            AppendProgram(programLine, programText, buffer);
+
+            return buffer.ToString();
+        }
+
+        private static void AppendProgram(int programLine, string programText, StringBuilder buffer)
+        {
+            buffer.Append("The program in question can be found in ");
+            buffer.Append(TestProgramFactory.FileName);
+            buffer.Append(" line ");
+            buffer.Append(programLine);
+            buffer.AppendLine(":");
+            buffer.AppendLine(programText);
+        }
+
+        private static void AppendErrors(IList<Event> errorMessages, StringBuilder buffer)
+        {
+            if (errorMessages.Count > 0)
+            {
+                buffer.AppendLine("Following errors were reported:");
+                for (int i = 0; i < errorMessages.Count; i++)
+                {
+                    var err = errorMessages[i];
+                    buffer.Append(i + 1);
+                    buffer.Append(". ");
+                    buffer.Append(err.Message);
+                    buffer.Append(" [src: ");
+                    buffer.Append(err.SourcePosition);
+                    buffer.Append("]");
+                    buffer.AppendLine();
+                }
             }
         }
 
@@ -30,25 +82,8 @@ namespace dumbo.Tests.SemanticAnalysis
         {
             StringBuilder buffer = new StringBuilder();
 
-            buffer.AppendLine("Following errors was reported:");
-            for (int i = 0; i < errorMessages.Count; i++)
-            {
-                var err = errorMessages[i];
-                buffer.Append(i + 1);
-                buffer.Append(". ");
-                buffer.Append(err.Message);
-                buffer.Append(" [src: ");
-                buffer.Append(err.SourcePosition);
-                buffer.Append("]");
-                buffer.AppendLine();
-            }
-
-            buffer.Append("The program in question can be found in ");
-            buffer.Append(SemanticSuccessfullTestCaseFactory.FileName);
-            buffer.Append(" line ");
-            buffer.Append(programLine);
-            buffer.AppendLine(":");
-            buffer.AppendLine(programText);
+            AppendErrors(errorMessages, buffer);
+            AppendProgram(programLine, programText, buffer);
 
             return buffer.ToString();
         }

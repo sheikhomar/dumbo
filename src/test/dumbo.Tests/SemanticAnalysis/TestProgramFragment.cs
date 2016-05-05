@@ -2,9 +2,9 @@ using System.Text;
 
 namespace dumbo.Tests.SemanticAnalysis
 {
-    public class ProgramFragment
+    public class TestProgramFragment
     {
-        public ProgramFragment(int line)
+        public TestProgramFragment(int line)
         {
             Buffer = new StringBuilder();
             Line = line;

@@ -90,6 +90,32 @@ Program
     TexT a
 End Program
 
+
+
+ //New Program Failing 
+Program
+    Array[true] of Number arr
+End Program
+
+
+ //New Program Failing 
+Program
+    Array[false] of Number arr
+End Program
+
+
+ //New Program Failing 
+Program
+    Array["12"] of Number arr
+End Program
+
+
+ //New Program Failing 
+Program
+    Array["12"] of Number arr
+End Program
+
+
 // ************************DeclAss***********************
  //New Program 
 Program

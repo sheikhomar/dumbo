@@ -16,7 +16,7 @@ namespace dumbo.Tests.SyntaxAnalysis
             var parser = new Parser(Utils.GetGrammarTablePath());
 
             var dir = Path.GetDirectoryName(GetType().Assembly.Location);
-            var path = Path.Combine(dir, "ParserTests.txt");
+            var path = Path.Combine(dir, "SyntaxAnalysis", "TestPrograms.txt");
             using (var fs = new StreamReader(path))
             {
                 StringBuilder programBuilder = new StringBuilder();

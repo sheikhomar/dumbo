@@ -1,0 +1,238 @@
+﻿// *********************FuncCall**************
+ //New Program 
+Program
+    a( )
+End Program
+
+Function a() return nothing
+End functIon
+
+
+ //New Program Failing
+Program 
+	a()
+End Program
+
+
+ //New Program 
+Program
+	number a := 1
+    aa( a)
+End Program
+
+Function aa(number a) return nothing
+End functIon
+
+
+ //New Program 
+Program
+    aa( b())
+End Program
+
+Function aa(number a) return nothing
+End functIon
+
+Function b() return number
+	Return 1
+End function
+
+
+ //New Program 
+Program
+    text a := aa( b(aa(1, false)), true)
+End Program
+
+Function aa(number a, boolean bc) return text
+	return ""
+End functIon
+
+Function b(text a) return number
+	Return 1
+End function
+
+
+ //New Program 
+Program
+	number a := 1
+    aa( a, False, "")
+End Program
+
+Function aa(number a, boolean b, text c) return nothing
+End functIon
+
+
+ //New Program 
+Program
+    aa( false, FaLsE , "False",1254)
+End Program
+
+Function aa(booLean a, boolean b, text c, number d) return nothing
+End functIon
+
+
+ //New Program Failing
+Program
+    a( )
+End Program
+
+
+ //New Program Failing
+Program
+    aa(           )
+End Program
+
+Function aa(number a) return nothing
+End Function
+
+
+ //New Program Failing
+Program
+    aa( a)
+End Program
+
+Function aa(number a) return nothing
+End Function
+
+
+ //New Program Failing
+Program
+    aa( 1, False, "")
+End Program
+
+Function aa(number a, boolean a, text a) return number, text, boolean
+	return a, a, a
+End Function
+
+
+ //New Program Failing
+Program
+    aa( false, FaLsE , "False",1254)
+End Program
+
+Function aa(number a) return nothing
+End Function
+
+
+ //New Program Failing
+Program
+    aa( b())
+End Program
+
+Function aa(number a) return nothing
+End functIon
+
+Function b() return boolean
+	Return true
+End function
+
+
+ //New Program Failing
+Program
+    text a := aa( b(aa(1, false)), true)
+End Program
+
+Function aa(number a, boolean b) return text, number
+	return "", 1
+End functIon
+
+Function b(text a) return number
+	Return 1
+End function
+
+
+ //New Program Failing
+Program
+    text a := aa( b(aa(1, false)), true)
+End Program
+
+Function aa(number a, boolean b) return text
+	return ""
+End functIon
+
+Function b(text a) return number
+	Return truE
+End function
+
+
+ //New Program Failing
+Program
+    text a := aa( b(aa(1, false)), true)
+End Program
+
+Function aa(number a, number b) return text
+	return ""
+End functIon
+
+Function b(text a) return number
+	Return 1
+End function
+
+
+ //New Program Failing
+Program
+    text a := aa( b(aa(1, false)), true)
+End Program
+
+Function aa(number a, boolean b) return  number
+	return  1
+End functIon
+
+Function b(text a) return number
+	Return 1
+End function
+
+
+ //New Program Failing
+Program
+	text t := aa(bb(11))
+End Program
+
+Function aa(number a, boolean b) return text
+	return "ALLO"
+End Function
+
+Function bb(Number a) return number, boolean, text
+	return 11, true, ""
+End Function
+
+
+ //New Program Failing
+Program
+	text t := aa(bb(11))
+End Program
+
+Function aa(number a, boolean b) return text
+	return "ALLO"
+End Function
+
+Function bb(Number a) return number
+	return 11
+End Function
+
+
+ //New Program 
+Program
+    text a := aa( b(aa(1, false)), true)
+End Program
+
+Function aa(number a, boolean c) return text
+	return ""
+End functIon
+
+Function b(text a) return number
+	Return 1
+End function
+
+
+ //New Program 
+Program
+	text t := aa(bb(11))
+End Program
+
+Function aa(number a, boolean b) return text
+	return "ALLO"
+End Function
+
+Function bb(Number a) return number, boolean
+	return 11, true
+End Function

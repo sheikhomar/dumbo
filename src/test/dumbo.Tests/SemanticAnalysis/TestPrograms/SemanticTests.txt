@@ -1,4 +1,3 @@
-
 // ************************DeclAss***********************
  //New Program 
 Program
@@ -96,53 +95,6 @@ End Program
 Program
 	Boolean a
     a := True
-End Program
-
-
- //New Program 
-Program
-	Text a
-    a := ""
-End Program
-
-
- //New Program 
-Program
-	text a
-    a := "test"
-End Program
-
-
- //New Program Failing
-Program
-	number a
-	boolean b
-    a, b := 1, false
-End Program
-
-
- //New Program Failing
-Program
-	number a
-	text b
-    a, b := 1,"2"
-End Program
-
-
- //New Program Failing
-Program
-	number a, b
-	boolean c
-    a, b, c := 1,2,false 
-End Program
-
-
- //New Program Failing
-Program
-	number a
-	text b
-	boolean c
-    a, b,c := 1, "Program", true
 End Program
 
 

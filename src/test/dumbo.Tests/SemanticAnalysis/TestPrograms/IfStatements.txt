@@ -1,0 +1,190 @@
+﻿// **************************************IfStmt********************************
+ //New Program 
+Program
+	if(true) then
+		number test := 0
+		
+	end if
+End Program
+
+
+ //New Program 
+Program
+	if true  then
+	
+	end if
+End Program
+
+
+ //New Program 
+Program
+	if true then
+	end if
+End Program
+
+
+ //New Program 
+Program
+	if true  then
+		number test := 0
+	else
+		number test := 0
+	end if
+End Program
+
+
+ //New Program 
+Program
+	if true  then
+	else
+	end if
+End Program
+
+
+ //New Program 
+Program
+	if true  then
+		number test := 0
+	else if false then
+		number test2
+	else
+		number test2
+	end if
+End Program
+
+
+ //New Program 
+Program
+	if true  then
+	else if false then
+	else
+	end if
+End Program
+
+
+ //New Program 
+Program
+	if true  then
+		number test := 0
+	else if false then
+		number test3
+	else if false then
+		number test1
+	else if false then
+		number test4
+	else
+		number test3
+	end if
+End Program
+
+
+ //New Program 
+Program
+	if(true )then
+		number test := 0
+	else if    (false )      then
+		number test2
+	else if(false)then
+		number test3
+	else
+		number test := 0
+	end if
+End Program
+
+
+ //New Program 
+Program
+	number a := 1
+	if aa() then
+		number a := 1
+	else if a = 1 then
+		number test := 0
+	else if a < 2 or (a > 1 and -a <= a)  then
+		number test
+	else
+		number test := 0
+	end if
+End Program
+
+Function aa() return boolean
+	return true
+End Function
+
+
+ //New Program
+Program
+	if true  then
+	
+	end if
+End Program
+
+
+ //New Program Failing
+Program
+	if test = 0 then
+		number test := 0
+	else if false then
+		number test
+	else
+		number test
+	end if
+End Program
+
+
+ //New Program
+Program
+	if "" = ""  then
+	else if false then
+	else
+	end if
+End Program
+
+
+ //New Program Failing
+Program
+	if true  then
+		number test := 0
+	else if test = 0 then
+		number test1
+	else if false then
+		number test2
+	else if false then
+		number test3
+	else
+		number test
+	end if
+End Program
+
+
+ //New Program Failing
+Program
+	if true  then
+		number test := 0
+	else if false then
+		number test
+	else if 1 = true then
+		number test
+	else
+		number test
+	end if
+End Program
+
+
+ //New Program Failing
+Program
+	number a := 1
+	if aa() then
+		number a := 1
+	else if a = 1 then
+		number test := 0
+	else if a < 2 or (a > 1 and -a <= a) = a  then
+		number test
+	else
+		number test := 0
+	end if
+End Program
+
+Function aa() return boolean
+	return true
+End Function
+

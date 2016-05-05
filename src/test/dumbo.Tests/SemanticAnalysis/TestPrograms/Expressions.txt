@@ -1,0 +1,160 @@
+﻿//*******************************Expr*******************************
+ //New Program 
+Program
+	number a := (((1)+1)+ 1)
+End Program
+
+
+ //New Program 
+Program
+	number a, i
+	text b
+	boolean c
+	a := +--1+1-1/1*1%1 -------------------------i
+	b := "Kurt" + " " + "Nielsen"
+	c :=true and false or true and not false or +1=1 and -1<1 or 1>1 and (1>=1) or 1<=1
+End Program
+
+
+ //New Program Failing
+Program
+	number a := (((1)+1)and 1)
+End Program
+
+
+ //New Program Failing
+Program
+	boolean a := (((1)+1)and 1)
+End Program
+
+
+ //New Program Failing
+Program
+	number a
+	text b
+	boolean c
+	a := +--1+1-1/1*1%1 -------------------------i
+	b := not "Kurt" + " " + "Nielsen"
+	c := true and false or true and not false or +1=1 and 1<1 or 1>1 and (1>=1) or 1<=1
+End Program
+
+
+ //New Program Failing
+Program
+	number a := 1-""
+End Program
+
+
+ //New Program Failing
+Program
+	number a := 1-true
+End Program
+
+
+ //New Program Failing
+Program
+	number a := 1+""
+End Program
+
+
+ //New Program Failing
+Program
+	number a := 1+false
+End Program
+
+
+ //New Program Failing
+Program
+	number a := 1*""
+End Program
+
+
+ //New Program Failing
+Program
+	number a := 1*true
+End Program
+
+
+ //New Program Failing
+Program
+	number a := 1/true
+End Program
+
+
+ //New Program Failing
+Program
+	number a := 1/""
+End Program
+
+
+ //New Program Failing
+Program
+	number a := 1%true
+End Program
+
+
+ //New Program Failing
+Program
+	number a := 1%""
+End Program
+
+
+ //New Program Failing
+Program
+	number a := - true
+End Program
+
+
+ //New Program Failing
+Program
+	number a := - ""
+End Program
+
+
+ //New Program Failing
+Program
+	number a := not 1
+End Program
+
+
+ //New Program Failing
+Program
+	number a := not ""
+End Program
+
+
+ //New Program Failing
+Program
+	boolean a := 1 and true
+End Program
+
+
+ //New Program Failing
+Program
+	booLean a := 1 = true
+End Program
+
+
+ //New Program Failing
+Program
+	boolean a := 1 = ""
+End Program
+
+
+ //New Program
+Program
+	boolean a := "" = ""
+End Program
+
+
+ //New Program Failing
+Program
+	text a := "" - ""
+End Program
+
+
+ //New Program
+Program
+	boolean a := true = true
+End Program
+

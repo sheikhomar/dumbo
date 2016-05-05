@@ -1,0 +1,6 @@
+﻿// ********************************Id********************************
+  //New Program 
+Program
+	number abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 := 1
+End Program
+

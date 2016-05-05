@@ -14,7 +14,110 @@ namespace dumbo.Tests.SemanticAnalysis
     public class SemanticTests
     {
         [Test, TestCaseSource(typeof(TestProgramFactory),
-            nameof(TestProgramFactory.Declarations))]
+               nameof(TestProgramFactory.Assignment))]
+        public void TestAssignments(string fileName, int startLine, string programText, bool shouldFail)
+        {
+            TestProgram(fileName, startLine, programText, shouldFail);
+        }
+
+        [Test, TestCaseSource(typeof(TestProgramFactory),
+               nameof(TestProgramFactory.Break))]
+        public void TestBreak(string fileName, int startLine, string programText, bool shouldFail)
+        {
+            TestProgram(fileName, startLine, programText, shouldFail);
+        }
+
+        [Test, TestCaseSource(typeof(TestProgramFactory),
+               nameof(TestProgramFactory.Declarations))]
+        public void TestDeclarations(string fileName, int startLine, string programText, bool shouldFail)
+        {
+            TestProgram(fileName, startLine, programText, shouldFail);
+        }
+
+        [Test, TestCaseSource(typeof(TestProgramFactory),
+               nameof(TestProgramFactory.DeclarationsAndAssignment))]
+        public void TestDeclarationsAndAssignment(string fileName, int startLine, string programText, bool shouldFail)
+        {
+            TestProgram(fileName, startLine, programText, shouldFail);
+        }
+
+        [Test, TestCaseSource(typeof(TestProgramFactory),
+               nameof(TestProgramFactory.Empty))]
+        public void TestEmpty(string fileName, int startLine, string programText, bool shouldFail)
+        {
+            TestProgram(fileName, startLine, programText, shouldFail);
+        }
+
+        [Test, TestCaseSource(typeof(TestProgramFactory),
+               nameof(TestProgramFactory.Expressions))]
+        public void TestExpressions(string fileName, int startLine, string programText, bool shouldFail)
+        {
+            TestProgram(fileName, startLine, programText, shouldFail);
+        }
+
+        [Test, TestCaseSource(typeof(TestProgramFactory),
+               nameof(TestProgramFactory.FunctionCall))]
+        public void TestFunctionCall(string fileName, int startLine, string programText, bool shouldFail)
+        {
+            TestProgram(fileName, startLine, programText, shouldFail);
+        }
+
+        [Test, TestCaseSource(typeof(TestProgramFactory),
+               nameof(TestProgramFactory.FunctionDeclaration))]
+        public void TestFunctionDeclaration(string fileName, int startLine, string programText, bool shouldFail)
+        {
+            TestProgram(fileName, startLine, programText, shouldFail);
+        }
+
+        [Test, TestCaseSource(typeof(TestProgramFactory),
+               nameof(TestProgramFactory.Identifiers))]
+        public void TestIdentifiers(string fileName, int startLine, string programText, bool shouldFail)
+        {
+            TestProgram(fileName, startLine, programText, shouldFail);
+        }
+
+        [Test, TestCaseSource(typeof(TestProgramFactory),
+               nameof(TestProgramFactory.IfStatements))]
+        public void TestIfStatements(string fileName, int startLine, string programText, bool shouldFail)
+        {
+            TestProgram(fileName, startLine, programText, shouldFail);
+        }
+
+        [Test, TestCaseSource(typeof(TestProgramFactory),
+               nameof(TestProgramFactory.MiniPrograms))]
+        public void TestMiniPrograms(string fileName, int startLine, string programText, bool shouldFail)
+        {
+            TestProgram(fileName, startLine, programText, shouldFail);
+        }
+
+        [Test, TestCaseSource(typeof(TestProgramFactory),
+               nameof(TestProgramFactory.RepeatStatements))]
+        public void TestRepeatStatements(string fileName, int startLine, string programText, bool shouldFail)
+        {
+            TestProgram(fileName, startLine, programText, shouldFail);
+        }
+
+        [Test, TestCaseSource(typeof(TestProgramFactory),
+               nameof(TestProgramFactory.RepeatWhileStatements))]
+        public void TestRepeatWhileStatements(string fileName, int startLine, string programText, bool shouldFail)
+        {
+            TestProgram(fileName, startLine, programText, shouldFail);
+        }
+
+        [Test, TestCaseSource(typeof(TestProgramFactory),
+               nameof(TestProgramFactory.Return))]
+        public void TestReturn(string fileName, int startLine, string programText, bool shouldFail)
+        {
+            TestProgram(fileName, startLine, programText, shouldFail);
+        }
+
+        [Test, TestCaseSource(typeof(TestProgramFactory),
+               nameof(TestProgramFactory.Scope))]
+        public void TestScope(string fileName, int startLine, string programText, bool shouldFail)
+        {
+            TestProgram(fileName, startLine, programText, shouldFail);
+        }
+
         public void TestProgram(string fileName, int startLine, string programText, bool shouldFail)
         {
             var rootNode = Parse(startLine, programText);

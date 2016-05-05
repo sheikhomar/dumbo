@@ -1,0 +1,52 @@
+﻿// **************************Break***************************
+ //New Program 
+Program
+	repeat while true
+		break
+	end repeat
+End Program
+
+
+ //New Program 
+Program
+	repeat 15
+		break
+	end repeat
+End Program
+
+
+ //New Program Failing
+Program
+	break
+	repeat 15
+		
+	end repeat
+End Program
+
+
+ //New Program Failing
+Program
+	if(true) then
+		break
+	end if
+End Program
+
+
+ //New Program Failing
+Program
+	number a := aa()
+End Program
+
+functIon aa() return number
+	break
+	retUrn 1
+end function
+
+
+ //New Program Failing
+Program
+	break
+	repeat while true
+	
+	end repeat
+End Program

@@ -1,7 +1,6 @@
 ﻿// *********************Decls***************
 
  //New Program
- //Description: Single Number declaration
 Program
     Number a
 End Program
@@ -62,24 +61,54 @@ Program
 End Program
 
 
-
- //New Program Failing 
+ //New Program Failing
 Program
     Boolean b
     Array[b] of Number arr
 End Program
 
 
- //New Program Failing 
+ //New Program Failing
 Program
     Text t
     Array[t] of Number arr
 End Program
 
 
- //New Program Failing 
+ //New Program Failing
 Program
     Text t
     Array[1, t] of Number arr
 End Program
+
+
+ //New Program 
+Program
+    NUMBER a
+End Program
+
+
+ //New Program 
+Program
+    Number a , b
+End Program
+
+
+ //New Program 
+Program
+    BooleAn a , b
+End Program
+
+
+ //New Program 
+Program
+    Text a , b
+End Program
+
+
+ //New Program 
+Program
+    TexT a
+End Program
+
 

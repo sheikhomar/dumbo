@@ -1,0 +1,178 @@
+﻿// **************************Scope*******************************
+ //New Program 
+Program
+	number a := 0
+		repeat while true
+			boolean a := true
+			if(true) then
+				a := false
+			end if
+		end repeat
+End Program
+
+
+ //New Program 
+Program
+	number a := 0
+		repeat while true
+			number a := 1
+			if(true) then
+				boolean a := true
+			else
+			    a := 2
+			end if
+		end repeat
+End Program
+
+
+ //New Program 
+Program
+	number a := 0
+		repeat while true
+			number a := 1
+			if(true) then
+				boolean a := true
+			else if true then
+			    a := 2
+			end if
+		end repeat
+End Program
+
+
+ //New Program 
+Program
+	number a := 0
+		repeat while true
+			number a := 1
+			if(true) then
+				boolean a := true
+			else
+				a := 2
+			end if
+		end repeat
+End Program
+
+
+ //New Program 
+Program
+	number a := 0
+		repeat 1
+			boolean a := false
+			if(true) then
+				a := true
+			else
+			    a := true
+			end if
+		end repeat
+End Program
+
+
+ //New Program 
+Program
+	number a := 0
+		repeat while true
+			boolean a := true
+		end repeat
+	a := 1
+End Program
+
+
+ //New Program 
+Program
+	number a := 0
+		if(true) then
+			boolean a := true
+		end if
+		repeat while a = 0
+			a := 1
+		end repeat
+End Program
+
+
+ //New Program Failing
+Program
+	number a := 0
+		repeat while true
+			boolean a := true
+			if(true) then
+				a := 1
+			end if
+		end repeat
+End Program
+
+
+ //New Program Failing
+Program
+	number a := 0
+		repeat while true
+			number a := 1
+			if(true) then
+				boolean a := true
+			else
+			    a := false
+			end if
+		end repeat
+End Program
+
+
+ //New Program Failing
+Program
+	number a := 0
+		repeat 1
+			boolean a := false
+			if(true) then
+				a := 1
+			else
+			    a := 1
+			end if
+		end repeat
+End Program
+
+
+ //New Program Failing
+Program
+	number a := 0
+		repeat while true
+			boolean a := true
+		end repeat
+	a := false
+End Program
+
+
+ //New Program Failing
+Program
+	number a := 0
+		if(true) then
+			boolean a := true
+		end if
+		repeat while a
+			a := false
+		end repeat
+End Program
+
+
+//New Program
+
+Program
+  Text a,b,c := MyFunc()
+  Write(a)
+  Write(b)
+  Write(c)
+End Program
+
+Function MyFunc() Returns Text, Text, Text 
+  Text t := "Fisk"
+  return "Flid", "Fuld", t
+End Function
+
+
+
+//New Program Failing
+
+Program
+  
+End Program
+
+Function MyFunc() Returns Text
+  // Should fail because function never returns anything
+End Function

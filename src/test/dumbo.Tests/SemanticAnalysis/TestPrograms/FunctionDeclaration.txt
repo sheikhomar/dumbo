@@ -1,0 +1,189 @@
+﻿// ************************FuncDecl************************
+ //New Program 
+Program
+End Program
+
+Function a() return nothing
+	//Hammertime
+End function
+
+
+ //New Program 
+Program
+End Program
+
+Function aa(Number a) return nothing
+End function
+
+
+ //New Program 
+Program
+End Program
+
+Function aa(Number a, Boolean b) return nothing
+End function
+
+
+ //New Program 
+Program
+End Program
+
+Function aa(Number a, text b, boolean c) return nothing
+End function
+
+
+ //New Program 
+Program
+End Program
+
+Function aa(Number a, booLean z) return number, Text
+	return a, ""
+End function
+
+
+ //New Program 
+Program
+End Program
+
+FunctIon aa(Number A) retUrn BooleAn, number, number
+    return true, a, a
+End functIon
+
+
+ //New Program 
+Program
+End Program
+
+Function a() return number, text, text
+	return 1, "", ""
+End function
+
+
+ //New Program 
+Program
+End Program
+
+Function aa(Number a) return text, text, text, text, text, text, text, text, text, text, text, text, text, text, text, text, text, text, text, text
+    return "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""
+End function
+
+
+ //New Program 
+Program
+End Program
+
+function aa(boolean a, boolean b, boolean c, boolean d, boolean e, boolean f, boolean g, boolean h, boolean i, boolean j, boolean k, boolean l) return nothing
+    //Hammertime
+EnD functioN
+
+
+ //New Program 
+Program
+End Program
+
+Function a() return text
+
+	number test
+
+
+	test := 11
+	
+	
+	return "test"
+	
+	
+	
+End function
+
+
+ //New Program 
+Program
+End Program
+
+
+
+
+Function a() return number, text, text
+    retUrn 1, "", ""
+End function
+
+
+ //New Program Failing
+Program
+End Program
+
+Function a() return nothing
+	return 1
+End function
+
+
+ //New Program Failing
+Program
+End Program
+
+Function aa(Number a) return nothing
+    return a
+End function
+
+
+ //New Program Failing
+Program
+End Program
+
+Function aa(Number a, Boolean a) return nothing
+End function
+
+
+ //New Program Failing
+Program
+End Program
+
+Function aa(Number a, text a, boolean b) return nothing
+End function
+
+
+ //New Program Failing
+Program
+End Program
+
+Function a() return number, text, text
+End function
+
+
+ //New Program Failing
+Program
+End Program
+
+function aa(boolean a, boolean a, boolean a, boolean a, boolean a, boolean a, boolean a, boolean a, boolean a, boolean a, boolean a, boolean a) return nothing
+    //Hammertime
+EnD functioN
+
+
+ //New Program Failing
+Program
+End Program
+
+Function a() return number, text, text
+    return a(1)
+End function
+
+
+ //New Program 
+Program
+End Program
+
+Function test() return number, number
+    Number b
+    return 1, b
+End function
+
+
+ //New Program Failing
+Program
+End Program
+
+
+Function a() return number, text, text
+    return a(1)
+End function
+

@@ -1,0 +1,97 @@
+﻿// *************************RepSmt*******************************
+ //New Program 
+Program
+	repeat 1
+		
+		
+	end repeat
+End Program
+
+
+ //New Program 
+Program
+	repeat 1
+		if time() then
+		end if
+	end repeat
+End Program
+
+Function time() return boolean
+	return false
+end functIon
+
+
+ //New Program 
+Program
+	repeat 1
+	end repeat
+End Program
+
+
+ //New Program 
+Program
+	repeat 111111111111111111111111111111111111.11111111111111111111111111111111111111111111111
+		if time() then
+		end if
+	end repeat
+End Program
+
+Function time() return boolean
+	return false
+end functIon
+
+
+ //New Program 
+Program
+	number a := 22
+	repeat(a * 42)
+	end repeat
+End Program
+
+
+ //New Program 
+Program
+	repEat 1
+		repeat 2
+		end repeat
+	enD Repeat
+End Program
+
+
+ //New Program Failing
+Program
+	repeat 1 = 1 and true
+		
+	end repeat
+End Program
+
+
+ //New Program Failing
+Program
+	repeat true
+		if false then
+		end if
+	end repeat
+End Program
+
+
+ //New Program Failing
+Program
+	repeat 1 = 1
+	end repeat
+End Program
+
+
+ //New Program Failing
+Program
+	repeat("")
+	end repeat
+End Program
+
+
+ //New Program Failing
+Program
+	repeat 1 = 1 = 1 //Evaluerer til false :D
+	end repeat
+End Program
+

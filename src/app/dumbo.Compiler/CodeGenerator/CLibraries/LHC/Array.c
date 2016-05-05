@@ -1,3 +1,8 @@
+// CME.cpp : Defines the entry point for the console application.
+//
+#include "stdafx.h"
+#include <conio.h>
+
 /********************************************************
 Function:	Array
 Version: 	v1.1
@@ -215,7 +220,7 @@ void TestArrayCreate() {
 void TestArrayOffsetStart() {
 	printf("Beginning Array Offset Test\r\n");
 	TestArrayOffset(0, 0, 0, 1, 1, 1, 0);
-	/*TestArrayOffset(0, 0, 0, 1, 2, 3, 0);
+	TestArrayOffset(0, 0, 0, 1, 2, 3, 0);
 	TestArrayOffset(0, 0, 1, 1, 2, 3, 1);
 	TestArrayOffset(0, 1, 0, 1, 2, 3, 3);
 	TestArrayOffset(1, 0, 0, 1, 2, 3, 6);
@@ -223,7 +228,7 @@ void TestArrayOffsetStart() {
 	TestArrayOffset(1, 2, 3, 1, 2, 3, 15);
 	TestArrayOffset(0, 0, 0, 3, 3, 3, 0);
 	TestArrayOffset(3, 2, 1, 3, 3, 3, 34);
-	TestArrayOffset(3, 3, 3, 3, 3, 3, 39);*/
+	TestArrayOffset(3, 3, 3, 3, 3, 3, 39);
 	printf("Finished Array Offset Test\r\n");
 
 	return;
@@ -276,7 +281,7 @@ void TestArrayOffset(int a1, int a2, int a3, int m1, int m2, int m3, int expecte
 	maxIndex.indices = max;
 	maxIndex.numberOfDims = 3;
 
-	int offset = CalculateArrayOffset(&actualIndex, ConvertDeclToLookupIndexMethod(maxIndex));
+	int offset = CalculateArrayOffset(&actualIndex, ConvertDeclToLookupIndexMethod(&maxIndex));
 
 	if (expectedOffset != offset) {
 		printf("ERROR: Test with %d, %d, %d, %d, %d, %d failed\r\nExpected offset was %d, calculated was %d\r\n", a1, a2, a3, m1, m2, m3, expectedOffset, offset);
@@ -304,7 +309,7 @@ void DebugPrintLookupIndex(LookupIndex *index) {
 void DebugPrintArray(Array *array) {
 	printf("The data starts at: %d\n", array->arr);
 	printf("The wordsize is: %d\n", array->wordsize);
-	DebugPrintDeclIndex(array->maxIndex);
+	DebugPrintLookupIndex(array->maxIndex);
 }
 
 void Throw(char* message) {

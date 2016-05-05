@@ -22,72 +22,54 @@ typedef struct Array {
 //LHZ Functions
 Index *CreateIndex(int *indices, int numberOfDims);
 Array *CreateArray(Index *maxIndex, int wordsize);
-void PrintIndex(Index *index);
-void PrintArray(Array *array);
+void DebugPrintIndex(Index *index);
+void DebugPrintArray(Array *array);
 int RecCalculateArrayOffset(Index *actualIndex, Index *maxIndex, int currentIndex);
 int CalculateArrayOffset(Index *actualIndex, Index *maxIndex);
 
 //HelperFunctions
+void TestArrayCreate();
 void TestArrayOffsetStart();
 void TestArrayOffset(int a1, int a2, int a3, int m1, int m2, int m3, int expectedOffset);
 void Throw(char* message);
 
-int main(){
-	int numbDims = 3;
-	int *inputIndices = malloc(sizeof(int)*numbDims);
-	inputIndices[0] = 3;
-	inputIndices[1] = 5;
-	inputIndices[2] = 7;
-	
-	Index *maxindex = CreateIndex(inputIndices, numbDims);
-	PrintIndex(maxindex);
-	printf("\n");
-	
-	Array *a = CreateArray(maxindex, sizeof(double));
-	PrintArray(a);
-	
-	printf("I made it all the way down here!\n");
-	
+int main() {
+	TestArrayCreate();
 	TestArrayOffsetStart();
-	
+
+	_getch();
 	return 0;
 }
 
 //Array Functions//
 // Creating an Index with the indix sizes and the number of dimensions
-Index *CreateIndex(int *indices, int numberOfDims){
-	Index *output = (Index*)calloc(1, sizeof(Index));
+Index *CreateIndex(int *externalIndices, int numberOfDims) {
+	Index *output = (Index *)calloc(1, sizeof(Index));
+	int *indices = (int *)calloc(numberOfDims, sizeof(int));
+	int offset;
+
+	//Dup the content of external Indices
+	for (offset = 0; offset < numberOfDims; offset++)
+	{
+		*(indices + offset) = *(externalIndices + offset);
+	}
+
+	//Assign to the Index
 	output->indices = indices;
 	output->numberOfDims = numberOfDims;
 	return output;
 }
 
 // Creating an Array given the Index size and the size of the type
-Array *CreateArray(Index *maxIndex, int wordsize){
-	int i, sum = 0;
-	Array *output = (Array*)calloc(1, sizeof(Array));
-	//output->arr = malloc(CalculateArrayOffset(wordsize, maxIndex, maxIndex));
-	for(i = 0; i<maxIndex->numberOfDims; i++){
-		sum += maxIndex->indices[i];
-	}
-	output->arr = malloc(wordsize*sum);
+Array *CreateArray(Index *externalMaxIndex, int wordsize) {
+	Array *output = (Array *)calloc(1, sizeof(Array));
+	Index *maxIndex = CreateIndex(externalMaxIndex->indices, externalMaxIndex->numberOfDims);
+	int entries = CalculateArrayOffset(externalMaxIndex, externalMaxIndex);
+
+	output->arr = calloc(entries, wordsize);
 	output->wordsize = wordsize;
 	output->maxIndex = maxIndex;
 	return output;
-}
-
-void PrintIndex(Index *index){
-	int i;
-	printf("Number of dims: %d\n", index->numberOfDims);
-	for(i =0; i<index->numberOfDims; i++){
-		printf("The index of slot %d is: %d\n", i, index->indices[i]);
-	}
-}
-
-void PrintArray(Array *array){
-	printf("The data starts at: %d\n", array->arr);
-	printf("The wordsize is: %d\n", array->wordsize);
-	PrintIndex(array->maxIndex);
 }
 
 //Recrusive call of offset calculation (based on https://en.wikipedia.org/wiki/Row-major_order)
@@ -112,7 +94,21 @@ int CalculateArrayOffset(Index *actualIndex, Index *maxIndex) {
 
 
 //************Helper Functions***********//
-void TestArrayOffsetStart(){
+//Test the creating of Array - does nothing but running the actual code atm
+void TestArrayCreate() {
+	int numbDims = 3;
+	int inputIndices[] = { 3,5,7 };
+
+	printf("Beginning Array Create Test\r\n");
+	Index *maxindex = CreateIndex(inputIndices, numbDims);
+	Array *a = CreateArray(maxindex, sizeof(double));
+	printf("Finished Array Create Test\r\n");
+	//DebugPrintArray(a);
+	return;
+}
+
+
+void TestArrayOffsetStart() {
 	printf("Beginning Array Offset Test\r\n");
 	TestArrayOffset(0, 0, 0, 1, 1, 1, 0);
 	TestArrayOffset(0, 0, 0, 1, 2, 3, 0);
@@ -126,11 +122,11 @@ void TestArrayOffsetStart(){
 	TestArrayOffset(3, 3, 3, 3, 3, 3, 39);
 	printf("Finished Array Offset Test\r\n");
 
-	return ;
+	return;
 }
 
 //Calculates the offset on a three dimentional array based on 3 x actual and max index values
-void TestArrayOffset(int a1, int a2, int a3, int m1, int m2, int m3, int expectedOffset){
+void TestArrayOffset(int a1, int a2, int a3, int m1, int m2, int m3, int expectedOffset) {
 	int actual[] = { a1,a2,a3 };
 	int max[] = { m1,m2,m3 };
 
@@ -149,6 +145,23 @@ void TestArrayOffset(int a1, int a2, int a3, int m1, int m2, int m3, int expecte
 	}
 	return;
 }
+
+
+void DebugPrintIndex(Index *index) {
+	int i;
+	printf("Number of dims: %d\n", index->numberOfDims);
+	for (i = 0; i < index->numberOfDims; i++) {
+		printf("The index of slot %d is: %d\n", i, index->indices[i]);
+	}
+}
+
+void DebugPrintArray(Array *array) {
+	printf("The data starts at: %d\n", array->arr);
+	printf("The wordsize is: %d\n", array->wordsize);
+	DebugPrintIndex(array->maxIndex);
+}
+
+
 
 void Throw(char* message) {
 	printf("Program ended unexpectedly:\r\n%s\r\n", message);

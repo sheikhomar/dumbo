@@ -191,7 +191,7 @@ namespace dumbo.Compiler.CodeGenerator
         {
             foreach (var item in node)
             {
-                node.Accept(this, arg);
+                item.Accept(this, arg);
             }
 
             return null;
@@ -215,7 +215,7 @@ namespace dumbo.Compiler.CodeGenerator
         public RuntimeEntity Visit(DeclAndAssignmentStmtNode node, VisitorArgs arg)
         {
             bool isMultiAssignmen = node.Identifiers.Count > 1;
-            bool isArrayDecl = (node.Type as ArrayTypeNode) != null;
+            bool isArrayDecl = node.Type is ArrayTypeNode;
 
             if (isMultiAssignmen)
             {
@@ -231,8 +231,7 @@ namespace dumbo.Compiler.CodeGenerator
             else if (isArrayDecl)
             {
                 ArrayTypeNode type = node.Type as ArrayTypeNode;
-                WriteArrayDecl(type, node.Identifiers, arg);
-                /// Todo -- assignment
+                WriteArrayDeclAss(type, node.Identifiers, node.Value, arg);
             }
             else
             {
@@ -340,13 +339,10 @@ namespace dumbo.Compiler.CodeGenerator
 
         public RuntimeEntity Visit(FuncDeclListNode node, VisitorArgs arg)
         {
-            int count = node.Count;
-
-            for (int i = 0; i < count; i++)
+            foreach (var item in node)
             {
-                node[i].Accept(this, arg);
+                item.Accept(this, arg);
             }
-
             return null;
         }
 
@@ -408,7 +404,6 @@ namespace dumbo.Compiler.CodeGenerator
 
         public RuntimeEntity Visit(IdentifierNode node, VisitorArgs arg)
         {
-            ///var idType = node.DeclarationNode.Type as PrimitiveTypeNode;
             _currentStmt.Append(node.Name);
 
             return null;
@@ -563,7 +558,7 @@ namespace dumbo.Compiler.CodeGenerator
         public RuntimeEntity Visit(RootNode node, VisitorArgs arg)
         {
             _currentModule = new Module();
-            //node.ConstDecls.Accept(this, arg);
+            node.ConstDecls.Accept(this, arg);
             node.FuncDecls.Accept(this, new FuncVisitorArgs(false));
             CProgram.AddUserFuncDeclModule(_currentModule);
             node.Program.Accept(this, arg);
@@ -835,6 +830,48 @@ namespace dumbo.Compiler.CodeGenerator
                 case PrimitiveType.Boolean: return "Boolean";
                 default: throw new ArgumentException($"{type} is not a valid primitive type");
             }
+        }
+
+        private void WriteArrayDeclAss(ArrayTypeNode type, IdentifierListNode identifiers, ExpressionNode expressions, VisitorArgs arg)
+        {
+            if (identifiers.Count != 1)
+            {
+                throw new ArgumentException($"Only one identifier can be used in an array decl, so {identifiers.Count} is invalid");
+            }
+            WriteArrayDecl(type, identifiers, arg);
+            
+        }
+
+        private void WriteFullArrayAss(ExpressionNode input, VisitorArgs arg)
+        {
+            ArrayValueNode expressions = input as ArrayValueNode;
+            if (expressions != null)
+            {
+                CastNestedExprAndAssign(expressions.Values, 0, arg);
+            }
+            //((node.Values[0] as NestedExpressionListNode) as ExpressionListNode)[0].Accept(this, arg)
+        }
+
+        private void CastNestedExprAndAssign(NestedExpressionListNode expressions, int index, VisitorArgs arg)
+        {
+            NestedExpressionListNode exprs = expressions[index] as NestedExpressionListNode;
+            if (exprs != null)
+            {
+                CastNestedExprAndAssign(exprs, index, arg);
+            }
+            else
+            {
+                ExpressionListNode exprList = exprs[index] as ExpressionListNode;
+                if (exprList != null)
+                {
+                    AssignArrayIndex(exprList, arg);
+                }
+            }
+        }
+
+        private void AssignArrayIndex(ExpressionListNode exprList, VisitorArgs arg)
+        {
+
         }
     }
 }

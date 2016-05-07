@@ -1,184 +1,194 @@
 ﻿// *******************Ass*************************
  //New Program 
 Program
-	Number a
-    a := 1
+  Number a
+  a := 1
+  a := a
+  a := 1+1
+  a := f()
+End Program
+
+Function f() Returns Number
+  Return 1
+End Function
+
+
+ //New Program
+Program
+  Text t
+  t := "text"
+  t := t
+  t := f()
+End Program
+
+Function f() Returns Text
+  Return "Flick"
+End Function
+
+
+
+ //New Program 
+Program
+  Boolean a
+  a := False
+  a := f()
+  a := true and false or 1 = 1
+End Program
+
+Function f() Returns Boolean
+  Return false
+End Function
+
+
+
+ //New Program Failing
+Program
+  a := 1
+  Number a
+End Program
+
+
+ //New Program Failing
+Program
+  a := False
+  Boolean a
+End Program
+
+
+ //New Program Failing
+Program
+  a := ""
+  Text a
+End Program
+
+
+
+ //New Program Failing
+Program
+  Number a, b
+  a, b := 1
 End Program
 
 
  //New Program 
 Program
-	Number a := 1
+  number a, b
+  a, b := f()
+End Program
+
+Function f() Returns Number, Number
+  Return 1,1
+End function
+
+
+ //New Program 
+Program
+  Array[2] of Number arrNum
+  Array[2, 2] of Text arrText
+  Array[2] of Boolean arrBool
+  
+  arrNum[1] := 0.3
+  arrNum[2] := 0.1
+  arrText[1, 1] := "Sprungly"
+  arrText[1, 2] := "2014"
+  arrBool[1] := true
+  arrBool[2] := false
+End Program
+
+
+ //New Program 
+Program
+  Array[2] of Number arrNum
+  Number n := 1
+  arrNum[n] := 42
+End Program
+
+
+ //New Program Failing
+Program
+  Array[2] of Number arrNum
+  Text t := "1"
+  arrNum[t] := 42
+End Program
+
+
+ //New Program Failing
+Program
+  Array[2] of Number arrNum
+  Boolean b := true
+  arrNum[b] := 42
+End Program
+
+
+
+ //New Program Failing
+Program
+  a[1] := ""
+End Program
+
+
+ //New Program Failing
+Program
+  a[1] := true
+End Program
+
+
+ //New Program Failing
+Program
+  a[1] := 42.0
+End Program
+
+
+
+ //New Program Failing
+Program
+  Array[2] of Number arrNum
+  arrNum[1, 1] := 42.0
+End Program
+
+
+ //New Program Failing
+Program
+  Array[2,2] of Number arrNum
+  arrNum[1] := 42
+End Program
+
+
+ //New Program Failing
+Program
+  Array[2,2] of Number arrNum
+  arrNum[1,1,1] := 42.0
 End Program
 
 
  //New Program
 Program
-	Number a := "text"
+  Array[2] of Number arrNum1
+  Array[2] of Number arrNum2
+  arrNum1 := arrNum2
+End Program
+
+
+
+ //New Program
+Program
+  Array[2,3] of Number arrNum1
+  Array[2,3] of Number arrNum2
+  arrNum1 := arrNum2
 End Program
 
 
  //New Program Failing
 Program
-	a := 1
-	Number a
-End Program
-
-
- //New Program 
-Program
-	Number a, b
-    a := 1.2
-    b := 2.5
+  Array[2] of Number arrNum1
+  Array[3] of Number arrNum2
+  arrNum1 := arrNum2
 End Program
 
 
  //New Program Failing
 Program
-	a := 1.2
-	b := 2.5
-	Number a, b
+  Array[2] of Number arrNum1
+  Array[2,3] of Number arrNum2
+  arrNum1 := arrNum2
 End Program
-
-
- //New Program 
-Program
-	Boolean a
-    a := False
-End Program
-
-
- //New Program Failing
-Program
-    a := False
-	Boolean a
-End Program
-
-
- //New Program 
-Program
-	Boolean a
-    a := True
-End Program
-
-
- //New Program Failing
-Program
-    a := True
-	Boolean a
-End Program
-
-
- //New Program 
-Program
-	Text a
-    a := ""
-End Program
-
-
- //New Program Failing
-Program
-    a := ""
-	Text a
-End Program
-
-
- //New Program 
-Program
-	text a
-    a := "test"
-End Program
-
-
- //New Program 
-Program
-	text a := "test"
-End Program
-
-
- //New Program 
-Program
-	boolean a
-    a := true and false or 1 = 1
-End Program
-
-
- //New Program Failing
-Program
-	Number a, b
-    a , b := 1
-End Program
-
-
- //New Program Failing
-Program
-	boolean test
-End Program
-
-Function test() return nothing
-	
-End Function
-
-
- //New Program 
-Program
-	Boolean a
-    a := false
-End Program
-
-
- //New Program 
-Program
-	Boolean a
-    a := truE
-End Program
-
-
- //New Program 
-Program
-	Boolean a
-    a := faLse
-End Program
-
-
- //New Program 
-Program
-	text a
-    a := ""
-End Program
-
-
- //New Program 
-Program
-	text a
-    a :="Program"
-End Program
-
-
- //New Program 
-Program
-	number a, b
-    a, b := test("test")
-End Program
-
-Function test(text a) return number, number
-	Return 1,1
-End function
-
-
- //New Program 
-Program
-	number a, b
-    a, b := test()
-End Program
-
-Function test() Returns Number, Number
-	Return 1,1
-End function
-
-
- //New Program Failing
-Program
-	Number a, b := 1
-End Program
-

@@ -1,12 +1,12 @@
 ﻿using System;
 using System.IO;
 
-namespace dumbo.Tests.SemanticAnalysis
+namespace dumbo.Tests
 {
     public class TestProgramReader : IDisposable
     {
-        public const string CorrectProgramMarker = " //New Program ";
-        public const string IncorrectProgramMarker = " //New Program Failing";
+        public const string CorrectProgramMarker = "//New Program";
+        public const string IncorrectProgramMarker = "//New Program Failing";
 
         private TestProgramFragment _currentTestProgram;
         private bool _endOfFile;
@@ -38,8 +38,8 @@ namespace dumbo.Tests.SemanticAnalysis
                     break;
                 }
 
-                var isCorrectMarker = CorrectProgramMarker.Equals(_previousLine);
-                var isIncorrectMarker = IncorrectProgramMarker.Equals(_previousLine);
+                var isCorrectMarker = CorrectProgramMarker.Equals(_previousLine.Trim());
+                var isIncorrectMarker = IncorrectProgramMarker.Equals(_previousLine.Trim());
                 var isNewProgramMarker = isCorrectMarker || isIncorrectMarker;
 
                 if (isNewProgramMarker)

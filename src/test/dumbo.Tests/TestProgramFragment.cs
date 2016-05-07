@@ -1,6 +1,6 @@
 using System.Text;
 
-namespace dumbo.Tests.SemanticAnalysis
+namespace dumbo.Tests
 {
     public class TestProgramFragment
     {

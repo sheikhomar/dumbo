@@ -1,30 +1,24 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using NUnit.Framework;
 
 namespace dumbo.Tests.SemanticAnalysis
 {
     public class TestProgramFactory
     {
-        public const string FileName = "SemanticTests";
-
         private TestProgramFactory()
         {
         }
 
-        public static IEnumerable TestCases => BuildTestCases(FileName);
-
         public static IEnumerable Assignment => BuildTestCases(nameof(Assignment));
         public static IEnumerable Break => BuildTestCases(nameof(Break));
+        public static IEnumerable Continue => BuildTestCases(nameof(Continue));
         public static IEnumerable Declarations => BuildTestCases(nameof(Declarations));
         public static IEnumerable DeclarationsAndAssignment => BuildTestCases(nameof(DeclarationsAndAssignment));
-        public static IEnumerable Empty => BuildTestCases(nameof(Empty));
         public static IEnumerable Expressions => BuildTestCases(nameof(Expressions));
         public static IEnumerable FunctionCall => BuildTestCases(nameof(FunctionCall));
         public static IEnumerable FunctionDeclaration => BuildTestCases(nameof(FunctionDeclaration));
-        public static IEnumerable Identifiers => BuildTestCases(nameof(Identifiers));
         public static IEnumerable IfStatements => BuildTestCases(nameof(IfStatements));
         public static IEnumerable MiniPrograms => BuildTestCases(nameof(MiniPrograms));
         public static IEnumerable RepeatStatements => BuildTestCases(nameof(RepeatStatements));

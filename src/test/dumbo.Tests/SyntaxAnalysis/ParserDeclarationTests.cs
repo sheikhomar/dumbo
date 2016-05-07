@@ -4,7 +4,7 @@ using NUnit.Framework;
 namespace dumbo.Tests.SyntaxAnalysis
 {
     [TestFixture]
-    public class ParserDeclarationTests : BaseParserTester
+    public class ParserDeclarationTests : BaseTest
     {
         [TestCase(PrimitiveType.Number, "num", "Program\r\n    Number num\r\nEnd Program")]
         [TestCase(PrimitiveType.Number, "a", "Program\r\n    NUMBER a\r\nEnd Program")]

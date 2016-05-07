@@ -7,19 +7,12 @@ using NUnit.Framework;
 namespace dumbo.Tests.SyntaxAnalysis
 {
     [TestFixture]
-    public class ParserTests
+    public class ParserTests : BaseTest
     {
         private readonly PrimitiveTypeNode BooleanType = new PrimitiveTypeNode(PrimitiveType.Boolean);
         private readonly PrimitiveTypeNode TextType = new PrimitiveTypeNode(PrimitiveType.Text);
         private readonly PrimitiveTypeNode NumberType = new PrimitiveTypeNode(PrimitiveType.Number);
-
-        private RootNode ParseAndGetRootNode(string programText)
-        {
-            var parser = new Parser(Utils.GetGrammarTablePath());
-            var result = parser.Parse(new StringReader(programText));
-            return result.Root;
-        }
-
+        
         [Test]
         public void ShouldParseEmptyProgram()
         {

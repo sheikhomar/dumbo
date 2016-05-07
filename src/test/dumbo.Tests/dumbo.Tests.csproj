@@ -46,15 +46,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="SemanticAnalysis\TestProgramFragment.cs" />
-    <Compile Include="SemanticAnalysis\TestProgramReader.cs" />
+    <Compile Include="BaseTest.cs" />
+    <Compile Include="SyntaxAnalysis\SyntaxTests.cs" />
+    <Compile Include="SyntaxAnalysis\TestProgramFactory.cs" />
+    <Compile Include="TestProgramFragment.cs" />
+    <Compile Include="TestProgramReader.cs" />
     <Compile Include="SemanticAnalysis\TestProgramFactory.cs" />
     <Compile Include="SemanticAnalysis\SemanticTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SemanticBlackBoxTests.cs" />
     <Compile Include="SymbolTable\SymbolTableTests.cs" />
-    <Compile Include="SyntaxAnalysis\BaseParserTester.cs" />
-    <Compile Include="SyntaxAnalysis\GeneralParserTestsBlackBox.cs" />
     <Compile Include="SyntaxAnalysis\ParserDeclarationTests.cs" />
     <Compile Include="SyntaxAnalysis\ParserTests.cs" />
   </ItemGroup>
@@ -71,10 +71,10 @@
     <Content Include="SemanticAnalysis\TestPrograms\Assignment.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="SemanticAnalysis\TestPrograms\Break.txt">
+    <Content Include="SemanticAnalysis\TestPrograms\Continue.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="SemanticAnalysis\TestPrograms\Empty.txt">
+    <Content Include="SemanticAnalysis\TestPrograms\Break.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="SemanticAnalysis\TestPrograms\Expressions.txt">
@@ -84,9 +84,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="SemanticAnalysis\TestPrograms\FunctionDeclaration.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SemanticAnalysis\TestPrograms\Identifiers.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="SemanticAnalysis\TestPrograms\IfStatements.txt">

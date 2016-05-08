@@ -64,6 +64,14 @@ namespace dumbo.Compiler.AST
             return true;
         }
 
+        public int? GetDimensionSize(int dimension)
+        {
+            if (dimension < 0 || dimension >= _parsedDimensions.Count)
+                return null;
+
+            return _parsedDimensions[dimension];
+        }
+
         public override string ToString()
         {
             var builder = new StringBuilder();

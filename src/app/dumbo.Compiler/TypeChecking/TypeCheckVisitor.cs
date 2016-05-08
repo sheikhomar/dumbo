@@ -43,6 +43,20 @@ namespace dumbo.Compiler.TypeChecking
 
         public TypeCheckVisitResult Visit(ArrayTypeNode node, VisitorArgs arg)
         {
+            foreach (var item in node.Sizes)
+            {
+                var res = item.Accept(this, arg);
+
+                var count = res.Types.Count();
+                if (count == 1)
+                {
+                    var firstType = res.Types.First() as PrimitiveTypeNode;
+                    if (firstType == null || firstType.Type != PrimitiveType.Number)
+                    {
+                        Reporter.Error("Dimension size must be a number.", item.SourcePosition);
+                    }
+                }
+            }
             return null;
         }
 

@@ -1,9 +1,15 @@
 using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Text;
 
 namespace dumbo.Compiler.AST
 {
     public class ArrayTypeNode : TypeNode, IEquatable<ArrayTypeNode>
     {
+        private readonly IList<int?> _parsedDimensions;
+
         public PrimitiveTypeNode Type { get; set; }
         public ExpressionListNode Sizes { get; set; }
 
@@ -12,6 +18,7 @@ namespace dumbo.Compiler.AST
             Type = type;
             Sizes = sizes;
             SourcePosition = srcPos;
+            _parsedDimensions = ParseDimensions();
         }
 
         public override T Accept<T, K>(IVisitor<T, K> visitor, K arg)
@@ -19,17 +26,69 @@ namespace dumbo.Compiler.AST
             return visitor.Visit(this, arg);
         }
 
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as ArrayTypeNode);
+        }
+        
         public bool Equals(ArrayTypeNode other)
         {
             if (other == null)
                 return false;
-            if (!Equals(Type, other.Type))
-                return false;
 
-            if (this.Sizes.Count == other.Sizes.Count)
+            if (ReferenceEquals(this, other))
                 return true;
 
-            return false;
+            if (!Type.Equals(other.Type))
+                return false;
+
+            if (Sizes.Count != other.Sizes.Count)
+                return false;
+
+            for (int i = 0; i < Sizes.Count; i++)
+            {
+                var mySize = _parsedDimensions[i];
+                var otherSize = other._parsedDimensions[i];
+                
+                if (mySize == null || otherSize == null)
+                {
+                    return true;
+                }
+
+                if (mySize != otherSize)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        private IList<int?> ParseDimensions()
+        {
+            IList<int?> retList = new List<int?>();
+            foreach (var size in Sizes)
+            {
+                var sizeLiteral = size as LiteralValueNode;
+                if (sizeLiteral != null)
+                {
+                    double parsedVal;
+                    if (double.TryParse(sizeLiteral.Value, out parsedVal))
+                    {
+                        var sizeAsInt = (int) Math.Floor(parsedVal);
+                        retList.Add(sizeAsInt);
+                    }
+                    else
+                    {
+                        retList.Add(null);
+                    }
+                }
+                else
+                {
+                    retList.Add(null);
+                }
+            }
+            return retList;
         }
     }
 }

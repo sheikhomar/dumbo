@@ -56,6 +56,10 @@ namespace dumbo.Compiler.TypeChecking
                         Reporter.Error("Dimension size must be a number.", item.SourcePosition);
                     }
                 }
+                else
+                {
+                    Reporter.Error("Dimension size must be a single numeric value.", item.SourcePosition);
+                }
             }
             return null;
         }

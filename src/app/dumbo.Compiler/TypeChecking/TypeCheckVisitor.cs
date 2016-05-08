@@ -33,12 +33,39 @@ namespace dumbo.Compiler.TypeChecking
 
         public TypeCheckVisitResult Visit(ArrayIdentifierNode node, VisitorArgs arg)
         {
+            foreach (var item in node.Indices)
+            {
+                var res = item.Accept(this, arg);
+                
+                var count = res.Types.Count();
+                if (count == 1)
+                {
+                    var firstType = res.Types.First() as PrimitiveTypeNode;
+                    if (firstType == null || firstType.Type != PrimitiveType.Number)
+                    {
+                        Reporter.Error("Array can only be indexed with a number.", item.SourcePosition);
+                    }
+                }
+                else
+                {
+                    Reporter.Error("Wrong number of return values for array index.", item.SourcePosition);
+                }
+            }
+
             if (node.DeclarationNode == null)
                 return ErrorType();
 
-            node.InferredType = new TypeDescriptor(node.DeclarationNode.Type);
 
-            return new TypeCheckVisitResult(node.DeclarationNode.Type);
+            var type = node.DeclarationNode.Type as ArrayTypeNode;
+            
+            if (node.Indices.Count != type.Sizes.Count)
+            {
+                Reporter.Error($"Wrong number of dimensions. Array '{node.Name}' has only {type.Sizes.Count} dimensions.", node.Indices.SourcePosition);
+            }
+
+            node.InferredType = new TypeDescriptor(type.Type);
+
+            return new TypeCheckVisitResult(type.Type);
         }
 
         public TypeCheckVisitResult Visit(ArrayTypeNode node, VisitorArgs arg)

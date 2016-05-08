@@ -27,7 +27,7 @@ namespace dumbo.Compiler.TypeChecking
 
         public TypeCheckVisitResult Visit(ArrayDeclStmtNode node, VisitorArgs arg)
         {
-            node.Identifiers.Accept(this, arg);
+            node.Type.Accept(this, arg);
             return null;
         }
 
@@ -186,32 +186,24 @@ namespace dumbo.Compiler.TypeChecking
             {
                 var id = node.Identifiers.First();
                 var expr = node.Value;
-                
-                var idRes = GetVisitResult(id, arg);
                 var exprRes = GetVisitResult(expr, arg);
-                var idType = idRes.Types.First();
 
-                //LHS can be primitivetype or arraytype
-                if (idType is PrimitiveTypeNode)
+                if (exprRes.Types.Count() > 1)
                 {
-                    if (exprRes.Types.Count() != 1)
-                        Reporter.Error("ok", expr.SourcePosition);
-                    else
-                    {
-                        var exprType = exprRes.Types.First();
-
-                        if (!idType.Equals(exprType))
-                            Reporter.Error("Ok", expr.SourcePosition);
-                    }
-                }
-                else if (idType is ArrayTypeNode)
-                {
-
+                    Reporter.Error("The expression returns multiple values.", expr.SourcePosition);
                 }
                 else
-                    Reporter.Error($"The identifier '{id.Name}' is not an assignable type", id.SourcePosition);
+                {
+                    var exprType = exprRes.Types.First();
+                    var idRes = GetVisitResult(id, arg);
+                    var idType = idRes.Types.First();
 
-
+                    if (!idType.Equals(exprType))
+                    {
+                        Reporter.Error($"The variable '{id.Name}' cannot be assigned the type {exprType}.",
+                                    expr.SourcePosition);
+                    }
+                }
             }
 
             return null;
@@ -380,12 +372,11 @@ namespace dumbo.Compiler.TypeChecking
             {
                 for (int i = 0; i < exprTypes.Count; i++)
                 {
-                    var id = idList[i];
                     if (!exprTypes[i].Equals(node.Type))
                     {
                         Reporter.Error(
-                            $"Variable '{id.Name}' has a different type than the expression on the left hand side.",
-                            id.SourcePosition);
+                            $"Expression must be of type '{node.Type}'.",
+                            expr.SourcePosition);
                     }
                 }
             }

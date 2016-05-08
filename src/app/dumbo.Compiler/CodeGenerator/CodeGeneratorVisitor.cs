@@ -49,18 +49,19 @@ namespace dumbo.Compiler.CodeGenerator
 
         public RuntimeEntity Visit(ArrayTypeNode node, VisitorArgs arg)
         {
-            CreateStmtAndAddToCurrentModule("//Create Index struct");
-            CreateStmtAndAddToCurrentModule($"int _numberOfDims = {node.Sizes.Count};");
-            CreateStmtAndAddToCurrentModule("int *_indices = malloc(sizeof(int)*_numberOfDims);");
-            for (int i = 0; i < node.Sizes.Count; i++)
-            {
-                _currentStmt.Append($"_indices[{i}] = ");
-                node.Sizes[i].Accept(this, arg);
-                _currentStmt.Append(";");
-                AppendCurrentStmtToCurrentModule();
-            }
-            CreateStmtAndAddToCurrentModule("Index *_index = CreateIndex(_indices, _numberOfDims);");
-            CreateStmtAndAddToCurrentModule("//End of creating Index struct");
+            WriteArrayIndex(node.Sizes, arg);
+            //CreateStmtAndAddToCurrentModule("//Create Index struct");
+            //CreateStmtAndAddToCurrentModule($"int _numberOfDims = {node.Sizes.Count};");
+            //CreateStmtAndAddToCurrentModule("int *_indices = malloc(sizeof(int)*_numberOfDims);");
+            //for (int i = 0; i < node.Sizes.Count; i++)
+            //{
+            //    _currentStmt.Append($"_indices[{i}] = ");
+            //    node.Sizes[i].Accept(this, arg);
+            //    _currentStmt.Append(";");
+            //    AppendCurrentStmtToCurrentModule();
+            //}
+            //CreateStmtAndAddToCurrentModule("Index *_index = CreateIndex(_indices, _numberOfDims);");
+            //CreateStmtAndAddToCurrentModule("//End of creating Index struct");
             
             return null;
         }
@@ -809,6 +810,22 @@ namespace dumbo.Compiler.CodeGenerator
             CreateStmtAndAddToCurrentModule("//End of declaring an Array");
         }
 
+        private void WriteArrayIndex(ExpressionListNode exprList, VisitorArgs arg)
+        {
+            CreateStmtAndAddToCurrentModule("//Create Index struct");
+            CreateStmtAndAddToCurrentModule($"int _numberOfDims = {exprList.Count};");
+            CreateStmtAndAddToCurrentModule("int *_indices = malloc(sizeof(int)*_numberOfDims);");
+            for (int i = 0; i < exprList.Count; i++)
+            {
+                _currentStmt.Append($"_indices[{i}] = ");
+                exprList[i].Accept(this, arg);
+                _currentStmt.Append(";");
+                AppendCurrentStmtToCurrentModule();
+            }
+            CreateStmtAndAddToCurrentModule("Index *_index = CreateIndex(_indices, _numberOfDims);");
+            CreateStmtAndAddToCurrentModule("//End of creating Index struct");
+        }
+
         private void CreateStmtAndAddToCurrentModule(string input)
         {
             Stmt stmt = new Stmt(input);
@@ -839,39 +856,74 @@ namespace dumbo.Compiler.CodeGenerator
                 throw new ArgumentException($"Only one identifier can be used in an array decl, so {identifiers.Count} is invalid");
             }
             WriteArrayDecl(type, identifiers, arg);
-            
+            WriteFullArrayAss(expressions, identifiers, arg);
         }
 
-        private void WriteFullArrayAss(ExpressionNode input, VisitorArgs arg)
+        private void WriteFullArrayAss(ExpressionNode input, IdentifierListNode identifiers, VisitorArgs arg)
         {
             ArrayValueNode expressions = input as ArrayValueNode;
             if (expressions != null)
             {
-                CastNestedExprAndAssign(expressions.Values, 0, arg);
+                CastNestedExprAndAssign(expressions.Values, identifiers, 0, new List<int>(), arg);
             }
             //((node.Values[0] as NestedExpressionListNode) as ExpressionListNode)[0].Accept(this, arg)
         }
 
-        private void CastNestedExprAndAssign(NestedExpressionListNode expressions, int index, VisitorArgs arg)
+        private void CastNestedExprAndAssign(NestedExpressionListNode expressions, IdentifierListNode identifiers, int layer, IList<int> index, VisitorArgs arg)
         {
-            NestedExpressionListNode exprs = expressions[index] as NestedExpressionListNode;
+            NestedExpressionListNode exprs = expressions[layer] as NestedExpressionListNode;
+            index.Add(0);
             if (exprs != null)
             {
-                CastNestedExprAndAssign(exprs, index, arg);
+                for (int i = 0; i < exprs.Count; i++)
+                {
+                    index[layer] = i;
+                    CastNestedExprAndAssign(exprs, identifiers, i, index, arg);
+                }
             }
             else
             {
-                ExpressionListNode exprList = exprs[index] as ExpressionListNode;
+                ExpressionListNode exprList = expressions[layer] as ExpressionListNode;
                 if (exprList != null)
                 {
-                    AssignArrayIndex(exprList, arg);
+                    AssignArrayIndex(exprList, identifiers, index, arg);
+                }
+                else
+                {
+                    throw new InvalidCastException($"It is not possible to cast the NestedExpressionListNode to ExpressionListNode");
                 }
             }
         }
 
-        private void AssignArrayIndex(ExpressionListNode exprList, VisitorArgs arg)
+        private void AssignArrayIndex(ExpressionListNode exprList, IdentifierListNode identifiers, IList<int> index, VisitorArgs arg)
         {
+            int i = 0;
+            PrimitiveType type = exprList[0].InferredType.GetFirstAs<PrimitiveTypeNode>().Type;
 
+            CreateStmtAndAddToCurrentModule("//Create Index struct");
+            CreateStmtAndAddToCurrentModule($"int _numberOfDims = {index.Count};");
+            CreateStmtAndAddToCurrentModule("int *_index = malloc(sizeof(int)*_numberOfDims);");
+
+            for (; i < index.Count; i++)
+            {
+                CreateStmtAndAddToCurrentModule($"_index[{i}] = {index[i]};");
+            }
+
+            for (int j = 0; j < exprList.Count; j++)
+            {
+                CreateStmtAndAddToCurrentModule($"_index[{i}] = {j};");
+                CreateStmtAndAddToCurrentModule("Index *_index = CreateIndex(_indices, _numberOfDims);");
+                CreateStmtAndAddToCurrentModule("//End of creating Index struct");
+
+                _currentStmt.Append($"Update{type}ArrayIndex(Array *");
+                identifiers.Accept(this, arg);
+                _currentStmt.Append($", Index *_index, ");
+                string cType = type == PrimitiveType.Number ? "double" : type.ToString();
+                _currentStmt.Append($"{cType} ");
+                exprList[j].Accept(this, arg);
+                _currentStmt.Append(");");
+                AppendCurrentStmtToCurrentModule();
+            }
         }
     }
 }

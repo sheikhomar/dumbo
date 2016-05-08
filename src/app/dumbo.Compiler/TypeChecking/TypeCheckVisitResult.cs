@@ -11,7 +11,7 @@ namespace dumbo.Compiler.TypeChecking
 
         public TypeCheckVisitResult(bool isError)
         {
-
+            _types.Add(new ErrorTypeNode());
         }
 
         public TypeCheckVisitResult(TypeNode happyType)

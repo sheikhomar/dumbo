@@ -153,6 +153,7 @@
     <Compile Include="SyntaxAnalysis\AbstractSyntaxTreeBuilder.cs" />
     <Compile Include="SyntaxAnalysis\TokenData.cs" />
     <Compile Include="Interpreter\TextValue.cs" />
+    <Compile Include="TypeChecking\ErrorTypeNode.cs" />
     <Compile Include="TypeChecking\InternalType.cs" />
     <Compile Include="TypeChecking\TypeCheckVisitor.cs" />
     <Compile Include="TypeChecking\TypeCheckVisitResult.cs" />

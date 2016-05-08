@@ -76,15 +76,15 @@ namespace dumbo.Compiler.TypeChecking
                 leftOperand = (leftNode as PrimitiveTypeNode).Type;
             else if (leftNode is ArrayTypeNode)
                 leftOperand = (leftNode as ArrayTypeNode).Type.Type;
-            else 
-                throw new InvalidOperationException("Unknow type node.");
+            else
+                return new Tuple<bool, PrimitiveType>(false, default(PrimitiveType));
 
             if (rightNode is PrimitiveTypeNode)
                 rightOperand = (rightNode as PrimitiveTypeNode).Type;
             else if (rightNode is ArrayTypeNode)
                 rightOperand = (rightNode as ArrayTypeNode).Type.Type;
             else
-                throw new InvalidOperationException("Unknow type node.");
+                return new Tuple<bool, PrimitiveType>(false, default(PrimitiveType));
 
             if (_container.ContainsKey(operationType))
             {

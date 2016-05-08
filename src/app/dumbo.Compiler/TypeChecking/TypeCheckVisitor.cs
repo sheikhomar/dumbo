@@ -588,8 +588,6 @@ namespace dumbo.Compiler.TypeChecking
 
         public TypeCheckVisitResult Visit(ReturnStmtNode node, VisitorArgs arg)
         {
-            node.Expressions.Accept(this, arg);
-
             return null;
         }
 

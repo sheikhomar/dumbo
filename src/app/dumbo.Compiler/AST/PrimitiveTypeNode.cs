@@ -19,15 +19,18 @@ namespace dumbo.Compiler.AST
 
         public override bool Equals(object obj)
         {
-            if (ReferenceEquals(this, obj))
-                return true;
-
             return Equals(obj as PrimitiveTypeNode);
         }
 
         public bool Equals(PrimitiveTypeNode other)
         {
-            return Type == other?.Type;
+            if (other == null)
+                return false;
+
+            if (ReferenceEquals(this, other))
+                return true;
+
+            return Type == other.Type;
         }
 
         public override int GetHashCode()

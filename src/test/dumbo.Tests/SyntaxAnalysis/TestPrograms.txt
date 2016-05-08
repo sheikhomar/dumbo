@@ -126,7 +126,7 @@ Program
 End Program
 
 
- //New Program 
+ //New Program Failing
 Program
     Number a := 1,2,3
 End Program
@@ -138,49 +138,49 @@ Program
 End Program
 
 
- //New Program 
+ //New Program Failing
 Program
     Number a, b := 1, 2
 End Program
 
 
- //New Program 
+ //New Program Failing
 Program
     NumbEr a , b := 1, 2 ,3.222222222222222222222222222224
 End Program
 
 // *******************Ass*************************
- //New Program 
+ //New Program Failing
 Program
     a := 1,2
 End Program
 
 
- //New Program 
+ //New Program Failing
 Program
     a := 1.2 , 2.5
 End Program
 
 
- //New Program 
+ //New Program
 Program
     a , b := 1
 End Program
 
 
- //New Program 
+ //New Program Failing
 Program
     a, b := 1,2,3
 End Program
 
 
- //New Program 
+ //New Program Failing
 Program
     a, b := 1,2
 End Program
 
 
- //New Program 
+ //New Program Failing
 Program
     a := false, true
 End Program
@@ -222,19 +222,19 @@ Program
 End Program
 
 
- //New Program 
+ //New Program Failing
 Program
     a, b := 1,2
 End Program
 
 
- //New Program 
+ //New Program Failing
 Program
     a, b := 1,2,false 
 End Program
 
 
- //New Program 
+ //New Program Failing
 Program
     a, b := 1, "Program", true
 End Program
@@ -317,34 +317,6 @@ Program
     a( a,a(a,a,a()))
 End Program
 
-// *******************Return in program body***************
-	 //New Program Failing
-	Program
-		return nothing
-	End Program
-
-
-	 //New Program Failing
-	Program
-		return a
-	End Program
-
-	 //New Program Failing
-	Program
-		return a, b
-	End Program
-
-
-	 //New Program Failing
-	Program
-		return 1,1,1
-	End Program
-
-
-	 //New Program Failing
-	Program
-		return false, true or false
-	End Program
 
 // ************************FuncDecl************************
  //New Program 
@@ -700,7 +672,7 @@ Program
 End Program
 
 // ********************************Id********************************
- //New Program 
+ //New Program Failing
 Program
 	_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 := 1
 End Program
@@ -712,25 +684,25 @@ Program
 End Program
 
 
- //New Program 
+ //New Program Failing
 Program
 	_a := 1
 End Program
 
 
- //New Program 
+ //New Program Failing
 Program
 	_a_______________ := 1
 End Program
 
 
- //New Program 
+ //New Program Failing
 Program
 	_a_a_a___A_a______ := 1
 End Program
 
 
- //New Program 
+ //New Program Failing
 Program
 	_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789____ := 1
 End Program
@@ -789,23 +761,14 @@ Program
 	break
 End Program
 
-	 //New Program Failing
-	Program
-		if(true) then
-			break
-		end if
-	End Program
-
-
-	 //New Program Failing
-	Program
-		number a := aa()
-	End Program
-
-	functIon aa() return number
+//New Program
+Program
+	if(true) then
 		break
-		retUrn 1
-	end function
+	end if
+End Program
+
+
 
 // ************************Mini Programs************************
  //New Program 
@@ -829,16 +792,16 @@ Program
 
 	number result
 	
-	fahrenheit_temperature(0.0, fahrenheit_temp)
+	fahrenheitTemperature(0.0, fahrenheitTemp)
 	write("Freezing point: " + result + " F.")
 	
-	fahrenheit_temperature(100.0, fahrenheit_temp)
+	fahrenheitTemperature(100.0, fahrenheitTemp)
 	write("Boiling point: " + result + " F.")
 	
 End program
 
-Function Fahrenheit_temperature(number celcius_temp, number fahrenheit_temp) return nothing
-	fahrenheit_temp := (9.0 / 5.0) * celcius_temp + 32.0
+Function FahrenheitTemperature(number celciusTemp, number fahrenheitTemp) return nothing
+	fahrenheitTemp := (9.0 / 5.0) * celciusTemp + 32.0
 end function
 
 
@@ -1051,10 +1014,10 @@ Program
 	Number res3
 	Number res4
 	
-	Number res1_equiv
-	Number res2_equiv
-	Number res3_equiv
-	Number res4_equiv
+	Number res1Equiv
+	Number res2Equiv
+	Number res3Equiv
+	Number res4Equiv
 	
 	res1 := a > b AND c < x
 	res2 := a < NOT b OR not(not(a))
@@ -1066,15 +1029,15 @@ Program
 	write("res3 = " + res3)
 	write("res4 = " + res4)
 	
-	res1_equiv := (a > b) and (c < x)
-	res2_equiv := (a < (not(b))) or (not(not(a)))
-	res3_equiv := (a + b) < (((not(c)) + c))
-	res4_equiv := (a - x) or ((b * c) and (b / a))
+	res1Equiv := (a > b) and (c < x)
+	res2Equiv := (a < (not(b))) or (not(not(a)))
+	res3Equiv := (a + b) < (((not(c)) + c))
+	res4Equiv := (a - x) or ((b * c) and (b / a))
 	
-	write("res1_equiv = " + res1_equiv)
-	write("res2_equiv = " + res2_equiv)
-	write("res3_equiv = " + res3_equiv)
-	write("res4_equiv = " + res4_equiv)
+	write("res1Equiv = " + res1Equiv)
+	write("res2Equiv = " + res2Equiv)
+	write("res3Equiv = " + res3Equiv)
+	write("res4Equiv = " + res4Equiv)
 
 End program
 
@@ -1218,3 +1181,21 @@ Program
 	Write(seconds + "is equal to " + hour + "hours, " + min + " minutes and " + sec + " seconds.")
 	
 End Program
+
+
+
+ //New Program Failing
+Program
+    Array[2] of Number arrNum
+    arrNum[-1] := 1.2
+End Program
+
+
+ //New Program Failing
+Program
+    Array[f()] of Number arrNum
+    arrNum[f()] := 42.0
+End Program
+
+Function f() Returns Number
+End Function

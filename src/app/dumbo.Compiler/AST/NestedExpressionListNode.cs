@@ -78,5 +78,17 @@ namespace dumbo.Compiler.AST
                 }
             }
         }
+
+        public void UpdateSourcePosition()
+        {
+            foreach (object t in _internalList)
+            {
+                var list = t as ExpressionListNode;
+                list?.UpdateSourcePosition();
+
+                var nestedList = t as NestedExpressionListNode;
+                nestedList?.UpdateSourcePosition();
+            }
+        }
     }
 }

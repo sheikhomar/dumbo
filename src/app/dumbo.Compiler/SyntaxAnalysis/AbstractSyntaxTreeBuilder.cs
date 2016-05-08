@@ -642,10 +642,15 @@ namespace dumbo.Compiler.SyntaxAnalysis
         private ArrayValueNode BuildArrayValueNode(Token token, ArrayTypeNode node)
         {
             Debug.Assert(token.Parent.Name() == "ArrayAssign");
+            Reduction rhs = (Reduction)token.Data;
 
-            var arrayValueNode = new ArrayValueNode(node);
+            var srcPos = BuildSourcePosition(rhs[0], rhs[2]);
+
+            var arrayValueNode = new ArrayValueNode(node, srcPos);
 
             AppendArrayAssign(token, arrayValueNode);
+
+            arrayValueNode.Values.UpdateSourcePosition();
 
             return arrayValueNode;
         }

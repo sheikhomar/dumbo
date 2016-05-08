@@ -5,11 +5,12 @@ namespace dumbo.Compiler.AST
 {
     public class ArrayValueNode : ValueNode
     {
-        public ArrayValueNode(ArrayTypeNode type) : base(type)
+        public ArrayValueNode(ArrayTypeNode type, SourcePosition sourcePosition) : base(type)
         {
             ArrayType = type;
             Values = new NestedExpressionListNode();
             _currentNestListNode = Values;
+            SourcePosition = sourcePosition;
         }
 
         public ArrayTypeNode ArrayType { get; }

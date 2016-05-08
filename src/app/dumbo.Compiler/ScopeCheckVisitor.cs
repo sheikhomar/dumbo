@@ -25,15 +25,17 @@ namespace dumbo.Compiler
         public object Visit(ArrayDeclStmtNode node, VisitorArgs arg)
         {
             foreach (var identifier in node.Identifiers)
-            {
                 AddVariableToSymbolTable(identifier, node);
-            }
 
+            node.Type.Accept(this, arg);
+            node.Identifiers.Accept(this, arg);
             return null;
         }
 
         public object Visit(ArrayIdentifierNode node, VisitorArgs arg)
         {
+            node.Indices.Accept(this, arg);
+
             var symbolEntry = SymbolTable.RetrieveSymbol(node.Name);
             if (symbolEntry == null)
             {
@@ -57,6 +59,8 @@ namespace dumbo.Compiler
 
         public object Visit(ArrayTypeNode node, VisitorArgs arg)
         {
+            node.Sizes.Accept(this, arg);
+            node.Type.Accept(this, arg);
             return null;
         }
 

@@ -93,17 +93,24 @@ namespace dumbo.Compiler.TypeChecking
 
         public TypeCheckVisitResult Visit(ArrayValueNode node, VisitorArgs arg)
         {
-            CheckArrayValues(node.Values, node.ArrayType.Type, arg);
+            CheckArrayValues(node.Values, node, 0, arg);
             return new TypeCheckVisitResult(node.ArrayType);
         }
 
-        private void CheckArrayValues(NestedExpressionListNode values, PrimitiveTypeNode targetType, VisitorArgs arg)
+        private void CheckArrayValues(NestedExpressionListNode values, ArrayValueNode node, int dimension, VisitorArgs arg)
         {
+            ArrayTypeNode arrayType = node.ArrayType;
+            var dimSize = arrayType.GetDimensionSize(dimension);
+
+            PrimitiveTypeNode targetType = arrayType.Type;
             for (int i = 0; i < values.Count; i++)
             {
                 if (values[i] is ExpressionListNode)
                 {
                     var list = values[i] as ExpressionListNode;
+                    if (dimSize.HasValue && list.Count != dimSize.Value)
+                        Reporter.Error("Invalid array value.", list.SourcePosition);
+
                     foreach (var expr in list)
                     {
                         expr.Accept(this, arg);
@@ -124,7 +131,10 @@ namespace dumbo.Compiler.TypeChecking
                 else
                 {
                     var list = values[i] as NestedExpressionListNode;
-                    CheckArrayValues(list, targetType, arg);
+                    if (dimSize.HasValue && list.Count != dimSize.Value)
+                        Reporter.Error("Invalid array value.", node.SourcePosition);
+
+                    CheckArrayValues(list, node, dimension+1, arg);
                 }
             }
         }

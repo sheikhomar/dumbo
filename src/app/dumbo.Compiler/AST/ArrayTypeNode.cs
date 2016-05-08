@@ -64,6 +64,19 @@ namespace dumbo.Compiler.AST
             return true;
         }
 
+        public override string ToString()
+        {
+            var builder = new StringBuilder();
+            var dim = _parsedDimensions.Select(e => e.HasValue ? e.Value.ToString() : "x");
+
+            builder.Append("Array[");
+            builder.Append(string.Join(", ", dim));
+            builder.Append("] of ");
+            builder.Append(Type);
+
+            return builder.ToString();
+        }
+
         private IList<int?> ParseDimensions()
         {
             IList<int?> retList = new List<int?>();

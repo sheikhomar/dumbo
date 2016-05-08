@@ -236,3 +236,15 @@ End Function
 Function bb(Number a) return number, boolean
 	return 11, true
 End Function
+
+
+ //New Program Failing
+Program
+	boolean test
+End Program
+
+Function test() return nothing
+	
+End Function
+
+

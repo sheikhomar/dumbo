@@ -372,16 +372,3 @@ Program
 	Write("The result is: " + input1 + operator + input2 + "=" + result)  
 	
 End Program
-
-Function write(text textToPrint) return nothing
-	// Print stuff
-End function
-
-Function readtext() return text
-	return ""
-End function
-
-Function readnumber() return number
-	return 1
-End function
-

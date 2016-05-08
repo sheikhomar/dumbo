@@ -1,52 +1,96 @@
 ﻿// **************************Break***************************
  //New Program 
 Program
-	repeat while true
-		break
-	end repeat
+  Repeat While true
+    Break
+  End Repeat
 End Program
 
 
  //New Program 
 Program
-	repeat 15
-		break
-	end repeat
+  Repeat 15
+    break
+  End Repeat
+End Program
+
+
+ //New Program
+Program
+  If (true) Then
+    If (true) Then
+      Repeat While true
+        Break
+      End Repeat
+    End If
+  End If
+End Program
+
+ //New Program Failing
+Program
+  Break
 End Program
 
 
  //New Program Failing
 Program
-	break
-	repeat 15
-		
-	end repeat
+  If (true) Then
+    break
+  End If
 End Program
 
 
  //New Program Failing
 Program
-	if(true) then
-		break
-	end if
+  if(true) then
+    else if (true) then
+    break
+  end if
 End Program
 
 
  //New Program Failing
 Program
-	number a := aa()
+  If (true) Then
+    
+  else If (true) Then
+    
+  else
+    break
+  End If
 End Program
 
-functIon aa() return number
-	break
-	retUrn 1
-end function
+ //New Program Failing
+Program
+  If (true) Then
+    If (true) Then
+      If (true) Then
+        break
+      End If
+    End If
+  End If
+End Program
 
 
  //New Program Failing
 Program
-	break
-	repeat while true
-	
-	end repeat
 End Program
+
+Function f() Return Nothing
+  Break
+End Function
+
+
+ //New Program Failing
+Program
+End Program
+
+Function f() Return Nothing
+  If (true) Then
+    If (true) Then
+      If (true) Then
+        break
+      End If
+    End If
+  End If
+End Function

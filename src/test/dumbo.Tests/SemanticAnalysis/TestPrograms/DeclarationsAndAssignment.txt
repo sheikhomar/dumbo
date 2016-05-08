@@ -2,18 +2,37 @@
  //New Program 
 Program
     Number a := 1.11111111111111111111111111111111
-End Program
-
- //New Program 
-Program
-    Boolean a := true
+    Boolean b := true
+    Text c := "This is some text"
 End Program
 
 
  //New Program 
 Program
-    Text a := "This is some text"
+  Array[4] of Number arrNum1 := (1, 2, 4, 8)
+  Array[2, 4] of Number arrNum2 := ((1, 2, 4, 8), (16, 32, 64, 128))
 End Program
+
+ //New Program Failing
+Program
+  Array[4] of Number arrNum1 := (1, 2, 4)
+End Program
+
+
+ //New Program Failing
+Program
+  Array[2, 4] of Number arrNum2 := ((1, 2, 4, 8, 16), (32, 64, 128, 256))
+End Program
+
+
+ //New Program 
+Program
+  Number a, b := f()
+End Program
+
+Function f() Returns Number, Number
+  Return 1,1
+End function
 
 
  //New Program Failing

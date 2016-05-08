@@ -1,77 +1,77 @@
 ﻿// ***************************Ret**************************
  //New Program 
 Program
-	number a := aa()
+  number a := aa()
 End Program
 
 Function aa() return number
-	return 1
+  return 1
 end function
 
 
  //New Program 
 Program
-	a()
+  a()
 End Program
 
 Function a() return nothing
-	return nothing
+  return nothing
 end function
 
 
  //New Program 
 Program
-	number a,b,c:= aa()
+  number a,b,c:= aa()
 End Program
 
 Function aa() return number, number, number
-	return bb(), bb(), 1
+  return bb(), bb(), 1
 end function
 
 Function bb() return number
-	return 1
+  return 1
 end functIon
 
 
  //New Program 
 Program
-	boolean a:=aa()
+  boolean a:=aa()
 End Program
 
 Function aa() return booLean
-	return true and false or b()
+  return true and false or b()
 end function
 
 Function b() return booLean
-	return true
+  return true
 end functIon
 
 
  //New Program 
 Program
-	text a := aa()
+  text a := aa()
 End Program
 
 Function aa() return text
-	return ""
+  return ""
 end function
 
 
  //New Program Failing
 Program
-	return a()
+  return a()
 End Program
 
 
  //New Program Failing
 Program
-	return aa(),aa(),b(aa(),a)
+  return aa(),aa(),b(aa(),a)
 End Program
 
 
  //New Program Failing
 Program
-	return false or true and aa()
+  return false or true and aa()
 End Program
 
 
@@ -85,62 +85,124 @@ End function
 
  //New Program Failing
 Program
-	return nothing
+  return nothing
 End Program
 
 
  //New Program Failing
 Program
-	return a
+  return a
 End Program
 
  //New Program Failing
 Program
-	return a, b
-End Program
-
-
- //New Program Failing
-Program
-	return 1,1,1
+  return a, b
 End Program
 
 
  //New Program Failing
 Program
-	return false, true or false
+  return 1,1,1
+End Program
+
+
+ //New Program Failing
+Program
+  return false, true or false
 End Program
 
 
  //New Program 
 Program
-	text t := aa(bb(11))
+  text t := aa(bb(11))
 End Program
 
 Function aa(number a, boolean b) return text
-	return "ALLO"
+  return "ALLO"
 End Function
 
 Function bb(Number a) return number, boolean
-	return 11, true
+  return 11, true
 End Function
 
 
  //New Program 
 Program
-	number a,z,c:= aa()
+  number a,z,c:= aa()
 End Program
 
 Function aa() return number, number, number
-	return b(), b(), 1
+  return b(), b(), 1
 end function
 
 Function b() return number
-	return 1
+  return 1
 end functIon
 
 
  //New Program 
 Program
-	return nothing
+  return nothing
 End Program
+
+// *******************Return in program body***************
+  //New Program Failing
+Program
+  return nothing
+End Program
+
+
+  //New Program
+Program
+  return a
+End Program
+
+  //New Program
+Program
+  return a, b
+End Program
+
+
+  //New Program
+Program
+  return 1,1,1
+End Program
+
+
+  //New Program
+Program
+  return false, true or false
+End Program
+
+
+
+
+//New Program Failing
+
+Program
+  
+End Program
+
+Function MyFunc() Returns Text
+  // Should fail because function never returns anything
+End Function
+
+
+ //New Program Failing
+Program
+End Program
+
+Function aa(Number a) Returns nothing
+    Return a
+End Function
+
+
+
+
+ //New Program Failing
+Program
+End Program
+
+Function a() Returns nothing
+	Return 1
+End Function

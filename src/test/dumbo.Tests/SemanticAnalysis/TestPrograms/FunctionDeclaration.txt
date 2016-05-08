@@ -3,187 +3,125 @@
 Program
 End Program
 
-Function a() return nothing
+Function a() Returns nothing
 	//Hammertime
-End function
+End Function
 
 
  //New Program 
 Program
 End Program
 
-Function aa(Number a) return nothing
-End function
+Function aa(Number a) Returns nothing
+End Function
 
 
  //New Program 
 Program
 End Program
 
-Function aa(Number a, Boolean b) return nothing
-End function
+Function aa(Number a, Boolean b) Returns nothing
+End Function
 
 
  //New Program 
 Program
 End Program
 
-Function aa(Number a, text b, boolean c) return nothing
-End function
+Function aa(Number a, Text b, Boolean c) Returns nothing
+End Function
 
 
  //New Program 
 Program
 End Program
 
-Function aa(Number a, booLean z) return number, Text
-	return a, ""
-End function
+Function aa(Number a, Boolean z) Returns Number, Text
+	Return a, ""
+End Function
 
 
  //New Program 
 Program
 End Program
 
-FunctIon aa(Number A) retUrn BooleAn, number, number
-    return true, a, a
-End functIon
+Function aa(Number A) Returns Boolean, Number, Number
+  Return true, a, a
+End Function
 
 
  //New Program 
 Program
 End Program
 
-Function a() return number, text, text
-	return 1, "", ""
-End function
+Function a() Returns Number, Text, Text
+	Return 1, "", ""
+End Function
 
 
  //New Program 
 Program
 End Program
 
-Function aa(Number a) return text, text, text, text, text, text, text, text, text, text, text, text, text, text, text, text, text, text, text, text
-    return "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""
-End function
+Function aa(Number a) Returns Text, Text, Text, Text, Text, Text, Text, Text, Text, Text, Text, Text, Text, Text, Text, Text, Text, Text, Text, Text
+  Return "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""
+End Function
 
 
  //New Program 
 Program
 End Program
 
-function aa(boolean a, boolean b, boolean c, boolean d, boolean e, boolean f, boolean g, boolean h, boolean i, boolean j, boolean k, boolean l) return nothing
-    //Hammertime
-EnD functioN
+Function aa(Boolean a, Boolean b, Boolean c, Boolean d, Boolean e, Boolean f, Boolean g, Boolean h, Boolean i, Boolean j, Boolean k, Boolean l) Returns nothing
+  //Hammertime
+End Function
 
 
  //New Program 
 Program
 End Program
 
-Function a() return text
-
-	number test
-
-
+Function a() Returns Text
+	Number test
 	test := 11
-	
-	
-	return "test"
-	
-	
-	
-End function
+	Return "test"
+End Function
 
 
- //New Program 
-Program
-End Program
-
-
-
-
-Function a() return number, text, text
-    retUrn 1, "", ""
-End function
 
 
  //New Program Failing
 Program
 End Program
 
-Function a() return nothing
-	return 1
-End function
+Function aa(Number a, Text a) Returns nothing
+End Function
+
+ //New Program Failing
+Program
+End Program
+
+Function f(Boolean a, Boolean a) Returns nothing
+  
+End Function
+
+
+
+ //New Program
+Program
+End Program
+
+Function a() Returns Number, Text, Text
+  // Recursive function call
+  Return a()
+End Function
+
 
 
  //New Program Failing
 Program
 End Program
 
-Function aa(Number a) return nothing
-    return a
-End function
-
-
- //New Program Failing
-Program
-End Program
-
-Function aa(Number a, Boolean a) return nothing
-End function
-
-
- //New Program Failing
-Program
-End Program
-
-Function aa(Number a, text a, boolean b) return nothing
-End function
-
-
- //New Program Failing
-Program
-End Program
-
-Function a() return number, text, text
-End function
-
-
- //New Program Failing
-Program
-End Program
-
-function aa(boolean a, boolean a, boolean a, boolean a, boolean a, boolean a, boolean a, boolean a, boolean a, boolean a, boolean a, boolean a) return nothing
-    //Hammertime
-EnD functioN
-
-
- //New Program Failing
-Program
-End Program
-
-Function a() return number, text, text
-    return a(1)
-End function
-
-
- //New Program 
-Program
-End Program
-
-Function test() return number, number
-    Number b
-    return 1, b
-End function
-
-
- //New Program Failing
-Program
-End Program
-
-
-Function a() return number, text, text
-    return a(1)
-End function
-
+Function a() Returns Number, Text, Text
+  Return a(1)
+End Function

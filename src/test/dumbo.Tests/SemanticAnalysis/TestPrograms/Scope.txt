@@ -151,8 +151,7 @@ Program
 End Program
 
 
-//New Program
-
+//New Program 
 Program
   Text a,b,c := MyFunc()
   Write(a)

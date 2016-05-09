@@ -1,9 +1,11 @@
 ﻿// ************* Constant **********
 
  //New Program 
-constant number numb1 := 10
+constant number numb1 := 1
+constant text   txt1  := "text"
+constant boolean bool := true
 Program
-	
+
 End Program
 
 
@@ -14,19 +16,18 @@ Program
 End Program
 
 
- //New Program
-constant number numb1 := 1
-constant text   txt1  := "text"
-Program
-
-End Program
-
-
  //New Program Failing
 Constant number n1 := 10
 constant number n1 := 11
-
 program 
+
+end program
+
+
+ //New Program Failing
+Constant number numtxtbool := 1
+constant text   numtxtbool := "text"
+program
 
 end program
 

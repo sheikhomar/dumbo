@@ -20,10 +20,6 @@ end functIon
  //New Program 
 Program
 	repeaT wHile(true)
-	
-	
-	
-	
 	end repEat
 End Program
 

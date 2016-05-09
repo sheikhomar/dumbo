@@ -5,18 +5,13 @@ Program
 	Repeat While true
 		Continue
 	End Repeat
-End Program
-
-
- //New Program 
-Program
 	Repeat 15
 		Continue
 	End Repeat
 End Program
 
 
- //New Program
+ //New Program 
 Program
   If (true) Then
     If (true) Then

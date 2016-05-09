@@ -1,23 +1,13 @@
 ﻿// *********************Decls***************
 
- //New Program
-Program
-  Number a
-  Number b, c, d
-End Program
-
-
  //New Program 
 Program
-  Boolean a
-  Boolean b, c, d
-End Program
-
-
- //New Program 
-Program
-  Text a, b
-  Text c
+  Number na
+  Number nb, nc, nd
+  Boolean ba
+  Boolean bb, bc, bd
+  Text ta, tb
+  Text tc
 End Program
 
 

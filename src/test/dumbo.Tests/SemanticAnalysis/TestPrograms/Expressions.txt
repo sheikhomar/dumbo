@@ -141,9 +141,10 @@ Program
 End Program
 
 
- //New Program
+ //New Program 
 Program
 	boolean a := "" = ""
+	boolean b := true = true
 End Program
 
 
@@ -152,9 +153,4 @@ Program
 	text a := "" - ""
 End Program
 
-
- //New Program
-Program
-	boolean a := true = true
-End Program
 

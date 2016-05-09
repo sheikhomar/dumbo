@@ -72,12 +72,6 @@ End functIon
 
  //New Program Failing
 Program
-    a( )
-End Program
-
-
- //New Program Failing
-Program
     aa(           )
 End Program
 

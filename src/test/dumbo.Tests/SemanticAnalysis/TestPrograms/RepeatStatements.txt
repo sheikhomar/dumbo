@@ -2,8 +2,6 @@
  //New Program 
 Program
 	repeat 1
-		
-		
 	end repeat
 End Program
 
@@ -19,13 +17,6 @@ End Program
 Function time() return boolean
 	return false
 end functIon
-
-
- //New Program 
-Program
-	repeat 1
-	end repeat
-End Program
 
 
  //New Program 

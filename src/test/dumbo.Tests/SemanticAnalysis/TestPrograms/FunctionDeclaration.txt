@@ -88,8 +88,6 @@ Function a() Returns Text
 End Function
 
 
-
-
  //New Program Failing
 Program
 End Program
@@ -106,7 +104,6 @@ Function f(Boolean a, Boolean a) Returns nothing
 End Function
 
 
-
  //New Program
 Program
 End Program
@@ -115,7 +112,6 @@ Function a() Returns Number, Text, Text
   // Recursive function call
   Return a()
 End Function
-
 
 
  //New Program Failing

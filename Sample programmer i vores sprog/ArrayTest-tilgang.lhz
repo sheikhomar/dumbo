@@ -1,0 +1,20 @@
+Program
+Array[4] of Text textArray
+textArray[1] := "Michael"
+textArray[2] := "Benny"
+textArray[3] := "Stephanie"
+textArray[4] := "Gudrun"
+
+Array[2,3] of Number numberArray
+numberArray[1,1] := 2
+numberArray[1,2] := 3
+numberArray[1,3] := 7
+numberArray[2,1] := 11
+numberArray[2,2] := 13
+numberArray[2,3] := 17
+
+if(numberArray[1,1] <= 2 ) then
+	write("Test passed")
+end if
+
+End program

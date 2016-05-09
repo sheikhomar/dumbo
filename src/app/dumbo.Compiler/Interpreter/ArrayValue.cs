@@ -19,7 +19,6 @@ namespace dumbo.Compiler.Interpreter
             set { InternalArray[i] = value; }
         }
 
-
         public ArrayValue(PrimitiveType type, List<int> sizes)
         {
             Type = type;

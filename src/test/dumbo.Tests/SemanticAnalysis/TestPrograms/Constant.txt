@@ -1,0 +1,15 @@
+﻿// ************* Constant **********
+
+ //New Program 
+constant number numb1 := 10
+Program
+	
+End Program
+
+
+ //New Program Failing
+constant number numb1 := 10
+Program
+	numb1 := 12
+End Program
+ 

@@ -71,6 +71,7 @@
     <Content Include="SemanticAnalysis\TestPrograms\Assignment.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="SemanticAnalysis\TestPrograms\Constant.txt" />
     <Content Include="SemanticAnalysis\TestPrograms\Continue.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

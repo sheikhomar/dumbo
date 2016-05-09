@@ -26,6 +26,12 @@ namespace dumbo.Tests.SemanticAnalysis
         }
 
         [Test, TestCaseSource(typeof(TestProgramFactory), nameof(TestProgramFactory.Continue))]
+        public void TestConstant(string fileName, int startLine, string programText, bool shouldFail)
+        {
+            TestProgram(fileName, startLine, programText, shouldFail);
+        }
+
+        [Test, TestCaseSource(typeof(TestProgramFactory), nameof(TestProgramFactory.Continue))]
         public void TestContinue(string fileName, int startLine, string programText, bool shouldFail)
         {
             TestProgram(fileName, startLine, programText, shouldFail);

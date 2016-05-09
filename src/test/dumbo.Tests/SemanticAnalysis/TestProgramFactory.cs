@@ -13,6 +13,7 @@ namespace dumbo.Tests.SemanticAnalysis
 
         public static IEnumerable Assignment => BuildTestCases(nameof(Assignment));
         public static IEnumerable Break => BuildTestCases(nameof(Break));
+        public static IEnumerable Constant => BuildTestCases(nameof(Constant));
         public static IEnumerable Continue => BuildTestCases(nameof(Continue));
         public static IEnumerable Declarations => BuildTestCases(nameof(Declarations));
         public static IEnumerable DeclarationsAndAssignment => BuildTestCases(nameof(DeclarationsAndAssignment));

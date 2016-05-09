@@ -166,7 +166,7 @@ namespace dumbo.Compiler
 
         public ReturnCheckResult Visit(IfElseStmtNode node, VisitorArgs arg)
         {
-            var ifResult = node.Body.Accept(this, arg).ContainsReturn;
+            var ifResult = node.Then.Accept(this, arg).ContainsReturn;
             var elseIfResult = node.ElseIfStatements.Accept(this, arg).ContainsReturn;
             var elseResult = node.Else.Accept(this, arg).ContainsReturn;
 

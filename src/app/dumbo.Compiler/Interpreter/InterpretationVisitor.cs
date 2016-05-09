@@ -385,7 +385,7 @@ namespace dumbo.Compiler.Interpreter
             var value = node.Predicate.Accept(this, arg) as BooleanValue;
             if (value.Boolean)
             {
-                node.Body.Accept(this, arg);
+                node.Then.Accept(this, arg);
             }
             else
             {
@@ -403,7 +403,7 @@ namespace dumbo.Compiler.Interpreter
             var value = node.Predicate.Accept(this, arg) as BooleanValue;
             if (value.Boolean)
             {
-                node.Body.Accept(this, arg);
+                node.Then.Accept(this, arg);
             }
             else
             {

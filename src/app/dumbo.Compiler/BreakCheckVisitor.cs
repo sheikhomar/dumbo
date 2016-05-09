@@ -157,7 +157,7 @@ namespace dumbo.Compiler
 
         public VisitResult Visit(IfElseStmtNode node, VisitorArgs arg)
         {
-            node.Body.Accept(this, arg);
+            node.Then.Accept(this, arg);
             node.ElseIfStatements.Accept(this, arg);
             node.Else.Accept(this, arg);
             return null;
@@ -165,7 +165,7 @@ namespace dumbo.Compiler
 
         public VisitResult Visit(IfStmtNode node, VisitorArgs arg)
         {
-            node.Body.Accept(this, arg);
+            node.Then.Accept(this, arg);
             node.ElseIfStatements.Accept(this, arg);
             return null;
         }

@@ -257,7 +257,7 @@ namespace dumbo.Compiler
             Write("If (");
             node.Predicate.Accept(this, arg);
             WriteLine(") Then");
-            node.Body.Accept(this, arg);
+            node.Then.Accept(this, arg);
             node.ElseIfStatements.Accept(this, arg);
             WriteLine("Else");
             node.Else.Accept(this, arg);
@@ -271,7 +271,7 @@ namespace dumbo.Compiler
             Write("If (");
             node.Predicate.Accept(this, arg);
             WriteLine(") Then");
-            node.Body.Accept(this, arg);
+            node.Then.Accept(this, arg);
             node.ElseIfStatements.Accept(this, arg);
             WriteLine("End If");
 

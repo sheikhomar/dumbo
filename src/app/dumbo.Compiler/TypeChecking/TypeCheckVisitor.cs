@@ -555,7 +555,7 @@ namespace dumbo.Compiler.TypeChecking
         {
             EnsureCorrectType(node.Predicate, PrimitiveType.Boolean, arg);
 
-            node.Body.Accept(this, arg);
+            node.Then.Accept(this, arg);
             node.ElseIfStatements.Accept(this, arg);
             node.Else.Accept(this, arg);
 
@@ -566,7 +566,7 @@ namespace dumbo.Compiler.TypeChecking
         {
             EnsureCorrectType(node.Predicate, PrimitiveType.Boolean, arg);
 
-            node.Body.Accept(this, arg);
+            node.Then.Accept(this, arg);
             node.ElseIfStatements.Accept(this, arg);
 
             return null;

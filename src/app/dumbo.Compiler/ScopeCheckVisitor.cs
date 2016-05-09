@@ -316,7 +316,7 @@ namespace dumbo.Compiler
             node.Predicate.Accept(this, arg);
 
             SymbolTable.OpenScope();
-            node.Body.Accept(this, arg);
+            node.Then.Accept(this, arg);
             SymbolTable.CloseScope();
 
             node.ElseIfStatements.Accept(this, arg);
@@ -333,7 +333,7 @@ namespace dumbo.Compiler
             node.Predicate.Accept(this, arg);
 
             SymbolTable.OpenScope();
-            node.Body.Accept(this, arg);
+            node.Then.Accept(this, arg);
             SymbolTable.CloseScope();
 
             node.ElseIfStatements.Accept(this, arg);

@@ -416,7 +416,7 @@ namespace dumbo.Compiler.CodeGenerator
             node.Predicate.Accept(this, arg);
             _currentStmt.Append(")");
             _currentModule.Append(_currentStmt);
-            node.Body.Accept(this, arg);
+            node.Then.Accept(this, arg);
             node.ElseIfStatements.Accept(this, arg);
             _currentModule.Append(new Stmt($"else"));
             node.Else.Accept(this, arg);
@@ -430,7 +430,7 @@ namespace dumbo.Compiler.CodeGenerator
             node.Predicate.Accept(this, arg);
             _currentStmt.Append(")");
             _currentModule.Append(_currentStmt);
-            node.Body.Accept(this, arg);
+            node.Then.Accept(this, arg);
             node.ElseIfStatements.Accept(this, arg);
 
             return null;

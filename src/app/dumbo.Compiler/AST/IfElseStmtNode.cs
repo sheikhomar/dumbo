@@ -4,8 +4,8 @@ namespace dumbo.Compiler.AST
 {
     public class IfElseStmtNode : IfStmtNode
     {
-        public IfElseStmtNode(ExpressionNode predicate, StmtBlockNode body, StmtBlockNode @else, ElseIfStmtListNode elseIfStmtList, SourcePosition sourcePosition)
-            : base(predicate, body, elseIfStmtList, sourcePosition)
+        public IfElseStmtNode(ExpressionNode predicate, StmtBlockNode then, StmtBlockNode @else, ElseIfStmtListNode elseIfStmtList, SourcePosition sourcePosition)
+            : base(predicate, then, elseIfStmtList, sourcePosition)
         {
             Else = @else;
         }

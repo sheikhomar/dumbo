@@ -5,18 +5,20 @@
 
 /********************************************************
 Function:	Array
-Version: 	v1.1
+Version: 	v1.2
 Uses:		Throw
 /********************************************************/
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 
+//Array indexing for declaring an array, just like C (ie [1,2,3] results in 6 entries)
 typedef struct DeclIndex {
 	int *indices;
 	int numberOfDims;
 } DeclIndex;
 
+//Array index assuming 0-indexing, just like C (ie accessing a [1,2,3] last evelemtn would be [0,1,2])
 typedef struct LookupIndex {
 	int *indices;
 	int numberOfDims;
@@ -26,7 +28,7 @@ typedef struct Array {
 	void *arr;
 	int wordsize;
 	int lastIndex;
-	LookupIndex *maxIndex;
+	DeclIndex *maxIndex;
 } Array;
 
 
@@ -37,8 +39,8 @@ Array *CreateArray(DeclIndex *maxIndex, int wordsize);
 void DebugPrintDeclIndex(DeclIndex *index);
 void DebugPrintLookupIndex(LookupIndex *index);
 void DebugPrintArray(Array *array);
-int RecCalculateArrayOffset(LookupIndex *actualIndex, LookupIndex *maxIndex, int currentIndex);
-int CalculateArrayOffset(LookupIndex *actualIndex, LookupIndex *maxIndex);
+int RecCalculateArrayOffset(LookupIndex *actualIndex, DeclIndex *maxIndex, int currentIndex);
+int CalculateArrayOffset(LookupIndex *actualIndex, DeclIndex *maxIndex);
 void UpdateArrayIndexValue(Array *a, LookupIndex * index, void* input);
 void ReadArrayIndexValue(Array *a, LookupIndex * index, void* output);
 char *FetchArrayCellAddress(Array *a, LookupIndex *index);
@@ -129,8 +131,8 @@ LookupIndex *CreateLookupIndex(int *externalIndices, int numberOfDims) {
 // Creating an Array given the Index size and the size of the type
 Array *CreateArray(DeclIndex *externalMaxIndex, int wordsize) {
 	Array *output = (Array *)calloc(1, sizeof(Array));
-	LookupIndex *maxIndex = ConvertDeclToLookupIndexMethod(externalMaxIndex); //Todo, cleanup from convertion of decl to lookup. | should create a new lookupIndex
-	int entries = CalculateArrayOffset(maxIndex, maxIndex);
+	DeclIndex *maxIndex = CreateDeclIndex(externalMaxIndex->indices, externalMaxIndex->numberOfDims);
+	int entries = CalculateArrayOffset(ConvertDeclToLookupIndexMethod(maxIndex), maxIndex);
 
 	output->arr = calloc(entries, wordsize);
 	output->wordsize = wordsize;
@@ -140,11 +142,8 @@ Array *CreateArray(DeclIndex *externalMaxIndex, int wordsize) {
 }
 //**Get ArrayOffset
 //Recrusive call of offset calculation (based on https://en.wikipedia.org/wiki/Row-major_order)
-int RecCalculateArrayOffset(LookupIndex *actualIndex, LookupIndex *maxIndex, int currentIndex)
+int RecCalculateArrayOffset(LookupIndex *actualIndex, DeclIndex *maxIndex, int currentIndex)
 {
-	int actual = *((actualIndex->indices) + currentIndex);
-	int max = *((maxIndex->indices) + currentIndex);
-	
 	//Base - we're at the outermost dim (ie 1) and only need to add it's actual offset
 	if (currentIndex == 0)
 		return *((actualIndex->indices));
@@ -156,7 +155,7 @@ int RecCalculateArrayOffset(LookupIndex *actualIndex, LookupIndex *maxIndex, int
 
 
 //Calculates the offset in a given array in row-major ordre
-int CalculateArrayOffset(LookupIndex *actualIndex, LookupIndex *maxIndex) {
+int CalculateArrayOffset(LookupIndex *actualIndex, DeclIndex *maxIndex) {
 	return RecCalculateArrayOffset(actualIndex, maxIndex, maxIndex->numberOfDims - 1);
 }
 
@@ -170,21 +169,18 @@ char *FetchArrayCellAddress(Array *a, LookupIndex *index) {
 void CheckArrayBound(Array *a, LookupIndex *index) {
 	int curOffset = CalculateArrayOffset(index, a->maxIndex);
 
-	int pet = CalculateArrayOffset(a->maxIndex, a->maxIndex);
-
 	if (curOffset < 0 || curOffset > a->lastIndex) {
 		char message[50];
 		sprintf(message, "Array out of bound: Tried to access element number %d\r\n", curOffset);
 
 		Throw(message);
 	}
-		
 }
 
 //Copies the given value to a specific index in the array
 void UpdateArrayIndexValue(Array *a, LookupIndex * index, void* input) {
 	char * cellAddress = FetchArrayCellAddress(a, index);
-	
+
 	CheckArrayBound(a, index);
 	memcpy(cellAddress, input, a->wordsize);
 
@@ -194,7 +190,7 @@ void UpdateArrayIndexValue(Array *a, LookupIndex * index, void* input) {
 //Reads the given value from a specific index in the given array
 void ReadArrayIndexValue(Array *a, LookupIndex * index, void* output) {
 	char * cellAddress = FetchArrayCellAddress(a, index);
-	
+
 	CheckArrayBound(a, index);
 	memcpy(output, cellAddress, a->wordsize);
 
@@ -234,40 +230,6 @@ void TestArrayOffsetStart() {
 	return;
 }
 
-void TestArraySetReadValue() {
-	//Set-up
-	int indexIntArr[] = { 1,2,3 };
-	Array * a = CreateArray(CreateDeclIndex(indexIntArr, 3), sizeof(double));
-
-	printf("Beginning Array Set/Read Test\r\n");
-
-	//Assign values
-	double val1 = 5, val2 = 10;
-	int in1Arr[] = { 0,0,0 }, in2Arr[] = { 0,1,2 }, in3Arr[] = {1,0,0};
-	LookupIndex *in1 = CreateLookupIndex(in1Arr,3);
-	LookupIndex *in2 = CreateLookupIndex(in2Arr, 3);
-	LookupIndex *in3 = CreateLookupIndex(in3Arr, 3);
-	
-	//Set the values
-	UpdateArrayIndexValue(a, in1, &val1);
-	UpdateArrayIndexValue(a, in2, &val2);
-
-	//Read the set values
-	double ret1=0, ret2=0;
-	ReadArrayIndexValue(a, in1, &ret1);
-	ReadArrayIndexValue(a, in2, &ret2);
-
-	if (ret1 != val1 || ret2 != val2)
-		printf("Error: sat values %f and %f, but read %f and %f\r\n", val1, val2, ret1, ret2);
-
-	//Bound check
-	//ReadArrayIndexValue(a, in3, &ret1);
-
-	printf("Finished Array Set/Read Test\r\n");
-
-	return;
-}
-
 //Calculates the offset on a three dimentional array based on 3 x actual and max index values
 void TestArrayOffset(int a1, int a2, int a3, int m1, int m2, int m3, int expectedOffset) {
 	int actual[] = { a1,a2,a3 };
@@ -281,7 +243,7 @@ void TestArrayOffset(int a1, int a2, int a3, int m1, int m2, int m3, int expecte
 	maxIndex.indices = max;
 	maxIndex.numberOfDims = 3;
 
-	int offset = CalculateArrayOffset(&actualIndex, ConvertDeclToLookupIndexMethod(&maxIndex));
+	int offset = CalculateArrayOffset(&actualIndex, &maxIndex);
 
 	if (expectedOffset != offset) {
 		printf("ERROR: Test with %d, %d, %d, %d, %d, %d failed\r\nExpected offset was %d, calculated was %d\r\n", a1, a2, a3, m1, m2, m3, expectedOffset, offset);
@@ -289,6 +251,39 @@ void TestArrayOffset(int a1, int a2, int a3, int m1, int m2, int m3, int expecte
 	return;
 }
 
+void TestArraySetReadValue() {
+	//Set-up
+	int indexIntArr[] = { 1,2,3 };
+	Array * a = CreateArray(CreateDeclIndex(indexIntArr, 3), sizeof(double));
+
+	printf("Beginning Array Set/Read Test\r\n");
+
+	//Assign values
+	double val1 = 5, val2 = 10;
+	int in1Arr[] = { 0,0,0 }, in2Arr[] = { 0,1,2 }, in3Arr[] = { 1,0,0 };
+	LookupIndex *in1 = CreateLookupIndex(in1Arr, 3);
+	LookupIndex *in2 = CreateLookupIndex(in2Arr, 3);
+	LookupIndex *in3 = CreateLookupIndex(in3Arr, 3);
+
+	//Set the values
+	UpdateArrayIndexValue(a, in1, &val1);
+	UpdateArrayIndexValue(a, in2, &val2);
+
+	//Read the set values
+	double ret1 = 0, ret2 = 0;
+	ReadArrayIndexValue(a, in1, &ret1);
+	ReadArrayIndexValue(a, in2, &ret2);
+
+	if (ret1 != val1 || ret2 != val2)
+		printf("Error: sat values %f and %f, but read %f and %f\r\n", val1, val2, ret1, ret2);
+
+	//Bound check
+	//ReadArrayIndexValue(a, in3, &ret1);
+
+	printf("Finished Array Set/Read Test\r\n");
+
+	return;
+}
 
 void DebugPrintDeclIndex(DeclIndex *index) {
 	int i;
@@ -309,7 +304,7 @@ void DebugPrintLookupIndex(LookupIndex *index) {
 void DebugPrintArray(Array *array) {
 	printf("The data starts at: %d\n", array->arr);
 	printf("The wordsize is: %d\n", array->wordsize);
-	DebugPrintLookupIndex(array->maxIndex);
+	DebugPrintDeclIndex(array->maxIndex);
 }
 
 void Throw(char* message) {

@@ -419,16 +419,13 @@ namespace dumbo.Compiler
 
             var entry = SymbolTable.RetrieveSymbol(name);
             if (entry == null)
-                SymbolTable.EnterSymbol(name, new SymbolTablePrimitiveType(declNode));
-            else if (entry.IsUnhideable == false)
             {
-                if (entry.Depth == SymbolTable.Depth)
-                    Reporter.Error($"The variable '{name}' is already declared in this scope.", idNode.SourcePosition);
-                else
-                    SymbolTable.EnterSymbol(name, new SymbolTablePrimitiveType(declNode));
+                SymbolTable.EnterSymbol(name, new SymbolTablePrimitiveType(declNode));
             }
-            else if (entry.IsUnhideable == true)
-                Reporter.Error($"The variable '{name}' is already declared in this scope.", idNode.SourcePosition);
+            else if (entry.IsUnhideable == false && entry.Depth != SymbolTable.Depth)
+            {
+                SymbolTable.EnterSymbol(name, new SymbolTablePrimitiveType(declNode));
+            }
         }
     }
 }

@@ -48,15 +48,14 @@ typedef struct Text {
 DeclIndex *CreateDeclIndex(int *indices, int numberOfDims);
 LookupIndex *CreateLookupIndex(int *indices, int numberOfDims);
 Array *CreateArray(DeclIndex *maxIndex, int wordsize);
-void *IntArrayCopy(int *src, int *dest, int size);
+void IntArrayCopy(int *src, int *dest, int size);
 int CalculateArrayOffset(LookupIndex *actualIndex, DeclIndex *maxIndex);
 int RecCalculateArrayOffset(LookupIndex *actualIndex, DeclIndex *maxIndex, int currentIndex);
-void UpdateArrayIndexValue(Array *a, LookupIndex * index, void* input);
-void ReadArrayIndexValue(Array *a, LookupIndex * index, void* output);
-char *FetchArrayCellAddress(Array *a, LookupIndex *index);
-void CheckArrayBound(Array *a, LookupIndex *index);
+void UpdateArrayIndexValue(Array *a, int offset, void* input);
+void ReadArrayIndexValue(Array *a, int offset, void* output);
+char *FetchArrayCellAddress(Array *a, int offset);
+void CheckArrayBound(Array *a, int offset);
 LookupIndex *ConvertDeclToLookupIndexMethod(DeclIndex *inpt);
-
 void UpdateNumberArrayIndexViaOffset(Array *a, int offset, double input);
 void UpdateTextArrayIndexViaOffset(Array *a, int offset, Text *input);
 void UpdateBooleanArrayIndexViaOffset(Array *a, int offset, Boolean input);
@@ -95,7 +94,6 @@ int main() {
 DeclIndex *CreateDeclIndex(int *externalIndices, int numberOfDims) {
 	DeclIndex *output = (DeclIndex *)calloc(1, sizeof(DeclIndex));
 	int *indices = (int *)calloc(numberOfDims, sizeof(int));
-	int offset;
 
 	//Duplicate the indices
 	IntArrayCopy(externalIndices, indices, numberOfDims);
@@ -110,7 +108,6 @@ DeclIndex *CreateDeclIndex(int *externalIndices, int numberOfDims) {
 LookupIndex *CreateLookupIndex(int *externalIndices, int numberOfDims) {
 	LookupIndex *output = (LookupIndex *)calloc(1, sizeof(LookupIndex));
 	int *indices = (int *)calloc(numberOfDims, sizeof(int));
-	int offset;
 
 	//Dup the content of external Indices
 	IntArrayCopy(externalIndices, indices, numberOfDims);
@@ -123,7 +120,7 @@ LookupIndex *CreateLookupIndex(int *externalIndices, int numberOfDims) {
 
 //Converts a DeclIndex to a LookupIndex
 LookupIndex *ConvertDeclToLookupIndexMethod(DeclIndex *inpt) {
-	int i, dims = inpt->numberOfDims;
+	int dims = inpt->numberOfDims;
 	int *indices = (int *)calloc(dims, sizeof(int));
 
 	IntArrayCopy(inpt->indices, indices, dims);
@@ -132,7 +129,7 @@ LookupIndex *ConvertDeclToLookupIndexMethod(DeclIndex *inpt) {
 }
 
 //Copies the content of one IntArray to another
-void *IntArrayCopy(int *src, int *dest, int size) {
+void IntArrayCopy(int *src, int *dest, int size) {
 	int i;
 	
 	for (i = 0; i < size; i++)
@@ -174,37 +171,35 @@ int CalculateArrayOffset(LookupIndex *actualIndex, DeclIndex *maxIndex) {
 
 //**Get/set values in array - base**
 //Copies the given value to a specific index in the array
-void UpdateArrayIndexValue(Array *a, LookupIndex * index, void* input) {
-	char * cellAddress = FetchArrayCellAddress(a, index);
+void UpdateArrayIndexValue(Array *a, int offset, void* input) {
+	char * cellAddress = FetchArrayCellAddress(a, offset);
 
-	CheckArrayBound(a, index);
+	CheckArrayBound(a, offset);
 	memcpy(cellAddress, input, a->wordsize);
 
 	return;
 }
 
 //Reads the given value from a specific index in the given array
-void ReadArrayIndexValue(Array *a, LookupIndex * index, void* output) {
-	char * cellAddress = FetchArrayCellAddress(a, index);
+void ReadArrayIndexValue(Array *a, int offset, void* output) {
+	char * cellAddress = FetchArrayCellAddress(a, offset);
 
-	CheckArrayBound(a, index);
+	CheckArrayBound(a, offset);
 	memcpy(output, cellAddress, a->wordsize);
 
 	return;
 }
 
 //Finds the given cellAdress
-char *FetchArrayCellAddress(Array *a, LookupIndex *index) {
-	int byteOffset = CalculateArrayOffset(index, a->maxIndex) * a->wordsize;
+char *FetchArrayCellAddress(Array *a, int offset) {
+	int byteOffset = offset * a->wordsize;
 	return ((char *)a->arr) + byteOffset; //char in c is equal to one byte.
 }
 
-void CheckArrayBound(Array *a, LookupIndex *index) {
-	int curOffset = CalculateArrayOffset(index, a->maxIndex);
-
-	if (curOffset < 0 || curOffset > a->lastIndex) {
+void CheckArrayBound(Array *a, int offset) {
+	if (offset < 0 || offset > a->lastIndex) {
 		char message[50];
-		sprintf(message, "Array out of bound: Tried to access element number %d\r\n", curOffset);
+		sprintf(message, "Array out of bound: Tried to access element number %d\r\n", offset);
 
 		Throw(message);
 	}
@@ -212,7 +207,9 @@ void CheckArrayBound(Array *a, LookupIndex *index) {
 
 //**Get/set values in array - extension for LHZ**
 //Copies the given TYPE value to a specific index in the array
-void UpdateNumberArrayIndexViaOffset(Array *a, int offset, double input) {}
+void UpdateNumberArrayIndexViaOffset(Array *a, int offset, double input) {
+	UpdateArrayIndexValue(a, offset, &input);
+}
 void UpdateTextArrayIndexViaOffset(Array *a, int offset, Text *input) {}
 void UpdateBooleanArrayIndexViaOffset(Array *a, int offset, Boolean input) {}
 void UpdateNumberArrayIndexViaIndex(Array *a, int *offset, double input) {}
@@ -220,9 +217,9 @@ void UpdateTextArrayIndexViaIndex(Array *a, int *offset, Text *input) {}
 void UpdateBooleanArrayIndexViaIndex(Array *a, int *offset, Boolean input) {}
 
 //Reads the given  TYPE value from a specific index in the given array
-double ReadNumberArrayIndex(Array *a, int offset) {}
-Text *ReadTextArrayIndex(Array *a, int *offset) {}
-Boolean ReadBooleanArrayIndex(Array *a, int *offset) {}
+double ReadNumberArrayIndex(Array *a, int offset) { return NULL; }
+Text *ReadTextArrayIndex(Array *a, int *offset) { return NULL; }
+Boolean ReadBooleanArrayIndex(Array *a, int *offset) { return ff; }
 
 
 
@@ -280,11 +277,13 @@ void TestArrayOffset(int a1, int a2, int a3, int m1, int m2, int m3, int expecte
 }
 
 void TestArraySetReadValue() {
-	//Set-up
-	int indexIntArr[] = { 1,2,3 };
-	Array * a = CreateArray(CreateDeclIndex(indexIntArr, 3), sizeof(double));
-
+	
 	printf("Beginning Array Set/Read Test\r\n");
+	
+	//Create Array
+	int indexIntArr[] = { 1,2,3 };
+	DeclIndex *decl = CreateDeclIndex(indexIntArr, 3);
+	Array *a = CreateArray(decl, sizeof(double));
 
 	//Assign values
 	double val1 = 5, val2 = 10;
@@ -292,21 +291,25 @@ void TestArraySetReadValue() {
 	LookupIndex *in1 = CreateLookupIndex(in1Arr, 3);
 	LookupIndex *in2 = CreateLookupIndex(in2Arr, 3);
 	LookupIndex *in3 = CreateLookupIndex(in3Arr, 3);
+	int offset1 = CalculateArrayOffset(in1, decl);
+	int offset2 = CalculateArrayOffset(in2, decl);
+	int offset3 = CalculateArrayOffset(in3, decl);
+
 
 	//Set the values
-	UpdateArrayIndexValue(a, in1, &val1);
-	UpdateArrayIndexValue(a, in2, &val2);
+	UpdateArrayIndexValue(a, offset1, &val1);
+	UpdateArrayIndexValue(a, offset2, &val2);
 
 	//Read the set values
 	double ret1 = 0, ret2 = 0;
-	ReadArrayIndexValue(a, in1, &ret1);
-	ReadArrayIndexValue(a, in2, &ret2);
+	ReadArrayIndexValue(a, offset1, &ret1);
+	ReadArrayIndexValue(a, offset2, &ret2);
 
 	if (ret1 != val1 || ret2 != val2)
 		printf("Error: sat values %f and %f, but read %f and %f\r\n", val1, val2, ret1, ret2);
 
 	//Bound check
-	//ReadArrayIndexValue(a, in3, &ret1);
+	//ReadArrayIndexValue(a, offset3, &ret1);
 
 	printf("Finished Array Set/Read Test\r\n");
 
@@ -330,7 +333,7 @@ void DebugPrintLookupIndex(LookupIndex *index) {
 }
 
 void DebugPrintArray(Array *array) {
-	printf("The data starts at: %d\n", array->arr);
+	printf("The data starts at: %x\n", (unsigned int) (array->arr));
 	printf("The wordsize is: %d\n", array->wordsize);
 	DebugPrintDeclIndex(array->maxIndex);
 }

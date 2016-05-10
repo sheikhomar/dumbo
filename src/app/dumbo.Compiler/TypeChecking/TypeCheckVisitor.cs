@@ -660,6 +660,9 @@ namespace dumbo.Compiler.TypeChecking
         public TypeCheckVisitResult Visit(UnaryOperationNode node, VisitorArgs arg)
         {
             var exprRes = GetVisitResult(node.Expression, arg);
+            if (exprRes.IsError)
+                return ErrorType();
+
             if (exprRes.Types.Count() != 1)
             {
                 Reporter.Error("Expression must return a single value.", node.Expression.SourcePosition);

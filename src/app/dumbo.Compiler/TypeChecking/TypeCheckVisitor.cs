@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.Eventing.Reader;
 using System.Linq;
 using dumbo.Compiler.AST;
 
@@ -468,27 +467,24 @@ namespace dumbo.Compiler.TypeChecking
 
             node.Parameters.Accept(this, arg);
 
-            if (node.DeclarationNode.Parameters.Count != node.Parameters.Count)
+            var formalParameterCount = node.DeclarationNode.Parameters.Count;
+            List<TypeNode> actualParamTypes = GetActualParameterTypes(node, arg);
+
+            if (formalParameterCount != actualParamTypes.Count)
             {
-                Reporter.Error("The number of actual parameters does not correspond to number of formal parameters.",
-                    node.SourcePosition);
+                const string msg = "The number of actual parameters does not correspond to number of formal parameters.";
+                Reporter.Error(msg, node.SourcePosition);
             }
             else
             {
-                for (int i = 0; i < node.Parameters.Count; i++)
+                for (int i = 0; i < formalParameterCount; i++)
                 {
-                    var actualParamRes = GetVisitResult(node.Parameters[i], arg);
-                    if (actualParamRes.Types.Count() != 1)
-                    {
-                        Reporter.Error($"The actual parameter {i + 1} does not have correct value.", node.Parameters[i].SourcePosition);
-                        continue;
-                    }
-
-                    var actual = actualParamRes.Types.First();
+                    var actual = actualParamTypes[i];
                     var formal = node.DeclarationNode.Parameters[i].Type;
                     if (!actual.Equals(formal))
                     {
-                        Reporter.Error($"The actual parameter {i + 1} does not match the formal parameter.", node.Parameters[i].SourcePosition);
+                        Reporter.Error($"The actual parameter {i + 1} does not match the formal parameter.",
+                            node.Parameters[i].SourcePosition);
                     }
                 }
             }
@@ -733,6 +729,18 @@ namespace dumbo.Compiler.TypeChecking
         private TypeCheckVisitResult ErrorType()
         {
             return new TypeCheckVisitResult(isError: true);
+        }
+        
+        private List<TypeNode> GetActualParameterTypes(FuncCallExprNode node, VisitorArgs arg)
+        {
+            var actualParamTypes = new List<TypeNode>();
+            foreach (var actualParam in node.Parameters)
+            {
+                var actualParamRes = GetVisitResult(actualParam, arg);
+                actualParamTypes.AddRange(actualParamRes.Types);
+            }
+
+            return actualParamTypes;
         }
     }
 }

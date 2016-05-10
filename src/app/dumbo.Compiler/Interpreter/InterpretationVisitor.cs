@@ -44,8 +44,11 @@ namespace dumbo.Compiler.Interpreter
         {
             var array = CurrentCallFrame.Get<ArrayValue>(node.Name);
             var sizes = GetArraySizes(node.Indices, arg);
-            var value = array.GetValue(sizes);
-            return value;
+
+            if (array.AreIndicesValid(sizes))
+                return array.GetValue(sizes);
+
+            throw new InterpretationErrorException("Array out of bounds", node.Indices);
         }
 
         public Value Visit(ArrayTypeNode node, VisitorArgs arg)
@@ -514,7 +517,7 @@ namespace dumbo.Compiler.Interpreter
         {
             if (_callStack.Count == 0)
             {
-                Reporter.Error("Wrong return statement call.", new SourcePosition(0, 0, 0, 0));
+                throw new InterpretationErrorException("Wrong return statement call.", node);
             }
             else
             {
@@ -640,7 +643,15 @@ namespace dumbo.Compiler.Interpreter
                 {
                     var id = identifiers[0] as ArrayIdentifierNode;
                     var arrayValue = CurrentCallFrame.Get<ArrayValue>(id.Name);
-                    arrayValue.SetValue(GetArraySizes(id.Indices, arg), value);
+                    var indices = GetArraySizes(id.Indices, arg);
+                    if (arrayValue.AreIndicesValid(indices))
+                    {
+                        arrayValue.SetValue(indices, value);
+                    }
+                    else
+                    {
+                        throw new InterpretationErrorException("Array out of bounds", id.Indices);
+                    }
                 }
                 else
                 {
@@ -668,8 +679,7 @@ namespace dumbo.Compiler.Interpreter
                 var sizeVal = size.Accept(this, arg) as NumberValue;
                 sizeList.Add((int)Math.Floor(sizeVal.Number));
             }
-
-
+            
             return sizeList;
         }
 

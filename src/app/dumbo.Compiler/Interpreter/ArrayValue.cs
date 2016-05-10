@@ -13,7 +13,7 @@ namespace dumbo.Compiler.Interpreter
         public PrimitiveType Type { get; }
         public List<int> Sizes { get; }
         private List<Value> InternalArray { get; }
-        public Value this[int i]
+        private Value this[int i]
         {
             get { return InternalArray[i]; }
             set { InternalArray[i] = value; }
@@ -63,35 +63,50 @@ namespace dumbo.Compiler.Interpreter
             return GetValue(this, indices);
         }
 
-        private Value GetValue(ArrayValue array, List<int> indices)
-        {
-            if (indices.Count == 1)
-            {
-                return array[indices[0]];
-            }
-            else
-            {
-                var newArray = array[indices[0]] as ArrayValue;
-                var value = GetValue(newArray, indices.Skip(1).ToList());
-                return value;
-            }
-        }
-
         public void SetValue(List<int> indices, Value value)
         {
             SetValue(this, indices, value);
+        }
+
+        public bool AreIndicesValid(List<int> indices)
+        {
+            for (int i = 0; i < indices.Count; i++)
+            {
+                var index = indices[i];
+                var dimensionSize = Sizes[i];
+                if (index < 1 || index > dimensionSize)
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         private void SetValue(ArrayValue array, List<int> indices, Value value)
         {
             if (indices.Count == 1)
             {
-                array[indices[0]] = value;
+                array[indices[0] - 1] = value;
             }
             else
             {
-                var newArray = array[indices[0]] as ArrayValue;
+                var newArray = array[indices[0] - 1] as ArrayValue;
                 SetValue(newArray, indices.Skip(1).ToList(), value);
+            }
+        }
+
+        private Value GetValue(ArrayValue array, List<int> indices)
+        {
+            if (indices.Count == 1)
+            {
+                return array[indices[0] - 1];
+            }
+            else
+            {
+                var newArray = array[indices[0] - 1] as ArrayValue;
+                var value = GetValue(newArray, indices.Skip(1).ToList());
+                return value;
             }
         }
     }

@@ -11,6 +11,7 @@ namespace dumbo.Compiler.TypeChecking
 
         public TypeCheckVisitResult(bool isError)
         {
+            IsError = isError;
             _types.Add(new ErrorTypeNode());
         }
 
@@ -34,5 +35,7 @@ namespace dumbo.Compiler.TypeChecking
 
             return Types.SequenceEqual(other.Types);
         }
+
+        public bool IsError { get; }
     }
 }

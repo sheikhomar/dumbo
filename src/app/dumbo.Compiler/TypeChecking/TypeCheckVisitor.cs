@@ -222,6 +222,12 @@ namespace dumbo.Compiler.TypeChecking
             var lr = GetVisitResult(node.LeftOperand, arg);
             var rr = GetVisitResult(node.RightOperand, arg);
 
+            if (lr.IsError || rr.IsError)
+            {
+                node.InferredType = new TypeDescriptor(new ErrorTypeNode());
+                return new TypeCheckVisitResult(true);
+            }
+
             if (lr.Types.Count() != 1)
             {
                 Reporter.Error("Left operand must return a single value.", node.LeftOperand.SourcePosition);
@@ -487,8 +493,8 @@ namespace dumbo.Compiler.TypeChecking
 
         public TypeCheckVisitResult Visit(FuncCallStmtNode node, VisitorArgs arg)
         {
-            var result = node.CallNode.Accept(this, arg) as TypeCheckVisitResult;
-            if (result.Types.Any())
+            var result = node.CallNode.Accept(this, arg);
+            if (!result.IsError && result.Types.Any())
             {
                 string funcName = node.CallNode.FuncName;
                 Reporter.Error($"Cannot use function '{funcName}' as a statement. The function should return 'Nothing'.", node.CallNode.SourcePosition);

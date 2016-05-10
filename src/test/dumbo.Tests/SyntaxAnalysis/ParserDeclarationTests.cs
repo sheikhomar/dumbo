@@ -15,7 +15,7 @@ namespace dumbo.Tests.SyntaxAnalysis
         [TestCase(PrimitiveType.Text, "d", "Program\r\n    Text d\r\nEnd Program")]
         [TestCase(PrimitiveType.Text, "e", "Program\r\n    TEXT e\r\nEnd Program")]
         [TestCase(PrimitiveType.Text, "f", "Program\r\n    texT f\r\nEnd Program")]
-        public void ShouldParseDeclerationStatements(PrimitiveType expectedType, string expectedName, string programText)
+        public void ShouldParseDeclarationStatements(PrimitiveType expectedType, string expectedName, string programText)
         {
             var rootNode = ParseAndGetRootNode(programText);
             var node = rootNode.Program.Body.GetAs<PrimitiveDeclStmtNode>(0);

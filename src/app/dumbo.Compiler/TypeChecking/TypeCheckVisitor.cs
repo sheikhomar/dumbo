@@ -141,6 +141,14 @@ namespace dumbo.Compiler.TypeChecking
 
         public TypeCheckVisitResult Visit(AssignmentStmtNode node, VisitorArgs arg)
         {
+            foreach (var identifier in node.Identifiers)
+            {
+                if (identifier.DeclarationNode is ConstDeclNode)
+                {
+                    Reporter.Error("Constants cannot be changed.", identifier.SourcePosition);
+                }
+            }
+
             if (node.Identifiers.Count > 1)
             {
                 // We expect the RHS to be a function call,

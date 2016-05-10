@@ -5,25 +5,28 @@
 
 /********************************************************
 Function:	Array
-Version: 	v1.2
-Uses:		Throw
+Version: 	v1.3
+Uses:		Throw, Text, Boolean
 /********************************************************/
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 
+//LHZ Types//
 //Array indexing for declaring an array, just like C (ie [1,2,3] results in 6 entries)
+
 typedef struct DeclIndex {
 	int *indices;
 	int numberOfDims;
 } DeclIndex;
 
-//Array index assuming 0-indexing, just like C (ie accessing a [1,2,3] last evelemtn would be [0,1,2])
+//Array index assuming 0-indexing, just like C (ie accessing a[1,2,3] last evelemtn would be [0,1,2])
 typedef struct LookupIndex {
 	int *indices;
 	int numberOfDims;
 } LookupIndex;
 
+//Array structure, wordsize denotes the entires size in bytes
 typedef struct Array {
 	void *arr;
 	int wordsize;
@@ -32,34 +35,44 @@ typedef struct Array {
 } Array;
 
 
+//LHC helper Type
+//typedef enum { false, true } Boolean;
+typedef enum Boolean{ff, tt} Boolean;
+
+typedef struct Text {
+	int Length;
+	char *Value;
+} Text;
+
 //LHZ Functions
 DeclIndex *CreateDeclIndex(int *indices, int numberOfDims);
 LookupIndex *CreateLookupIndex(int *indices, int numberOfDims);
 Array *CreateArray(DeclIndex *maxIndex, int wordsize);
-void DebugPrintDeclIndex(DeclIndex *index);
-void DebugPrintLookupIndex(LookupIndex *index);
-void DebugPrintArray(Array *array);
-int RecCalculateArrayOffset(LookupIndex *actualIndex, DeclIndex *maxIndex, int currentIndex);
+void *IntArrayCopy(int *src, int *dest, int size);
 int CalculateArrayOffset(LookupIndex *actualIndex, DeclIndex *maxIndex);
+int RecCalculateArrayOffset(LookupIndex *actualIndex, DeclIndex *maxIndex, int currentIndex);
 void UpdateArrayIndexValue(Array *a, LookupIndex * index, void* input);
 void ReadArrayIndexValue(Array *a, LookupIndex * index, void* output);
 char *FetchArrayCellAddress(Array *a, LookupIndex *index);
 void CheckArrayBound(Array *a, LookupIndex *index);
 LookupIndex *ConvertDeclToLookupIndexMethod(DeclIndex *inpt);
 
-
-/* ADD
-void UpdateNumberArrayIndex(Array a, Index index, double input);
-void UpdateTextArrayIndex(Array a, Index index, Text *input);
-void UpdateBooleanArrayIndex(Array a, Index index, Boolean input);
-double ReadNumberArrayIndex(Array a, Index index);
-Text ReadTextArrayIndex(Array a, Index index);
-Boolean ReadBooleanArrayIndex(Array a, Index index);
-*/
+void UpdateNumberArrayIndexViaOffset(Array *a, int offset, double input);
+void UpdateTextArrayIndexViaOffset(Array *a, int offset, Text *input);
+void UpdateBooleanArrayIndexViaOffset(Array *a, int offset, Boolean input);
+void UpdateNumberArrayIndexViaIndex(Array *a, int *offset, double input);
+void UpdateTextArrayIndexViaIndex(Array *a, int *offset, Text *input);
+void UpdateBooleanArrayIndexViaIndex(Array *a, int *offset, Boolean input);
+double ReadNumberArrayIndex(Array *a, int offset);
+Text *ReadTextArrayIndex(Array *a, int *offset);
+Boolean ReadBooleanArrayIndex(Array *a, int *offset);
 
 
 
 //HelperFunctions
+void DebugPrintDeclIndex(DeclIndex *index);
+void DebugPrintLookupIndex(LookupIndex *index);
+void DebugPrintArray(Array *array);
 void TestArrayCreate();
 void TestArrayOffsetStart();
 void TestArrayOffset(int a1, int a2, int a3, int m1, int m2, int m3, int expectedOffset);
@@ -67,6 +80,7 @@ void TestArraySetReadValue();
 void Throw(char* message);
 
 int main() {
+
 	TestArrayCreate();
 	TestArrayOffsetStart();
 	TestArraySetReadValue();
@@ -76,32 +90,15 @@ int main() {
 }
 
 //Array Functions//
-//**Create Array
-//Converts a DeclIndex to a LookupIndex
-LookupIndex *ConvertDeclToLookupIndexMethod(DeclIndex *inpt) {
-	int i, dims = inpt->numberOfDims;
-	int *indices = (int *)calloc(dims, sizeof(int));
-
-	for (i = 0; i < dims; i++)
-	{
-		*(indices + i) = *(inpt->indices + i) - 1;
-	}
-
-	return CreateLookupIndex(indices, dims);
-}
-
-
-// Creating an Index with the indix sizes and the number of dimensions
+//**Creation of Arrays**
+// Creating an Index with the index' sizes and the number of dimensions
 DeclIndex *CreateDeclIndex(int *externalIndices, int numberOfDims) {
 	DeclIndex *output = (DeclIndex *)calloc(1, sizeof(DeclIndex));
 	int *indices = (int *)calloc(numberOfDims, sizeof(int));
 	int offset;
 
-	//Dup the content of external Indices
-	for (offset = 0; offset < numberOfDims; offset++)
-	{
-		*(indices + offset) = *(externalIndices + offset);
-	}
+	//Duplicate the indices
+	IntArrayCopy(externalIndices, indices, numberOfDims);
 
 	//Assign to the Index
 	output->indices = indices;
@@ -109,17 +106,14 @@ DeclIndex *CreateDeclIndex(int *externalIndices, int numberOfDims) {
 	return output;
 }
 
-//Todo, make a general method for dup
+//Create an Index with the index' sizes and the number of dimensions
 LookupIndex *CreateLookupIndex(int *externalIndices, int numberOfDims) {
 	LookupIndex *output = (LookupIndex *)calloc(1, sizeof(LookupIndex));
 	int *indices = (int *)calloc(numberOfDims, sizeof(int));
 	int offset;
 
 	//Dup the content of external Indices
-	for (offset = 0; offset < numberOfDims; offset++)
-	{
-		*(indices + offset) = *(externalIndices + offset);
-	}
+	IntArrayCopy(externalIndices, indices, numberOfDims);
 
 	//Assign to the Index
 	output->indices = indices;
@@ -127,6 +121,25 @@ LookupIndex *CreateLookupIndex(int *externalIndices, int numberOfDims) {
 	return output;
 }
 
+//Converts a DeclIndex to a LookupIndex
+LookupIndex *ConvertDeclToLookupIndexMethod(DeclIndex *inpt) {
+	int i, dims = inpt->numberOfDims;
+	int *indices = (int *)calloc(dims, sizeof(int));
+
+	IntArrayCopy(inpt->indices, indices, dims);
+
+	return CreateLookupIndex(indices, dims);
+}
+
+//Copies the content of one IntArray to another
+void *IntArrayCopy(int *src, int *dest, int size) {
+	int i;
+	
+	for (i = 0; i < size; i++)
+	{
+		*(dest + i) = *(src + i);
+	}
+}
 
 // Creating an Array given the Index size and the size of the type
 Array *CreateArray(DeclIndex *externalMaxIndex, int wordsize) {
@@ -140,7 +153,8 @@ Array *CreateArray(DeclIndex *externalMaxIndex, int wordsize) {
 	output->lastIndex = entries;
 	return output;
 }
-//**Get ArrayOffset
+
+//**Get ArrayOffset for a given index**
 //Recrusive call of offset calculation (based on https://en.wikipedia.org/wiki/Row-major_order)
 int RecCalculateArrayOffset(LookupIndex *actualIndex, DeclIndex *maxIndex, int currentIndex)
 {
@@ -153,30 +167,12 @@ int RecCalculateArrayOffset(LookupIndex *actualIndex, DeclIndex *maxIndex, int c
 		* RecCalculateArrayOffset(actualIndex, maxIndex, currentIndex - 1);
 }
 
-
 //Calculates the offset in a given array in row-major ordre
 int CalculateArrayOffset(LookupIndex *actualIndex, DeclIndex *maxIndex) {
 	return RecCalculateArrayOffset(actualIndex, maxIndex, maxIndex->numberOfDims - 1);
 }
 
-//**Get/set values in array
-//Finds the given cellAdress
-char *FetchArrayCellAddress(Array *a, LookupIndex *index) {
-	int byteOffset = CalculateArrayOffset(index, a->maxIndex) * a->wordsize;
-	return ((char *)a->arr) + byteOffset; //char in c is equal to one byte.
-}
-
-void CheckArrayBound(Array *a, LookupIndex *index) {
-	int curOffset = CalculateArrayOffset(index, a->maxIndex);
-
-	if (curOffset < 0 || curOffset > a->lastIndex) {
-		char message[50];
-		sprintf(message, "Array out of bound: Tried to access element number %d\r\n", curOffset);
-
-		Throw(message);
-	}
-}
-
+//**Get/set values in array - base**
 //Copies the given value to a specific index in the array
 void UpdateArrayIndexValue(Array *a, LookupIndex * index, void* input) {
 	char * cellAddress = FetchArrayCellAddress(a, index);
@@ -196,6 +192,38 @@ void ReadArrayIndexValue(Array *a, LookupIndex * index, void* output) {
 
 	return;
 }
+
+//Finds the given cellAdress
+char *FetchArrayCellAddress(Array *a, LookupIndex *index) {
+	int byteOffset = CalculateArrayOffset(index, a->maxIndex) * a->wordsize;
+	return ((char *)a->arr) + byteOffset; //char in c is equal to one byte.
+}
+
+void CheckArrayBound(Array *a, LookupIndex *index) {
+	int curOffset = CalculateArrayOffset(index, a->maxIndex);
+
+	if (curOffset < 0 || curOffset > a->lastIndex) {
+		char message[50];
+		sprintf(message, "Array out of bound: Tried to access element number %d\r\n", curOffset);
+
+		Throw(message);
+	}
+}
+
+//**Get/set values in array - extension for LHZ**
+//Copies the given TYPE value to a specific index in the array
+void UpdateNumberArrayIndexViaOffset(Array *a, int offset, double input) {}
+void UpdateTextArrayIndexViaOffset(Array *a, int offset, Text *input) {}
+void UpdateBooleanArrayIndexViaOffset(Array *a, int offset, Boolean input) {}
+void UpdateNumberArrayIndexViaIndex(Array *a, int *offset, double input) {}
+void UpdateTextArrayIndexViaIndex(Array *a, int *offset, Text *input) {}
+void UpdateBooleanArrayIndexViaIndex(Array *a, int *offset, Boolean input) {}
+
+//Reads the given  TYPE value from a specific index in the given array
+double ReadNumberArrayIndex(Array *a, int offset) {}
+Text *ReadTextArrayIndex(Array *a, int *offset) {}
+Boolean ReadBooleanArrayIndex(Array *a, int *offset) {}
+
 
 
 //************Helper Functions***********//

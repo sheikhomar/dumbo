@@ -145,16 +145,22 @@ namespace dumbo.Compiler.TypeChecking
             {
                 if (identifier.DeclarationNode is ConstDeclNode)
                 {
-                    Reporter.Error("Constants cannot be changed.", identifier.SourcePosition);
+                    string msg = $"Constant '{identifier.Name}' cannot be changed.";
+                    Reporter.Error(msg, identifier.SourcePosition);
                 }
             }
+
+            var expr = node.Value;
+            var exprRes = GetVisitResult(expr, arg);
+            if (exprRes.IsError)
+                return null;
 
             if (node.Identifiers.Count > 1)
             {
                 // We expect the RHS to be a function call,
                 // when there are more than one identifers
-                var expr = node.Value as FuncCallExprNode;
-                if (expr == null)
+                var funcExpr = node.Value as FuncCallExprNode;
+                if (funcExpr == null)
                 {
                     Reporter.Error("Only function call with multiple return types are allowed.",
                         node.Value.SourcePosition);
@@ -162,13 +168,12 @@ namespace dumbo.Compiler.TypeChecking
                 else
                 {
                     // RHS is a function call
-                    var exprResult = GetVisitResult(expr, arg);
-                    var exprTypes = exprResult.Types.ToList();
+                    var exprTypes = exprRes.Types.ToList();
                     var idList = node.Identifiers.ToList();
 
                     if (idList.Count != exprTypes.Count)
                     {
-                        Reporter.Error($"Number of return values of '{expr.FuncName}' does not match identifiers.",
+                        Reporter.Error($"Number of return values of '{funcExpr.FuncName}' does not match identifiers.",
                             node.Value.SourcePosition);
                     }
                     else
@@ -193,9 +198,6 @@ namespace dumbo.Compiler.TypeChecking
             if (node.Identifiers.Count == 1)
             {
                 var id = node.Identifiers.First();
-                var expr = node.Value;
-                var exprRes = GetVisitResult(expr, arg);
-
                 if (exprRes.Types.Count() > 1)
                 {
                     Reporter.Error("The expression returns multiple values.", expr.SourcePosition);
@@ -209,7 +211,7 @@ namespace dumbo.Compiler.TypeChecking
                     if (!idType.Equals(exprType))
                     {
                         Reporter.Error($"The variable '{id.Name}' cannot be assigned the type {exprType}.",
-                                    expr.SourcePosition);
+                            expr.SourcePosition);
                     }
                 }
             }

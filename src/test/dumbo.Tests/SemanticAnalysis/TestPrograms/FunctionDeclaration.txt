@@ -132,3 +132,14 @@ End Program
 Function aa(number a, boolean a) return Nothing
 	
 End Function
+
+
+ //New Program Failing
+Program
+End Program
+
+Function test() return nothing
+end function
+
+Function test() return nothing
+end function

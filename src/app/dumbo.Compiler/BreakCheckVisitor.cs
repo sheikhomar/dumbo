@@ -1,4 +1,5 @@
-﻿using dumbo.Compiler.AST;
+﻿using System.ComponentModel;
+using dumbo.Compiler.AST;
 
 namespace dumbo.Compiler
 {
@@ -119,13 +120,13 @@ namespace dumbo.Compiler
 
         public VisitResult Visit(FuncCallExprNode node, VisitorArgs arg)
         {
-            node.DeclarationNode.Accept(this, arg);
+            node.DeclarationNode?.Accept(this, arg);
             return null;
         }
 
         public VisitResult Visit(FuncCallStmtNode node, VisitorArgs arg)
         {
-            node.CallNode.DeclarationNode.Accept(this, arg);
+            node.CallNode.Accept(this, arg);
             return null;
         }
 

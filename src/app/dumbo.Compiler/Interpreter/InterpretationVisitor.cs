@@ -10,7 +10,9 @@ namespace dumbo.Compiler.Interpreter
         private readonly IInteractiveShell _shell;
         public EventReporter Reporter { get; }
         private CallFrame CurrentCallFrame => _callStack.Peek();
-        private Stack<CallFrame> _callStack;
+        private readonly Stack<CallFrame> _callStack;
+        private readonly Dictionary<string, Value> _constants;
+        
         private IFormatProvider EnglishCulture = new CultureInfo("en");
 
         public InterpretationVisitor(EventReporter reporter, IInteractiveShell shell)
@@ -18,6 +20,7 @@ namespace dumbo.Compiler.Interpreter
             _shell = shell;
             Reporter = reporter;
             _callStack = new Stack<CallFrame>();
+            _constants = new Dictionary<string, Value>();
         }
 
         public Value Visit(ActualParamListNode node, VisitorArgs arg)
@@ -218,26 +221,16 @@ namespace dumbo.Compiler.Interpreter
         public Value Visit(ConstDeclListNode node, VisitorArgs arg)
         {
             foreach (var constant in node)
-            {
                 constant.Accept(this, arg);
-            }
-
             return null;
         }
 
         public Value Visit(ConstDeclNode node, VisitorArgs arg)
         {
-            CurrentCallFrame.Allocate(node.Name);
-            var val = ConvertValueNodeToValue(node.Value, arg);
-            CurrentCallFrame.Set(node.Name, val);
+            var val = node.Value.Accept(this, arg);
+            _constants.Add(node.Name, val);
 
             return null;
-        }
-
-        private Value ConvertValueNodeToValue(ValueNode node, VisitorArgs arg)
-        {
-            var val = node.Accept(this, arg);
-            return val;
         }
 
         public Value Visit(BuiltInFuncDeclNode node, VisitorArgs arg)
@@ -251,30 +244,6 @@ namespace dumbo.Compiler.Interpreter
                 CurrentCallFrame.Allocate(identifier.Name);
 
             PerformAssignment(node.Identifiers, node.Value, arg);
-            return null;
-        }
-
-        public Value Visit(PrimitiveDeclStmtNode node, VisitorArgs arg)
-        {
-            foreach (var identifier in node.Identifiers)
-            {
-                CurrentCallFrame.Allocate(identifier.Name);
-                Value defaultValue = new UndefinedValue();
-                var typeNode = node.Type as PrimitiveTypeNode;
-                switch (typeNode.Type)
-                {
-                    case PrimitiveType.Number:
-                        defaultValue = new NumberValue(0);
-                        break;
-                    case PrimitiveType.Text:
-                        defaultValue = new TextValue(string.Empty);
-                        break;
-                    case PrimitiveType.Boolean:
-                        defaultValue = new BooleanValue(false);
-                        break;
-                }
-                CurrentCallFrame.Set(identifier.Name, defaultValue);
-            }
             return null;
         }
 
@@ -388,6 +357,9 @@ namespace dumbo.Compiler.Interpreter
 
         public Value Visit(IdentifierNode node, VisitorArgs arg)
         {
+            if (_constants.ContainsKey(node.Name))
+                return _constants[node.Name];
+
             return CurrentCallFrame.Get<Value>(node.Name);
         }
 
@@ -445,6 +417,30 @@ namespace dumbo.Compiler.Interpreter
 
         public Value Visit(PrimitiveTypeNode node, VisitorArgs arg)
         {
+            return null;
+        }
+
+        public Value Visit(PrimitiveDeclStmtNode node, VisitorArgs arg)
+        {
+            foreach (var identifier in node.Identifiers)
+            {
+                CurrentCallFrame.Allocate(identifier.Name);
+                Value defaultValue = new UndefinedValue();
+                var typeNode = node.Type as PrimitiveTypeNode;
+                switch (typeNode.Type)
+                {
+                    case PrimitiveType.Number:
+                        defaultValue = new NumberValue(0);
+                        break;
+                    case PrimitiveType.Text:
+                        defaultValue = new TextValue(string.Empty);
+                        break;
+                    case PrimitiveType.Boolean:
+                        defaultValue = new BooleanValue(false);
+                        break;
+                }
+                CurrentCallFrame.Set(identifier.Name, defaultValue);
+            }
             return null;
         }
 

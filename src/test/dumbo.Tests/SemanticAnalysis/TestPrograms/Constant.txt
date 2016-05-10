@@ -9,6 +9,18 @@ Program
 End Program
 
 
+//New Program
+constant Number id := 1
+
+Program
+  write("" + id)
+End Program
+
+Function f() Returns nothing
+  write("" + id)
+end function
+
+
  //New Program Failing
 constant number numb1 := 10
 Program
@@ -30,5 +42,4 @@ constant text   numtxtbool := "text"
 program
 
 end program
-
 

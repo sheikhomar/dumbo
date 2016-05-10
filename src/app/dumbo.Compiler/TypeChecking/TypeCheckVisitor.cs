@@ -96,48 +96,6 @@ namespace dumbo.Compiler.TypeChecking
             return new TypeCheckVisitResult(node.ArrayType);
         }
 
-        private void CheckArrayValues(NestedExpressionListNode values, ArrayValueNode node, int dimension, VisitorArgs arg)
-        {
-            ArrayTypeNode arrayType = node.ArrayType;
-            var dimSize = arrayType.GetDimensionSize(dimension);
-
-            PrimitiveTypeNode targetType = arrayType.Type;
-            for (int i = 0; i < values.Count; i++)
-            {
-                if (values[i] is ExpressionListNode)
-                {
-                    var list = values[i] as ExpressionListNode;
-                    if (dimSize.HasValue && list.Count != dimSize.Value)
-                        Reporter.Error("Invalid array value.", list.SourcePosition);
-
-                    foreach (var expr in list)
-                    {
-                        expr.Accept(this, arg);
-                        var exprType = expr.InferredType.GetFirstAs<PrimitiveTypeNode>();
-                        if (exprType == null)
-                        {
-                            Reporter.Error($"Assigned value must be of type {targetType.Type}", expr.SourcePosition);
-                        }
-                        else
-                        {
-                            if (exprType.Type != targetType.Type)
-                            {
-                                Reporter.Error($"Expression should be of type {targetType.Type}", expr.SourcePosition);
-                            }
-                        }
-                    }
-                }
-                else
-                {
-                    var list = values[i] as NestedExpressionListNode;
-                    if (dimSize.HasValue && list.Count != dimSize.Value)
-                        Reporter.Error("Invalid array value.", node.SourcePosition);
-
-                    CheckArrayValues(list, node, dimension+1, arg);
-                }
-            }
-        }
-
         public TypeCheckVisitResult Visit(AssignmentStmtNode node, VisitorArgs arg)
         {
             foreach (var identifier in node.Identifiers)
@@ -313,69 +271,6 @@ namespace dumbo.Compiler.TypeChecking
             return null;
         }
 
-        private ExpressionListNode CheckForDesiredSize(NestedExpressionListNode values)
-        {
-            List<int> CheckResult;
-            if (values[0] is ExpressionListNode)
-            {
-                CheckResult = CheckHelperForExprList(values, new List<int>());
-            }
-            else
-            {
-                CheckResult = CheckHelperForNestedExprList(values[0] as NestedExpressionListNode, new List<int>());
-            }
-
-            CheckResult.Reverse();
-            ExpressionListNode exprList = new ExpressionListNode();
-            foreach (var val in CheckResult)
-            {
-                exprList.Add(new LiteralValueNode(val.ToString(), new PrimitiveTypeNode(PrimitiveType.Number), new SourcePosition(0,0,0,0)));
-            }
-            return exprList;
-        }
-
-        private List<int> CheckHelperForNestedExprList(NestedExpressionListNode values, List<int> result)
-        {
-            if (values[0] is ExpressionListNode)
-            {
-                result = CheckHelperForExprList(values, result);
-                result.Add(values.Count);
-                return result;
-            }
-            else
-            {
-                List<int> childrenList = new List<int>();
-
-                foreach (NestedExpressionListNode list in values)
-                {
-                    CheckHelperForNestedExprList(list, result);
-                    childrenList.Add(list.Count);
-                }
-                if (childrenList.Any(o => o != childrenList[0]))
-                    Reporter.Error("The array's defined dimensions does not match the given value's.", new SourcePosition(0, 0, 0, 0));
-                else
-                    result.Add(childrenList[0]);
-            }
-
-            return result;
-        }
-
-        private List<int> CheckHelperForExprList(NestedExpressionListNode values, List<int> result)
-        {
-            List<int> childrenList = new List<int>();
-
-            foreach (ExpressionListNode list in values)
-            {
-                childrenList.Add(list.Count);
-            }
-
-            if (childrenList.Any(o => o != childrenList[0]))
-                Reporter.Error("The array's defined dimensions does not match the given value's.", new SourcePosition(0, 0, 0, 0));
-            else
-                result.Add(childrenList[0]);
-            return result;
-        }
-
         public TypeCheckVisitResult Visit(BuiltInFuncDeclNode node, VisitorArgs arg)
         {
             return null;
@@ -412,14 +307,7 @@ namespace dumbo.Compiler.TypeChecking
             }
             return null;
         }
-
-        public TypeCheckVisitResult Visit(PrimitiveDeclStmtNode node, VisitorArgs arg)
-        {
-            node.Identifiers.Accept(this, arg);
-
-            return null;
-        }
-
+        
         public TypeCheckVisitResult Visit(ElseIfStmtListNode node, VisitorArgs arg)
         {
             foreach (var item in node)
@@ -600,6 +488,13 @@ namespace dumbo.Compiler.TypeChecking
             return null;
         }
 
+        public TypeCheckVisitResult Visit(PrimitiveDeclStmtNode node, VisitorArgs arg)
+        {
+            node.Identifiers.Accept(this, arg);
+
+            return null;
+        }
+
         public TypeCheckVisitResult Visit(ProgramNode node, VisitorArgs arg)
         {
             node.Body.Accept(this, arg);
@@ -741,6 +636,111 @@ namespace dumbo.Compiler.TypeChecking
             }
 
             return actualParamTypes;
+        }
+
+        private ExpressionListNode CheckForDesiredSize(NestedExpressionListNode values)
+        {
+            List<int> CheckResult;
+            if (values[0] is ExpressionListNode)
+            {
+                CheckResult = CheckHelperForExprList(values, new List<int>());
+            }
+            else
+            {
+                CheckResult = CheckHelperForNestedExprList(values[0] as NestedExpressionListNode, new List<int>());
+            }
+
+            CheckResult.Reverse();
+            ExpressionListNode exprList = new ExpressionListNode();
+            foreach (var val in CheckResult)
+            {
+                exprList.Add(new LiteralValueNode(val.ToString(), new PrimitiveTypeNode(PrimitiveType.Number), new SourcePosition(0, 0, 0, 0)));
+            }
+            return exprList;
+        }
+
+        private List<int> CheckHelperForNestedExprList(NestedExpressionListNode values, List<int> result)
+        {
+            if (values[0] is ExpressionListNode)
+            {
+                result = CheckHelperForExprList(values, result);
+                result.Add(values.Count);
+                return result;
+            }
+            else
+            {
+                List<int> childrenList = new List<int>();
+
+                foreach (NestedExpressionListNode list in values)
+                {
+                    CheckHelperForNestedExprList(list, result);
+                    childrenList.Add(list.Count);
+                }
+                if (childrenList.Any(o => o != childrenList[0]))
+                    Reporter.Error("The array's defined dimensions does not match the given value's.", new SourcePosition(0, 0, 0, 0));
+                else
+                    result.Add(childrenList[0]);
+            }
+
+            return result;
+        }
+
+        private List<int> CheckHelperForExprList(NestedExpressionListNode values, List<int> result)
+        {
+            List<int> childrenList = new List<int>();
+
+            foreach (ExpressionListNode list in values)
+            {
+                childrenList.Add(list.Count);
+            }
+
+            if (childrenList.Any(o => o != childrenList[0]))
+                Reporter.Error("The array's defined dimensions does not match the given value's.", new SourcePosition(0, 0, 0, 0));
+            else
+                result.Add(childrenList[0]);
+            return result;
+        }
+
+        private void CheckArrayValues(NestedExpressionListNode values, ArrayValueNode node, int dimension, VisitorArgs arg)
+        {
+            ArrayTypeNode arrayType = node.ArrayType;
+            var dimSize = arrayType.GetDimensionSize(dimension);
+
+            PrimitiveTypeNode targetType = arrayType.Type;
+            for (int i = 0; i < values.Count; i++)
+            {
+                if (values[i] is ExpressionListNode)
+                {
+                    var list = values[i] as ExpressionListNode;
+                    if (dimSize.HasValue && list.Count != dimSize.Value)
+                        Reporter.Error("Invalid array value.", list.SourcePosition);
+
+                    foreach (var expr in list)
+                    {
+                        expr.Accept(this, arg);
+                        var exprType = expr.InferredType.GetFirstAs<PrimitiveTypeNode>();
+                        if (exprType == null)
+                        {
+                            Reporter.Error($"Assigned value must be of type {targetType.Type}", expr.SourcePosition);
+                        }
+                        else
+                        {
+                            if (exprType.Type != targetType.Type)
+                            {
+                                Reporter.Error($"Expression should be of type {targetType.Type}", expr.SourcePosition);
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    var list = values[i] as NestedExpressionListNode;
+                    if (dimSize.HasValue && list.Count != dimSize.Value)
+                        Reporter.Error("Invalid array value.", node.SourcePosition);
+
+                    CheckArrayValues(list, node, dimension + 1, arg);
+                }
+            }
         }
     }
 }

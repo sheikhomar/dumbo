@@ -203,6 +203,12 @@ namespace dumbo.Compiler
             if (entry == null)
             {
                 SymbolTable.EnterSymbol(node.Name, new SymbolTablePrimitiveType(node), true);
+
+                if (node.Type is ArrayTypeNode)
+                {
+                    var arrayType = node.Type as ArrayTypeNode;
+                    IntroduceVariablesForDimensionSizes(arrayType);
+                }
             }
             else if (SymbolTable.DeclaredLocally(node.Name))
             {
@@ -425,6 +431,29 @@ namespace dumbo.Compiler
             else if (entry.IsUnhideable == false && entry.Depth != SymbolTable.Depth)
             {
                 SymbolTable.EnterSymbol(name, new SymbolTablePrimitiveType(declNode));
+            }
+        }
+        
+        private void IntroduceVariablesForDimensionSizes(ArrayTypeNode arrayType)
+        {
+            foreach (var dim in arrayType.Sizes)
+            {
+                var id = dim as IdentifierNode;
+                if (id != null)
+                {
+                    if (SymbolTable.DeclaredLocally(id.Name))
+                    {
+                        Reporter.Error($"Identifier '{id.Name}' is already declared.", id.SourcePosition);
+                    }
+                    else
+                    {
+                        // HACK
+                        var idList = new IdentifierListNode { id };
+                        var type = new PrimitiveTypeNode(PrimitiveType.Number, dim.SourcePosition);
+                        var decl = new PrimitiveDeclStmtNode(idList, type, dim.SourcePosition);
+                        AddVariableToSymbolTable(id, decl);
+                    }
+                }
             }
         }
     }

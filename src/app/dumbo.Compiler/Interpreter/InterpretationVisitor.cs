@@ -1,11 +1,6 @@
 using System;
-using System.CodeDom;
 using System.Collections.Generic;
-using System.Diagnostics.Eventing;
 using System.Globalization;
-using System.Linq;
-using System.Net.Http.Headers;
-using System.Runtime.InteropServices;
 using dumbo.Compiler.AST;
 
 namespace dumbo.Compiler.Interpreter
@@ -314,12 +309,13 @@ namespace dumbo.Compiler.Interpreter
             if (IsBuiltIn(node.DeclarationNode))
                 return CallBuiltInFunction(node, arg);
 
+            List<Value> valueList = GetActualParameterValues(node, arg);
+
             CallFrame newFrame = new CallFrame(node.DeclarationNode);
             for (int i = 0; i < node.DeclarationNode.Parameters.Count; i++)
             {
-                var actualParam = node.Parameters[i];
                 var formalParam = node.DeclarationNode.Parameters[i];
-                var value = actualParam.Accept(this, arg);
+                var value = valueList[i];
 
                 newFrame.Allocate(formalParam.Name);
                 newFrame.Set(formalParam.Name, value);
@@ -663,6 +659,26 @@ namespace dumbo.Compiler.Interpreter
 
 
             return sizeList;
+        }
+
+        private List<Value> GetActualParameterValues(FuncCallExprNode node, VisitorArgs arg)
+        {
+            var valueList = new List<Value>();
+            foreach (var actualParam in node.Parameters)
+            {
+                var value = actualParam.Accept(this, arg);
+                if (value is ReturnValue)
+                {
+                    var retVal = value as ReturnValue;
+                    valueList.AddRange(retVal.ReturnValues);
+                }
+                else
+                {
+                    valueList.Add(value);
+                }
+            }
+
+            return valueList;
         }
     }
 }

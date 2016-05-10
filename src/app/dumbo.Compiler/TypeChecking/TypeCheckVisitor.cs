@@ -244,16 +244,21 @@ namespace dumbo.Compiler.TypeChecking
             var rightType = rr.Types.First();
             var resultType = BinaryOperation.GetInferredType(node.Operator, leftType, rightType);
 
+            TypeNode finalExprTypeNode = null;
+
             if (!resultType.Item1)
             {
                 Reporter.Error($"The types {leftType} and {rightType} are not compatible.", node.SourcePosition);
+                finalExprTypeNode = new ErrorTypeNode();
+            }
+            else
+            {
+                finalExprTypeNode = new PrimitiveTypeNode(resultType.Item2);
             }
 
-            var exprType = new PrimitiveTypeNode(resultType.Item2);
+            node.InferredType = new TypeDescriptor(finalExprTypeNode);
 
-            node.InferredType = new TypeDescriptor(exprType);
-
-            return new TypeCheckVisitResult(exprType);
+            return new TypeCheckVisitResult(finalExprTypeNode);
         }
 
         public TypeCheckVisitResult Visit(BreakStmtNode node, VisitorArgs arg)

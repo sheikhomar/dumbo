@@ -217,12 +217,27 @@ namespace dumbo.Compiler.Interpreter
 
         public Value Visit(ConstDeclListNode node, VisitorArgs arg)
         {
-            throw new NotImplementedException();
+            foreach (var constant in node)
+            {
+                constant.Accept(this, arg);
+            }
+
+            return null;
         }
 
         public Value Visit(ConstDeclNode node, VisitorArgs arg)
         {
-            throw new NotImplementedException();
+            CurrentCallFrame.Allocate(node.Name);
+            var val = ConvertValueNodeToValue(node.Value, arg);
+            CurrentCallFrame.Set(node.Name, val);
+
+            return null;
+        }
+
+        private Value ConvertValueNodeToValue(ValueNode node, VisitorArgs arg)
+        {
+            var val = node.Accept(this, arg);
+            return val;
         }
 
         public Value Visit(BuiltInFuncDeclNode node, VisitorArgs arg)
@@ -522,6 +537,7 @@ namespace dumbo.Compiler.Interpreter
 
         public Value Visit(RootNode node, VisitorArgs arg)
         {
+            node.ConstDecls.Accept(this, arg);
             node.Program.Accept(this, arg);
             node.FuncDecls.Accept(this, arg);
             return null;

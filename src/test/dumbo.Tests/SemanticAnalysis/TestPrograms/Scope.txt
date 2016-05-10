@@ -123,7 +123,7 @@ Program
       if(true) then
         a := 1
       else
-          a := 1
+        a := true
       end if
     end repeat
 End Program
@@ -145,7 +145,7 @@ Program
     if(true) then
       boolean a := true
     end if
-    repeat while a
+    repeat while a = 0
       a := false
     end repeat
 End Program
@@ -164,3 +164,12 @@ Function MyFunc() Returns Text, Text, Text
   return "Flid", "Fuld", t
 End Function
 
+
+
+//New Program Failing
+Program
+End Program
+
+Function f2(Array[n, n] of Number a) return nothing
+  
+End Function

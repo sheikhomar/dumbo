@@ -57,29 +57,13 @@ Function aa() return text
 end function
 
 
- //New Program Failing
-Program
-  return a()
-End Program
-
-
- //New Program Failing
-Program
-  return aa(),aa(),b(aa(),a)
-End Program
-
-
- //New Program Failing
-Program
-  return false or true and aa()
-End Program
 
 
  //New Program Failing
 Program
 End Program
 
-Function aa(Number a) return text, text, text, text, text, text, text, text, text, text, text, text, text, text, text, text, text, text, text, text
+Function aa(Number a) return text
 End function
 
 
@@ -88,42 +72,6 @@ Program
   return nothing
 End Program
 
-
- //New Program Failing
-Program
-  return a
-End Program
-
- //New Program Failing
-Program
-  return a, b
-End Program
-
-
- //New Program Failing
-Program
-  return 1,1,1
-End Program
-
-
- //New Program Failing
-Program
-  return false, true or false
-End Program
-
-
- //New Program 
-Program
-  text t := aa(bb(11))
-End Program
-
-Function aa(number a, boolean b) return text
-  return "ALLO"
-End Function
-
-Function bb(Number a) return number, boolean
-  return 11, true
-End Function
 
 
  //New Program 
@@ -140,43 +88,29 @@ Function b() return number
 end functIon
 
 
- //New Program 
-Program
-  return nothing
-End Program
+
 
 // *******************Return in program body***************
+
   //New Program Failing
 Program
   return nothing
 End Program
 
 
-  //New Program
+  //New Program Failing
 Program
-  return a
-End Program
-
-  //New Program
-Program
-  return a, b
+  return 1
 End Program
 
 
-  //New Program
+  //New Program Failing
 Program
-  return 1,1,1
-End Program
-
-
-  //New Program
-Program
-  return false, true or false
+  return true, false
 End Program
 
 
 //New Program Failing
-
 Program
   
 End Program

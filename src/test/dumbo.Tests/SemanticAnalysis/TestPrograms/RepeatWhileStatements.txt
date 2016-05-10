@@ -1,15 +1,15 @@
 ﻿// ***************************RepWhileStmt*********************************
  //New Program 
 Program
-	repeat while 1 = 1 or false
-	end repeat
+	Repeat While 1 = 1 or false
+	end Repeat
 End Program
 
 
  //New Program 
 Program
-	repeat while 1 > truee()
-	end repeat
+	Repeat While 1 > truee()
+	end Repeat
 End Program
 
 Function truee() return number
@@ -19,60 +19,38 @@ end functIon
 
  //New Program 
 Program
-	repeaT wHile(true)
-	end repEat
+	Repeat While(true)
+	end Repeat
 End Program
 
 
  //New Program 
 Program
-	repeat while 1 = 1 or ((1 = 1 and 2 = 1) or true)
-	end repeat
+	Repeat While 1 = 1 or ((1 = 1 and 2 = 1) or true)
+	end Repeat
 End Program
 
 
  //New Program 
 Program
-	repeat while true
-		repEat 11
-			repEat while 1 > 2
-			end repeat
-		end repEat
-	end repeat
+	Repeat While true
+		Repeat 11
+			Repeat While 1 > 2
+			end Repeat
+		end Repeat
+	end Repeat
 End Program
 
 
  //New Program Failing
 Program
-	repeat while 1 = 1 = 1
-	end repeat
+	Repeat While 1 + 1
+	end Repeat
 End Program
 
 
  //New Program Failing
 Program
-	repeat while 1 > 1 > Truee()
-	end repeat
+	Repeat While 1
+	end Repeat
 End Program
-
-Function truee() return boolean
-	return false
-end function
-
-
- //New Program Failing
-Program
-	repeaT wHile(1)
-	end repEat
-End Program
-
-
- //New Program Failing
-Program
-	repeat while 1 > 1 > Truee()
-	end repeat
-End Program
-
-Function truee() return number
-	return 1%1
-end functIon

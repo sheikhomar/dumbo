@@ -88,13 +88,14 @@ Function aa(number a) return nothing
 End Function
 
 
+
  //New Program Failing
 Program
-    aa( 1, False, "")
+    aa(1)
 End Program
 
-Function aa(number a, boolean a, text a) return number, text, boolean
-	return a, a, a
+Function aa(number a) return number
+	return a
 End Function
 
 
@@ -164,7 +165,7 @@ Program
     text a := aa( b(aa(1, false)), true)
 End Program
 
-Function aa(number a, boolean b) return text
+Function aa(number a, boolean c) return text
 	return ""
 End functIon
 
@@ -173,32 +174,6 @@ Function b(text a) return number
 End function
 
 
- //New Program Failing
-Program
-    text a := aa( b(aa(1, false)), true)
-End Program
-
-Function aa(number a, number b) return text
-	return ""
-End functIon
-
-Function b(text a) return number
-	Return 1
-End function
-
-
- //New Program Failing
-Program
-    text a := aa( b(aa(1, false)), true)
-End Program
-
-Function aa(number a, boolean b) return  number
-	return  1
-End functIon
-
-Function b(text a) return number
-	Return 1
-End function
 
 
  //New Program Failing

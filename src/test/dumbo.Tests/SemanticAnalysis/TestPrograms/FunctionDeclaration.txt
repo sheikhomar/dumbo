@@ -121,3 +121,14 @@ End Program
 Function a() Returns Number, Text, Text
   Return a(1)
 End Function
+
+
+
+ //New Program Failing
+Program
+    
+End Program
+
+Function aa(number a, boolean a) return Nothing
+	
+End Function

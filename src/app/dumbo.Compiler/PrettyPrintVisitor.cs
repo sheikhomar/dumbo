@@ -181,7 +181,8 @@ namespace dumbo.Compiler
 
         public object Visit(FormalParamNode node, VisitorArgs arg)
         {
-            Write($"{node.Type} {node.Name}");
+            node.Type.Accept(this, arg);
+            Write($" {node.Name}");
 
             return null;
         }

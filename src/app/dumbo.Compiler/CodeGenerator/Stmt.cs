@@ -15,6 +15,8 @@ namespace dumbo.Compiler.CodeGenerator
             _line = line;
         }
 
+        public string GetLine { get { return _line.Substring(0); } }
+
         public void Append(string linePart)
         {
             _line += linePart;

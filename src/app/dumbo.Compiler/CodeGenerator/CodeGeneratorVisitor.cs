@@ -42,14 +42,19 @@ namespace dumbo.Compiler.CodeGenerator
 
         public RuntimeEntity Visit(ArrayIdentifierNode node, VisitorArgs arg)
         {
-            
+            string indexName = $"_indexExpr{node.Name}";
+            WriteArrayIndexWithIntPointer(node, indexName, arg);
 
-            throw new NotImplementedException();
+            PrimitiveType type = node.InferredType.GetFirstAs<PrimitiveTypeNode>().Type;
+            _currentStmt.Append($"Read{type}ArrayIndex(Array *{node.Name}, int *{indexName})");
+
+            return null;
         }
 
         public RuntimeEntity Visit(ArrayTypeNode node, VisitorArgs arg)
         {
-            WriteArrayIndex(node.Sizes, arg);
+            _currentStmt.Append("Array*");
+            // WriteArrayIndex(node.Sizes, arg);
             //CreateStmtAndAddToCurrentModule("//Create Index struct");
             //CreateStmtAndAddToCurrentModule($"int _numberOfDims = {node.Sizes.Count};");
             //CreateStmtAndAddToCurrentModule("int *_indices = malloc(sizeof(int)*_numberOfDims);");
@@ -62,7 +67,7 @@ namespace dumbo.Compiler.CodeGenerator
             //}
             //CreateStmtAndAddToCurrentModule("Index *_index = CreateIndex(_indices, _numberOfDims);");
             //CreateStmtAndAddToCurrentModule("//End of creating Index struct");
-            
+
             return null;
         }
 
@@ -83,6 +88,7 @@ namespace dumbo.Compiler.CodeGenerator
             {
                 //A normal assignment | Id := expression   (note: single return function is an expression)
                 PrimitiveTypeNode idType = node.Identifiers[0].DeclarationNode.Type as PrimitiveTypeNode;
+                ArrayIdentifierNode arrayType = node.Identifiers[0] as ArrayIdentifierNode;
                 _currentStmt = new Stmt("");
 
                 if (idType?.Type == PrimitiveType.Text)
@@ -92,15 +98,31 @@ namespace dumbo.Compiler.CodeGenerator
                     _currentStmt.Append($", ");
                     node.Identifiers.Accept(this, arg);
                     _currentStmt.Append(")");
+                    _currentStmt.Append(";");
+                    _currentModule.Append(_currentStmt);
+                }
+                else if (arrayType != null)
+                {
+                    string indexName = "_index";
+                    CreateStmtAndAddToCurrentModule("{");
+                    WriteArrayIndexWithIntPointer(arrayType, indexName, arg);
+
+                    PrimitiveType type = arrayType.InferredType.GetFirstAs<PrimitiveTypeNode>().Type;
+                    _currentStmt.Append("Update");
+                    _currentStmt.Append($"{type}ArrayIndexViaIndex(Array *{arrayType.Name}, int *{indexName}, {DetermineCType(type)} ");
+                    node.Value.Accept(this, arg);
+                    _currentStmt.Append(");");
+                    AppendCurrentStmtToCurrentModule();
+                    CreateStmtAndAddToCurrentModule("}");
                 }
                 else
                 {
                     node.Identifiers.Accept(this, arg);
                     _currentStmt.Append(" = ");
                     node.Value.Accept(this, arg);
+                    _currentStmt.Append(";");
+                    _currentModule.Append(_currentStmt);
                 }
-                _currentStmt.Append(";");
-                _currentModule.Append(_currentStmt);
             }
 
             return null;
@@ -375,7 +397,7 @@ namespace dumbo.Compiler.CodeGenerator
             {
                 PrimitiveTypeNode parType = node.Parameters[i].Type as PrimitiveTypeNode;
 
-                if (parType.Type == PrimitiveType.Text)
+                if (parType != null && parType.Type == PrimitiveType.Text)
                 {
                     prefix.Add(new Stmt($"{node.Parameters[i].Name.ToLower()} = TextDup({node.Parameters[i].Name.ToLower()});"));
                 }
@@ -802,8 +824,9 @@ namespace dumbo.Compiler.CodeGenerator
         {
             _currentStmt = new Stmt("");
             CreateStmtAndAddToCurrentModule("//Declaring an Array");
+            WriteArrayIndex(type.Sizes, arg);
             type.Accept(this, arg);
-            _currentStmt.Append("Array *");
+            _currentStmt.Append(" ");
             identifiers.Accept(this, arg);
             _currentStmt.Append($"= CreateArray(_index, sizeof({DetermineCType(type.Type.Type)}));");
             AppendCurrentStmtToCurrentModule();
@@ -862,14 +885,16 @@ namespace dumbo.Compiler.CodeGenerator
         private void WriteFullArrayAss(ExpressionNode input, IdentifierListNode identifiers, VisitorArgs arg)
         {
             ArrayValueNode expressions = input as ArrayValueNode;
+            Stack<int> offset = new Stack<int>();
+            offset.Push(1);
             if (expressions != null)
             {
-                CastNestedExprAndAssign(expressions.Values, identifiers, 0, new List<int>(), arg);
+                CastNestedExprAndAssign(expressions.Values, identifiers, 0, offset, new List<int>(), arg);
             }
             //((node.Values[0] as NestedExpressionListNode) as ExpressionListNode)[0].Accept(this, arg)
         }
 
-        private void CastNestedExprAndAssign(NestedExpressionListNode expressions, IdentifierListNode identifiers, int layer, IList<int> index, VisitorArgs arg)
+        private void CastNestedExprAndAssign(NestedExpressionListNode expressions, IdentifierListNode identifiers, int layer, Stack<int> offset, IList<int> index, VisitorArgs arg)
         {
             NestedExpressionListNode exprs = expressions[layer] as NestedExpressionListNode;
             index.Add(0);
@@ -878,7 +903,7 @@ namespace dumbo.Compiler.CodeGenerator
                 for (int i = 0; i < exprs.Count; i++)
                 {
                     index[layer] = i;
-                    CastNestedExprAndAssign(exprs, identifiers, i, index, arg);
+                    CastNestedExprAndAssign(exprs, identifiers, i, offset, index, arg);
                 }
             }
             else
@@ -886,7 +911,7 @@ namespace dumbo.Compiler.CodeGenerator
                 ExpressionListNode exprList = expressions[layer] as ExpressionListNode;
                 if (exprList != null)
                 {
-                    AssignArrayIndex(exprList, identifiers, index, arg);
+                    AssignArrayIndexWithOffset(exprList, identifiers, index, offset, arg);
                 }
                 else
                 {
@@ -895,35 +920,54 @@ namespace dumbo.Compiler.CodeGenerator
             }
         }
 
-        private void AssignArrayIndex(ExpressionListNode exprList, IdentifierListNode identifiers, IList<int> index, VisitorArgs arg)
+        private void AssignArrayIndexWithOffset(ExpressionListNode exprList, IdentifierListNode identifiers, IList<int> index, Stack<int> offset, VisitorArgs arg)
         {
-            int i = 0;
+            int i = 0, newCount = offset.Count;
             PrimitiveType type = exprList[0].InferredType.GetFirstAs<PrimitiveTypeNode>().Type;
 
-            CreateStmtAndAddToCurrentModule("//Create Index struct");
-            CreateStmtAndAddToCurrentModule($"int _numberOfDims = {index.Count};");
-            CreateStmtAndAddToCurrentModule("int *_index = malloc(sizeof(int)*_numberOfDims);");
+            //CreateStmtAndAddToCurrentModule("//Create Index struct");
+            //CreateStmtAndAddToCurrentModule($"int _numberOfDims = {index.Count};");
+            //CreateStmtAndAddToCurrentModule("int *_index = malloc(sizeof(int)*_numberOfDims);");
 
             for (; i < index.Count; i++)
             {
-                CreateStmtAndAddToCurrentModule($"_index[{i}] = {index[i]};");
+                //CreateStmtAndAddToCurrentModule($"_index[{i}] = {index[i]};");
             }
 
             for (int j = 0; j < exprList.Count; j++)
             {
-                CreateStmtAndAddToCurrentModule($"_index[{i}] = {j};");
-                CreateStmtAndAddToCurrentModule("Index *_index = CreateIndex(_indices, _numberOfDims);");
-                CreateStmtAndAddToCurrentModule("//End of creating Index struct");
+                //CreateStmtAndAddToCurrentModule($"_index[{i}] = {j};");
+                //CreateStmtAndAddToCurrentModule("Index *_index = CreateIndex(_indices, _numberOfDims);");
+                //CreateStmtAndAddToCurrentModule("//End of creating Index struct");
 
                 _currentStmt.Append($"Update{type}ArrayIndex(Array *");
                 identifiers.Accept(this, arg);
-                _currentStmt.Append($", Index *_index, ");
+                _currentStmt.Append($", int {offset.Peek()}, ");
                 string cType = type == PrimitiveType.Number ? "double" : type.ToString();
                 _currentStmt.Append($"{cType} ");
                 exprList[j].Accept(this, arg);
                 _currentStmt.Append(");");
                 AppendCurrentStmtToCurrentModule();
+                newCount++;
+                offset.Push(newCount);
             }
+        }
+
+        private void WriteArrayIndexWithIntPointer(ArrayIdentifierNode node, string indexName, VisitorArgs arg)
+        {
+            string tempCurrentStmt = _currentStmt.GetLine;
+            _currentStmt = new Stmt("");
+            _currentStmt.Append($"int {indexName}[] = {{");
+            for (int i = 0; i < node.Indices.Count; i++)
+            {
+                _currentStmt.Append("(int)");
+                node.Indices[i].Accept(this, arg);
+                if (i < node.Indices.Count - 1)
+                    _currentStmt.Append(", ");
+            }
+            _currentStmt.Append("};");
+            AppendCurrentStmtToCurrentModule();
+            _currentStmt = new Stmt(tempCurrentStmt);
         }
     }
 }

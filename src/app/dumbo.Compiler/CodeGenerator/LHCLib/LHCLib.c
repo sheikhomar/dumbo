@@ -46,8 +46,8 @@ Text * TextDup(Text *input);
 
 void BooleanPrint(Boolean *input);
 
-Text* ConcatTextAndBoolean(Text *text, Boolean boolean);
-Text* ConcatTextAndNumber(Text *text, double number);
+Text* ConvertNumberToText(double number);
+Text* ConvertBooleanToText(Boolean boolean);
 
 Index *CreateIndex(int *indices, int numberOfDims);
 Array *CreateArray(Index *maxIndex, int wordsize);
@@ -397,30 +397,20 @@ void Throw(char* message) {
 
 /********************************************************
 Function:	Convert									
-Version: 	v1.1 						
+Version: 	v1.2 						
 /********************************************************/
-Text* ConcatTextAndNumber(Text *text, double number)
+Text* ConvertNumberToText(double number)
 {
-    int MAX_SIZE = 50;
-    char *output = (char*)malloc(MAX_SIZE+1);
-    sprintf(output, "%lf", number);
-    
-    Text *numberAsText = CreateText(output);
+	int MAX_SIZE = 50;
+	char *output = (char*)malloc(MAX_SIZE + 1);
+	sprintf(output, "%lf", number);
 
-    char *tempBuffer = (char*)malloc(text->Length + numberAsText->Length);
-    strcpy(tempBuffer, text->Value);
-    strcat(tempBuffer, numberAsText->Value);
-    return CreateText(tempBuffer);
+	return CreateText(output);
 }
 
-
-Text* ConcatTextAndBoolean(Text *text, Boolean boolean)
+Text* ConvertBooleanToText(Boolean boolean)
 {
-    char *tempBuffer = (char*)malloc(text->Length + 6);
-    strcpy(tempBuffer, text->Value);
-    strcat(tempBuffer, boolean == true ? "true" : "false");
-    
-    return CreateText(tempBuffer);
+	return CreateText(boolean == true ? "true" : "false");
 }
 
 /********************************************************

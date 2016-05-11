@@ -135,42 +135,9 @@ namespace dumbo.Compiler.CodeGenerator
             PrimitiveTypeNode rightType = node.RightOperand.InferredType.GetFirstAs<PrimitiveTypeNode>();
             string binOperator = ConvertBinaryOperator(node.Operator);
 
-            if (binOperator == "+" && (leftType.Type == PrimitiveType.Text || rightType.Type == PrimitiveType.Text))
+            if (binOperator == "+" && leftType.Type == PrimitiveType.Text && rightType.Type == PrimitiveType.Text)
             {
-                if (leftType.Type == PrimitiveType.Text)
-                {
-                    if (rightType.Type == PrimitiveType.Text)
-                    {
-                        WriteBinOpNodeFunc("ConcatText", node.LeftOperand, node.RightOperand, arg);
-                    }
-                    else if (rightType.Type == PrimitiveType.Number)
-                    {
-                        WriteBinOpNodeFunc("ConcatTextAndNumber", node.LeftOperand, node.RightOperand, arg);
-                    }
-                    else
-                    {
-                        WriteBinOpNodeFunc("ConcatTextAndBoolean", node.LeftOperand, node.RightOperand, arg);
-                    }
-                }
-                else if (rightType.Type == PrimitiveType.Text)
-                {
-                    if (leftType.Type == PrimitiveType.Boolean)
-                    {
-                        _currentStmt.Append($"ConcatText(ConcatTextAndBoolean(CreateText(\"\"), ");
-                        node.LeftOperand.Accept(this, arg);
-                        _currentStmt.Append("), ");
-                        node.RightOperand.Accept(this, arg);
-                        _currentStmt.Append(")");
-                    }
-                    else
-                    {
-                        _currentStmt.Append($"ConcatText(ConcatTextAndNumber(CreateText(\"\"), ");
-                        node.LeftOperand.Accept(this, arg);
-                        _currentStmt.Append("), ");
-                        node.RightOperand.Accept(this, arg);
-                        _currentStmt.Append(")");
-                    }
-                }
+                WriteBinOpNodeFunc("ConcatText", node.LeftOperand, node.RightOperand, arg);
             }
             else if (binOperator == "%" && binType.Type == PrimitiveType.Number)
             {
@@ -225,6 +192,7 @@ namespace dumbo.Compiler.CodeGenerator
             _currentStmt = new Stmt("#define ");
             _currentStmt.Append(node.Name.ToLower() + " ");
             node.Value.Accept(this, arg);
+            _currentStmt.Append(";");
             _currentModule.Append(_currentStmt);
 
             return null;

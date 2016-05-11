@@ -184,7 +184,7 @@ namespace dumbo.Compiler.TypeChecking
             if (lr.IsError || rr.IsError)
             {
                 node.InferredType = new TypeDescriptor(new ErrorTypeNode());
-                return new TypeCheckVisitResult(true);
+                return ErrorType();
             }
 
             if (lr.Types.Count() != 1)

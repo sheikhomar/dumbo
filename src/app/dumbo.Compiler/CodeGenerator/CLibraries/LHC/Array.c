@@ -34,6 +34,8 @@ Text * TextDup(Text *input);
 
 
 //*****Array LHZ Types*****//
+typedef enum Type {t_Number, t_Text, t_Boolean};
+
 //Array indexing for declaring an array, just like C (ie [1,2,3] results in 6 entries)
 typedef struct DeclIndex {
 	int *indices;
@@ -43,6 +45,7 @@ typedef struct DeclIndex {
 //Array structure, wordsize denotes the entires size in bytes
 typedef struct Array {
 	void *arr;
+	Type type;
 	int wordsize;
 	int entries;
 	DeclIndex *maxIndex;
@@ -50,7 +53,7 @@ typedef struct Array {
 
 //*****Array LHZ Functions*****//
 DeclIndex *CreateDeclIndex(int *indices, int numberOfDims);
-Array *CreateArray(DeclIndex *maxIndex, int wordsize);
+Array *CreateArray(DeclIndex *maxIndex, Type type);
 void IntArrayCopy(int *src, int *dest, int size);
 int CalculateArrayOffset(int *actualIndex, DeclIndex *maxIndex);
 int RecCalculateArrayOffset(int *actualIndex, DeclIndex *maxIndex, int currentIndex);
@@ -59,6 +62,8 @@ void UpdateArrayIndexValue(Array *a, int offset, void* input);
 void ReadArrayIndexValue(Array *a, int offset, void* output);
 char *FetchArrayCellAddress(Array *a, int offset);
 void CheckArrayBound(Array *a, int offset);
+int GetArrayWordSize(Type type);
+void InitArray(Array *a);
 void UpdateNumberArrayIndexViaOffset(Array *a, int offset, double input);
 void UpdateTextArrayIndexViaOffset(Array *a, int offset, Text *input);
 void UpdateBooleanArrayIndexViaOffset(Array *a, int offset, Boolean input);
@@ -116,15 +121,18 @@ void IntArrayCopy(int *src, int *dest, int size) {
 }
 
 //Creating an Array given the Index size and the size of the type
-Array *CreateArray(DeclIndex *externalMaxIndex, int wordsize) {
+Array *CreateArray(DeclIndex *externalMaxIndex, Type type) {
 	Array *output = (Array *)calloc(1, sizeof(Array));
 	DeclIndex *maxIndex = CreateDeclIndex(externalMaxIndex->indices, externalMaxIndex->numberOfDims);
 	int entries = CalculateNumberOfArrayEntries(maxIndex);
+	int wordSize = GetArrayWordSize(type);
 
-	output->arr = calloc(entries, wordsize);
-	output->wordsize = wordsize;
+	output->arr = malloc(entries * wordSize);
+	output->wordsize = wordSize;
 	output->maxIndex = maxIndex;
 	output->entries = entries;
+
+	InitArray(output);
 
 	return output;
 }
@@ -141,6 +149,47 @@ int CalculateNumberOfArrayEntries(DeclIndex *index) {
 	}
 
 	return CalculateArrayOffset(indices, index) + 1;
+}
+
+//Find the wordSize of a given type
+int GetArrayWordSize(Type type) {
+	switch (type)
+	{
+	case t_Number:
+		return sizeof(double);
+	case t_Text:
+		return sizeof(Text *);
+	case t_Boolean:
+		return sizeof(Boolean);
+	default:
+		return 1;
+	}
+}
+
+//Initialises all array entires to their default value
+void InitArray(Array *a) {
+	int i, arrEntries = a->entries;
+
+	switch (a->type)
+	{
+	case t_Number:
+		for (i = 0; i < arrEntries; i++)
+			*((double *)a->arr + i) = 0;
+		break;
+
+	case t_Boolean:
+		for (i = 0; i < arrEntries; i++)
+			*((Boolean *)a->arr + i) = ff;
+		break;
+	case t_Text:
+		for (i = 0; i < arrEntries; i++)
+			*((Text **)a->arr + i) = CreateText("");
+		break;
+	default:
+		for (i = 0; i < arrEntries; i++)
+			*((int *)a->arr + i) = 0;
+		break;
+	}
 }
 
 //**Get ArrayOffset for a given index**
@@ -250,13 +299,13 @@ void TestArrayCreate() {
 
 	printf("Beginning Array Create Test\r\n");
 	DeclIndex *maxindex = CreateDeclIndex(inputIndices, numbDims);
-	Array *a = CreateArray(maxindex, sizeof(double));
+	Array *a = CreateArray(maxindex, t_Number);
 	printf("Finished Array Create Test\r\n");
 	//DebugPrintArray(a);
 	return;
 }
-//Starts the ArrayOffset test
 
+//Starts the ArrayOffset test
 void TestArrayOffsetStart() {
 	printf("Beginning Array Offset Test\r\n");
 	TestArrayOffset(0, 0, 0, 1, 1, 1, 0);
@@ -298,7 +347,7 @@ void TestArraySetReadValue() {
 	//Create Array
 	int indexIntArr[] = { 1,2,3 };
 	DeclIndex *decl = CreateDeclIndex(indexIntArr, 3);
-	Array *a = CreateArray(decl, sizeof(double));
+	Array *a = CreateArray(decl, t_Number);
 
 	//Assign values
 	double val1 = 5, val2 = 10;
@@ -336,7 +385,7 @@ void TestArraySerReadLHZValues() {
 		//Create array
 		int indexIntArr[] = { 1,2,3 };
 		DeclIndex *decl = CreateDeclIndex(indexIntArr, 3);
-		Array *a = CreateArray(decl, sizeof(double));
+		Array *a = CreateArray(decl, t_Number);
 
 		//Set values
 		double val1 = 20, val2 = 40;
@@ -347,8 +396,8 @@ void TestArraySerReadLHZValues() {
 		//Read values
 		int read1[] = { 0,0,0 };
 		int read2[] = { 0,1,2 };
-		int ret1 = ReadNumberArrayIndex(a, read1);
-		int ret2 = ReadNumberArrayIndex(a, read2);
+		double ret1 = ReadNumberArrayIndex(a, read1);
+		double ret2 = ReadNumberArrayIndex(a, read2);
 
 		if (val1 != ret1 || val2 != ret2)
 			printf("Error: sat values %f and %f, but read %f and %f\r\n", val1, val2, ret1, ret2);
@@ -359,7 +408,7 @@ void TestArraySerReadLHZValues() {
 		//Create array
 		int indexIntArr[] = { 1,2,3 };
 		DeclIndex *decl = CreateDeclIndex(indexIntArr, 3);
-		Array *a = CreateArray(decl, sizeof(Boolean));
+		Array *a = CreateArray(decl, t_Boolean);
 
 		//Set values
 		Boolean val1 = tt, val2 = ff;
@@ -382,26 +431,7 @@ void TestArraySerReadLHZValues() {
 		//Create array
 		int indexIntArr[] = { 1,2,3 };
 		DeclIndex *decl = CreateDeclIndex(indexIntArr, 3);
-		Array *a = CreateArray(decl, sizeof(Text));
-
-
-		//Debug
-		//Make zero
-		int i;
-		Text * abe = (Text *)a->arr;
-		for (i = 0; i < a->entries; i++) {
-			Text *adr = abe + i * sizeof(Text);
-			adr = (CreateText("pet"));
-		}
-
-		//Debug
-		Text *p = (Text *)(a->arr);
-		Text *p2 = ((Text *)(a->arr)) + sizeof(Text);
-		Text *p3 = (Text *)(a->arr) + a->wordsize * 2;
-		Text *p4 = (Text *)(a->arr) + a->wordsize * 3;
-		Text *p5 = (Text *)(a->arr) + a->wordsize * 4;
-		Text *p6 = (Text *)(a->arr) + a->wordsize * 5;
-
+		Array *a = CreateArray(decl, t_Text);
 
 		//Set values
 		Text *val1 = CreateText("Hello"), *val2 = CreateText("World");

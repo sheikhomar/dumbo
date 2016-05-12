@@ -1,38 +1,93 @@
 Program
-	text t := t1(t2(t3()))
-	t4(t)
+	//Base values
+	text t := ""
+	text tt := "Text"
+	t := textFunc(tt)
+	write("" + t + " = " + tt)
+	
 	number n
-	n := n1(n)
-	write(t)
-	n3(n)
-	write("" + n)
+	number nn := 42
+	n := numberFunc(nn)
+	Text nnpar1 := convertNumberToText(n)
+	Text nnpar2 := convertNumberToText(nn)
+	write("" + nnpar1 + " = " + nnpar2)
+	
+	boolean b
+	boolean bb := true
+	b := booleanFunc(bb)
+	Text bbpar1 := convertBooleanToText(b)
+	Text bbpar2 := convertBooleanToText(bb)
+	write("" + bbpar1 + " = " + bbpar2)
+	
+	//Arrays
+	Array[1,2] of Text tArr := (("",""))
+	tArr := arrText1(tArr,"a","a")
+	arrText2(tArr)
+	write("" + tArr[1,1] + " = "  + tArr[1,2])
+	
+	Array[1,2] of Number nArr := ((0,10))
+	nArr := arrNUmber1(nArr,5,5)
+	arrNumber2(nArr)
+	Text npar1 := convertNumberToText(nArr[1,1])
+	Text npar2 := convertNumberToText(nArr[1,2])
+	write("" + npar1 + " = "  + npar2)
+	
+	Array[1,2] of Boolean bArr := ((false,false))
+	bArr := arrBoolean1(bArr,true,true)
+	arrBoolean2(bArr)
+	Text bpar1 := convertBooleanToText(bArr[1,1])
+	Text bpar2 := convertBooleanToText(bArr[1,2])
+	write("" + bpar1 + " = "  + bpar2)
+	
+	//Expression without id | func and non
+	//Return array of size a,b?
+	//a,a = exp
+	
 End Program
 
-function t1(text t) return text
-	return "Bob"
+//Base values
+function textFunc(Text input) return Text
+	input := "Error"
+	return "Text"
 end function
 
-function t2(text t) return text
-	return "Hans"
+function numberFunc(number input) return number
+	input := 20
+	return 42
 end function
 
-function t3() return text
-	return "Sigurd"
+function booleanFunc(boolean input) return boolean
+	input := false
+	return true
 end function
 
-function t4(text t) return nothing
-	t := "Inger"
+//Array
+function arrText1(Array[a,b] of Text arr, text p1, text p2) return Array[1,2] of Text
+	Array[a,b] of Text arr := ((p1,p2))
+	return arr
 end function
 
-function n1(number n) return number
-	return n2(n)
+function arrText2(Array[a,b] of Text arr) return nothing
+	arr[a,1] := "error"
+	arr[a,b] := "yes"
 end function
 
-function n2(number n) return number
-	n := 5
-	return 11 
+function arrNumber1(Array[a,b] of Number arr, number p1, number p2) return Array[1,2] of Number
+	Array[a,b] of Number arr := ((p1,p2))
+	return arr
 end function
 
-function n3(number n) return nothing
-	n := 5
+function arrNumber2(Array[a,b] of Number arr) return nothing
+	arr[a,1] := -1
+	arr[a,b] := -10000
+end function
+
+function arrBoolean1(Array[a,b] of Boolean arr, boolean p1, boolean p2) return Array[1,2] of Boolean
+	Array[a,b] of Boolean arr := ((p1,p2))
+	return arr
+end function
+
+function arrBoolean2(Array[a,b] of Boolean arr) return nothing
+	arr[a,1] := false
+	arr[a,b] := true
 end function

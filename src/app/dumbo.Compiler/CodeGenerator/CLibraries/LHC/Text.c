@@ -1,6 +1,6 @@
 /********************************************************
 Function:	Text									
-Version: 	v1.4 (with more mem leaks and NULL check)							
+Version: 	v1.5 (with more mem leaks, NULL check and \0)							
 Uses:		Throw	
 /********************************************************/
 #include <stdio.h>
@@ -64,7 +64,7 @@ Text *CreateText(char *input){
 	Text *newText = (Text*)calloc(1,sizeof(Text));
 	
 	(*newText).Length = 0;
-	(*newText).Value = "";
+	(*newText).Value = '\0';
 	
 	CopyToText(input, strlen(input),newText);
 	
@@ -82,7 +82,7 @@ void UpdateText(Text *sourceText, Text *destText){
 void CopyToText(char *inputText, int length, Text *destText) {
 	if (inputText == NULL || destText == NULL)
 		Throw("Cannot Copy to/from a NULL Text");
-	char *textContent = (char*)calloc(length, sizeof(char));
+	char *textContent = (char*)calloc(length+1, sizeof(char));
 	int i = 0;
 
 	strcpy(textContent, inputText);
@@ -102,7 +102,7 @@ Text *ConcatText(Text *inputText1, Text *inputText2) {
 	int size2 = (*inputText2).Length;
 	char *text1 = (*inputText1).Value;
 	char *text2 = (*inputText2).Value;
-	char *combinedText = (char*)malloc(size1 + size2);
+	char *combinedText = (char*)malloc(size1 + size2 + 1);
 
 	//Combine the two Texts
 	strcpy(combinedText, text1);
@@ -116,22 +116,11 @@ Text *ConcatText(Text *inputText1, Text *inputText2) {
 //Removes a given Text and it's value
 void RemoveText(Text *input) {
 	return ;
-	
-	if (input != NULL) {
-		RemoveTextValue(input);
-		(*input).Value = NULL;
-		free(input);
-	}
 }
 
 //Removes a given Text's value
 void RemoveTextValue(Text *input) {
 	return ;
-	
-	if (input != NULL) {
-		free((*input).Value);
-		(*input).Value = NULL;
-	}
 }
 
 //Duplicates the input Text and returs the copy as a Text *

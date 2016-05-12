@@ -60,6 +60,8 @@
     <ApplicationDefinition Include="App.xaml">
       <Generator>MSBuild:Compile</Generator>
     </ApplicationDefinition>
+    <Compile Include="GccCompiler.cs" />
+    <Compile Include="GccCompilerResult.cs" />
     <Compile Include="HappyCProcessor.cs" />
     <Compile Include="ProcessorResult.cs" />
     <Compile Include="ReaderWindow.xaml.cs">

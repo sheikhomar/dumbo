@@ -127,7 +127,7 @@ namespace dumbo.Compiler
             var entry = SymbolTable.RetrieveSymbol(node.Name);
             if (entry != null)
             {
-                Reporter.Error($"Constant '{node.Name}' is already declared.", node.SourcePosition);
+                Reporter.Error($"The name '{node.Name}' is already used by another declaration", node.SourcePosition);
             }
             else
             {
@@ -260,7 +260,7 @@ namespace dumbo.Compiler
                 var entry = SymbolTable.RetrieveSymbol(item.Name);
                 if (entry != null)
                 {
-                    Reporter.Error($"Function '{item.Name}' is already declared.", node.SourcePosition);
+                    Reporter.Error($"The name '{item.Name}' is already used by another declaration.", node.SourcePosition);
                 }
                 else
                 {
@@ -431,6 +431,10 @@ namespace dumbo.Compiler
             else if (entry.IsUnhideable == false && entry.Depth != SymbolTable.Depth)
             {
                 SymbolTable.EnterSymbol(name, new SymbolTablePrimitiveType(declNode));
+            }
+            else
+            {
+                 Reporter.Error($"Identifier '{name}' is already declared and cannot be overridden.", idNode.SourcePosition);
             }
         }
         

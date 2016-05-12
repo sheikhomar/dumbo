@@ -173,3 +173,99 @@ End Program
 Function f2(Array[n, n] of Number a) return nothing
   
 End Function
+
+
+
+//New Program Failing
+
+Constant number a := 1
+
+Program
+End Program
+
+Function f(Array[a,b] of Number arr) Returns Nothing
+End Function
+
+
+
+//New Program Failing
+
+Constant Number a := 1
+
+Program
+End Program
+
+Function f() Returns Nothing
+   If (true) Then
+     If (true) Then
+       Number a
+     End If
+   End If
+End Function
+
+
+
+//New Program Failing
+Constant Number a := 1
+
+Program
+  
+End Program
+
+Function a() Returns Nothing
+   
+End Function
+
+
+
+
+
+
+//New Program Failing
+
+Program
+End Program
+
+Function f(Array[a,b] of Number arr) Returns Nothing
+   Number a
+End Function
+
+
+
+
+//New Program Failing
+
+Program
+End Program
+
+Function f(Array[a,b] of Number arr) Returns Nothing
+   Number b
+End Function
+
+
+
+//New Program Failing
+
+Program
+End Program
+
+Function f(Number a) Returns Nothing
+   Number a
+End Function
+
+
+
+//New Program Failing
+
+Program
+End Program
+
+Function f(Number a) Returns Nothing
+   If (true) Then
+     If (true) Then
+       Number a
+     End If
+   End If
+End Function
+
+

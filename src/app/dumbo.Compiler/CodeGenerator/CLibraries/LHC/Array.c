@@ -1,11 +1,6 @@
-// CME.cpp : Defines the entry point for the console application.
-//
-#include "stdafx.h"
-#include <conio.h>
-
 /********************************************************
 Function:	Array
-Version: 	v1.4
+Version: 	v1.5
 Uses:		Throw, Text, Boolean
 /********************************************************/
 #include <stdlib.h>
@@ -14,8 +9,7 @@ Uses:		Throw, Text, Boolean
 
 //*****External LHZ lib*****//
 //Types
-//typedef enum { false, true } Boolean;
-typedef enum Boolean { ff, tt } Boolean;
+typedef enum { false, true } Boolean;
 
 typedef struct Text {
 	int Length;
@@ -34,7 +28,8 @@ Text * TextDup(Text *input);
 
 
 //*****Array LHZ Types*****//
-typedef enum Type {t_Number, t_Text, t_Boolean};
+//LHZ Types
+typedef enum {t_Number, t_Text, t_Boolean} Type;
 
 //Array indexing for declaring an array, just like C (ie [1,2,3] results in 6 entries)
 typedef struct DeclIndex {
@@ -90,7 +85,6 @@ int main() {
 	TestArraySetReadValue();
 	TestArraySerReadLHZValues();
 
-	_getch();
 	return 0;
 }
 
@@ -180,7 +174,7 @@ void InitArray(Array *a) {
 
 	case t_Boolean:
 		for (i = 0; i < arrEntries; i++)
-			*((Boolean *)a->arr + i) = ff;
+			*((Boolean *)a->arr + i) = false;
 		break;
 	case t_Text:
 		for (i = 0; i < arrEntries; i++)
@@ -406,7 +400,7 @@ void TestArraySerReadLHZValues() {
 		Array *a = CreateArray(decl, t_Boolean);
 
 		//Set values
-		Boolean val1 = tt, val2 = ff;
+		Boolean val1 = true, val2 = false;
 		int index[] = { 0,0,0 };
 		UpdateBooleanArrayIndexViaIndex(a, index, val1);
 		UpdateBooleanArrayIndexViaOffset(a, CalculateNumberOfArrayEntries(a->maxIndex)-1, val2);

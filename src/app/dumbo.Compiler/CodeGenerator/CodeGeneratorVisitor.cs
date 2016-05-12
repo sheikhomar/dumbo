@@ -42,7 +42,7 @@ namespace dumbo.Compiler.CodeGenerator
 
         public RuntimeEntity Visit(ArrayIdentifierNode node, VisitorArgs arg)
         {
-            string indexName = $"_indexExpr{node.Name}";
+            string indexName = $"_indexExpr{node.Name}_{node.SourcePosition.StartLine}_{node.SourcePosition.StartColumn}";
             WriteArrayIndexWithIntPointer(node, indexName, arg);
 
             PrimitiveType type = node.InferredType.GetFirstAs<PrimitiveTypeNode>().Type;
@@ -375,8 +375,7 @@ namespace dumbo.Compiler.CodeGenerator
                     {
                         _currentStmt = new Stmt("int ");
                         arrType.Sizes[j].Accept(this, arg);
-                        _currentStmt.Append($" = (int)Floor({node.Parameters[i].Name}");
-                        
+                        _currentStmt.Append($" = GetArrayDimSize({node.Parameters[i].Name}, {j});");
                         prefix.Add(_currentStmt);
                     }
                 }

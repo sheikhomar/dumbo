@@ -75,6 +75,7 @@ void UpdateBooleanArrayIndexViaIndex(Array *a, int *offset, Boolean input);
 double ReadNumberArrayIndex(Array *a, int *offset);
 Text *ReadTextArrayIndex(Array *a, int *offset);
 Boolean ReadBooleanArrayIndex(Array *a, int *offset);
+int GetArrayDimSize(Array *a, int dimNumber);
 
 // Built-in functions
 Text* ReadText();
@@ -358,6 +359,12 @@ Boolean ReadBooleanArrayIndex(Array *a, int *index) {
 	ReadArrayIndexValue(a, CalculateArrayOffset(index, a->maxIndex), &ret);
 	return ret;
 }
+
+// Get the size of a specific dimension
+int GetArrayDimSize(Array *a, int dimNumber) {
+	return *(((int*)(a->maxIndex->indices)) + dimNumber);
+}
+
 /********************************************************
 Function:	Boolean
 Version: 	v1.0

@@ -68,6 +68,7 @@ void UpdateBooleanArrayIndexViaIndex(Array *a, int *offset, Boolean input);
 double ReadNumberArrayIndex(Array *a, int *offset);
 Text *ReadTextArrayIndex(Array *a, int *offset);
 Boolean ReadBooleanArrayIndex(Array *a, int *offset);
+int GetArrayDimSize(Array *a, int dimNumber);
 
 //HelperFunctions
 void DebugPrintDeclIndex(DeclIndex *index);
@@ -77,6 +78,7 @@ void TestArrayOffsetStart();
 void TestArrayOffset(int a1, int a2, int a3, int m1, int m2, int m3, int expectedOffset);
 void TestArraySetReadValue();
 void TestArraySerReadLHZValues();
+void TestArrayDimCalc();
 
 int main() {
 
@@ -84,6 +86,7 @@ int main() {
 	TestArrayOffsetStart();
 	TestArraySetReadValue();
 	TestArraySerReadLHZValues();
+	TestArrayDimCalc();
 
 	return 0;
 }
@@ -279,6 +282,11 @@ Boolean ReadBooleanArrayIndex(Array *a, int *index) {
 	return ret;
 }
 
+// Get the size of a specific dimension
+int GetArrayDimSize(Array *a, int dimNumber){
+	return *(((int*)(a->maxIndex->indices))+dimNumber);
+}
+
 
 //************Helper Functions***********//
 //Test the creating of Array - does nothing but running the actual code atm
@@ -441,6 +449,20 @@ void TestArraySerReadLHZValues() {
 	printf("Finished Array Set/Read Test\r\n");
 
 	return;
+}
+
+void TestArrayDimCalc(){
+	int i;
+	
+	//Create Array
+	int indexIntArr[] = { 3,5,7 };
+	DeclIndex *decl = CreateDeclIndex(indexIntArr, 3);
+	Array *a = CreateArray(decl, t_Number);
+	
+	for(i=0; i<a->maxIndex->numberOfDims; i++)
+		printf("The size of dimension %d is %d\n", i, GetArrayDimSize(a, i));
+	
+	return ;
 }
 
 

@@ -63,8 +63,8 @@ end function
 
 //Array
 function arrText1(Array[a,b] of Text arr, text p1, text p2) return Array[1,2] of Text
-	Array[a,b] of Text arr := ((p1,p2))
-	return arr
+	Array[a,b] of Text arr1 := ((p1,p2))
+	return arr1
 end function
 
 function arrText2(Array[a,b] of Text arr) return nothing
@@ -73,8 +73,8 @@ function arrText2(Array[a,b] of Text arr) return nothing
 end function
 
 function arrNumber1(Array[a,b] of Number arr, number p1, number p2) return Array[1,2] of Number
-	Array[a,b] of Number arr := ((p1,p2))
-	return arr
+	Array[a,b] of Number arr1 := ((p1,p2))
+	return arr1
 end function
 
 function arrNumber2(Array[a,b] of Number arr) return nothing
@@ -83,8 +83,8 @@ function arrNumber2(Array[a,b] of Number arr) return nothing
 end function
 
 function arrBoolean1(Array[a,b] of Boolean arr, boolean p1, boolean p2) return Array[1,2] of Boolean
-	Array[a,b] of Boolean arr := ((p1,p2))
-	return arr
+	Array[a,b] of Boolean arr1 := ((p1,p2))
+	return arr1
 end function
 
 function arrBoolean2(Array[a,b] of Boolean arr) return nothing

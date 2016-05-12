@@ -1,0 +1,21 @@
+constant number cn := 11
+constant boolean cbt := true
+constant boolean cbf := false
+constant text ct := "fisk"
+
+Program
+	Number n := cn
+	number nn := n
+	boolean b := cbt or cbf
+	Text t := ct
+	array[2,3] of number arr := ((3,5,7),(11,13,17))
+	
+	if(cn = n and nn = cn and (cbt or cbf) and istextandtextequal(t, ct)_
+	and cn = arr[2,1] and not(not(arr[1,2] = cn + 6))) then
+		write(convertbooleantotext(cbt))
+	else
+		write(convertbooleantoText(cbf))
+	end if
+	
+	write("Flad" + ct)
+End Program

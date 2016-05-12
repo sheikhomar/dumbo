@@ -1,0 +1,47 @@
+Program
+	number n
+	number nn, nnn
+	boolean b
+	boolean bb, bbb
+	text t
+	text tt, ttt
+	n := 1
+	b := true
+	t := "a"
+	n := numb()
+	nn, nnn := numbnumb()
+	b := bool()
+	bb, bbb := boolbool()
+	t := te()
+	tt, ttt := tete()	
+	number n1 := numb()
+	number nn1, nnn1 := numbnumb()
+	boolean b1 := bool()
+	boolean bb1, bbb1 := boolbool()
+	text t1 := te()
+	text tt1, ttt1 := tete()
+End program
+
+function numb() return number
+	return 1
+end function
+
+function numbnumb() return number, number
+	return 11,11
+end function
+
+function bool() return boolean
+	return true
+end function
+
+function boolbool() return boolean, boolean
+	return true, false
+end function
+
+function te() return text
+	return "1"
+end function
+
+function tete() return text, text
+	return "11", "11"
+end function

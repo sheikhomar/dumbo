@@ -221,6 +221,7 @@ namespace dumbo.Compiler.CodeGenerator
             else if (isArrayDecl)
             {
                 ArrayTypeNode type = node.Type as ArrayTypeNode;
+
                 WriteArrayDeclAss(type, node.Identifiers, node.Value, arg);
             }
             else
@@ -805,7 +806,7 @@ namespace dumbo.Compiler.CodeGenerator
             type.Accept(this, arg);
             _currentStmt.Append(" ");
             identifiers.Accept(this, arg);
-            _currentStmt.Append($"= CreateArray(_index, t_{type.Type.Type});");
+            _currentStmt.Append($"= CreateArray(_index{ReturnUniqueName(type.Sizes)}, t_{type.Type.Type});");
             AppendCurrentStmtToCurrentModule();
             CreateStmtAndAddToCurrentModule("//End of declaring an Array");
         }
@@ -813,16 +814,16 @@ namespace dumbo.Compiler.CodeGenerator
         private void WriteArrayIndex(ExpressionListNode exprList, VisitorArgs arg)
         {
             CreateStmtAndAddToCurrentModule("//Create DeclIndex struct");
-            CreateStmtAndAddToCurrentModule($"int _numberOfDims = {exprList.Count};");
-            CreateStmtAndAddToCurrentModule("int *_indices = malloc(sizeof(int)*_numberOfDims);");
+            CreateStmtAndAddToCurrentModule($"int _numberOfDims{ReturnUniqueName(exprList)} = {exprList.Count};");
+            CreateStmtAndAddToCurrentModule($"int *_indices{ReturnUniqueName(exprList)} = (int*)malloc(sizeof(int)*_numberOfDims{ReturnUniqueName(exprList)});");
             for (int i = 0; i < exprList.Count; i++)
             {
-                _currentStmt.Append($"_indices[{i}] = ");
+                _currentStmt.Append($"_indices{ReturnUniqueName(exprList)}[{i}] = ");
                 exprList[i].Accept(this, arg);
                 _currentStmt.Append(";");
                 AppendCurrentStmtToCurrentModule();
             }
-            CreateStmtAndAddToCurrentModule("DeclIndex *_index = CreateDeclIndex(_indices, _numberOfDims);");
+            CreateStmtAndAddToCurrentModule($"DeclIndex *_index{ReturnUniqueName(exprList)} = CreateDeclIndex(_indices{ReturnUniqueName(exprList)}, _numberOfDims{ReturnUniqueName(exprList)});");
             CreateStmtAndAddToCurrentModule("//End of creating DeclIndex struct");
         }
 
@@ -943,6 +944,13 @@ namespace dumbo.Compiler.CodeGenerator
             _currentStmt.Append("};");
             AppendCurrentStmtToCurrentModule();
             _currentStmt = new Stmt(tempCurrentStmt);
+        }
+
+        private string ReturnUniqueName(BaseNode node)
+        {
+            string id = $"_{node.SourcePosition.StartLine}_{node.SourcePosition.StartColumn}";
+
+            return id;
         }
     }
 }

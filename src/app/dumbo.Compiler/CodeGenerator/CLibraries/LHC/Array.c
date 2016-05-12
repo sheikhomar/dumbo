@@ -129,6 +129,7 @@ Array *CreateArray(DeclIndex *externalMaxIndex, Type type) {
 
 	output->arr = malloc(entries * wordSize);
 	output->wordsize = wordSize;
+	output->type = type;
 	output->maxIndex = maxIndex;
 	output->entries = entries;
 
@@ -261,7 +262,7 @@ void UpdateNumberArrayIndexViaIndex(Array *a, int *index, double input) {
 	UpdateArrayIndexValue(a, CalculateArrayOffset(index, a->maxIndex), &input);
 }
 void UpdateTextArrayIndexViaIndex(Array *a, int *index, Text *input) {
-	UpdateArrayIndexValue(a, CalculateArrayOffset(index, a->maxIndex), input);
+	UpdateArrayIndexValue(a, CalculateArrayOffset(index, a->maxIndex), &input);
 }
 void UpdateBooleanArrayIndexViaIndex(Array *a, int *index, Boolean input) {
 	UpdateArrayIndexValue(a, CalculateArrayOffset(index, a->maxIndex), &input);
@@ -276,12 +277,6 @@ double ReadNumberArrayIndex(Array *a, int *index) {
 Text *ReadTextArrayIndex(Array *a, int *index) {
 	Text *ret;
 	ReadArrayIndexValue(a, CalculateArrayOffset(index, a->maxIndex), &ret);
-	
-	//Debug
-	Text *ret1 = (ret - a->wordsize);
-	Text *ret2 = ret + a->wordsize;
-	Text *ret3 = (ret + 2 * a->wordsize);
-
 	return TextDup(ret);
 }
 Boolean ReadBooleanArrayIndex(Array *a, int *index) {
@@ -438,17 +433,6 @@ void TestArraySerReadLHZValues() {
 		int index[] = { 0,0,0 };
 		UpdateTextArrayIndexViaIndex(a, index, val1);
 		UpdateTextArrayIndexViaOffset(a, CalculateNumberOfArrayEntries(a->maxIndex)-1, val2);
-
-
-		//Debug
-		Text *p33 = (Text *)(a->arr);
-		Text *p23 = (Text *)(a->arr) + a->wordsize * 1;
-		Text *p34 = (Text *)(a->arr) + a->wordsize * 2;
-		Text *p43 = (Text *)(a->arr) + a->wordsize * 3;
-		Text *p53 = (Text *)(a->arr) + a->wordsize * 4;
-		Text *p63 = (Text *)(a->arr) + a->wordsize * 5;
-
-
 
 		//Read values
 		int read1[] = { 0,0,0 };

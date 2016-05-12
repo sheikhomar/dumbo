@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -37,6 +38,7 @@ namespace dumbo.WpfApp
         private readonly FileSystemWatcher _grammarTableWatcher;
         private ITextMarkerService _textMarkerService;
         private HappyCProcessor _processor;
+        private GccCompiler _gccCompiler;
 
         public MainWindow()
         {
@@ -71,6 +73,8 @@ namespace dumbo.WpfApp
             UpdateCaretPosition();
             LoadDefaultProgram();
             LoadGrammar(GetGrammarFile());
+
+            _gccCompiler = new GccCompiler();
         }
 
         void InitializeTextMarkerService()
@@ -413,6 +417,8 @@ namespace dumbo.WpfApp
 
         private void GenerateCode(object sender, ExecutedRoutedEventArgs e)
         {
+            //GccCompiler.Compile("");
+
             if (!File.Exists(currentSourcePath))
             {
                 ResultTextBox.Text = $"File {currentSourcePath} does not exist!";
@@ -432,7 +438,25 @@ namespace dumbo.WpfApp
                 {
                     var codeGen = new CodeGeneratorVisitor();
                     root.Accept(codeGen, new VisitorArgs());
-                    ResultTextBox.Text = codeGen.CProgram.Print(true, false, true);
+                    string generatedCode = codeGen.CProgram.Print(true, true, true);
+
+                    var finalProgramPath = Path.Combine(Environment.CurrentDirectory, "final.c");
+                    File.WriteAllText(finalProgramPath, generatedCode);
+
+                    var result = _gccCompiler.Compile(finalProgramPath);
+
+                    //ResultTextBox.Text = generatedCode;
+                    ResultTextBox.Text = $"Status Code:  {result.StatusCode} \n";
+
+                    ResultTextBox.Text = $"Binary file path:  {result.BinaryPath} \n";
+
+                    foreach (var error in result.OutputData)
+                        ResultTextBox.Text += $"Output: {error} \n";
+                    
+                    foreach (var error in result.ErrorData)
+                        ResultTextBox.Text += $"ERROR: {error} \n";
+
+                    
                 }
 
                 MarkErrors(reporter);
@@ -489,5 +513,7 @@ namespace dumbo.WpfApp
         {
             MarkErrors(processorResult.Reporter);
         }
+
     }
 }
+

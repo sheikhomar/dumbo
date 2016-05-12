@@ -18,6 +18,10 @@ namespace dumbo.WpfApp
         {
             var sourceFileInfo = new FileInfo(sourceFilePath);
             var targetFile = new FileInfo(Path.Combine(sourceFileInfo.DirectoryName, "out.exe"));
+            if (targetFile.Exists)
+            {
+                targetFile.Delete();
+            }
             var result = new GccCompilerResult(targetFile.FullName);
 
             Process process = new Process();

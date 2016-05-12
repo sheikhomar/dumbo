@@ -483,13 +483,14 @@ namespace dumbo.Compiler.CodeGenerator
 
         public RuntimeEntity Visit(RepeatStmtNode node, VisitorArgs arg)
         {
-            _currentStmt = new Stmt("int _i = 0;");
-            _currentModule.Append(_currentStmt);
+            CreateStmtAndAddToCurrentModule("{");
+            CreateStmtAndAddToCurrentModule("int _i = 0;");
             _currentStmt = new Stmt("for (; _i<");
             node.Number.Accept(this, arg);
             _currentStmt.Append("; _i++)");
             _currentModule.Append(_currentStmt);
             node.Body.Accept(this, arg);
+            CreateStmtAndAddToCurrentModule("}");
 
             return null;
         }
@@ -793,7 +794,7 @@ namespace dumbo.Compiler.CodeGenerator
             type.Accept(this, arg);
             _currentStmt.Append(" ");
             identifiers.Accept(this, arg);
-            _currentStmt.Append($"= CreateArray(_index, sizeof({DetermineCType(type.Type.Type)}));");
+            _currentStmt.Append($"= CreateArray(_index, t_{type.Type.Type});");
             AppendCurrentStmtToCurrentModule();
             CreateStmtAndAddToCurrentModule("//End of declaring an Array");
         }

@@ -623,7 +623,7 @@ namespace dumbo.Compiler.Interpreter
                     var ceiling = (double)ceilingValue.Number;
                     return new NumberValue(Math.Ceiling(ceiling));
 
-                case BuiltInFunction.IsEqual:
+                case BuiltInFunction.IsTextAndTextEqual:
                     var v1 = node.Parameters[0].Accept(this, arg) as TextValue;
                     var v2 = node.Parameters[1].Accept(this, arg) as TextValue;
                     return new BooleanValue(v1.Text.Equals(v2.Text, StringComparison.CurrentCultureIgnoreCase));

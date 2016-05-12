@@ -149,7 +149,7 @@ namespace dumbo.Compiler.CodeGenerator
             }
             else if (binOperator == "==" && leftType.Type == PrimitiveType.Text && rightType.Type == PrimitiveType.Text)
             {
-                WriteBinOpNodeFunc("IsEqual", node.LeftOperand, node.RightOperand, arg);
+                WriteBinOpNodeFunc("IsTextAndTextEqual", node.LeftOperand, node.RightOperand, arg);
             }
             else
             {
@@ -192,7 +192,6 @@ namespace dumbo.Compiler.CodeGenerator
             _currentStmt = new Stmt("#define ");
             _currentStmt.Append(node.Name.ToLower() + " ");
             node.Value.Accept(this, arg);
-            _currentStmt.Append(";");
             _currentModule.Append(_currentStmt);
 
             return null;
@@ -779,8 +778,6 @@ namespace dumbo.Compiler.CodeGenerator
 
             if (idType is PrimitiveTypeNode)
                 WriteInitialValue((PrimitiveTypeNode)idType);
-            else if (idType is ArrayTypeNode)
-                throw new NotImplementedException();
             else
                 throw new Exception("Programming error - unknown type");
 

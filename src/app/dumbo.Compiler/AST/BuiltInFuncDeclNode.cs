@@ -50,12 +50,12 @@ namespace dumbo.Compiler.AST
             random.Parameters.Add(new FormalParamNode("n1", new PrimitiveTypeNode(PrimitiveType.Number), srcPos));
             random.Parameters.Add(new FormalParamNode("n2", new PrimitiveTypeNode(PrimitiveType.Number), srcPos));
             random.ReturnTypes.Add(new PrimitiveTypeNode(PrimitiveType.Number));
-            
-            // Define IsEqual function
-            var isEqual = new BuiltInFuncDeclNode(BuiltInFunction.IsEqual);
-            isEqual.Parameters.Add(new FormalParamNode("t1", new PrimitiveTypeNode(PrimitiveType.Text), srcPos));
-            isEqual.Parameters.Add(new FormalParamNode("t2", new PrimitiveTypeNode(PrimitiveType.Text), srcPos));
-            isEqual.ReturnTypes.Add(new PrimitiveTypeNode(PrimitiveType.Boolean));
+
+            // Define IsTextAndTextEqual function
+            var isTextAndTextEqual = new BuiltInFuncDeclNode(BuiltInFunction.IsTextAndTextEqual);
+            isTextAndTextEqual.Parameters.Add(new FormalParamNode("t1", new PrimitiveTypeNode(PrimitiveType.Text), srcPos));
+            isTextAndTextEqual.Parameters.Add(new FormalParamNode("t2", new PrimitiveTypeNode(PrimitiveType.Text), srcPos));
+            isTextAndTextEqual.ReturnTypes.Add(new PrimitiveTypeNode(PrimitiveType.Boolean));
 
             // Define ConvertNumberToText function
             var convertNumberToText = new BuiltInFuncDeclNode(BuiltInFunction.ConvertNumberToText);
@@ -69,7 +69,7 @@ namespace dumbo.Compiler.AST
 
             yield return ceiling;
             yield return floor;
-            yield return isEqual;
+            yield return isTextAndTextEqual;
             yield return random;
             yield return readNumber;
             yield return readText;

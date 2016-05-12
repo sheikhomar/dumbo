@@ -62,7 +62,7 @@ double ReadNumber();
 void Write(Text *input);
 double Ceiling(double input);
 double Floor(double input);
-Boolean IsEqual(Text *t1, Text *t2);
+Boolean IsTextAndTextEqual(Text *t1, Text *t2);
 double Random(double range_lower, double range_upper);
 double Modulo(double n, double d);
 double Div(double n, double d);
@@ -313,10 +313,10 @@ void Write(Text *input)
 }
 
 /********************************************************
-Function:	IsEqual
+Function:	IsTextAndTextEqual
 Version: 	v1.0
 /********************************************************/
-Boolean IsEqual(Text *t1, Text *t2)
+Boolean IsTextAndTextEqual(Text *t1, Text *t2)
 {
 	if (t1->Length != t2->Length)
 		return false;

@@ -1,17 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using dumbo.Compiler;
 using dumbo.Compiler.AST;
-using dumbo.Compiler.Interpreter;
 using dumbo.Compiler.TypeChecking;
+using dumbo.WpfApp;
 
-namespace dumbo.WpfApp
+namespace dumbo.Compiler.Interpreter
 {
-    class HappyCProcessor
+    public class HappyProcessor
     {
         private class RunnerArgument
         {

@@ -62,8 +62,6 @@
     </ApplicationDefinition>
     <Compile Include="GccCompiler.cs" />
     <Compile Include="GccCompilerResult.cs" />
-    <Compile Include="HappyCProcessor.cs" />
-    <Compile Include="ProcessorResult.cs" />
     <Compile Include="ReaderWindow.xaml.cs">
       <DependentUpon>ReaderWindow.xaml</DependentUpon>
     </Compile>

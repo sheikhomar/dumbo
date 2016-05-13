@@ -103,10 +103,12 @@
     <Compile Include="CodeGenerator\Module.cs" />
     <Compile Include="Interpreter\CallFrame.cs" />
     <Compile Include="Interpreter\ContinueException.cs" />
+    <Compile Include="Interpreter\HappyProcessor.cs" />
     <Compile Include="Interpreter\IInteractiveShell.cs" />
     <Compile Include="Interpreter\InterpretationErrorException.cs" />
     <Compile Include="Interpreter\BooleanValue.cs" />
     <Compile Include="Interpreter\KnownAddress.cs" />
+    <Compile Include="Interpreter\ProcessorResult.cs" />
     <Compile Include="Interpreter\ReturnValue.cs" />
     <Compile Include="Interpreter\ReturnFromFunctionException.cs" />
     <Compile Include="Interpreter\UndefinedValue.cs" />

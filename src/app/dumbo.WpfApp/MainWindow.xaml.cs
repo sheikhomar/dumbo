@@ -37,13 +37,13 @@ namespace dumbo.WpfApp
         private Parser _myParser;
         private readonly FileSystemWatcher _grammarTableWatcher;
         private ITextMarkerService _textMarkerService;
-        private HappyCProcessor _processor;
+        private HappyProcessor _processor;
         private GccCompiler _gccCompiler;
 
         public MainWindow()
         {
             InitializeComponent();
-            _processor = new HappyCProcessor();
+            _processor = new HappyProcessor();
             _processor.Success += ProcessorOnSuccess;
             _processor.Failure += ProcessorOnFailure;
 

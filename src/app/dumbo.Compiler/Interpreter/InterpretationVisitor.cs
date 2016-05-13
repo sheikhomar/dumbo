@@ -5,7 +5,7 @@ using dumbo.Compiler.AST;
 
 namespace dumbo.Compiler.Interpreter
 {
-    public class InterpretationVisitor : InterpreterState, IVisitor<Value, VisitorArgs>
+    public class InterpretationVisitor : IVisitor<Value, VisitorArgs>
     {
         private readonly IInteractiveShell _shell;
         public EventReporter Reporter { get; }

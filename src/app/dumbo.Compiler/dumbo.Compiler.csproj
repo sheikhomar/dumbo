@@ -105,7 +105,6 @@
     <Compile Include="Interpreter\ContinueException.cs" />
     <Compile Include="Interpreter\IInteractiveShell.cs" />
     <Compile Include="Interpreter\InterpretationErrorException.cs" />
-    <Compile Include="Interpreter\InterpreterState.cs" />
     <Compile Include="Interpreter\BooleanValue.cs" />
     <Compile Include="Interpreter\KnownAddress.cs" />
     <Compile Include="Interpreter\ReturnValue.cs" />
@@ -122,7 +121,6 @@
     <Compile Include="EventReporter.cs" />
     <Compile Include="IEventReporter.cs" />
     <Compile Include="Interpreter\InterpretationVisitor.cs" />
-    <Compile Include="Interpreter\InterpreterStatus.cs" />
     <Compile Include="IVisitable.cs" />
     <Compile Include="IVisitor.cs" />
     <Compile Include="Interpreter\NumberValue.cs" />

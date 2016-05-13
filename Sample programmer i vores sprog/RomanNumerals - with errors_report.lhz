@@ -1,16 +1,15 @@
 Program
-  number input
+  number input := true
   number OriginalInput
-  text output := ""
-  
-  write("Enter a number that should be converted to Roman numerals:")
+  text output := 5
+  write("Enter a number that should be"+_ 
+  " converted to Roman numerals:")
   input := readNumber()
   OriginalInput := input
-  
   repeat while (input > 0)
     if (input >= 1000) then
 	  output := output + "M"
-	  input := input - 1000
+	  input := input - 1000 
 	else if (input >= 500) then
 	  output := output + "D"
 	  input := input - 500
@@ -32,6 +31,8 @@ Program
 	end if
   end repeat
   
-  write("" + OriginalInput + " is the same as " + output + " in Roman numerals")
+  write("" + OriginalInput + _
+  " is the same as " + output + _
+  " in Roman numerals")
   
 end Program

@@ -440,21 +440,7 @@ namespace dumbo.WpfApp
                     root.Accept(codeGen, new VisitorArgs());
                     string generatedCode = codeGen.CProgram.Print(true, true, true);
 
-                    var finalProgramPath = Path.Combine(Environment.CurrentDirectory, "final.c");
-                    File.WriteAllText(finalProgramPath, generatedCode);
-
-                    var result = _gccCompiler.Compile(finalProgramPath);
-
-                    //ResultTextBox.Text = generatedCode;
-                    ResultTextBox.Text = $"Status Code:  {result.StatusCode} \n";
-
-                    ResultTextBox.Text = $"Binary file path:  {result.BinaryPath} \n";
-
-                    foreach (var error in result.OutputData)
-                        ResultTextBox.Text += $"Output: {error} \n";
-                    
-                    foreach (var error in result.ErrorData)
-                        ResultTextBox.Text += $"ERROR: {error} \n";
+                    GccCompileAndRun(generatedCode);
 
                     
                 }
@@ -464,6 +450,62 @@ namespace dumbo.WpfApp
 
             latestCompiledAt = DateTime.Now;
             UpdateInformationBox();
+        }
+
+        private void GccCompileAndRun(string generatedCode)
+        {
+            var finalProgramPath = Path.Combine(Environment.CurrentDirectory, "final.c");
+            var targetPath = Path.Combine(Environment.CurrentDirectory, "final.exe");
+            File.WriteAllText(finalProgramPath, generatedCode);
+
+            var result = _gccCompiler.Compile(finalProgramPath, targetPath);
+            ResultTextBox.Text = $"Binary file path:  {targetPath} \n";
+
+            if (result.StatusCode == 0)
+            {
+                RunCompiledProgram(targetPath);
+            }
+            else
+            {
+                ResultTextBox.Text = $"Compilation failed with status code {result.StatusCode} \n";
+
+                foreach (var error in result.OutputData)
+                    ResultTextBox.Text += $"{error} \n";
+
+                if (result.ErrorData.Any())
+                {
+                    ResultTextBox.Text += "Errors:\n";
+                    foreach (var error in result.ErrorData)
+                        ResultTextBox.Text += $"{error} \n";
+                }
+            }
+        }
+
+        private void RunCompiledProgram(string path)
+        {
+            var runner = new CProgramRunner();
+            var result = runner.Run(path);
+            if (result.StatusCode == 0)
+            {
+                ResultTextBox.Text = $"Compiled program has been run successfully. Output:\n";
+
+                foreach (var output in result.OutputData)
+                    ResultTextBox.Text += $"{output} \n";
+            }
+            else
+            {
+                ResultTextBox.Text = $"Running program failed with status code {result.StatusCode} \n";
+
+                foreach (var error in result.OutputData)
+                    ResultTextBox.Text += $"{error} \n";
+
+                if (result.ErrorData.Any())
+                {
+                    ResultTextBox.Text += "Errors:\n";
+                    foreach (var error in result.ErrorData)
+                        ResultTextBox.Text += $"{error} \n";
+                }
+            }
         }
 
         private void BreakExecution(object sender, ExecutedRoutedEventArgs e)

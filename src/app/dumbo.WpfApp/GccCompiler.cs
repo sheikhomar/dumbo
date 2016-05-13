@@ -14,15 +14,15 @@ namespace dumbo.WpfApp
             SetupEnvironment();
         }
 
-        public GccCompilerResult Compile(string sourceFilePath)
+        public ProcessResult Compile(string sourceFilePath, string targetPath)
         {
             var sourceFileInfo = new FileInfo(sourceFilePath);
-            var targetFile = new FileInfo(Path.Combine(sourceFileInfo.DirectoryName, "out.exe"));
+            var targetFile = new FileInfo(targetPath);
             if (targetFile.Exists)
             {
                 targetFile.Delete();
             }
-            var result = new GccCompilerResult(targetFile.FullName);
+            var result = new ProcessResult();
 
             Process process = new Process();
             process.StartInfo.CreateNoWindow = true;

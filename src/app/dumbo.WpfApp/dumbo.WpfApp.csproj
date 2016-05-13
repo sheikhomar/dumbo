@@ -60,8 +60,9 @@
     <ApplicationDefinition Include="App.xaml">
       <Generator>MSBuild:Compile</Generator>
     </ApplicationDefinition>
+    <Compile Include="CProgramRunner.cs" />
     <Compile Include="GccCompiler.cs" />
-    <Compile Include="GccCompilerResult.cs" />
+    <Compile Include="ProcessResult.cs" />
     <Compile Include="ReaderWindow.xaml.cs">
       <DependentUpon>ReaderWindow.xaml</DependentUpon>
     </Compile>

@@ -131,7 +131,7 @@ namespace dumbo.Compiler
             }
             else
             {
-                SymbolTable.EnterSymbol(node.Name, new SymbolTablePrimitiveType(node), true);
+                SymbolTable.EnterSymbol(node.Name, new SymbolTablePrimitiveType(node, true), true);
             }
 
             return null;
@@ -311,6 +311,7 @@ namespace dumbo.Compiler
                 else
                 {
                     node.DeclarationNode = primitiveType.DeclarationNode;
+                    node.IsReadonly = primitiveType.IsReadonly;
                 }
             }
 
@@ -419,18 +420,18 @@ namespace dumbo.Compiler
             return null;
         }
 
-        private void AddVariableToSymbolTable(IdentifierNode idNode, IVariableDeclNode declNode)
+        private void AddVariableToSymbolTable(IdentifierNode idNode, IVariableDeclNode declNode, bool isReadonly = false)
         {
             var name = idNode.Name;
 
             var entry = SymbolTable.RetrieveSymbol(name);
             if (entry == null)
             {
-                SymbolTable.EnterSymbol(name, new SymbolTablePrimitiveType(declNode));
+                SymbolTable.EnterSymbol(name, new SymbolTablePrimitiveType(declNode, isReadonly));
             }
             else if (entry.IsUnhideable == false && entry.Depth != SymbolTable.Depth)
             {
-                SymbolTable.EnterSymbol(name, new SymbolTablePrimitiveType(declNode));
+                SymbolTable.EnterSymbol(name, new SymbolTablePrimitiveType(declNode, isReadonly));
             }
             else
             {
@@ -452,10 +453,11 @@ namespace dumbo.Compiler
                     else
                     {
                         // HACK
+                        id.IsReadonly = true;
                         var idList = new IdentifierListNode { id };
                         var type = new PrimitiveTypeNode(PrimitiveType.Number, dim.SourcePosition);
                         var decl = new PrimitiveDeclStmtNode(idList, type, dim.SourcePosition);
-                        AddVariableToSymbolTable(id, decl);
+                        AddVariableToSymbolTable(id, decl, true);
                     }
                 }
             }

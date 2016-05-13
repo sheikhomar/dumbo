@@ -100,9 +100,9 @@ namespace dumbo.Compiler.TypeChecking
         {
             foreach (var identifier in node.Identifiers)
             {
-                if (identifier.DeclarationNode is ConstDeclNode)
+                if (identifier.IsReadonly)
                 {
-                    string msg = $"Constant '{identifier.Name}' cannot be changed.";
+                    string msg = $"The value of the identifier '{identifier.Name}' cannot be changed.";
                     Reporter.Error(msg, identifier.SourcePosition);
                 }
             }

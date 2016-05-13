@@ -143,3 +143,13 @@ end function
 
 Function test() return nothing
 end function
+
+
+
+//New Program Failing
+Program
+End Program
+
+Function a(Array[n] of Number arrNum) Returns Nothing
+   n := 1 // Cannot change dimension size
+End Function

@@ -1,7 +1,7 @@
 using dumbo.Compiler.AST;
-using dumbo.Compiler.CodeGenerator.LHCLib;
 using System;
 using System.Collections.Generic;
+using dumbo.Compiler.CodeGenerator.LHZLib;
 
 namespace dumbo.Compiler.CodeGenerator
 {
@@ -12,8 +12,8 @@ namespace dumbo.Compiler.CodeGenerator
 
         public CodeGeneratorVisitor()
         {
-            var libearyReader = new LHCLibReader();
-            CProgram = new Program(libearyReader.CreateLHCLIb());
+            var libearyReader = new LHZLibReader();
+            CProgram = new Program(libearyReader.CreateLHZLIb());
         }
 
         public Program CProgram { get; }

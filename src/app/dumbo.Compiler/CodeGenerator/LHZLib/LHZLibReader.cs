@@ -1,18 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace dumbo.Compiler.CodeGenerator.LHCLib
+namespace dumbo.Compiler.CodeGenerator.LHZLib
 {
-    internal class LHCLibReader
+    internal class LHZLibReader
     {
-        public Module CreateLHCLIb()
+        public Module CreateLHZLIb()
         {
             Module output = new Module();
-            string currentPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"CodeGenerator\LHCLib\LHCLib.c");
+            string currentPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"CodeGenerator\LHZLib\LHZLib.c");
             StreamReader reader = new StreamReader(currentPath);
             string currentLine = reader.ReadLine();
 

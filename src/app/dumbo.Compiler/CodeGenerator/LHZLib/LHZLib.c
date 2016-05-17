@@ -37,7 +37,7 @@ typedef struct Array {
 /********************************************************
 Function Declarations
 /********************************************************/
-//LHC HelperFunctions
+//LHZ HelperFunctions
 void Throw(char* message);
 
 void TextPrint(Text *input);

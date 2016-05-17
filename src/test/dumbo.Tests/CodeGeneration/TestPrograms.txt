@@ -1,0 +1,36 @@
+﻿ //New Program 
+
+Program
+  Write("OK")
+End Program
+
+ //New Program Failing
+Program
+  // A program without 
+End Program
+
+
+
+ //New Program 
+
+Program
+  Number a
+  a := a + 1
+  Write("OK")
+End Program
+
+
+
+ //New Program 
+
+Program
+  Number a := 3
+  a := f()
+  If (a = -3) then
+    Write("OK")
+  end if
+End Program
+
+Function f() Returns Number
+  Return -3
+End Function

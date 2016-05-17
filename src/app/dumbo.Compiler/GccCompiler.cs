@@ -1,9 +1,8 @@
 using System;
 using System.Diagnostics;
 using System.IO;
-using dumbo.Compiler;
 
-namespace dumbo.WpfApp
+namespace dumbo.Compiler
 {
     public class GccCompiler
     {
@@ -33,7 +32,7 @@ namespace dumbo.WpfApp
             process.StartInfo.FileName = "gcc.exe";
             process.OutputDataReceived += (s, e) => result.AddOutput(e.Data);
             process.ErrorDataReceived += (s, e) => result.AddError(e.Data);
-            process.StartInfo.Arguments = $"{sourceFileInfo.Name} -o {targetFile.FullName}";
+            process.StartInfo.Arguments = $"{sourceFileInfo.FullName} -o {targetFile.FullName}";
             process.Start();
             process.BeginOutputReadLine();
             process.BeginErrorReadLine();

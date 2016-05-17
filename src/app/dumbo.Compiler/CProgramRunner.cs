@@ -1,8 +1,9 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+using dumbo.WpfApp;
 
-namespace dumbo.WpfApp
+namespace dumbo.Compiler
 {
     public class CProgramRunner
     {

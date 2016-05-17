@@ -94,6 +94,8 @@
     <Compile Include="CodeGenerator\LHCLib\LHCLibReader.cs" />
     <Compile Include="CodeGenerator\RuntimeEntity.cs" />
     <Compile Include="CodeGenerator\StmtBlockNodeArgs.cs" />
+    <Compile Include="CProgramRunner.cs" />
+    <Compile Include="GccCompiler.cs" />
     <Compile Include="Interpreter\ArrayValue.cs" />
     <Compile Include="Interpreter\BlockFrame.cs" />
     <Compile Include="Interpreter\BreakException.cs" />
@@ -113,6 +115,7 @@
     <Compile Include="Interpreter\ReturnFromFunctionException.cs" />
     <Compile Include="Interpreter\UndefinedValue.cs" />
     <Compile Include="Interpreter\Value.cs" />
+    <Compile Include="ProcessResult.cs" />
     <Compile Include="ReturnCheckResult.cs" />
     <Compile Include="ReturnCheckVisitor.cs" />
     <Compile Include="AST\ArrayValueNode.cs" />

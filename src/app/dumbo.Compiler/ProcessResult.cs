@@ -1,8 +1,6 @@
-using System;
 using System.Collections.Generic;
-using System.IO;
 
-namespace dumbo.WpfApp
+namespace dumbo.Compiler
 {
     public class ProcessResult
     {

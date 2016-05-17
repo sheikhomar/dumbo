@@ -537,7 +537,6 @@ namespace dumbo.Compiler.CodeGenerator
             else
             {
                 _currentModule.Append(new Stmt("//Return"));
-                _currentModule.Append(new Stmt("{"));
 
                 foreach (var ret in node.Expressions)
                 {
@@ -552,7 +551,6 @@ namespace dumbo.Compiler.CodeGenerator
                 }
 
                 _currentModule.Append(new Stmt("return ;"));
-                _currentModule.Append(new Stmt("}"));
             }
 
             return null;

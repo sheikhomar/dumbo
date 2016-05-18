@@ -76,6 +76,7 @@ double ReadNumberArrayIndex(Array *a, int *offset);
 Text *ReadTextArrayIndex(Array *a, int *offset);
 Boolean ReadBooleanArrayIndex(Array *a, int *offset);
 int GetArrayDimSize(Array *a, int dimNumber);
+int *ReduceThisIdexByOne(int *indices, int dims);
 
 // Built-in functions
 Text* ReadText();
@@ -167,9 +168,10 @@ Text * TextDup(Text *input){
 }
 /********************************************************
 Function:	Array
-Version: 	v1.5
+Version: 	v1.6
 Uses:		Throw, Text, Boolean
 /********************************************************/
+//*****Array Functions*****//
 //**Creation of Arrays**
 // Creating an Index with the index' sizes and the number of dimensions
 DeclIndex *CreateDeclIndex(int *externalIndices, int numberOfDims) {
@@ -216,15 +218,24 @@ Array *CreateArray(DeclIndex *externalMaxIndex, Type type) {
 //Calculate the number of entires for a given index by utalising the ArrayOffset calculation
 int CalculateNumberOfArrayEntries(DeclIndex *index) {
 	int dims = index->numberOfDims;
-	int i, *indices = (int *)calloc(dims, sizeof(int));
+	int *indices = (int *)calloc(dims, sizeof(int));
 
 	//Reduce the indices by one - this compensates for the difference between a declIndex and the actual indes (array[1,2,3] has the last element at [0,1,2])
-	//This is needed to reuse the 'CalculateArrayOffset* algorithm
-	for (i = 0; i < dims; i++) {
-		*(indices + i) = *(index->indices + i) - 1;
-	}
+	DeclIndex * copiedIndex = CreateDeclIndex(index->indices, index->numberOfDims);
+	ReduceThisIdexByOne(copiedIndex->indices, copiedIndex->numberOfDims);
 
-	return CalculateArrayOffset(indices, index) + 1;
+	//This is needed to reuse the 'CalculateArrayOffset* algorithm
+	return CalculateArrayOffset(copiedIndex->indices, index) + 1;
+}
+
+//Reduces all entries in the given int array by one. Returns the same pointer as given
+int *ReduceThisIdexByOne(int *indices, int dims) {
+	int i;
+
+	for (i = 0; i < dims; i++)
+		*(indices + i) = *(indices + i) - 1;
+
+	return indices;
 }
 
 //Find the wordSize of a given type
@@ -334,34 +345,37 @@ void UpdateBooleanArrayIndexViaOffset(Array *a, int offset, Boolean input) {
 	UpdateArrayIndexValue(a, offset, &input);
 }
 void UpdateNumberArrayIndexViaIndex(Array *a, int *index, double input) {
-	UpdateArrayIndexValue(a, CalculateArrayOffset(index, a->maxIndex), &input);
+	UpdateArrayIndexValue(a, CalculateArrayOffset(ReduceThisIdexByOne(index,a->maxIndex->numberOfDims), a->maxIndex), &input);
 }
 void UpdateTextArrayIndexViaIndex(Array *a, int *index, Text *input) {
-	UpdateArrayIndexValue(a, CalculateArrayOffset(index, a->maxIndex), &input);
+	UpdateArrayIndexValue(a, CalculateArrayOffset(ReduceThisIdexByOne(index, a->maxIndex->numberOfDims), a->maxIndex), &input);
 }
 void UpdateBooleanArrayIndexViaIndex(Array *a, int *index, Boolean input) {
-	UpdateArrayIndexValue(a, CalculateArrayOffset(index, a->maxIndex), &input);
+	UpdateArrayIndexValue(a, CalculateArrayOffset(ReduceThisIdexByOne(index, a->maxIndex->numberOfDims), a->maxIndex), &input);
 }
 
 //Reads the given TYPE value from a specific index in the given array
 double ReadNumberArrayIndex(Array *a, int *index) {
 	double ret;
-	ReadArrayIndexValue(a, CalculateArrayOffset(index, a->maxIndex), &ret);
+	ReadArrayIndexValue(a, CalculateArrayOffset(ReduceThisIdexByOne(index, a->maxIndex->numberOfDims), a->maxIndex), &ret);
 	return ret;
 }
 Text *ReadTextArrayIndex(Array *a, int *index) {
 	Text *ret;
-	ReadArrayIndexValue(a, CalculateArrayOffset(index, a->maxIndex), &ret);
+	ReadArrayIndexValue(a, CalculateArrayOffset(ReduceThisIdexByOne(index, a->maxIndex->numberOfDims), a->maxIndex), &ret);
 	return TextDup(ret);
 }
 Boolean ReadBooleanArrayIndex(Array *a, int *index) {
 	Boolean ret;
-	ReadArrayIndexValue(a, CalculateArrayOffset(index, a->maxIndex), &ret);
+	ReadArrayIndexValue(a, CalculateArrayOffset(ReduceThisIdexByOne(index, a->maxIndex->numberOfDims), a->maxIndex), &ret);
 	return ret;
 }
 
 // Get the size of a specific dimension
 int GetArrayDimSize(Array *a, int dimNumber) {
+	if (dimNumber < 0 || dimNumber > a->maxIndex->numberOfDims - 1)
+		Throw("Requested dimension is out of range");
+
 	return *(((int*)(a->maxIndex->indices)) + dimNumber);
 }
 

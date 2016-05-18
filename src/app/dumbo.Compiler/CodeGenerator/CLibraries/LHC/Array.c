@@ -1,6 +1,6 @@
 /********************************************************
 Function:	Array
-Version: 	v1.5
+Version: 	v1.6
 Uses:		Throw, Text, Boolean
 /********************************************************/
 #include <stdlib.h>
@@ -29,7 +29,7 @@ Text * TextDup(Text *input);
 
 //*****Array LHZ Types*****//
 //LHZ Types
-typedef enum {t_Number, t_Text, t_Boolean} Type;
+typedef enum { t_Number, t_Text, t_Boolean } Type;
 
 //Array indexing for declaring an array, just like C (ie [1,2,3] results in 6 entries)
 typedef struct DeclIndex {
@@ -69,6 +69,7 @@ double ReadNumberArrayIndex(Array *a, int *offset);
 Text *ReadTextArrayIndex(Array *a, int *offset);
 Boolean ReadBooleanArrayIndex(Array *a, int *offset);
 int GetArrayDimSize(Array *a, int dimNumber);
+int *ReduceThisIdexByOne(int *indices, int dims);
 
 //HelperFunctions
 void DebugPrintDeclIndex(DeclIndex *index);
@@ -77,7 +78,7 @@ void TestArrayCreate();
 void TestArrayOffsetStart();
 void TestArrayOffset(int a1, int a2, int a3, int m1, int m2, int m3, int expectedOffset);
 void TestArraySetReadValue();
-void TestArraySerReadLHZValues();
+void TestArraySetReadLHZValues();
 void TestArrayDimCalc();
 
 int main() {
@@ -85,7 +86,7 @@ int main() {
 	TestArrayCreate();
 	TestArrayOffsetStart();
 	TestArraySetReadValue();
-	TestArraySerReadLHZValues();
+	TestArraySetReadLHZValues();
 	TestArrayDimCalc();
 
 	return 0;
@@ -138,15 +139,24 @@ Array *CreateArray(DeclIndex *externalMaxIndex, Type type) {
 //Calculate the number of entires for a given index by utalising the ArrayOffset calculation
 int CalculateNumberOfArrayEntries(DeclIndex *index) {
 	int dims = index->numberOfDims;
-	int i, *indices = (int *)calloc(dims, sizeof(int));
+	int *indices = (int *)calloc(dims, sizeof(int));
 
 	//Reduce the indices by one - this compensates for the difference between a declIndex and the actual indes (array[1,2,3] has the last element at [0,1,2])
-	//This is needed to reuse the 'CalculateArrayOffset* algorithm
-	for (i = 0; i < dims; i++) {
-		*(indices + i) = *(index->indices + i) - 1;
-	}
+	DeclIndex * copiedIndex = CreateDeclIndex(index->indices, index->numberOfDims);
+	ReduceThisIdexByOne(copiedIndex->indices, copiedIndex->numberOfDims);
 
-	return CalculateArrayOffset(indices, index) + 1;
+	//This is needed to reuse the 'CalculateArrayOffset* algorithm
+	return CalculateArrayOffset(copiedIndex->indices, index) + 1;
+}
+
+//Reduces all entries in the given int array by one. Returns the same pointer as given
+int *ReduceThisIdexByOne(int *indices, int dims) {
+	int i;
+
+	for (i = 0; i < dims; i++)
+		*(indices + i) = *(indices + i) - 1;
+
+	return indices;
 }
 
 //Find the wordSize of a given type
@@ -256,35 +266,38 @@ void UpdateBooleanArrayIndexViaOffset(Array *a, int offset, Boolean input) {
 	UpdateArrayIndexValue(a, offset, &input);
 }
 void UpdateNumberArrayIndexViaIndex(Array *a, int *index, double input) {
-	UpdateArrayIndexValue(a, CalculateArrayOffset(index, a->maxIndex), &input);
+	UpdateArrayIndexValue(a, CalculateArrayOffset(ReduceThisIdexByOne(index,a->maxIndex->numberOfDims), a->maxIndex), &input);
 }
 void UpdateTextArrayIndexViaIndex(Array *a, int *index, Text *input) {
-	UpdateArrayIndexValue(a, CalculateArrayOffset(index, a->maxIndex), &input);
+	UpdateArrayIndexValue(a, CalculateArrayOffset(ReduceThisIdexByOne(index, a->maxIndex->numberOfDims), a->maxIndex), &input);
 }
 void UpdateBooleanArrayIndexViaIndex(Array *a, int *index, Boolean input) {
-	UpdateArrayIndexValue(a, CalculateArrayOffset(index, a->maxIndex), &input);
+	UpdateArrayIndexValue(a, CalculateArrayOffset(ReduceThisIdexByOne(index, a->maxIndex->numberOfDims), a->maxIndex), &input);
 }
 
 //Reads the given TYPE value from a specific index in the given array
 double ReadNumberArrayIndex(Array *a, int *index) {
 	double ret;
-	ReadArrayIndexValue(a, CalculateArrayOffset(index, a->maxIndex), &ret);
+	ReadArrayIndexValue(a, CalculateArrayOffset(ReduceThisIdexByOne(index, a->maxIndex->numberOfDims), a->maxIndex), &ret);
 	return ret;
 }
 Text *ReadTextArrayIndex(Array *a, int *index) {
 	Text *ret;
-	ReadArrayIndexValue(a, CalculateArrayOffset(index, a->maxIndex), &ret);
+	ReadArrayIndexValue(a, CalculateArrayOffset(ReduceThisIdexByOne(index, a->maxIndex->numberOfDims), a->maxIndex), &ret);
 	return TextDup(ret);
 }
 Boolean ReadBooleanArrayIndex(Array *a, int *index) {
 	Boolean ret;
-	ReadArrayIndexValue(a, CalculateArrayOffset(index, a->maxIndex), &ret);
+	ReadArrayIndexValue(a, CalculateArrayOffset(ReduceThisIdexByOne(index, a->maxIndex->numberOfDims), a->maxIndex), &ret);
 	return ret;
 }
 
 // Get the size of a specific dimension
-int GetArrayDimSize(Array *a, int dimNumber){
-	return *(((int*)(a->maxIndex->indices))+dimNumber);
+int GetArrayDimSize(Array *a, int dimNumber) {
+	if (dimNumber < 0 || dimNumber > a->maxIndex->numberOfDims - 1)
+		Throw("Requested dimension is out of range");
+
+	return *(((int*)(a->maxIndex->indices)) + dimNumber);
 }
 
 
@@ -373,7 +386,7 @@ void TestArraySetReadValue() {
 	return;
 }
 
-void TestArraySerReadLHZValues() {
+void TestArraySetReadLHZValues() {
 
 	printf("Beginning Array Set/Read LHZ Value Test\r\n");
 
@@ -386,15 +399,15 @@ void TestArraySerReadLHZValues() {
 
 		//Set values
 		double val1 = 20, val2 = 40;
-		int index[] = { 0,0,0 };
-		UpdateNumberArrayIndexViaIndex(a, index, val1);
-		UpdateNumberArrayIndexViaOffset(a, CalculateNumberOfArrayEntries(a->maxIndex)-1, val2);
+		int indexInLHZ[] = { 1,1,1 }; //That is first index is 1,1,1 and not 0,0,0
+		UpdateNumberArrayIndexViaIndex(a, indexInLHZ, val1);
+		UpdateNumberArrayIndexViaOffset(a, CalculateNumberOfArrayEntries(a->maxIndex) - 1, val2);
 
 		//Read values
-		int read1[] = { 0,0,0 };
-		int read2[] = { 0,1,2 };
-		double ret1 = ReadNumberArrayIndex(a, read1);
-		double ret2 = ReadNumberArrayIndex(a, read2);
+		int read1InLHZ[] = { 1,1,1 };
+		int read2InLHZ[] = { 1,2,3 };
+		double ret1 = ReadNumberArrayIndex(a, read1InLHZ);
+		double ret2 = ReadNumberArrayIndex(a, read2InLHZ);
 
 		if (val1 != ret1 || val2 != ret2)
 			printf("Error: sat values %f and %f, but read %f and %f\r\n", val1, val2, ret1, ret2);
@@ -409,15 +422,15 @@ void TestArraySerReadLHZValues() {
 
 		//Set values
 		Boolean val1 = true, val2 = false;
-		int index[] = { 0,0,0 };
-		UpdateBooleanArrayIndexViaIndex(a, index, val1);
-		UpdateBooleanArrayIndexViaOffset(a, CalculateNumberOfArrayEntries(a->maxIndex)-1, val2);
+		int indexInLHZ[] = { 1,1,1 };
+		UpdateBooleanArrayIndexViaIndex(a, indexInLHZ, val1);
+		UpdateBooleanArrayIndexViaOffset(a, CalculateNumberOfArrayEntries(a->maxIndex) - 1, val2);
 
 		//Read values
-		int read1[] = { 0,0,0 };
-		int read2[] = { 0,1,2 };
-		Boolean ret1 = ReadBooleanArrayIndex(a, read1);
-		Boolean ret2 = ReadBooleanArrayIndex(a, read2);
+		int read1InLHZ[] = { 1,1,1 };
+		int read2InLHZ[] = { 1,2,3 };
+		Boolean ret1 = ReadBooleanArrayIndex(a, read1InLHZ);
+		Boolean ret2 = ReadBooleanArrayIndex(a, read2InLHZ);
 
 		if (val1 != ret1 || val2 != ret2)
 			printf("Error: sat values %d and %d, but read %d and %d\r\n", val1, val2, ret1, ret2);
@@ -432,15 +445,15 @@ void TestArraySerReadLHZValues() {
 
 		//Set values
 		Text *val1 = CreateText("Hello"), *val2 = CreateText("World");
-		int index[] = { 0,0,0 };
-		UpdateTextArrayIndexViaIndex(a, index, val1);
-		UpdateTextArrayIndexViaOffset(a, CalculateNumberOfArrayEntries(a->maxIndex)-1, val2);
+		int indexInLHZ[] = { 1,1,1 };
+		UpdateTextArrayIndexViaIndex(a, indexInLHZ, val1);
+		UpdateTextArrayIndexViaOffset(a, CalculateNumberOfArrayEntries(a->maxIndex) - 1, val2);
 
 		//Read values
-		int read1[] = { 0,0,0 };
-		int read2[] = { 0,1,2 };
-		Text *ret1 = ReadTextArrayIndex(a, read1);
-		Text *ret2 = ReadTextArrayIndex(a, read2);
+		int read1InLHZ[] = { 1,1,1 };
+		int read2InLHZ[] = { 1,2,3 };
+		Text *ret1 = ReadTextArrayIndex(a, read1InLHZ);
+		Text *ret2 = ReadTextArrayIndex(a, read2InLHZ);
 
 		if (strcmp(val1->Value, ret1->Value) || strcmp(val2->Value, ret2->Value))
 			printf("Error: sat values %s and %s, but read %s and %s\r\n", val1->Value, val2->Value, ret1->Value, ret2->Value);
@@ -451,18 +464,24 @@ void TestArraySerReadLHZValues() {
 	return;
 }
 
-void TestArrayDimCalc(){
-	int i;
-	
+void TestArrayDimCalc() {
+	printf("Beginning TestArrayDimCalc Test\r\n");
+
 	//Create Array
-	int indexIntArr[] = { 3,5,7 };
+	int indexIntArr[] = { 1,2,3 };
 	DeclIndex *decl = CreateDeclIndex(indexIntArr, 3);
 	Array *a = CreateArray(decl, t_Number);
-	
-	for(i=0; i<a->maxIndex->numberOfDims; i++)
-		printf("The size of dimension %d is %d\n", i, GetArrayDimSize(a, i));
-	
-	return ;
+
+	Boolean dim1 = (Boolean) (1 == GetArrayDimSize(a, 0));
+	Boolean dim2 = (Boolean) (2 == GetArrayDimSize(a, 1));
+	Boolean dim3 = (Boolean) (3 == GetArrayDimSize(a, 2));
+
+	if (dim1 == false || dim2 == false || dim3 == false)
+		printf("Error: dim1 was %d, dim2 %d, dim3 %d (0=false, 1=true)\r\n",dim1,dim2,dim3);
+
+	printf("Finished TestArrayDimCalc Test\r\n");
+
+	return;
 }
 
 
@@ -483,19 +502,19 @@ void DebugPrintArray(Array *array) {
 
 //*****LHZ Functions*****
 //Creates a new Text Structure and 
-Text *CreateText(char *input){
-	Text *newText = (Text*)calloc(1,sizeof(Text));
-	
+Text *CreateText(char *input) {
+	Text *newText = (Text*)calloc(1, sizeof(Text));
+
 	(*newText).Length = 0;
 	(*newText).Value = '\0';
-	
-	CopyToText(input, strlen(input),newText);
-	
+
+	CopyToText(input, strlen(input), newText);
+
 	return newText;
 }
 
 //Updates a Text with the content of another Text
-void UpdateText(Text *sourceText, Text *destText){
+void UpdateText(Text *sourceText, Text *destText) {
 	if (sourceText == NULL || destText == NULL)
 		Throw("Cannot update a NULL text");
 	CopyToText(sourceText->Value, sourceText->Length, destText);
@@ -505,11 +524,11 @@ void UpdateText(Text *sourceText, Text *destText){
 void CopyToText(char *inputText, int length, Text *destText) {
 	if (inputText == NULL || destText == NULL)
 		Throw("Cannot Copy to/from a NULL Text");
-	char *textContent = (char*)calloc(length+1, sizeof(char));
+	char *textContent = (char*)calloc(length + 1, sizeof(char));
 	int i = 0;
 
 	strcpy(textContent, inputText);
-									
+
 	RemoveTextValue(destText);
 
 	//Create the new Text
@@ -531,23 +550,23 @@ Text *ConcatText(Text *inputText1, Text *inputText2) {
 	strcpy(combinedText, text1);
 	strcpy((combinedText + size1), text2);
 
-	
+
 	//Create the new Text
 	return CreateText(combinedText);
 }
 
 //Removes a given Text and it's value
 void RemoveText(Text *input) {
-	return ;
+	return;
 }
 
 //Removes a given Text's value
 void RemoveTextValue(Text *input) {
-	return ;
+	return;
 }
 
 //Duplicates the input Text and returs the copy as a Text *
-Text * TextDup(Text *input){
+Text * TextDup(Text *input) {
 	return CreateText(input->Value);
 }
 

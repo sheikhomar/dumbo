@@ -54,19 +54,6 @@ namespace dumbo.Compiler.CodeGenerator
         public RuntimeEntity Visit(ArrayTypeNode node, VisitorArgs arg)
         {
             _currentStmt.Append("Array*");
-            // WriteArrayIndex(node.Sizes, arg);
-            //CreateStmtAndAddToCurrentModule("//Create Index struct");
-            //CreateStmtAndAddToCurrentModule($"int _numberOfDims = {node.Sizes.Count};");
-            //CreateStmtAndAddToCurrentModule("int *_indices = malloc(sizeof(int)*_numberOfDims);");
-            //for (int i = 0; i < node.Sizes.Count; i++)
-            //{
-            //    _currentStmt.Append($"_indices[{i}] = ");
-            //    node.Sizes[i].Accept(this, arg);
-            //    _currentStmt.Append(";");
-            //    AppendCurrentStmtToCurrentModule();
-            //}
-            //CreateStmtAndAddToCurrentModule("Index *_index = CreateIndex(_indices, _numberOfDims);");
-            //CreateStmtAndAddToCurrentModule("//End of creating Index struct");
 
             return null;
         }
@@ -867,7 +854,6 @@ namespace dumbo.Compiler.CodeGenerator
             {
                 CastNestedExprAndAssign(expressions.Values, identifiers, 0, offset, new List<int>(), arg);
             }
-            //((node.Values[0] as NestedExpressionListNode) as ExpressionListNode)[0].Accept(this, arg)
         }
 
         private void CastNestedExprAndAssign(NestedExpressionListNode expressions, IdentifierListNode identifiers, int layer, Stack<int> offset, IList<int> index, VisitorArgs arg)
@@ -898,24 +884,11 @@ namespace dumbo.Compiler.CodeGenerator
 
         private void AssignArrayIndexWithOffset(ExpressionListNode exprList, IdentifierListNode identifiers, IList<int> index, Stack<int> offset, VisitorArgs arg)
         {
-            int i = 0, newCount = offset.Count;
+            int newCount = offset.Count;
             PrimitiveType type = exprList[0].InferredType.GetFirstAs<PrimitiveTypeNode>().Type;
-
-            //CreateStmtAndAddToCurrentModule("//Create Index struct");
-            //CreateStmtAndAddToCurrentModule($"int _numberOfDims = {index.Count};");
-            //CreateStmtAndAddToCurrentModule("int *_index = malloc(sizeof(int)*_numberOfDims);");
-
-            for (; i < index.Count; i++)
-            {
-                //CreateStmtAndAddToCurrentModule($"_index[{i}] = {index[i]};");
-            }
 
             for (int j = 0; j < exprList.Count; j++)
             {
-                //CreateStmtAndAddToCurrentModule($"_index[{i}] = {j};");
-                //CreateStmtAndAddToCurrentModule("Index *_index = CreateIndex(_indices, _numberOfDims);");
-                //CreateStmtAndAddToCurrentModule("//End of creating Index struct");
-
                 _currentStmt.Append($"Update{type}ArrayIndexViaOffset(");
                 identifiers.Accept(this, arg);
                 _currentStmt.Append($", {offset.Peek()}, ");

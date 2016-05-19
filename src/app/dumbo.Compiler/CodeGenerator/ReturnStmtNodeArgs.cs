@@ -9,13 +9,13 @@ namespace dumbo.Compiler.CodeGenerator
 {
     internal class ReturnStmtNodeArgs : VisitorArgs
     {
-        public ReturnStmtNodeArgs(IList<ArrayTypeNode> arrTypeNode, VisitorArgs arg)
+        public ReturnStmtNodeArgs(IList<TypeNode> arrTypeNode, VisitorArgs arg)
         {
             ArrTypeNode = arrTypeNode;
             Arg = arg;
         }
 
-        public IList<ArrayTypeNode> ArrTypeNode { get; }
+        public IList<TypeNode> ArrTypeNode { get; }
         public VisitorArgs Arg { get; }
     }
 }

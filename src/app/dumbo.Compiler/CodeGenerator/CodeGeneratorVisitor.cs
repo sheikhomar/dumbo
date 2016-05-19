@@ -338,7 +338,7 @@ namespace dumbo.Compiler.CodeGenerator
 
             if (!funcArg.VisitBody)
             {
-                WriteFunctionHeader(node, arg);
+                WriteFunctionHeader(node, retArg);
                 _currentStmt.Append(";");
                 _currentModule.Append(_currentStmt);
                 return null;
@@ -346,7 +346,7 @@ namespace dumbo.Compiler.CodeGenerator
 
             CreateNewModule();
             _currentStmt = new Stmt("");
-            WriteFunctionHeader(node, arg);
+            WriteFunctionHeader(node, retArg);
             _currentModule.Append(_currentStmt);
 
             for (int i = 0; i < node.Parameters.Count; i++)
@@ -364,27 +364,35 @@ namespace dumbo.Compiler.CodeGenerator
                     for (int j = 0; j < arrType.Sizes.Count; j++)
                     {
                         _currentStmt = new Stmt("int ");
-                        arrType.Sizes[j].Accept(this, arg);
+                        arrType.Sizes[j].Accept(this, retArg);
                         _currentStmt.Append($" = GetArrayDimSize({node.Parameters[i].Name.ToLower()}, {j});");
                         prefix.Add(_currentStmt);
                     }
-
-                    //retArg = new ReturnStmtNodeArgs(null, arg);
                 }
             }
-            
-            
+
+            ArrayTypeNode arrTypeNode;
+            IList<TypeNode> retTypeList = new List<TypeNode>();
             foreach (var item in node.ReturnTypes)
             {
-               // item as ArrayTypeNode
+                arrTypeNode = item as ArrayTypeNode;
+                if (arrTypeNode != null)
+                {
+                    retTypeList.Add(arrTypeNode);
+                }
+                else
+                {
+                    retTypeList.Add(item);
+                }
             }
+            retArg = new ReturnStmtNodeArgs(retTypeList, arg);
 
             if (node.ReturnTypes.Count == 0)
             {
                 suffix.Add(new Stmt("return ;"));
             }
             
-            node.Body.Accept(this, new StmtBlockNodeArgs(prefix, suffix, arg));
+            node.Body.Accept(this, new StmtBlockNodeArgs(prefix, suffix, retArg));
             return null;
         }
 
@@ -551,11 +559,12 @@ namespace dumbo.Compiler.CodeGenerator
             {
                 if (node.Expressions.Count != 0)
                 {
-                    ArrayIdentifierNode retPar = node.Expressions[0] as ArrayIdentifierNode;
-                    ReturnStmtNodeArgs retArg = arg as ReturnStmtNodeArgs;
-                    if (retPar != null && retArg != null)
+                    IdentifierNode retPar = node.Expressions[0] as IdentifierNode;
+                    ReturnStmtNodeArgs retArg = (arg as StmtBlockNodeArgs).Arg as ReturnStmtNodeArgs;
+                    ArrayTypeNode retArgType = retArg.ArrTypeNode[0] as ArrayTypeNode;
+                    if (retArg != null && retArgType != null)
                     {
-                        WriteArrayReturnCheck(retPar, retArg.ArrTypeNode[0], arg);
+                        WriteArrayReturnCheck(retPar, retArg.ArrTypeNode[0] as ArrayTypeNode, arg);
                     }
                     _currentStmt = new Stmt("return ");
 
@@ -966,10 +975,11 @@ namespace dumbo.Compiler.CodeGenerator
             return id;
         }
 
-        private void WriteArrayReturnCheck(ArrayIdentifierNode retPar, ArrayTypeNode retCheck, VisitorArgs arg)
+        private void WriteArrayReturnCheck(IdentifierNode retPar, ArrayTypeNode retCheck, VisitorArgs arg)
         {
+            _currentStmt = new Stmt("");
             WriteArrayIndex(retCheck.Sizes, arg);
-            CreateStmtAndAddToCurrentModule($"CheckArrayReturnSize(_index{ ReturnUniqueName(retCheck.Sizes)}, {retPar.Name});");
+            CreateStmtAndAddToCurrentModule($"CheckReturnArraySize(_index{ ReturnUniqueName(retCheck.Sizes)}, {retPar.Name.ToLower()});");
         }
     }
 }

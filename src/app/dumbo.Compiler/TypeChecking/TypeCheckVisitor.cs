@@ -408,6 +408,21 @@ namespace dumbo.Compiler.TypeChecking
         {
             node.Body.Accept(this, arg);
 
+            foreach (var returnType in node.ReturnTypes)
+            {
+                var arrType = returnType as ArrayTypeNode;
+                if (arrType != null)
+                {
+                    foreach (var size in arrType.Sizes)
+                    {
+                        if (!(size is LiteralValueNode))
+                        {
+                            Reporter.Error($"Dimension size cannot be dynamic.", size.SourcePosition);
+                        }
+                    }
+                }
+            }
+            
             var returnStmtNodes = node.Body.FindDescendants<ReturnStmtNode>();
 
             foreach (var retStmt in returnStmtNodes)

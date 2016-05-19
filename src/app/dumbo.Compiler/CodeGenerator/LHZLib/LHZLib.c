@@ -78,7 +78,7 @@ Boolean ReadBooleanArrayIndex(Array *a, int *offset);
 int GetArrayDimSize(Array *a, int dimNumber);
 int *ReduceThisIdexByOne(int *indices, int dims);
 Array *ArrayDup(Array *arr);
-void CheckReturnArraySize(Array *formal, Array *ret);
+void CheckReturnArraySize(DeclIndex *declaredSize, Array *actualSize);
 
 // Built-in functions
 Text* ReadText();
@@ -170,146 +170,9 @@ Text * TextDup(Text *input){
 }
 /********************************************************
 Function:	Array
-Version: 	v1.9
-Uses:		Throw, Text, Boolean
+Version: 	v2
+Uses:		Throw, Text, Boolean, IsEqual
 /********************************************************/
-//**Creation of Arrays**
-// Creating an Index with the index' sizes and the number of dimensions
-DeclIndex *CreateDeclIndex(int *externalIndices, int numberOfDims) {
-	DeclIndex *output = (DeclIndex *)calloc(1, sizeof(DeclIndex));
-	int *indices = (int *)calloc(numberOfDims, sizeof(int));
-
-	//Duplicate the indices
-	IntArrayCopy(externalIndices, indices, numberOfDims);
-
-	//Assign to the Index
-	output->indices = indices;
-	output->numberOfDims = numberOfDims;
-	return output;
-}
-
-//Copies the content of one IntArray to another
-void IntArrayCopy(int *src, int *dest, int size) {
-	int i;
-
-	for (i = 0; i < size; i++)
-	{
-		*(dest + i) = *(src + i);
-	}
-}
-
-//Creating an Array given the Index size and the size of the type
-Array *CreateArray(DeclIndex *externalMaxIndex, Type type) {
-	Array *output = (Array *)calloc(1, sizeof(Array));
-	DeclIndex *maxIndex = CreateDeclIndex(externalMaxIndex->indices, externalMaxIndex->numberOfDims);
-	int entries = CalculateNumberOfArrayEntries(maxIndex);
-	int wordSize = GetArrayWordSize(type);
-
-	output->arr = malloc(entries * wordSize);
-	output->wordsize = wordSize;
-	output->type = type;
-	output->maxIndex = maxIndex;
-	output->entries = entries;
-
-	InitArray(output);
-
-	return output;
-}
-
-//Calculate the number of entires for a given index by utalising the ArrayOffset calculation
-int CalculateNumberOfArrayEntries(DeclIndex *index) {
-	int dims = index->numberOfDims;
-	int *indices = (int *)calloc(dims, sizeof(int));
-
-	//Reduce the indices by one - this compensates for the difference between a declIndex and the actual indes (array[1,2,3] has the last element at [0,1,2])
-	DeclIndex * copiedIndex = CreateDeclIndex(index->indices, index->numberOfDims);
-	ReduceThisIdexByOne(copiedIndex->indices, copiedIndex->numberOfDims);
-
-	//This is needed to reuse the 'CalculateArrayOffset* algorithm
-	return CalculateArrayOffset(copiedIndex->indices, index) + 1;
-}
-
-//Reduces all entries in the given int array by one. Returns the same pointer as given
-int *ReduceThisIdexByOne(int *indices, int dims) {
-	int i;
-
-	for (i = 0; i < dims; i++)
-		*(indices + i) = *(indices + i) - 1;
-
-	return indices;
-}
-
-//Find the wordSize of a given type
-int GetArrayWordSize(Type type) {
-	switch (type)
-	{
-	case t_Number:
-		return sizeof(double);
-	case t_Text:
-		return sizeof(Text *);
-	case t_Boolean:
-		return sizeof(Boolean);
-	default:
-		return 1;
-	}
-}
-
-//Initialises all array entires to their default value
-void InitArray(Array *a) {
-	int i, arrEntries = a->entries;
-
-	switch (a->type)
-	{
-	case t_Number:
-		for (i = 0; i < arrEntries; i++)
-			*((double *)a->arr + i) = 0;
-		break;
-
-	case t_Boolean:
-		for (i = 0; i < arrEntries; i++)
-			*((Boolean *)a->arr + i) = false;
-		break;
-	case t_Text:
-		for (i = 0; i < arrEntries; i++)
-			*((Text **)a->arr + i) = CreateText("");
-		break;
-	default:
-		for (i = 0; i < arrEntries; i++)
-			*((int *)a->arr + i) = 0;
-		break;
-	}
-}
-
-//Duplicates the input Array and returs the copy as a Array *
-Array *ArrayDup(Array *arr) {
-	Array *arrCopy = CreateArray(arr->maxIndex, arr->type);
-	int i, arrEntries = arr->entries;
-
-	switch (arr->type)
-	{
-	case t_Number:
-		for (i = 0; i < arrEntries; i++)
-			*((double *)arrCopy->arr + i) = *((double *)arr->arr + i);
-		break;
-
-	case t_Boolean:
-		for (i = 0; i < arrEntries; i++)
-			*((Boolean *)arrCopy->arr + i) = *((Boolean *)arr->arr + i);
-		break;
-	case t_Text:
-		for (i = 0; i < arrEntries; i++)
-			*((Text **)arrCopy->arr + i) = CreateText((*((Text **)arr->arr + i))->Value);
-		break;
-	default:
-		for (i = 0; i < arrEntries; i++)
-			*((int *)arrCopy->arr + i) = *((int *)arr->arr + i);
-		break;
-	}
-
-	return arrCopy;
-}
-
-//**Get ArrayOffset for a given index**
 //Recrusive call of offset calculation (based on https://en.wikipedia.org/wiki/Row-major_order)
 int RecCalculateArrayOffset(int *actualIndex, DeclIndex *maxIndex, int currentIndex)
 {
@@ -409,9 +272,18 @@ int GetArrayDimSize(Array *a, int dimNumber) {
 	return *(((int*)(a->maxIndex->indices)) + dimNumber);
 }
 
-void CheckReturnArraySize(Array *formal, Array *ret) {
-	if (formal->entries != ret->entries)
-		Throw("Mismatch in entries for (one of) the input array(s) and reutrn array(s)");
+void CheckReturnArraySize(DeclIndex *declaredSize, Array *actualSize) {
+	Boolean correct = true;
+	int i;
+
+	if (declaredSize->numberOfDims != actualSize->maxIndex->numberOfDims)
+		Throw("Mismatch in the number of dimensions for (one of) the input array(s) and return array(s)");
+
+	for (i = 0; i < actualSize->maxIndex->numberOfDims; i++)
+		correct = (Boolean)(correct && (declaredSize->indices + i == actualSize->maxIndex->indices + i));
+
+	if (!correct)
+		Throw("Mismatch in entries for (one of) the input array(s) and return array(s)");
 }
 
 /********************************************************

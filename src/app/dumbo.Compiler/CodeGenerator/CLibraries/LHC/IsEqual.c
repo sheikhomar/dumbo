@@ -1,6 +1,6 @@
 /********************************************************
 Function:	IsEqual									
-Version: 	v1.0 		
+Version: 	v2		
 Uses:		Text, Boolean					
 /********************************************************/
 #include <stdio.h>
@@ -24,17 +24,17 @@ Text *CreateText(char *inputText)
     return retVal;
 }
 
-Boolean IsEqual(Text *t1, Text *t2)
+Boolean IsTextAndTextEqual(Text *t1, Text *t2)
 {
-    if (t1->Length != t2->Length)
-        return false;
+	if (t1->Length != t2->Length)
+		return false;
 
-    return strcmp(t1->Text, t2->Text) == 0;
+	return strcmp(t1->Value, t2->Value) == 0;
 }
 
 char *TestEqual(char *t1, char *t2) 
 {
-    Boolean q = IsEqual(CreateText(t1), CreateText(t2));
+    Boolean q = IsTextAndTextEqual(CreateText(t1), CreateText(t2));
     return q == 1 ? "true" : "false";
 }
 

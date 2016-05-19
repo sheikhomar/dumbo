@@ -1,7 +1,7 @@
 /********************************************************
 Function:	Array
-Version: 	v1.7
-Uses:		Throw, Text, Boolean
+Version: 	v1.8
+Uses:		Throw, Text, Boolean, IsEqual
 /********************************************************/
 #include <stdlib.h>
 #include <stdio.h>
@@ -25,6 +25,7 @@ void RemoveTextValue(Text *input);
 Text *CreateText(char *input);
 void CopyToText(char *inputText, int length, Text *destText);
 Text * TextDup(Text *input);
+Boolean IsTextAndTextEqual(Text *t1, Text *t2);
 
 
 //*****Array LHZ Types*****//
@@ -207,7 +208,7 @@ void InitArray(Array *a) {
 
 //Duplicates the input Array and returs the copy as a Array *
 Array *ArrayDup(Array *arr) {
-	Array *arrCopy = CreateArray(arr->maxIndex,arr->type);
+	Array *arrCopy = CreateArray(arr->maxIndex, arr->type);
 	int i, arrEntries = arr->entries;
 
 	switch (arr->type)
@@ -223,7 +224,7 @@ Array *ArrayDup(Array *arr) {
 		break;
 	case t_Text:
 		for (i = 0; i < arrEntries; i++)
-			*((Text **)arrCopy->arr + i) = CreateText((*(Text **)arr->arr + i)->Value);
+			*((Text **)arrCopy->arr + i) = CreateText((*((Text **)arr->arr + i))->Value);
 		break;
 	default:
 		for (i = 0; i < arrEntries; i++)
@@ -300,7 +301,7 @@ void UpdateBooleanArrayIndexViaOffset(Array *a, int offset, Boolean input) {
 	UpdateArrayIndexValue(a, offset, &input);
 }
 void UpdateNumberArrayIndexViaIndex(Array *a, int *index, double input) {
-	UpdateArrayIndexValue(a, CalculateArrayOffset(ReduceThisIdexByOne(index,a->maxIndex->numberOfDims), a->maxIndex), &input);
+	UpdateArrayIndexValue(a, CalculateArrayOffset(ReduceThisIdexByOne(index, a->maxIndex->numberOfDims), a->maxIndex), &input);
 }
 void UpdateTextArrayIndexViaIndex(Array *a, int *index, Text *input) {
 	UpdateArrayIndexValue(a, CalculateArrayOffset(ReduceThisIdexByOne(index, a->maxIndex->numberOfDims), a->maxIndex), &input);
@@ -500,39 +501,77 @@ void TestArraySetReadLHZValues() {
 void TestArrayDup() {
 	printf("Beginning ArrayDup Test\r\n");
 
-	//Create Array
-	int indexIntArr[] = { 1,2,3 };
-	DeclIndex *decl = CreateDeclIndex(indexIntArr, 3);
-	Array *a = CreateArray(decl, t_Number);
+	//Number
+	{
+		//Create Array
+		int indexIntArr[] = { 1,2,3 };
+		DeclIndex *decl = CreateDeclIndex(indexIntArr, 3);
+		Array *a = CreateArray(decl, t_Number);
 
-	//Set values
-	int val1 = 5, val2 = 10, val3 = 16;
-	int val4 = 17, val5 = 21, val6 = -5;
+		//Set values
+		int val1 = 5, val2 = 10, val3 = 16;
+		int val4 = 17, val5 = 21, val6 = -5;
 
-	int i1[] = { 1,1,1 }, i2[] = { 1,1,2 }, i3[] = { 1,1,3 };
-	int i4[] = { 1,2,1 }, i5[] = { 1,2,2 }, i6[] = { 1,2,3 };
+		int i1[] = { 1,1,1 }, i2[] = { 1,1,2 }, i3[] = { 1,1,3 };
+		int i4[] = { 1,2,1 }, i5[] = { 1,2,2 }, i6[] = { 1,2,3 };
 
-	UpdateNumberArrayIndexViaOffset(a, 0, val1);
-	UpdateNumberArrayIndexViaOffset(a, 1, val2);
-	UpdateNumberArrayIndexViaOffset(a, 2, val3);
-	UpdateNumberArrayIndexViaOffset(a, 3, val4);
-	UpdateNumberArrayIndexViaOffset(a, 4, val5);
-	UpdateNumberArrayIndexViaOffset(a, 5, val6);
+		UpdateNumberArrayIndexViaOffset(a, 0, val1);
+		UpdateNumberArrayIndexViaOffset(a, 1, val2);
+		UpdateNumberArrayIndexViaOffset(a, 2, val3);
+		UpdateNumberArrayIndexViaOffset(a, 3, val4);
+		UpdateNumberArrayIndexViaOffset(a, 4, val5);
+		UpdateNumberArrayIndexViaOffset(a, 5, val6);
 
-	//Duplicate and compare the arrays
-	Array *b = ArrayDup(a);
-	Boolean passed = true;
+		//Duplicate and compare the arrays
+		Array *b = ArrayDup(a);
+		Boolean passed = true;
 
-	passed = (Boolean)(passed && (val1 == ReadNumberArrayIndex(b, i1)));
-	passed = (Boolean)(passed && (val2 == ReadNumberArrayIndex(b, i2)));
-	passed = (Boolean)(passed && (val3 == ReadNumberArrayIndex(b, i3)));
-	passed = (Boolean)(passed && (val4 == ReadNumberArrayIndex(b, i4)));
-	passed = (Boolean)(passed && (val5 == ReadNumberArrayIndex(b, i5)));
-	passed = (Boolean)(passed && (val6 == ReadNumberArrayIndex(b, i6)));
+		passed = (Boolean)(passed && (val1 == ReadNumberArrayIndex(b, i1)));
+		passed = (Boolean)(passed && (val2 == ReadNumberArrayIndex(b, i2)));
+		passed = (Boolean)(passed && (val3 == ReadNumberArrayIndex(b, i3)));
+		passed = (Boolean)(passed && (val4 == ReadNumberArrayIndex(b, i4)));
+		passed = (Boolean)(passed && (val5 == ReadNumberArrayIndex(b, i5)));
+		passed = (Boolean)(passed && (val6 == ReadNumberArrayIndex(b, i6)));
 
-	if (passed == false)
-		printf("Error: duped array was incorrect.\r\n");
+		if (passed == false)
+			printf("Error: duped array was incorrect.\r\n");
+	}
 
+	//Text
+	{
+		//Create Array
+		int indexIntArr[] = { 1,2,3 };
+		DeclIndex *decl = CreateDeclIndex(indexIntArr, 3);
+		Array *a = CreateArray(decl, t_Text);
+
+		//Set values
+		Text *val1 = CreateText("Hans"), *val2 = CreateText("Peter"), *val3 = CreateText("Carl");
+		Text *val4 = CreateText("Jens"), *val5 = CreateText("Henning"), *val6 = CreateText("Mikkel");
+
+		int i1[] = { 1,1,1 }, i2[] = { 1,1,2 }, i3[] = { 1,1,3 };
+		int i4[] = { 1,2,1 }, i5[] = { 1,2,2 }, i6[] = { 1,2,3 };
+
+		UpdateTextArrayIndexViaOffset(a, 0, val1);
+		UpdateTextArrayIndexViaOffset(a, 1, val2);
+		UpdateTextArrayIndexViaOffset(a, 2, val3);
+		UpdateTextArrayIndexViaOffset(a, 3, val4);
+		UpdateTextArrayIndexViaOffset(a, 4, val5);
+		UpdateTextArrayIndexViaOffset(a, 5, val6);
+
+		//Duplicate and compare the arrays
+		Array *b = ArrayDup(a);
+		Boolean passed = true;
+
+		passed = (Boolean)(passed && IsTextAndTextEqual(val1, ReadTextArrayIndex(b, i1)));
+		passed = (Boolean)(passed && IsTextAndTextEqual(val2, ReadTextArrayIndex(b, i2)));
+		passed = (Boolean)(passed && IsTextAndTextEqual(val3, ReadTextArrayIndex(b, i3)));
+		passed = (Boolean)(passed && IsTextAndTextEqual(val4, ReadTextArrayIndex(b, i4)));
+		passed = (Boolean)(passed && IsTextAndTextEqual(val5, ReadTextArrayIndex(b, i5)));
+		passed = (Boolean)(passed && IsTextAndTextEqual(val6, ReadTextArrayIndex(b, i6)));
+
+		if (passed == false)
+			printf("Error: duped array was incorrect.\r\n");
+	}
 	printf("Finished ArrayDup Test\r\n");
 
 	return;
@@ -546,12 +585,12 @@ void TestArrayDimCalc() {
 	DeclIndex *decl = CreateDeclIndex(indexIntArr, 3);
 	Array *a = CreateArray(decl, t_Number);
 
-	Boolean dim1 = (Boolean) (1 == GetArrayDimSize(a, 0));
-	Boolean dim2 = (Boolean) (2 == GetArrayDimSize(a, 1));
-	Boolean dim3 = (Boolean) (3 == GetArrayDimSize(a, 2));
+	Boolean dim1 = (Boolean)(1 == GetArrayDimSize(a, 0));
+	Boolean dim2 = (Boolean)(2 == GetArrayDimSize(a, 1));
+	Boolean dim3 = (Boolean)(3 == GetArrayDimSize(a, 2));
 
 	if (dim1 == false || dim2 == false || dim3 == false)
-		printf("Error: dim1 was %d, dim2 %d, dim3 %d (0=false, 1=true)\r\n",dim1,dim2,dim3);
+		printf("Error: dim1 was %d, dim2 %d, dim3 %d (0=false, 1=true)\r\n", dim1, dim2, dim3);
 
 	printf("Finished ArrayDimCalc Test\r\n");
 
@@ -647,4 +686,12 @@ Text * TextDup(Text *input) {
 void Throw(char* message) {
 	printf("Program ended unexpectedly:\r\n%s\r\n", message);
 	exit(1);
+}
+
+Boolean IsTextAndTextEqual(Text *t1, Text *t2)
+{
+	if (t1->Length != t2->Length)
+		return false;
+
+	return (Boolean)(strcmp(t1->Value, t2->Value) == 0);
 }

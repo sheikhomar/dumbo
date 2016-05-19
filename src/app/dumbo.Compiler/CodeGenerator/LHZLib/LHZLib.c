@@ -281,7 +281,7 @@ void InitArray(Array *a) {
 
 //Duplicates the input Array and returs the copy as a Array *
 Array *ArrayDup(Array *arr) {
-	Array *arrCopy = CreateArray(arr->maxIndex,arr->type);
+	Array *arrCopy = CreateArray(arr->maxIndex, arr->type);
 	int i, arrEntries = arr->entries;
 
 	switch (arr->type)
@@ -297,7 +297,7 @@ Array *ArrayDup(Array *arr) {
 		break;
 	case t_Text:
 		for (i = 0; i < arrEntries; i++)
-			*((Text **)arrCopy->arr + i) = CreateText((*(Text **)arr->arr + i)->Value);
+			*((Text **)arrCopy->arr + i) = CreateText((*((Text **)arr->arr + i))->Value);
 		break;
 	default:
 		for (i = 0; i < arrEntries; i++)
@@ -374,7 +374,7 @@ void UpdateBooleanArrayIndexViaOffset(Array *a, int offset, Boolean input) {
 	UpdateArrayIndexValue(a, offset, &input);
 }
 void UpdateNumberArrayIndexViaIndex(Array *a, int *index, double input) {
-	UpdateArrayIndexValue(a, CalculateArrayOffset(ReduceThisIdexByOne(index,a->maxIndex->numberOfDims), a->maxIndex), &input);
+	UpdateArrayIndexValue(a, CalculateArrayOffset(ReduceThisIdexByOne(index, a->maxIndex->numberOfDims), a->maxIndex), &input);
 }
 void UpdateTextArrayIndexViaIndex(Array *a, int *index, Text *input) {
 	UpdateArrayIndexValue(a, CalculateArrayOffset(ReduceThisIdexByOne(index, a->maxIndex->numberOfDims), a->maxIndex), &input);
@@ -507,8 +507,8 @@ void Write(Text *input)
 }
 
 /********************************************************
-Function:	IsTextAndTextEqual
-Version: 	v1.0
+Function:	IsEqual
+Version: 	v2
 /********************************************************/
 Boolean IsTextAndTextEqual(Text *t1, Text *t2)
 {

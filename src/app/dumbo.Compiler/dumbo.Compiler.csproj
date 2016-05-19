@@ -92,6 +92,7 @@
     <Compile Include="AST\UnaryOperatorType.cs" />
     <Compile Include="AST\ValueNode.cs" />
     <Compile Include="CodeGenerator\LHZLib\LHZLibReader.cs" />
+    <Compile Include="CodeGenerator\ReturnStmtNodeArgs.cs" />
     <Compile Include="CodeGenerator\RuntimeEntity.cs" />
     <Compile Include="CodeGenerator\StmtBlockNodeArgs.cs" />
     <Compile Include="CProgramRunner.cs" />

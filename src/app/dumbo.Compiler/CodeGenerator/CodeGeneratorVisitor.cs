@@ -54,7 +54,7 @@ namespace dumbo.Compiler.CodeGenerator
         public RuntimeEntity Visit(ArrayTypeNode node, VisitorArgs arg)
         {
             _currentStmt.Append("Array*");
-
+            
             return null;
         }
 
@@ -327,6 +327,7 @@ namespace dumbo.Compiler.CodeGenerator
         public RuntimeEntity Visit(FuncDeclNode node, VisitorArgs arg)
         {
             FuncVisitorArgs funcArg = arg as FuncVisitorArgs;
+            VisitorArgs retArg = arg;
             var prefix = new List<Stmt>();
             var suffix = new List<Stmt>();
 
@@ -367,8 +368,15 @@ namespace dumbo.Compiler.CodeGenerator
                         _currentStmt.Append($" = GetArrayDimSize({node.Parameters[i].Name.ToLower()}, {j});");
                         prefix.Add(_currentStmt);
                     }
-                    suffix.Add(new Stmt("I'm over here!"));
+
+                    //retArg = new ReturnStmtNodeArgs(null, arg);
                 }
+            }
+            
+            
+            foreach (var item in node.ReturnTypes)
+            {
+               // item as ArrayTypeNode
             }
 
             if (node.ReturnTypes.Count == 0)
@@ -538,11 +546,17 @@ namespace dumbo.Compiler.CodeGenerator
         {
             bool isMultipleReturn = node.Expressions.Count > 1;
             int i = 1;
-
+            
             if (!isMultipleReturn)
             {
                 if (node.Expressions.Count != 0)
                 {
+                    ArrayIdentifierNode retPar = node.Expressions[0] as ArrayIdentifierNode;
+                    ReturnStmtNodeArgs retArg = arg as ReturnStmtNodeArgs;
+                    if (retPar != null && retArg != null)
+                    {
+                        WriteArrayReturnCheck(retPar, retArg.ArrTypeNode[0], arg);
+                    }
                     _currentStmt = new Stmt("return ");
 
                     node.Expressions[0].Accept(this, arg);
@@ -576,10 +590,10 @@ namespace dumbo.Compiler.CodeGenerator
         {
             _currentModule = new Module();
             node.ConstDecls.Accept(this, arg);
-            node.FuncDecls.Accept(this, new FuncVisitorArgs(false));
+            node.FuncDecls.Accept(this, new FuncVisitorArgs(false, arg));
             CProgram.AddUserFuncDeclModule(_currentModule);
             node.Program.Accept(this, arg);
-            node.FuncDecls.Accept(this, new FuncVisitorArgs(true));
+            node.FuncDecls.Accept(this, new FuncVisitorArgs(true, arg));
             return null;
         }
 
@@ -950,6 +964,12 @@ namespace dumbo.Compiler.CodeGenerator
             string id = $"_{node.SourcePosition.StartLine}_{node.SourcePosition.StartColumn}";
 
             return id;
+        }
+
+        private void WriteArrayReturnCheck(ArrayIdentifierNode retPar, ArrayTypeNode retCheck, VisitorArgs arg)
+        {
+            WriteArrayIndex(retCheck.Sizes, arg);
+            CreateStmtAndAddToCurrentModule($"CheckArrayReturnSize(_index{ ReturnUniqueName(retCheck.Sizes)}, {retPar.Name});");
         }
     }
 }

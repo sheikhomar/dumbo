@@ -3,18 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using dumbo.Compiler.AST;
 
 namespace dumbo.Compiler.CodeGenerator
 {
-    internal class FuncVisitorArgs : VisitorArgs
+    internal class ReturnStmtNodeArgs : VisitorArgs
     {
-        public FuncVisitorArgs(bool visitBody, VisitorArgs arg)
+        public ReturnStmtNodeArgs(IList<ArrayTypeNode> arrTypeNode, VisitorArgs arg)
         {
-            VisitBody = visitBody;
+            ArrTypeNode = arrTypeNode;
             Arg = arg;
         }
 
-        public bool VisitBody { get; }
+        public IList<ArrayTypeNode> ArrTypeNode { get; }
         public VisitorArgs Arg { get; }
     }
 }

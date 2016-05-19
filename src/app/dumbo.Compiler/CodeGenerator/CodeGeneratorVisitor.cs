@@ -367,6 +367,7 @@ namespace dumbo.Compiler.CodeGenerator
                         _currentStmt.Append($" = GetArrayDimSize({node.Parameters[i].Name.ToLower()}, {j});");
                         prefix.Add(_currentStmt);
                     }
+                    suffix.Add(new Stmt("I'm over here!"));
                 }
             }
 
@@ -427,13 +428,40 @@ namespace dumbo.Compiler.CodeGenerator
 
         public RuntimeEntity Visit(LiteralValueNode node, VisitorArgs arg)
         {
+            const string posInf = "INFINITY", negInf = "-INFINITY", nan = "NAN";
+
             PrimitiveTypeNode nodeType = node.Type as PrimitiveTypeNode;
 
             if (nodeType != null)
             {
                 switch (nodeType.Type)
                 {
-                    case PrimitiveType.Number: _currentStmt.Append(node.Value); break;
+                    case PrimitiveType.Number:
+                        double value;
+                        if (!double.TryParse(node.Value, out value))
+                        {
+                            if (node.Value.ToLower() == "inf")
+                            {
+                                _currentStmt.Append(posInf);
+                            }
+                            else
+                            {
+                                _currentStmt.Append(nan);
+                            }
+                        }
+                        else if (double.IsPositiveInfinity(value))
+                        {
+                            _currentStmt.Append(posInf);
+                        }
+                        else if (double.IsNegativeInfinity(value))
+                        {
+                            _currentStmt.Append(negInf);
+                        }
+                        else
+                        {
+                            _currentStmt.Append(value.ToString());
+                        }
+                        break;
                     case PrimitiveType.Text: _currentStmt.Append($"CreateText(\"{node.Value}\")"); break;
                     case PrimitiveType.Boolean: _currentStmt.Append(node.Value.ToLower()); break;
                     default: throw new ArgumentException($"{nodeType.Type} is not a valid type");
@@ -896,7 +924,7 @@ namespace dumbo.Compiler.CodeGenerator
                 exprList[j].Accept(this, arg);
                 _currentStmt.Append(");");
                 AppendCurrentStmtToCurrentModule();
-                offset.Push(newCount);
+                offset.Push(newCount++);
             }
         }
 

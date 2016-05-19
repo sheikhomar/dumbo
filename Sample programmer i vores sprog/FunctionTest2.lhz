@@ -1,7 +1,0 @@
-Program
-	
-End Program
-
-Function aa(Number a) return text, text, text
-	return "a", "b", "c"
-End function

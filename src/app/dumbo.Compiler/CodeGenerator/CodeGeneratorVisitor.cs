@@ -42,11 +42,11 @@ namespace dumbo.Compiler.CodeGenerator
 
         public RuntimeEntity Visit(ArrayIdentifierNode node, VisitorArgs arg)
         {
-            string indexName = $"_indexExpr{node.Name}_{node.SourcePosition.StartLine}_{node.SourcePosition.StartColumn}";
+            string indexName = $"_indexExpr{node.Name.ToLower()}_{node.SourcePosition.StartLine}_{node.SourcePosition.StartColumn}";
             WriteArrayIndexWithIntPointer(node, indexName, arg);
 
             PrimitiveType type = node.InferredType.GetFirstAs<PrimitiveTypeNode>().Type;
-            _currentStmt.Append($"Read{type}ArrayIndex({node.Name}, {indexName})");
+            _currentStmt.Append($"Read{type}ArrayIndex({node.Name.ToLower()}, {indexName})");
 
             return null;
         }
@@ -359,11 +359,12 @@ namespace dumbo.Compiler.CodeGenerator
                 }
                 else if (arrType != null)
                 {
+                    //prefix.Add(new Stmt($"{node.Parameters[i].Name.ToLower()} = ArrayDup({node.Parameters[i].Name.ToLower()});"));
                     for (int j = 0; j < arrType.Sizes.Count; j++)
                     {
                         _currentStmt = new Stmt("int ");
                         arrType.Sizes[j].Accept(this, arg);
-                        _currentStmt.Append($" = GetArrayDimSize({node.Parameters[i].Name}, {j});");
+                        _currentStmt.Append($" = GetArrayDimSize({node.Parameters[i].Name.ToLower()}, {j});");
                         prefix.Add(_currentStmt);
                     }
                 }
@@ -393,7 +394,7 @@ namespace dumbo.Compiler.CodeGenerator
 
         public RuntimeEntity Visit(IdentifierNode node, VisitorArgs arg)
         {
-            _currentStmt.Append(node.Name);
+            _currentStmt.Append(node.Name.ToLower());
 
             return null;
         }

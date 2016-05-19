@@ -3,41 +3,41 @@ Program
 	text t := ""
 	text tt := "Text"
 	t := textFunc(tt)
-	write("" + t + " = " + tt)
+	write(t + " = " + tt)
 	
 	number n
 	number nn := 42
 	n := numberFunc(nn)
 	Text nnpar1 := convertNumberToText(n)
 	Text nnpar2 := convertNumberToText(nn)
-	write("" + nnpar1 + " = " + nnpar2)
+	write(nnpar1 + " = " + nnpar2)
 	
 	boolean b
 	boolean bb := true
 	b := booleanFunc(bb)
 	Text bbpar1 := convertBooleanToText(b)
 	Text bbpar2 := convertBooleanToText(bb)
-	write("" + bbpar1 + " = " + bbpar2)
+	write(bbpar1 + " = " + bbpar2)
 	
 	//Arrays
 	Array[1,2] of Text tArr := (("",""))
 	tArr := arrText1(tArr,"a","a")
 	arrText2(tArr)
-	write("" + tArr[1,1] + " = "  + tArr[1,2])
+	write(tArr[1,1] + " = "  + tArr[1,2])
 	
 	Array[1,2] of Number nArr := ((0,10))
 	nArr := arrNUmber1(nArr,5,5)
 	arrNumber2(nArr)
 	Text npar1 := convertNumberToText(nArr[1,1])
 	Text npar2 := convertNumberToText(nArr[1,2])
-	write("" + npar1 + " = "  + npar2)
+	write(npar1 + " = "  + npar2)
 	
 	Array[1,2] of Boolean bArr := ((false,false))
 	bArr := arrBoolean1(bArr,true,true)
 	arrBoolean2(bArr)
 	Text bpar1 := convertBooleanToText(bArr[1,1])
 	Text bpar2 := convertBooleanToText(bArr[1,2])
-	write("" + bpar1 + " = "  + bpar2)
+	write(bpar1 + " = "  + bpar2)
 	
 	//Expression without id | func and non
 	//Return array of size a,b?

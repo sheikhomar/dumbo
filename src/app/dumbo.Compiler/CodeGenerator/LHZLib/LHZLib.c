@@ -78,7 +78,7 @@ Boolean ReadBooleanArrayIndex(Array *a, int *offset);
 int GetArrayDimSize(Array *a, int dimNumber);
 int *ReduceThisIdexByOne(int *indices, int dims);
 Array *ArrayDup(Array *arr);
-void CheckReturnArraySize(Array *formal, Array *ret);
+void CheckReturnArraySize(DeclIndex *declaredSize, Array *actualSize);
 
 // Built-in functions
 Text* ReadText();
@@ -170,8 +170,8 @@ Text * TextDup(Text *input){
 }
 /********************************************************
 Function:	Array
-Version: 	v1.9
-Uses:		Throw, Text, Boolean
+Version: 	v2
+Uses:		Throw, Text, Boolean, IsEqual
 /********************************************************/
 //**Creation of Arrays**
 // Creating an Index with the index' sizes and the number of dimensions
@@ -409,9 +409,18 @@ int GetArrayDimSize(Array *a, int dimNumber) {
 	return *(((int*)(a->maxIndex->indices)) + dimNumber);
 }
 
-void CheckReturnArraySize(Array *formal, Array *ret) {
-	if (formal->entries != ret->entries)
-		Throw("Mismatch in entries for (one of) the input array(s) and reutrn array(s)");
+void CheckReturnArraySize(DeclIndex *declaredSize, Array *actualSize) {
+	Boolean correct = true;
+	int i;
+
+	if (declaredSize->numberOfDims != actualSize->maxIndex->numberOfDims)
+		Throw("Mismatch in the number of dimensions for (one of) the input array(s) and return array(s)");
+
+	for (i = 0; i < actualSize->maxIndex->numberOfDims; i++)
+		correct = (Boolean)(correct && (declaredSize->indices + i == actualSize->maxIndex->indices + i));
+
+	if (!correct)
+		Throw("Mismatch in entries for (one of) the input array(s) and return array(s)");
 }
 
 /********************************************************

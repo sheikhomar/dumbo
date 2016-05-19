@@ -77,6 +77,7 @@ Text *ReadTextArrayIndex(Array *a, int *offset);
 Boolean ReadBooleanArrayIndex(Array *a, int *offset);
 int GetArrayDimSize(Array *a, int dimNumber);
 int *ReduceThisIdexByOne(int *indices, int dims);
+Array *ArrayDup(Array *arr);
 
 // Built-in functions
 Text* ReadText();
@@ -91,7 +92,7 @@ double Div(double n, double d);
 
 /********************************************************
 Function:	Text									
-Version: 	v1.5 (with more mem leaks, NULL check and \0)							
+Version: 	v1.5							
 /********************************************************/
 //Prints a Text's content
 void TextPrint(Text *input) {
@@ -168,10 +169,9 @@ Text * TextDup(Text *input){
 }
 /********************************************************
 Function:	Array
-Version: 	v1.6
+Version: 	v1.7
 Uses:		Throw, Text, Boolean
 /********************************************************/
-//*****Array Functions*****//
 //**Creation of Arrays**
 // Creating an Index with the index' sizes and the number of dimensions
 DeclIndex *CreateDeclIndex(int *externalIndices, int numberOfDims) {
@@ -277,6 +277,35 @@ void InitArray(Array *a) {
 			*((int *)a->arr + i) = 0;
 		break;
 	}
+}
+
+//Duplicates the input Array and returs the copy as a Array *
+Array *ArrayDup(Array *arr) {
+	Array *arrCopy = CreateArray(arr->maxIndex,arr->type);
+	int i, arrEntries = arr->entries;
+
+	switch (arr->type)
+	{
+	case t_Number:
+		for (i = 0; i < arrEntries; i++)
+			*((double *)arrCopy->arr + i) = *((double *)arr->arr + i);
+		break;
+
+	case t_Boolean:
+		for (i = 0; i < arrEntries; i++)
+			*((Boolean *)arrCopy->arr + i) = *((Boolean *)arr->arr + i);
+		break;
+	case t_Text:
+		for (i = 0; i < arrEntries; i++)
+			*((Text **)arrCopy->arr + i) = CreateText((*(Text **)arr->arr + i)->Value);
+		break;
+	default:
+		for (i = 0; i < arrEntries; i++)
+			*((int *)arrCopy->arr + i) = *((int *)arr->arr + i);
+		break;
+	}
+
+	return arrCopy;
 }
 
 //**Get ArrayOffset for a given index**

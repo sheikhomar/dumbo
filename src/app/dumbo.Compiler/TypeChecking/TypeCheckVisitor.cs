@@ -107,6 +107,8 @@ namespace dumbo.Compiler.TypeChecking
                 }
             }
 
+            CheckForDuplicates(node.Identifiers);
+            
             var expr = node.Value;
             var exprRes = GetVisitResult(expr, arg);
             if (exprRes.IsError)
@@ -740,6 +742,20 @@ namespace dumbo.Compiler.TypeChecking
 
                     CheckArrayValues(list, node, dimension + 1, arg);
                 }
+            }
+        }
+
+        private void CheckForDuplicates(IdentifierListNode identifiers)
+        {
+            var list = new List<string>();
+
+            foreach (var identifier in identifiers)
+            {
+                if (list.Contains(identifier.Name))
+                {
+                    Reporter.Error($"The variable '{identifier.Name}' is dublicated.", identifier.SourcePosition);
+                }
+                list.Add(identifier.Name);
             }
         }
     }

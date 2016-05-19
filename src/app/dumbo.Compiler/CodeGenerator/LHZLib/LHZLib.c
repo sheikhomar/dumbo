@@ -78,6 +78,7 @@ Boolean ReadBooleanArrayIndex(Array *a, int *offset);
 int GetArrayDimSize(Array *a, int dimNumber);
 int *ReduceThisIdexByOne(int *indices, int dims);
 Array *ArrayDup(Array *arr);
+void CheckReturnArraySize(Array *formal, Array *ret);
 
 // Built-in functions
 Text* ReadText();
@@ -169,7 +170,7 @@ Text * TextDup(Text *input){
 }
 /********************************************************
 Function:	Array
-Version: 	v1.7
+Version: 	v1.9
 Uses:		Throw, Text, Boolean
 /********************************************************/
 //**Creation of Arrays**
@@ -406,6 +407,11 @@ int GetArrayDimSize(Array *a, int dimNumber) {
 		Throw("Requested dimension is out of range");
 
 	return *(((int*)(a->maxIndex->indices)) + dimNumber);
+}
+
+void CheckReturnArraySize(Array *formal, Array *ret) {
+	if (formal->entries != ret->entries)
+		Throw("Mismatch in entries for (one of) the input array(s) and reutrn array(s)");
 }
 
 /********************************************************

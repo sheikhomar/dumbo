@@ -1,6 +1,6 @@
 /********************************************************
 Function:	Array
-Version: 	v1.8
+Version: 	v1.9
 Uses:		Throw, Text, Boolean, IsEqual
 /********************************************************/
 #include <stdlib.h>
@@ -72,6 +72,7 @@ Boolean ReadBooleanArrayIndex(Array *a, int *offset);
 int GetArrayDimSize(Array *a, int dimNumber);
 int *ReduceThisIdexByOne(int *indices, int dims);
 Array *ArrayDup(Array *arr);
+void CheckReturnArraySize(Array *formal, Array *ret);
 
 //HelperFunctions
 void DebugPrintDeclIndex(DeclIndex *index);
@@ -335,6 +336,10 @@ int GetArrayDimSize(Array *a, int dimNumber) {
 	return *(((int*)(a->maxIndex->indices)) + dimNumber);
 }
 
+void CheckReturnArraySize(Array *formal, Array *ret) {
+	if (formal->entries != ret->entries)
+		Throw("Mismatch in entries for (one of) the input array(s) and reutrn array(s)");
+}
 
 //************Helper Functions***********//
 //Test the creating of Array - does nothing but running the actual code atm

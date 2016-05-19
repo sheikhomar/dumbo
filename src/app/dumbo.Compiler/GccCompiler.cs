@@ -32,7 +32,7 @@ namespace dumbo.Compiler
             process.StartInfo.FileName = "gcc.exe";
             process.OutputDataReceived += (s, e) => result.AddOutput(e.Data);
             process.ErrorDataReceived += (s, e) => result.AddError(e.Data);
-            process.StartInfo.Arguments = $"{sourceFileInfo.FullName} -o {targetFile.FullName}";
+            process.StartInfo.Arguments = $"{sourceFileInfo.FullName} -o {targetFile.FullName} -std=c99";
             process.Start();
             process.BeginOutputReadLine();
             process.BeginErrorReadLine();

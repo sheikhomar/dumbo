@@ -359,7 +359,7 @@ namespace dumbo.Compiler.CodeGenerator
                 }
                 else if (arrType != null)
                 {
-                    //prefix.Add(new Stmt($"{node.Parameters[i].Name.ToLower()} = ArrayDup({node.Parameters[i].Name.ToLower()});"));
+                    prefix.Add(new Stmt($"{node.Parameters[i].Name.ToLower()} = ArrayDup({node.Parameters[i].Name.ToLower()});"));
                     for (int j = 0; j < arrType.Sizes.Count; j++)
                     {
                         _currentStmt = new Stmt("int ");
@@ -850,7 +850,7 @@ namespace dumbo.Compiler.CodeGenerator
         {
             ArrayValueNode expressions = input as ArrayValueNode;
             Stack<int> offset = new Stack<int>();
-            offset.Push(1);
+            offset.Push(0);
             if (expressions != null)
             {
                 CastNestedExprAndAssign(expressions.Values, identifiers, 0, offset, new List<int>(), arg);
@@ -896,7 +896,6 @@ namespace dumbo.Compiler.CodeGenerator
                 exprList[j].Accept(this, arg);
                 _currentStmt.Append(");");
                 AppendCurrentStmtToCurrentModule();
-                newCount++;
                 offset.Push(newCount);
             }
         }

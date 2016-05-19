@@ -29,6 +29,9 @@ Program
  Number a
  Repeat(a + 1)
    a := a + 1
+   if(a > 1000) then
+	break
+	end if
  end Repeat 
  
  
@@ -41,7 +44,7 @@ Program
  //Case Check
  numb := MyCaSEdFunction(5)
  
- write("" + numb)
+ write(ConvertNumberToText(numb))
  
 End Program
 

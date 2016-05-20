@@ -2,6 +2,7 @@ using dumbo.Compiler.AST;
 using System;
 using System.Collections.Generic;
 using dumbo.Compiler.CodeGenerator.LHZLib;
+using System.Globalization;
 
 namespace dumbo.Compiler.CodeGenerator
 {
@@ -96,7 +97,7 @@ namespace dumbo.Compiler.CodeGenerator
 
                     PrimitiveType type = arrayType.InferredType.GetFirstAs<PrimitiveTypeNode>().Type;
                     _currentStmt.Append("Update");
-                    _currentStmt.Append($"{type}ArrayIndexViaIndex({arrayType.Name}, {indexName}, ");
+                    _currentStmt.Append($"{type}ArrayIndexViaIndex({arrayType.Name.ToLower()}, {indexName}, ");
                     node.Value.Accept(this, arg);
                     _currentStmt.Append(");");
                     AppendCurrentStmtToCurrentModule();
@@ -353,6 +354,7 @@ namespace dumbo.Compiler.CodeGenerator
             {
                 PrimitiveTypeNode parType = node.Parameters[i].Type as PrimitiveTypeNode;
                 ArrayTypeNode arrType = node.Parameters[i].Type as ArrayTypeNode;
+                IdentifierNode arrSizeType;
 
                 if (parType != null && parType.Type == PrimitiveType.Text)
                 {
@@ -363,10 +365,14 @@ namespace dumbo.Compiler.CodeGenerator
                     prefix.Add(new Stmt($"{node.Parameters[i].Name.ToLower()} = ArrayDup({node.Parameters[i].Name.ToLower()});"));
                     for (int j = 0; j < arrType.Sizes.Count; j++)
                     {
-                        _currentStmt = new Stmt("int ");
-                        arrType.Sizes[j].Accept(this, retArg);
-                        _currentStmt.Append($" = GetArrayDimSize({node.Parameters[i].Name.ToLower()}, {j});");
-                        prefix.Add(_currentStmt);
+                        arrSizeType = arrType.Sizes[j] as IdentifierNode;
+                        if (arrSizeType != null)
+                        {
+                            _currentStmt = new Stmt("int ");
+                            arrType.Sizes[j].Accept(this, retArg);
+                            _currentStmt.Append($" = GetArrayDimSize({node.Parameters[i].Name.ToLower()}, {j});");
+                            prefix.Add(_currentStmt);
+                        }
                     }
                 }
             }
@@ -454,7 +460,9 @@ namespace dumbo.Compiler.CodeGenerator
                 {
                     case PrimitiveType.Number:
                         double value;
-                        if (!double.TryParse(node.Value, out value))
+                        var style = NumberStyles.Number;
+                        var culture = CultureInfo.CreateSpecificCulture("en-GB");
+                        if (!double.TryParse(node.Value, style, culture, out value))
                         {
                             if (node.Value.ToLower() == "inf")
                             {
@@ -475,7 +483,7 @@ namespace dumbo.Compiler.CodeGenerator
                         }
                         else
                         {
-                            _currentStmt.Append(value.ToString());
+                            _currentStmt.Append(value.ToString(culture));
                         }
                         break;
                     case PrimitiveType.Text: _currentStmt.Append($"CreateText(\"{node.Value}\")"); break;
@@ -554,13 +562,13 @@ namespace dumbo.Compiler.CodeGenerator
         {
             bool isMultipleReturn = node.Expressions.Count > 1;
             int i = 1;
-            
+            ReturnStmtNodeArgs retArg = (arg as StmtBlockNodeArgs).Arg as ReturnStmtNodeArgs;
+
             if (!isMultipleReturn)
             {
                 if (node.Expressions.Count != 0)
                 {
                     IdentifierNode retPar = node.Expressions[0] as IdentifierNode;
-                    ReturnStmtNodeArgs retArg = (arg as StmtBlockNodeArgs).Arg as ReturnStmtNodeArgs;
                     ArrayTypeNode retArgType = retArg.ArrTypeNode[0] as ArrayTypeNode;
                     if (retArg != null && retArgType != null)
                     {
@@ -577,13 +585,17 @@ namespace dumbo.Compiler.CodeGenerator
             {
                 _currentModule.Append(new Stmt("//Return"));
 
-                foreach (var ret in node.Expressions)
+                for (int j = 0; j < node.Expressions.Count; j++)
                 {
-                    PrimitiveTypeNode retType = ret.InferredType.GetFirstAs<PrimitiveTypeNode>();
-
-                    _currentStmt = new Stmt((retType.Type == PrimitiveType.Text ? "" : "*") + "_ret" + i);
+                    IdentifierNode retPar = node.Expressions[j] as IdentifierNode;
+                    ArrayTypeNode retArgType = retArg.ArrTypeNode[j] as ArrayTypeNode;
+                    if (retArg != null && retArgType != null)
+                    {
+                        WriteArrayReturnCheck(retPar, retArg.ArrTypeNode[j] as ArrayTypeNode, arg);
+                    }
+                    _currentStmt = new Stmt("*_ret" + i);
                     _currentStmt.Append(" = ");
-                    ret.Accept(this, arg);
+                    node.Expressions[j].Accept(this, arg);
                     _currentStmt.Append(";");
                     _currentModule.Append(_currentStmt);
                     i++;
@@ -693,10 +705,9 @@ namespace dumbo.Compiler.CodeGenerator
 
                 for (int i = 0; i < funcNode.ReturnTypes.Count; i++)
                 {
-                    PrimitiveTypeNode retType = funcNode.ReturnTypes[i] as PrimitiveTypeNode;
                     funcNode.ReturnTypes[i].Accept(this, arg);
-                    _currentStmt.Append(" " + (retType.Type == PrimitiveType.Text ? "" : "*"));
-                    _currentStmt.Append("_ret" + (i + 1));
+                    _currentStmt.Append("*_ret" + (i + 1));
+                    
                     if (i < funcNode.ReturnTypes.Count - 1)
                         _currentStmt.Append(", ");
                 }
@@ -770,12 +781,7 @@ namespace dumbo.Compiler.CodeGenerator
 
             foreach (var retIdentifier in node.Identifiers)
             {
-                var idType = retIdentifier.DeclarationNode.Type as PrimitiveTypeNode;
-
-                if (idType?.Type == PrimitiveType.Text)
-                    _currentStmt.Append(retIdentifier.Name);
-                else
-                    _currentStmt.Append("&" + retIdentifier.Name);
+                _currentStmt.Append("&" + retIdentifier.Name.ToLower());
 
                 if (i < node.Identifiers.Count - 1)
                     _currentStmt.Append(", ");

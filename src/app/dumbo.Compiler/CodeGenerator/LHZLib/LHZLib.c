@@ -606,13 +606,13 @@ void Throw(char* message) {
 
 /********************************************************
 Function:	Convert									
-Version: 	v1.2 						
+Version: 	v1.3 						
 /********************************************************/
 Text* ConvertNumberToText(double number)
 {
-	int MAX_SIZE = 50;
+	int MAX_SIZE = 308;
 	char *output = (char*)malloc(MAX_SIZE + 1);
-	sprintf(output, "%lf", number);
+	sprintf(output, "%f", number);
 
 	return CreateText(output);
 }

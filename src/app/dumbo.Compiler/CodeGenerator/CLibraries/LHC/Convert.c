@@ -1,6 +1,6 @@
 /********************************************************
 Function:	Convert									
-Version: 	v1.1 			
+Version: 	v1.3 			
 Uses:		Text, Boolean				
 /********************************************************/
 #include <stdio.h>
@@ -70,42 +70,18 @@ void Throw(char* message){
 	exit(1);
 }
 
-Text* ConcatTextAndNumber(Text *text, double number)
-{
-    int MAX_SIZE = 50;
-    char *output = (char*)malloc(MAX_SIZE+1);
-    sprintf(output, "%lf", number);
-    
-    Text *numberAsText = CreateText(output);
-
-    char *tempBuffer = (char*)malloc(text->Length + numberAsText->Length);
-    strcpy(tempBuffer, text->Value);
-    strcat(tempBuffer, numberAsText->Value);
-    return CreateText(tempBuffer);
-}
-
-
-Text* ConcatTextAndBoolean(Text *text, Boolean boolean)
-{
-    char *tempBuffer = (char*)malloc(text->Length + 6);
-    strcpy(tempBuffer, text->Value);
-    strcat(tempBuffer, boolean == true ? "true" : "false");
-    
-    return CreateText(tempBuffer);
-}
-
 Text* ConvertNumberToText(double number)
 {
-	int MAX_SIZE = 50;
-    char *output = (char*)malloc(MAX_SIZE+1);
-    sprintf(output, "%lf", number);
-    
-    return CreateText(output);
+	int MAX_SIZE = 308;
+	char *output = (char*)malloc(MAX_SIZE + 1);
+	sprintf(output, "%f", number);
+
+	return CreateText(output);
 }
 
 Text* ConvertBooleanToText(Boolean boolean)
 {
-    return CreateText(boolean == true ? "true" : "false");
+	return CreateText(boolean == true ? "true" : "false");
 }
 
 int main()

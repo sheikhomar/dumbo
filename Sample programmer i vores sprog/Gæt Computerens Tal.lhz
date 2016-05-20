@@ -11,10 +11,10 @@ Program
 			Write("Congrats! You guessed my Number!")
 			IsNumberGuessed := true
 		Else if(GuessedNumber < TheNumber) then
-			Write("My number is bigger than " + GuessedNumber)
+			Write("My number is bigger than " + ConvertNumberToText(GuessedNumber))
 			Write("Guess again")
 		Else if (GuessedNumber > TheNumber) then
-			Write("My number is less than " + GuessedNumber)
+			Write("My number is less than " + ConvertNumberToText(GuessedNumber))
 			Write("Guess again")
 		Else
 			Write("Error... Restart program")

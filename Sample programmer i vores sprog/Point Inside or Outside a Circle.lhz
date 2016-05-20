@@ -12,9 +12,9 @@ Program
 	y := readNUMber()
 
 	if(x*x + y*y <= r*r) then
-		write("The point(" + x + "," + y + ") is inside the circle centered in (0,0) and a radius " + r)
+		write("The point(ConvertNumberToText(x), ConvertNumberToText(y)) is inside the circle centered in (0,0) and a radius ConvertNumberToText(r)")
 	else 
-		write("The point(" + x + "," + y + ") is outside the circle centered in (0,0) and a radius " + r)
+		write("The point(ConvertNumberToText(x), ConvertNumberToText(y)) is outside the circle centered in (0,0) and a radius ConvertNumberToText(r)")
 	end if
 	
 End program

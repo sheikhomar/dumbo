@@ -15,6 +15,6 @@ Program
 	min := floor(remainder / 60)
 	sec := remainder % 60
 
-	Write(seconds + " seconds is equal to " + hour + " hours, " + min + " minutes and " + sec + " seconds.")
+	Write(ConvertNumberToText(seconds) + " seconds is equal to " + ConvertNumberToText(hour) + " hours, " + ConvertNumberToText(min) + " minutes and " + ConvertNumberToText(sec) + " seconds.")
 	
 End Program

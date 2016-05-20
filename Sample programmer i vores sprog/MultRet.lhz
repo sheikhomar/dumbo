@@ -1,0 +1,56 @@
+Program
+	number n
+	Array[1,2] of Text tarr := (("7","11"))
+	tarR, n := tarrfunc(tarr)
+	write("n: " + convertnumbertotext(n) + " == 22")
+	write("tarr: ")
+	printtarray(tarr)
+	
+	boolean b
+	text t
+	n, b, t, tarr := multretfunc(tarr)
+	write("n: " + convertnumbertotext(n) + " == 11")
+	write("b: " + convertbooleantotext(b) + " == false")
+	write("t: " + t + " == temp")
+	write("tarr: ")
+	printtarray(tarr)
+	n, b, t, tarr := multretfunc2()
+	write("n: " + convertnumbertotext(n) + " == 33")
+	write("b: " + convertbooleantotext(b) + " == true")
+	write("t: " + t + " == tEMp")
+	write("tarr: ")
+	printtarray(tarr)
+End Program
+
+Function tarrfunc(Array[a,b] of Text taRr) return Array[1,2] of Text, number
+	return Tarr, 22 // This should not be possible if they are different sizes
+End Function
+
+function multretfunc(array[1,2] of text tjutjuuu) return number, boolean, text, array[1,2] of text
+	return 11, false, "temp", tjutjuuu
+end function
+
+function multretfunc2() return number, boolean, text, array[1,2] of text
+	array[1,2] of text tjutjuuu := (("13","17"))
+	return 33, true, "tEMp", tjutjuuu
+end function
+
+Function PrintTArray(Array[a,b] of Text jupjup) return nothing
+	number i := 1
+	number j := 1
+	//write("a = " + convertnumbertotext(a))
+	//write("b = " + convertnumbertotext(b))
+	repeat a
+		//write("i = " + convertnumbertotext(i))
+		repeat b
+			//write("j = " + convertnumbertotext(j))
+			write(jupjup[i,j])
+			if(j < b) then
+				j := j + 1
+			end if
+		end repeat
+		if(i < a) then
+			i := i + 1
+		end if
+	end repeat
+End function

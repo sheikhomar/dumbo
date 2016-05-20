@@ -29,5 +29,5 @@ Program
     result := number1 / number2
   end if
   
-  Write("Resultatet er " + number1 + " " + operator + " " + number2 + " = " + result)
+  Write("Resultatet er " + ConvertNumberToText(number1) + " " + operator + " " + ConvertNumberToText(number2) + " = " + ConvertNumberToText(result))
 End program

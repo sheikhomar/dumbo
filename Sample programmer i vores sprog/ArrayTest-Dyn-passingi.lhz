@@ -11,11 +11,11 @@ Program
 	printTarray(tarrt)
 	write("\"tarr\" after \"tarrt\" has been assigned to it:")
 	printTarray(tarr)
-	write("")
 	
 	Array[1,3] of Text tarrtt := (("2","3","5"))
 	write("Test print of an 1,3 array")
 	printTarray(tarrtt)
+	write("")
 	
 	//Number arrays
 	Array[2,1] of number narr := ((13),(17))
@@ -32,7 +32,7 @@ Program
 	
 	Array[3,1] of number narrnn := ((29),(31),(37))
 	write("Test print of an 3,1 array")
-	printTarray(tarrtt)
+	printNarray(narrnn)
 End Program
 
 //Text array

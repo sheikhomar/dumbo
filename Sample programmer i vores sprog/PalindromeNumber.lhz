@@ -15,13 +15,13 @@ Program
 		temp := floor(temp / 10)
 	end repeat
 	
-	write("Your number was: " + n)
-	write("The reverse is: " + reverse)
+	write("Your number was: " + ConvertNumberToText(n))
+	write("The reverse is: " + ConvertNumberToText(reverse))
 	
 	if (reverse = n) then
-		write(n + " is a palindrome number.")
+		write(ConvertNumberToText(n) + " is a palindrome number.")
 	else if (not(reverse = n)) then
-		write(n + " is not a palindrome number.")
+		write(ConvertNumberToText(n) + " is not a palindrome number.")
 	else
 		write("You hit the cat out of the barrel... or encountered a problem.")
 	end if

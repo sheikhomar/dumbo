@@ -1,6 +1,6 @@
 program
 	number cap := foo()
-	write("" + cap)
+	write(ConvertNumberToText(cap))
 end program
 
 function foo() returns number

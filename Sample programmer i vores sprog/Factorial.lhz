@@ -1,6 +1,6 @@
 Program
   number i := 25
-  write("" + factorial(i))
+  write(ConvertNumberToText(factorial(i)))
 End program
 
 function factorial(number i) returns number

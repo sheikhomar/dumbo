@@ -25,6 +25,6 @@ program
 		end if
 	
 	
-	write(percent + " percent corresponds to the Danish grade " + grade)
+	write(ConvertNumberToText(percent) + " percent corresponds to the Danish grade " + ConvertNumberToText(grade))
 	
 end program

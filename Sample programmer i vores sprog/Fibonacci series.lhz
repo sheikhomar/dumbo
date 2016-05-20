@@ -1,7 +1,7 @@
 Program 
   number i := 10
   number result := Fibonacci(i)
-  write("Fib(" + i + ") = " + result)
+  write("Fib(" + ConvertNumberToText(i) + ") = " + ConvertNumberToText(result))
 End program
 
 function fibonacci(number i) return number

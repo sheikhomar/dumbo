@@ -31,7 +31,7 @@ Program
 	end if
   end repeat
   
-  write("" + OriginalInput + _
+  write(ConvertNumberToText(OriginalInput) + _
   " is the same as " + output + _
   " in Roman numerals")
   

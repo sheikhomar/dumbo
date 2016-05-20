@@ -32,6 +32,6 @@ Program
 	end if
   end repeat
   
-  write("" + OriginalInput + " is the same as " + output + " in Roman numerals")
+  write(ConvertNumberToText(OriginalInput) + " is the same as " + output + " in Roman numerals")
   
 end Program

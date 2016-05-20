@@ -7,15 +7,15 @@ Program
 	Number e
 	
 	e := (a + b) * c / d //(30*15) / 5 ------- should write 90
-	write("Value of (a + b) * c / d is: " + e)
+	write("Value of (ConvertNumberToText(a) + ConvertNumberToText(b)) * ConvertNumberToText(c) / ConvertNumberToText(d) is: " + ConvertNumberToText(e))
 	
 	e := ((a + b) * c) / d   // (30 * 15 ) / 5 -------- should write 90
-	write("Value of ((a + b) * c) / d is: " + e)
+	write("Value of ((ConvertNumberToText(a) + ConvertNumberToText(b)) * ConvertNumberToText(c)) / ConvertNumberToText(d) is: " + ConvertNumberToText(e))
 	
    e := (a + b) * (c / d)  // (30) * (15/5) ------- should write 90
-   write("Value of (a + b) * (c / d) is: " + e)
+   write("Value of (ConvertNumberToText(a) + ConvertNumberToText(b)) * (ConvertNumberToText(c) / ConvertNumberToText(d)) is: " + ConvertNumberToText(e))
 
    e := a + (b * c) / d     //  20 + (150/5) ------- should write 50
-   write("Value of a + (b * c) / d is: " + e )
+   write("Value of ConvertNumberToText(a) + (ConvertNumberToText(b) * ConvertNumberToText(c)) / ConvertNumberToText(d) is: " + ConvertNumberToText(e))
 
 End Program

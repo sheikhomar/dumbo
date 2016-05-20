@@ -10,8 +10,8 @@ End Program
 
 function equal(boolean res) return nothing
 	if(res) then
-		return write("true")
+		write("true")
 	else
-		return write("false")
+		write("false")
 	end if
 end function

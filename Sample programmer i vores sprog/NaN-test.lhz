@@ -29,10 +29,10 @@ Program
 		end if
 	end repeat
 	
-	write("Count = " + count)
-	write("Total = " + total)
-	write("Average = " + average)
-	write("Low = " + low)
-	write("High = " + high)
+	write("Count = " + ConvertNumberToText(count))
+	write("Total = " + ConvertNumberToText(total))
+	write("Average = " + ConvertNumberToText(average))
+	write("Low = " + ConvertNumberToText(low))
+	write("High = " + ConvertNumberToText(high))
 	
 End program

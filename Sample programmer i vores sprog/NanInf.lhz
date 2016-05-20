@@ -1,0 +1,19 @@
+Program
+	number infId := Inf
+	number nanId := nan
+	number neginf := -inf
+	number temp
+	
+	temp := infId / nanID
+	temp := infId / neginf
+	temp := inf + 10
+
+
+	if(NOT (infId = infId + 10)) then
+		write("Error: nonequal compare of inf")
+	else if(NOT (500000 / infId = 0)) then
+		write("Error: n/inf should be 0")
+	else if((neginf - infId) = nanId) then
+		write("Error: -Inf - inf should be nan")
+	end if
+End program

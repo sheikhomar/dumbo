@@ -4,10 +4,10 @@ Program
 	number fahrenheittemp
 	
 	result := fahrenheitTemperature(0.0, fahrenheitTemp)
-	write("Freezing point: " + result + " F.")
+	write("Freezing point: " + convertnumbertotext(result) + " F.")
 	
 	result := fahrenheitTemperature(100.0, fahrenheitTemp)
-	write("Boiling point: " + result + " F.")
+	write("Boiling point: " + convertnumbertotext(result) + " F.")
 	
 End program
 

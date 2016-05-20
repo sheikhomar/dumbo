@@ -4,8 +4,8 @@ constant number numb2 := 120
 constant boolean truebool := true
 
 Program
-	write("" + numb1)
-	write("" + text1)
-	write("" + numb2)
-	write("" + truebool)
+	write(convertnumbertotext(numb1))
+	write(text1)
+	write(convertnumbertotext(numb2))
+	write(convertbooleantotext(truebool))
 End Program

@@ -1,11 +1,11 @@
 Program
   number i := 100
-  write("" + i)
+  write(convertnumbertotext(i))
   
-  repeat while i > 80
+  repeat 10
     i := i - 10
-  	write("" + i)
+  	write(convertnumbertotext(i))
   	break
-  	end repeat
+  end repeat
   
 End program

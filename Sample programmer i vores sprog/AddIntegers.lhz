@@ -7,7 +7,7 @@ Program
 	sum2 := 010 + 011 + 012
 	sum3 := 10.0 + 11.1 + 12.3
 	
-	write("Sum1 = " + sum1)
-	wRiTe("Sum2 = " + sum2)
-	WrITe("Sum3 = " + sum3)
+	write(convertnumbertotext(Sum1) + " = " + convertnumbertotext(Sum1))
+	wRiTe(convertnumbertotext(Sum2) + " = " + convertnumbertotext(sum2))
+	WrITe(convertnumbertotext(Sum3) + " = " + convertnumbertotext(sum3))
 End program

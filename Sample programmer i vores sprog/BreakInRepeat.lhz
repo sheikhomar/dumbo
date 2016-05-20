@@ -1,10 +1,10 @@
 Program
   number i := 100
-  write("" + i)
+  write(convertnumbertotext(i))
   
   repeat 10
     i := i - 10
-  	write("" + i)
+  	write(convertnumbertotext(i))
   	break
   end repeat
   

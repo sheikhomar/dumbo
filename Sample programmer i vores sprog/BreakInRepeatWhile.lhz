@@ -2,7 +2,7 @@ Program
   number i := 100
   write(convertnumbertotext(i))
   
-  repeat 10
+  repeat while i > 80
     i := i - 10
   	write(convertnumbertotext(i))
   	break

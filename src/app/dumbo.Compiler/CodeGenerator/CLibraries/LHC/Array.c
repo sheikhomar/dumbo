@@ -1,6 +1,6 @@
 /********************************************************
 Function:	Array
-Version: 	v2.0
+Version: 	v2.1
 Uses:		Throw, Text, Boolean, IsEqual
 /********************************************************/
 #include <stdlib.h>
@@ -84,6 +84,7 @@ void TestArraySetReadValue();
 void TestArraySetReadLHZValues();
 void TestArrayDimCalc();
 void TestArrayDup();
+void TestReturnArrayCheck();
 
 int main() {
 
@@ -93,6 +94,7 @@ int main() {
 	TestArraySetReadLHZValues();
 	TestArrayDimCalc();
 	TestArrayDup();
+	TestReturnArrayCheck();
 
 	_getch();
 
@@ -344,7 +346,7 @@ void CheckReturnArraySize(DeclIndex *declaredSize, Array *actualSize) {
 		Throw("Mismatch in the number of dimensions for (one of) the input array(s) and return array(s)");
 
 	for (i = 0; i < actualSize->maxIndex->numberOfDims; i++)
-		correct = (Boolean)(correct && (declaredSize->indices + i == actualSize->maxIndex->indices + i));
+		correct = (Boolean)(correct && (*(declaredSize->indices + i) == *(actualSize->maxIndex->indices + i)));
 
 	if (!correct)
 		Throw("Mismatch in entries for (one of) the input array(s) and return array(s)");
@@ -611,6 +613,26 @@ void TestArrayDimCalc() {
 	return;
 }
 
+void TestReturnArrayCheck() {
+	printf("Beginning ReturnArrayCheck Test\r\n");
+
+	//Create Array
+	int indexIntArrOne[] = { 1,2,3 };
+	DeclIndex *decl1 = CreateDeclIndex(indexIntArrOne, 3);
+	Array *a = CreateArray(decl1, t_Number);
+
+	int indexIntArrTwo[] = { 2,2,2 };
+	DeclIndex *decl2 = CreateDeclIndex(indexIntArrTwo, 3);
+	Array *b = CreateArray(decl2, t_Number);
+
+	//Array Check
+	CheckReturnArraySize(decl1, a);
+	//CheckReturnArraySize(decl1, b);
+
+	printf("Finished ReturnArrayCheck Test\r\n");
+
+	return;
+}
 
 void DebugPrintDeclIndex(DeclIndex *index) {
 	int i;

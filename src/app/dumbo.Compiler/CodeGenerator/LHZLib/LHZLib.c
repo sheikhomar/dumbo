@@ -170,7 +170,7 @@ Text * TextDup(Text *input){
 }
 /********************************************************
 Function:	Array
-Version: 	v2
+Version: 	v2.1
 Uses:		Throw, Text, Boolean, IsEqual
 /********************************************************/
 //**Creation of Arrays**
@@ -417,7 +417,7 @@ void CheckReturnArraySize(DeclIndex *declaredSize, Array *actualSize) {
 		Throw("Mismatch in the number of dimensions for (one of) the input array(s) and return array(s)");
 
 	for (i = 0; i < actualSize->maxIndex->numberOfDims; i++)
-		correct = (Boolean)(correct && (declaredSize->indices + i == actualSize->maxIndex->indices + i));
+		correct = (Boolean)(correct && (*(declaredSize->indices + i) == *(actualSize->maxIndex->indices + i)));
 
 	if (!correct)
 		Throw("Mismatch in entries for (one of) the input array(s) and return array(s)");

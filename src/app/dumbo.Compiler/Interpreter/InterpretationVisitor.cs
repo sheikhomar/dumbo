@@ -58,7 +58,12 @@ namespace dumbo.Compiler.Interpreter
 
         public Value Visit(ArrayValueNode node, VisitorArgs arg)
         {
-            throw new NotImplementedException();
+            var dims = GetArraySizes(node.ArrayType.Sizes, arg);
+            var arrayValue = new ArrayValue(node.ArrayType.Type.Type, dims);
+
+            // TODO: Set array values
+
+            return arrayValue;
         }
 
         public Value Visit(AssignmentStmtNode node, VisitorArgs arg)
@@ -302,6 +307,11 @@ namespace dumbo.Compiler.Interpreter
             for (int i = 0; i < node.DeclarationNode.Parameters.Count; i++)
             {
                 var formalParam = node.DeclarationNode.Parameters[i];
+                if (formalParam.Type is ArrayTypeNode)
+                {
+                    // TODO: Declare variable in the stack
+                    var t = "";
+                }
                 var value = valueList[i];
 
                 newFrame.Allocate(formalParam.Name);
@@ -627,6 +637,14 @@ namespace dumbo.Compiler.Interpreter
                     var v1 = node.Parameters[0].Accept(this, arg) as TextValue;
                     var v2 = node.Parameters[1].Accept(this, arg) as TextValue;
                     return new BooleanValue(v1.Text.Equals(v2.Text, StringComparison.CurrentCultureIgnoreCase));
+
+                case BuiltInFunction.ConvertNumberToText:
+                    var nValue = node.Parameters[0].Accept(this, arg) as NumberValue;
+                    return new TextValue(nValue.Number.ToString());
+                    
+                case BuiltInFunction.ConvertBooleanToText:
+                    var bValue = node.Parameters[0].Accept(this, arg) as BooleanValue;
+                    return new TextValue(bValue.Boolean.ToString());
 
                 default:
                     throw new ArgumentOutOfRangeException();

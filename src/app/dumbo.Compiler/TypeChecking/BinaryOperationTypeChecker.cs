@@ -40,8 +40,8 @@ namespace dumbo.Compiler.TypeChecking
 
             // Rules for relational expressions
             Add(BinaryOperatorType.Equals, PrimitiveType.Number, PrimitiveType.Number, PrimitiveType.Boolean);
-            Add(BinaryOperatorType.Equals, PrimitiveType.Boolean, PrimitiveType.Boolean, PrimitiveType.Boolean);
-            Add(BinaryOperatorType.Equals, PrimitiveType.Text, PrimitiveType.Text, PrimitiveType.Boolean);
+            //Add(BinaryOperatorType.Equals, PrimitiveType.Boolean, PrimitiveType.Boolean, PrimitiveType.Boolean);
+            //Add(BinaryOperatorType.Equals, PrimitiveType.Text, PrimitiveType.Text, PrimitiveType.Boolean);
             Add(BinaryOperatorType.GreaterThan, PrimitiveType.Number, PrimitiveType.Number, PrimitiveType.Boolean);
             Add(BinaryOperatorType.GreaterOrEqual, PrimitiveType.Number, PrimitiveType.Number, PrimitiveType.Boolean);
             Add(BinaryOperatorType.LessThan, PrimitiveType.Number, PrimitiveType.Number, PrimitiveType.Boolean);

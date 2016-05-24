@@ -13,11 +13,11 @@ End Program
 constant Number id := 1
 
 Program
-  write("" + id)
+  write("" + ConvertNumberToText(id))
 End Program
 
 Function f() Returns nothing
-  write("" + id)
+  write("" + ConvertNumberToText(id))
 end function
 
 

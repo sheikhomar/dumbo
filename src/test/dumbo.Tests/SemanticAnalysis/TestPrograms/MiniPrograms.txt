@@ -9,9 +9,9 @@ Program
 	sum2 := 010 + 011 + 012
 	sum3 := 10.0 + 11.1 + 12.3
 	
-	write("Sum1 = " + sum1)
-	wRiTe("Sum2 = " + sum2)
-	WrITe("Sum3 = " + sum3)
+	write("Sum1 = " + ConvertNumberToText(sum1))
+	wRiTe("Sum2 = " + ConvertNumberToText(sum2))
+	WrITe("Sum3 = " + ConvertNumberToText(sum3))
 End program
 
 
@@ -21,10 +21,10 @@ Program
 	number result
 	
 	result := fahrenheitTemperature(0.0)
-	write("Freezing point: " + result + " F.")
+	write("Freezing point: " + ConvertNumberToText(result) + " F.")
 	
 	result := fahrenheitTemperature(100.0)
-	write("Boiling point: " + result + " F.")
+	write("Boiling point: " + ConvertNumberToText(result) + " F.")
 	
 End program
 
@@ -41,12 +41,12 @@ end function
   wRITe("How many sides does your die have")
   a := readNumBEr()
 
-  wRite("Press enter to roll your new " + a + "-sided dice")  
+  wRite("Press enter to roll your new " + ConvertNumberToText(a) + "-sided dice")  
 
   repeat (99)
     a := readnumbER()
     b := Random(1,a)
-    Write("You've rolled: " + b)
+    Write("You've rolled: " + ConvertNumberToText(b))
   End Repeat
   
   WriTE("You've rolled your dice too many times. You need to restart the program to define a new dice")
@@ -98,7 +98,7 @@ Program
 	Write("Enter operator either +, -, * or / ")
 	operator := ReadText()
 
-	Write("Write the two operands you want to calcute using " + operator + "seperanted by 'Enter'")
+	Write("Write the two operands you want to calcute using " + operator + "seperated by 'Enter'")
 
 	input1 := ReadNumber()
 	input2 := ReadNumber()
@@ -115,7 +115,7 @@ Program
 		Write("Error occured")
 	end if
 	
-	Write("The result is: " + input1 + operator + input2 + "=" + result)  
+	Write("The result is: " + ConvertNumberToText(input1) + operator + ConvertNumberToText(input2) + "=" + ConvertNumberToText(result))  
 	
 End Program
 
@@ -154,7 +154,7 @@ program
 		grade := 0
 	end if
 	
-	write(percent + " percent corresponds to the Danish grade " + grade)
+	write(ConvertNumberToText(percent) + " percent corresponds to the Danish grade " + ConvertNumberToText(grade))
 	
 end program
 
@@ -216,9 +216,9 @@ Program
 	end repeat
 	
 	if (input = reverse) then
-		write(input + " is a palindrome number.")
+		write(ConvertNumberToText(input) + " is a palindrome number.")
 	else if (not(input = reverse)) then
-		write(input + " is not a palindrome number.")
+		write(ConvertNumberToText(input) + " is not a palindrome number.")
 	else
 		write("You hit the cat out of the barrel... or encountered a problem.")
 	end if
@@ -268,9 +268,9 @@ Program
 	y := readNUMber()
 
 	if(x*x + y*y <= r*r) then
-		write("The point(" + x + "," + y + ") is inside the circle centered in (0,0) and a radius " + r)
+		write("The point(" + ConvertNumberToText(x) + "," + ConvertNumberToText(y) + ") is inside the circle centered in (0,0) and a radius " + ConvertNumberToText(r))
 	else 
-		write("The point(" + x + "," + y + ") is outside the circle centered in (0,0) and a radius " + r)
+		write("The point(" + ConvertNumberToText(x) + "," + ConvertNumberToText(y) + ") is outside the circle centered in (0,0) and a radius " + ConvertNumberToText(r))
 	end if
 	
 End program
@@ -282,7 +282,7 @@ Program
   number OriginalInput
   text output := ""
   
-  write("Indtast et nummer, der skal omregnes til romertal:")
+  write("Indtast et nummer, der skal omregnes til romertal: ")
   input := readNumber()
   OriginalInput := input
   
@@ -311,7 +311,7 @@ Program
 	end if
   end repeat
   
-  write(OriginalInput + " is the same as " + output + " in Roman numerals")
+  write(ConvertNumberToText(input) + " is the same as " + output + " in Roman numerals")
   
 end Program
 
@@ -334,7 +334,7 @@ Program
 	min := remainder / 60
 	sec := remainder % 60
 
-	Write(seconds + "is equal to " + hour + "hours, " + min + " minutes and " + sec + " seconds.")
+	Write(ConvertNumberToText(seconds) + "is equal to " + ConvertNumberToText(hour) + "hours, " + ConvertNumberToText(min) + " minutes and " + ConvertNumberToText(sec) + " seconds.")
 	
 End Program
 
@@ -350,7 +350,7 @@ Program
 	Write("Enter operator either +, -, * or / ")
 	operator := ReadText()
 
-	Write("Write the two operands you want to calcute using " + operator + "seperanted by 'Enter'")
+	Write("Write the two operands you want to calcute using " + operator + "seperated by 'Enter'")
 
 	input1 := ReadNumber()
 	input2 := ReadNumber()
@@ -367,6 +367,6 @@ Program
 		Write("Error occured")
 	end if
 	
-	Write("The result is: " + input1 + operator + input2 + "=" + result)  
+	Write("The result is: " + ConvertNumberToText(input1) + operator + ConvertNumberToText(input2) + "=" + ConvertNumberToText(result))  
 	
 End Program

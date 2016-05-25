@@ -106,12 +106,11 @@ End Program
 
  //New Program
 Program
-	if "" = ""  then
+	if IsTextAndTextEqual("", "")  then
 	else if false then
 	else
 	end if
 End Program
-
 
  //New Program Failing
 Program

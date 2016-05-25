@@ -146,10 +146,9 @@ Program
 End Program
 
 
- //New Program 
+ //New Program Failing
 Program
 	boolean a := "" = ""
-	boolean b := true = true
 End Program
 
 

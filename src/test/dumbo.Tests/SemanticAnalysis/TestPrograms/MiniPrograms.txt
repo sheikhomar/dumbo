@@ -355,13 +355,13 @@ Program
 	input1 := ReadNumber()
 	input2 := ReadNumber()
 
-	if (operator = "+") then
+	if (IsTextAndTextEqual(operator, "+")) then
 		result := input1+input2
-	else if (operator = "-") then
+	else if (IsTextAndTextEqual(operator, "-")) then
 		result := input1-input2
-	else if (operator = "*") then
+	else if (IsTextAndTextEqual(operator, "*")) then
 		result := input1*input2
-	else if (operator = "/") then
+	else if (IsTextAndTextEqual(operator, "/")) then
 		result := input1/input2
 	else 
 		Write("Error occured")
@@ -370,3 +370,4 @@ Program
 	Write("The result is: " + ConvertNumberToText(input1) + operator + ConvertNumberToText(input2) + "=" + ConvertNumberToText(result))  
 	
 End Program
+

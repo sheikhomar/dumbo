@@ -310,7 +310,6 @@ namespace dumbo.Compiler.Interpreter
                 if (formalParam.Type is ArrayTypeNode)
                 {
                     // TODO: Declare variable in the stack
-                    var t = "";
                 }
                 var value = valueList[i];
 
@@ -526,22 +525,16 @@ namespace dumbo.Compiler.Interpreter
         public Value Visit(ReturnStmtNode node, VisitorArgs arg)
         {
             if (_callStack.Count == 0)
-            {
                 throw new InterpretationErrorException("Wrong return statement call.", node);
-            }
-            else
+
+            var returnValue = new ReturnValue();
+            foreach (var expression in node.Expressions)
             {
-                var returnValue = new ReturnValue();
-                foreach (var expression in node.Expressions)
-                {
-                    var value = expression.Accept(this, arg);
-                    returnValue.ReturnValues.Add(value);
-
-                }
-                throw new ReturnFromFunctionException(returnValue);
+                var value = expression.Accept(this, arg);
+                returnValue.ReturnValues.Add(value);
             }
 
-            return null;
+            throw new ReturnFromFunctionException(returnValue);
         }
 
         public Value Visit(RootNode node, VisitorArgs arg)

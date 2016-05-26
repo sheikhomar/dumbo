@@ -15,6 +15,7 @@ let version = "0.1"  // or retrieve from CI server
 Target "Clean" (fun _ ->
     CleanDirs [buildDir; testDir; deployDir]
     CopyFile (buildDir + "/readme.txt") "README.md"
+    CopyDir  (buildDir + "MingGW") "./tools/MinGW" allFiles
 )
  
 Target "BuildApp" (fun _ ->
@@ -51,7 +52,7 @@ Target "Default" (fun _ ->
 "Clean"
   ==> "BuildApp"
   ==> "BuildTest"
-  ==> "Test"
+  //==> "Test"
   ==> "Zip"
   ==> "Default"
  

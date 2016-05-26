@@ -15,9 +15,9 @@ let version = "0.1"  // or retrieve from CI server
 Target "Clean" (fun _ ->
     CleanDirs [buildDir; testDir; deployDir]
     CopyFile (buildDir + "/readme.txt") "README.md"
-    CopyDir  (buildDir + "MingGW") "./tools/MinGW" allFiles
+    CopyDir  (buildDir + "MinGW") "./tools/MinGW" allFiles
 )
- 
+
 Target "BuildApp" (fun _ ->
    !! "src/app/**/*.csproj"
      |> MSBuildRelease buildDir "Build"
@@ -31,7 +31,7 @@ Target "BuildTest" (fun _ ->
 )
  
 Target "Test" (fun _ ->
-    !! (testDir + "/ring.Tests.dll") 
+    !! (testDir + "/dumbo.Tests.dll") 
       |> NUnit (fun p ->
           {p with
              DisableShadowCopy = true;
@@ -41,7 +41,7 @@ Target "Test" (fun _ ->
 Target "Zip" (fun _ ->
     !! (buildDir + "/**/*.*") 
         -- "*.zip"
-        |> Zip buildDir (deployDir + "ring." + version + ".zip")
+        |> Zip buildDir (deployDir + "dumbo." + version + ".zip")
 )
  
 Target "Default" (fun _ ->

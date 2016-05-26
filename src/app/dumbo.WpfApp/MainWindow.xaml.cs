@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -35,7 +33,6 @@ namespace dumbo.WpfApp
         private DateTime latestSaveAt;
         private DateTime grammarTableLoadedAt;
         private Parser _myParser;
-        private readonly FileSystemWatcher _grammarTableWatcher;
         private ITextMarkerService _textMarkerService;
         private HappyProcessor _processor;
         private GccCompiler _gccCompiler;
@@ -46,11 +43,6 @@ namespace dumbo.WpfApp
             _processor = new HappyProcessor();
             _processor.Success += ProcessorOnSuccess;
             _processor.Failure += ProcessorOnFailure;
-
-            _grammarTableWatcher = new FileSystemWatcher();
-            _grammarTableWatcher.NotifyFilter = NotifyFilters.LastWrite;
-            _grammarTableWatcher.EnableRaisingEvents = false;
-            _grammarTableWatcher.Changed += GrammarHasChanged;
 
             textEditor.TextArea.Caret.PositionChanged += CaretOnPositionChanged;
 
@@ -90,7 +82,6 @@ namespace dumbo.WpfApp
 
         private void LoadGrammar(string path)
         {
-            _grammarTableWatcher.EnableRaisingEvents = false;
             string message = string.Empty;
             try
             {
@@ -102,9 +93,6 @@ namespace dumbo.WpfApp
                 currentGrammarTablePath = path;
                 grammarTableLoadedAt = DateTime.Now;
                 UpdateInformationBox();
-
-                _grammarTableWatcher.Path = Path.GetDirectoryName(currentGrammarTablePath);
-                _grammarTableWatcher.EnableRaisingEvents = true;
             }
             catch (Exception ex)
             {
@@ -112,13 +100,6 @@ namespace dumbo.WpfApp
             }
 
             ResultTextBox.Text = message;
-        }
-
-        private void GrammarHasChanged(object sender, FileSystemEventArgs e)
-        {
-            if (e.FullPath == currentGrammarTablePath && !IsFileReady(e.FullPath)) return;
-
-            Dispatcher.BeginInvoke(new Action(() => LoadGrammar(currentGrammarTablePath)));
         }
 
         private void CaretOnPositionChanged(object sender, EventArgs eventArgs)
@@ -275,48 +256,6 @@ namespace dumbo.WpfApp
             SaveFileClick(sender, e);
         }
 
-        private void DrawReductionTree(GOLD.Reduction Root)
-        {
-            //This procedure starts the recursion that draws the parse tree.
-            StringBuilder tree = new StringBuilder();
-
-            tree.AppendLine("+ " + Root.Parent.Text(false));
-            DrawReduction(tree, Root, 1);
-
-            ResultTextBox.Text = tree.ToString();
-        }
-
-        private void DrawReduction(StringBuilder tree, GOLD.Reduction reduction, int indent)
-        {
-            int n;
-            string indentText = "";
-
-            for (n = 1; n <= indent; n++)
-            {
-                indentText += "| ";
-            }
-
-            //=== Display the children of the reduction
-            for (n = 0; n < reduction.Count(); n++)
-            {
-                switch (reduction[n].Type())
-                {
-                    case GOLD.SymbolType.Nonterminal:
-                        GOLD.Reduction branch = (GOLD.Reduction)reduction[n].Data;
-
-                        tree.AppendLine(indentText + "+ " + branch.Parent.Text(false));
-                        DrawReduction(tree, branch, indent + 1);
-                        break;
-
-                    default:
-                        string leaf = (string)reduction[n].Data;
-
-                        tree.AppendLine(indentText + "+ " + leaf);
-                        break;
-                }
-            }
-        }
-
         private void PickGrammar(object sender, ExecutedRoutedEventArgs e)
         {
             OpenFileDialog dlg = new OpenFileDialog();
@@ -332,20 +271,7 @@ namespace dumbo.WpfApp
         {
             LoadGrammar(currentGrammarTablePath);
         }
-
-        private bool IsFileReady(string path)
-        {
-            try
-            {
-                using (File.Open(path, FileMode.Open, FileAccess.Read, FileShare.Read))
-                    return true;
-            }
-            catch (IOException)
-            {
-                return false;
-            }
-        }
-
+        
         private void PrettyPrint(RootNode root)
         {
             var ppv = new PrettyPrintVisitor();
@@ -555,7 +481,6 @@ namespace dumbo.WpfApp
         {
             MarkErrors(processorResult.Reporter);
         }
-
     }
 }
 

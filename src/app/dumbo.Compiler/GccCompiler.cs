@@ -23,22 +23,30 @@ namespace dumbo.Compiler
             }
             var result = new ProcessResult();
 
-            Process process = new Process();
-            process.StartInfo.CreateNoWindow = true;
-            process.StartInfo.WorkingDirectory = Environment.CurrentDirectory;
-            process.StartInfo.UseShellExecute = false;
-            process.StartInfo.RedirectStandardError = true;
-            process.StartInfo.RedirectStandardOutput = true;
-            process.StartInfo.FileName = "gcc.exe";
-            process.OutputDataReceived += (s, e) => result.AddOutput(e.Data);
-            process.ErrorDataReceived += (s, e) => result.AddError(e.Data);
-            process.StartInfo.Arguments = $"{sourceFileInfo.FullName} -o {targetFile.FullName} -std=c99";
-            process.Start();
-            process.BeginOutputReadLine();
-            process.BeginErrorReadLine();
-            process.WaitForExit();
-            result.StatusCode = process.ExitCode;
-            process.Close();
+            try
+            {
+                Process process = new Process();
+                process.StartInfo.CreateNoWindow = true;
+                process.StartInfo.WorkingDirectory = Environment.CurrentDirectory;
+                process.StartInfo.UseShellExecute = false;
+                process.StartInfo.RedirectStandardError = true;
+                process.StartInfo.RedirectStandardOutput = true;
+                process.StartInfo.FileName = "gcc.exe";
+                process.OutputDataReceived += (s, e) => result.AddOutput(e.Data);
+                process.ErrorDataReceived += (s, e) => result.AddError(e.Data);
+                process.StartInfo.Arguments = $"\"{sourceFileInfo.FullName}\" -o \"{targetFile.FullName}\" -std=c99";
+                process.Start();
+                process.BeginOutputReadLine();
+                process.BeginErrorReadLine();
+                process.WaitForExit();
+                result.StatusCode = process.ExitCode;
+                process.Close();
+            }
+            catch (Exception e)
+            {
+                result.StatusCode = -1;
+                result.AddError($"Unexpected error while compiling with GCC: '{e.Message}'.\n{e.StackTrace}");
+            }
 
             return result;
         }

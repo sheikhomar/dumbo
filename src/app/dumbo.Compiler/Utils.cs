@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.IO;
 
 namespace dumbo.Compiler
 {
@@ -11,8 +6,7 @@ namespace dumbo.Compiler
     {
         public static string GetGrammarTablePath()
         {
-            string baseDir = GetProjectRootPath();
-            string grammarPath = Path.Combine(baseDir, "Grammar");
+            string grammarPath = System.AppDomain.CurrentDomain.BaseDirectory;
             string path = Path.Combine(grammarPath, "HappyZ-Grammar.egt");
             return path;
         }

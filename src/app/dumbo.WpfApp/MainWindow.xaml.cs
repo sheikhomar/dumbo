@@ -64,7 +64,7 @@ namespace dumbo.WpfApp
 
             UpdateCaretPosition();
             LoadDefaultProgram();
-            LoadGrammar(GetGrammarFile());
+            LoadGrammar(Utils.GetGrammarTablePath());
 
             _gccCompiler = new GccCompiler();
         }
@@ -166,15 +166,6 @@ namespace dumbo.WpfApp
             }
 
             InformationBox.Text = builder.ToString();
-        }
-
-        private string GetGrammarFile()
-        {
-            string appDir = System.AppDomain.CurrentDomain.BaseDirectory;
-            string baseDir = Path.GetFullPath(Path.Combine(appDir, "..\\..\\..\\..\\..\\"));
-            string grammarPath = Path.Combine(baseDir, "Grammar");
-            string path = Path.Combine(grammarPath, "HappyZ-Grammar.egt");
-            return path;
         }
 
         private void LoadDefaultProgram()

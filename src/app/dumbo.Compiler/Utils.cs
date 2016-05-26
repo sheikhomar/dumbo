@@ -7,8 +7,7 @@ namespace dumbo.Compiler
         public static string GetGrammarTablePath()
         {
             string grammarPath = System.AppDomain.CurrentDomain.BaseDirectory;
-            string path = Path.Combine(grammarPath, "HappyZ-Grammar.egt");
-            return path;
+            return Path.Combine(grammarPath, "HappyZ-Grammar.egt");
         }
 
         public static string GetProjectRootPath()

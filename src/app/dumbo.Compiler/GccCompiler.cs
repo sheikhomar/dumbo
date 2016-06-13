@@ -54,7 +54,8 @@ namespace dumbo.Compiler
         private void SetupEnvironment()
         {
             var baseDir = Utils.GetBasePath();
-            var mingwPath = Path.Combine(baseDir, "MinGW");
+            //var mingwPath = Path.Combine(baseDir, "MinGW");
+            var mingwPath = Path.Combine(baseDir, "tools", "MinGW");
             var binPath = Path.Combine(mingwPath, "bin");
             var ming32BinPath = Path.Combine(mingwPath, "mingw32", "bin");
             var msysBinPath = Path.Combine(mingwPath, "msys", "1.0", "bin");

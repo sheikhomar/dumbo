@@ -116,6 +116,11 @@
     <Compile Include="Interpreter\ReturnFromFunctionException.cs" />
     <Compile Include="Interpreter\UndefinedValue.cs" />
     <Compile Include="Interpreter\Value.cs" />
+    <Compile Include="MipsCode\DataSegmentItem.cs" />
+    <Compile Include="MipsCode\MipsCodeGenerationVisitor.cs" />
+    <Compile Include="MipsCode\Register.cs" />
+    <Compile Include="MipsCode\RegisterManagement.cs" />
+    <Compile Include="MipsCode\VariableLocation.cs" />
     <Compile Include="ProcessResult.cs" />
     <Compile Include="ReturnCheckResult.cs" />
     <Compile Include="ReturnCheckVisitor.cs" />

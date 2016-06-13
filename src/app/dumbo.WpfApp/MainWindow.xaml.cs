@@ -12,6 +12,7 @@ using dumbo.Compiler;
 using dumbo.Compiler.AST;
 using dumbo.Compiler.CodeGenerator;
 using dumbo.Compiler.Interpreter;
+using dumbo.Compiler.MipsCode;
 using ICSharpCode.AvalonEdit.Highlighting;
 using Microsoft.Win32;
 using Path = System.IO.Path;
@@ -358,8 +359,37 @@ namespace dumbo.WpfApp
                     string generatedCode = codeGen.CProgram.Print(true, true, true);
 
                     GccCompileAndRun(generatedCode);
+                }
 
-                    
+                MarkErrors(reporter);
+            }
+
+            latestCompiledAt = DateTime.Now;
+            UpdateInformationBox();
+        }
+
+        private void GenerateMips(object sender, ExecutedRoutedEventArgs e)
+        {
+            if (!File.Exists(currentSourcePath))
+            {
+                ResultTextBox.Text = $"File {currentSourcePath} does not exist!";
+                return;
+            }
+
+            SaveFile(sender, e);
+
+            var parserResult = Parse(textEditor.Text);
+
+            if (parserResult.IsSuccess)
+            {
+                var root = parserResult.Root;
+                EventReporter reporter = new EventReporter();
+                ScopeAndTypeCheck(parserResult.Root, reporter);
+                if (!reporter.HasErrors)
+                {
+                    var mips = new MipsCodeGenerationVisitor();
+                    root.Accept(mips, new VisitorArgs());
+                    ResultTextBox.Text = mips.GetFormattedCode();
                 }
 
                 MarkErrors(reporter);

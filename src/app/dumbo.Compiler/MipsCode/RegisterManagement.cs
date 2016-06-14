@@ -13,9 +13,9 @@ namespace dumbo.Compiler.MipsCode
             _registers = new List<Register>
             {
                 //new Register("$f0"),  // Used when reading input from user
-                //new Register("$f2"),  // Used for result when evaluation eded
-                //new Register("$f4"),  // Used as temporary register for working with two operands
-                new Register("$f6"),
+                //new Register("$f2"),  // Used for result 
+                //new Register("$f4"),  // Used as temporary when evaluating expressions
+                //new Register("$f6"),  // Used as temporary when evaluating expressions
                 new Register("$f8"),
                 new Register("$f10"),
                 //new Register("$f12"), // Used when printing to the console

@@ -8,8 +8,9 @@ namespace dumbo.Compiler.MipsCode
 {
     public class MipsCodeGenerationVisitor : IVisitor<object, VisitorArgs>
     {
-        private const int IndentationLength = 8;
-        private const int InstructionPadding = 20;
+        private const int IndentationLength = 4;
+        private const int InstructionPadding = 30;
+        private const int CommandPadding = 8;
         private readonly IList<string> _instructions;
         private readonly IDictionary<string, DataSegmentItem> _data;
         private readonly RegisterManagement _regAllocator;
@@ -50,33 +51,103 @@ namespace dumbo.Compiler.MipsCode
 
         public object Visit(AssignmentStmtNode node, VisitorArgs arg)
         {
+            // The value of the expression is stored in register $f2
+            node.Value.Accept(this, arg);
+
+            foreach (var identifier in node.Identifiers)
+            {
+                var loc = _locations[identifier.Name];
+                var register = _regAllocator.Find(loc);
+
+                Emit($"mov.d  {register.Name}, $f2    # Allocate {register.Name} to variable '{identifier.Name}'.");
+
+                EmitPrintString($"'{identifier.Name}' = ");
+                EmitPrintDouble(register.Name);
+            }
+
             return null;
         }
 
         public object Visit(BinaryOperationNode node, VisitorArgs arg)
         {
-            // The value of the left operand is stored in $f2
-            node.LeftOperand.Accept(this, arg);
+            ExpressionNode expr1, expr2;
 
-            // Copy the value of $f2 to $f4 before evaluating the right operand
-            Emit("mov.d   $f4, $f2");
+            /* 
+            Up to three registers are used to compute arithmetic expressions:
+             - $f2: stores the result of an expression
+             - $f4: stores the value of left expression before evaluating the right expression
+             - $f6: used when both left and right expression have subtrees. Stores the value of larger expression tree.
+            */
 
-            // The value of the right operand is stored in $f2
-            node.RightOperand.Accept(this, arg);
+            string regLeftOp;  // Register used as left operand for the instruction
+            string regRightOp; // Register used as right operand for the instruction
+
+            int leftNodeCount = CountNodes(node.LeftOperand);
+            int rightNodeCount = CountNodes(node.RightOperand);
+
+            if (rightNodeCount > leftNodeCount)
+            {
+                // Right subtree has more nodes, so we will evaluate it first
+                expr1 = node.RightOperand;
+                expr2 = node.LeftOperand;
+
+                // Since we are evaluating left subtree last, the value of 
+                // the left expression is stored in $f2. To ensure correct
+                // computation $f2 must be the left operand used for the instruction.
+                regLeftOp = "$f2";
+                regRightOp = "$f4";
+            }
+            else
+            {
+                expr1 = node.LeftOperand;
+                expr2 = node.RightOperand;
+                regLeftOp = "$f4";
+                regRightOp = "$f2"; // Right expression is computed last.
+            }
+
+            // Generate code to evaluate the expression. 
+            // The value of the expression is stored in $f2.
+            expr1.Accept(this, arg);
+
+            if (leftNodeCount > 1 && rightNodeCount > 1)
+            {
+                // Both the left and the right operand of the current expression have subtrees.
+                // We need another register to keep result of the first subtree.
+                Emit("mov.d   $f6, $f2  # $f6 = $f2");
+
+                if (rightNodeCount > leftNodeCount)
+                {
+                    regLeftOp = "$f2";
+                    regRightOp = "$f6";
+                }
+                else
+                {
+                    regLeftOp = "$f6";
+                    regRightOp = "$f2";
+                }
+            }
+            else
+            {
+                // Copy the value of first expression to $f4 before evaluating the right expression
+                Emit("mov.d   $f4, $f2  # $f4 = $f2");
+            }
+
+            // Generate code to evaluate the second expression. The value of is stored in $f2.
+            expr2.Accept(this, arg);
 
             switch (node.Operator)
             {
                 case BinaryOperatorType.Plus:
-                    Emit("add.d   $f2, $f4, $f2   # $f2 = $f4 + $f2");
+                    Emit($"add.d   $f2, {regLeftOp}, {regRightOp}   # $f2 = {regLeftOp} + {regRightOp}");
                     break;
                 case BinaryOperatorType.Minus:
-                    Emit("sub.d   $f2, $f4, $f2   # $f2 = $f4 - $f2");
+                    Emit($"sub.d   $f2, {regLeftOp}, {regRightOp}   # $f2 = {regLeftOp} - {regRightOp}");
                     break;
                 case BinaryOperatorType.Times:
-                    Emit("mul.d   $f2, $f4, $f2   # $f2 = $f4 * $f2");
+                    Emit($"mul.d   $f2, {regLeftOp}, {regRightOp}   # $f2 = {regLeftOp} * {regRightOp}");
                     break;
                 case BinaryOperatorType.Division:
-                    Emit("div.d   $f2, $f4, $f2   # $f2 = $f4 / $f2");
+                    Emit($"div.d   $f2, {regLeftOp}, {regRightOp}   # $f2 = {regLeftOp} / {regRightOp}");
                     break;
                 case BinaryOperatorType.Modulo:
                     break;
@@ -98,7 +169,7 @@ namespace dumbo.Compiler.MipsCode
                     throw new ArgumentOutOfRangeException();
             }
 
-            EmitPrintDouble("$f2");
+            //EmitPrintDouble("$f2");
 
             return null;
         }
@@ -142,6 +213,7 @@ namespace dumbo.Compiler.MipsCode
 
                     Emit($"mov.d  {register.Name}, $f2    # Allocate {register.Name} to variable '{identifier.Name}'.");
 
+                    EmitPrintString($"'{identifier.Name}' = ");
                     EmitPrintDouble(register.Name);
                 }
             }
@@ -354,7 +426,7 @@ namespace dumbo.Compiler.MipsCode
 
             if (instruction.Contains("#"))
             {
-                var strings = instruction.Split(new[] {'#'});
+                var strings = instruction.Split('#');
 
 
                 string instructionPart = strings[0].Trim();
@@ -364,10 +436,29 @@ namespace dumbo.Compiler.MipsCode
                 {
                     buffer.AppendLine(instruction);
                 }
+                else if (string.IsNullOrEmpty(instructionPart))
+                {
+                    buffer.Append("# ");
+                    buffer.AppendLine(commentPart);
+                }
                 else
                 {
-                    buffer.Append(instructionPart);
-                    buffer.Append(' ', InstructionPadding - instructionPart.Length);
+                    int instructionPartLength = instructionPart.Length;
+                    if (!instructionPart.StartsWith(".") && instructionPart.Contains(" "))
+                    {
+                        string cmd = instructionPart.Substring(0, instructionPart.IndexOf(" "));
+                        string operands = instructionPart.Substring(instructionPart.IndexOf(" ")).Trim();
+                        buffer.Append(cmd);
+                        buffer.Append(' ', CommandPadding - cmd.Length);
+                        buffer.Append(operands);
+                        instructionPartLength = CommandPadding + operands.Length;
+                    }
+                    else
+                    {
+                        buffer.Append(instructionPart);
+                    }
+                    
+                    buffer.Append(' ', InstructionPadding - instructionPartLength);
                     buffer.Append(" # ");
                     buffer.AppendLine(commentPart);
                 }
@@ -418,6 +509,17 @@ namespace dumbo.Compiler.MipsCode
             Emit("syscall");
         }
 
+        private void EmitPrintString(string str)
+        {
+            string memoryLoc = "str" + _data.Count;
+            AddDataItem(memoryLoc, "asciiz", $"\"{str}\"");
+
+            Emit($"             # Print \"{str}\"");
+            Emit($"li  $v0, 4   # Syscall 4 (print_string)");
+            Emit($"la  $a0, {memoryLoc}  # Load argument");
+            Emit("syscall");
+        }
+
         private VariableLocation NewFrameLocation(string name)
         {
             var location = new VariableLocation();
@@ -425,6 +527,15 @@ namespace dumbo.Compiler.MipsCode
             _locations.Add(name, location);
 
             return location;
+        }
+
+        private int CountNodes(ExpressionNode expr)
+        {
+            var bexpr = expr as BinaryOperationNode;
+            if (bexpr != null)
+                return CountNodes(bexpr.LeftOperand) + CountNodes(bexpr.RightOperand) + 1;
+
+            return 1;
         }
     }
 }

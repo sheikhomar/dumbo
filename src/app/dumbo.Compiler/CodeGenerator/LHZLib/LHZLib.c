@@ -472,7 +472,13 @@ char * Getline(void) {
 }
 
 Text* ReadText() {
-	char* text = Getline();
+	char* text;
+  
+  //Muffle dummy chars
+  do {
+		text = Getline();
+	}while (! strcmp(text, "\0"));
+  
 	int length = strlen(text);
 
 	Text *retVal = (Text*)malloc(sizeof(Text));
